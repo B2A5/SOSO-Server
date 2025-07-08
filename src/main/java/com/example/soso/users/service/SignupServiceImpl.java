@@ -18,11 +18,24 @@ public class SignupServiceImpl implements SignupService {
             signup = new SignupSession();
         }
 
-        if (signup.getCurrentStep() != SignupStep.REGION) {
+        if (signup.getCurrentStep() != SignupStep.USER_TYPE) {
             throw new IllegalStateException("순서가 잘못되었습니다.");
         }
         signup.setUserType(userType);
+        signup.setCurrentStep(SignupStep.USER_TYPE);
+        session.setAttribute(SESSION_KEY, signup);
+    }
+
+    public void saveRegion(HttpSession session, String regionId) {
+        SignupSession signup = (SignupSession) session.getAttribute(SESSION_KEY);
+
+        if (signup == null || signup.getCurrentStep() != SignupStep.REGION) {
+            throw new IllegalStateException("잘못된 요청 순서입니다.");
+        }
+
+        signup.setRegionId(regionId);
         signup.setCurrentStep(SignupStep.REGION);
         session.setAttribute(SESSION_KEY, signup);
     }
+
 }

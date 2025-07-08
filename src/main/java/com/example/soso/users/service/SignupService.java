@@ -6,4 +6,6 @@ import jakarta.servlet.http.HttpSession;
 public interface SignupService {
 
     void saveUserType(HttpSession session, UserType userType);
+
+    void saveRegion(HttpSession session, String regionId);
 }
