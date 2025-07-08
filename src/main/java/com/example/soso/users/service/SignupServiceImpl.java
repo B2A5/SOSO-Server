@@ -1,6 +1,7 @@
 package com.example.soso.users.service;
 
 import com.example.soso.users.domain.dto.SignupSession;
+import com.example.soso.users.domain.entity.AgeRange;
 import com.example.soso.users.domain.entity.SignupStep;
 import com.example.soso.users.domain.entity.UserType;
 import jakarta.servlet.http.HttpSession;
@@ -38,4 +39,15 @@ public class SignupServiceImpl implements SignupService {
         session.setAttribute(SESSION_KEY, signup);
     }
 
+    public void saveAgeRange(HttpSession session, AgeRange ageRange) {
+        SignupSession signup = (SignupSession) session.getAttribute(SESSION_KEY);
+
+        if (signup == null || signup.getCurrentStep() != SignupStep.GENDER) {
+            throw new IllegalStateException("잘못된 요청 순서입니다.");
+        }
+
+        signup.setAgeRange(ageRange);
+        signup.setCurrentStep(SignupStep.GENDER);
+        session.setAttribute(SESSION_KEY, signup);
+    }
 }

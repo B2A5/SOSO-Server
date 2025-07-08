@@ -1,5 +1,6 @@
 package com.example.soso.users.controller;
 
+import com.example.soso.users.domain.dto.AgeRangeRequest;
 import com.example.soso.users.domain.dto.RegionRequest;
 import com.example.soso.users.domain.entity.UserType;
 import com.example.soso.users.service.SignupService;
@@ -29,7 +30,14 @@ public class SignupController {
     @PostMapping("/region")
     public ResponseEntity<Void> setRegion(@RequestBody @Valid RegionRequest request,
                                           HttpSession session) {
-        signupService.saveRegion(session, request.getRegionId());
+        signupService.saveRegion(session, request.regionId());
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/age-range")
+    public ResponseEntity<Void> setAgeRange(@RequestBody @Valid AgeRangeRequest request,
+                                            HttpSession session) {
+        signupService.saveAgeRange(session, request.ageRange());
         return ResponseEntity.ok().build();
     }
 
