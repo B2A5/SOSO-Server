@@ -37,7 +37,8 @@ public class Users extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    private LocalDate birthDate;
+    @Enumerated(EnumType.STRING)
+    private AgeRange ageRange;
 
     private String location;
 
@@ -45,16 +46,17 @@ public class Users extends BaseTimeEntity {
     private String longitude;
 
     @Builder
-    public Users(String username, String nickName, String phoneNumber, String email, String profileImageUrl, UserType userType,
-                 Gender gender, LocalDate birthDate, String location, String latitude, String longitude) {
+    public Users(String username, String nickName, String phoneNumber, String email, UserType userType,
+                 String profileImageUrl, Gender gender, AgeRange ageRange, String location, String latitude,
+                 String longitude) {
         this.username = username;
         this.nickName = nickName;
         this.phoneNumber = phoneNumber;
         this.email = email;
-        this.profileImageUrl = profileImageUrl;
         this.userType = userType;
+        this.profileImageUrl = profileImageUrl;
         this.gender = gender;
-        this.birthDate = birthDate;
+        this.ageRange = ageRange;
         this.location = location;
         this.latitude = latitude;
         this.longitude = longitude;
