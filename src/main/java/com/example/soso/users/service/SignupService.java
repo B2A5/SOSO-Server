@@ -1,6 +1,7 @@
 package com.example.soso.users.service;
 
 import com.example.soso.users.domain.entity.AgeRange;
+import com.example.soso.users.domain.entity.BudgetRange;
 import com.example.soso.users.domain.entity.Gender;
 import com.example.soso.users.domain.entity.InterestType;
 import com.example.soso.users.domain.entity.UserType;
@@ -18,4 +19,6 @@ public interface SignupService {
     void saveGender(HttpSession session, Gender gender);
 
     void saveInterests(HttpSession session, List<InterestType> interests);
+
+    void saveBudget(HttpSession session, BudgetRange budget);
 }

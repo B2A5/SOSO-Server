@@ -1,6 +1,7 @@
 package com.example.soso.users.controller;
 
 import com.example.soso.users.domain.dto.AgeRangeRequest;
+import com.example.soso.users.domain.dto.BudgetRequest;
 import com.example.soso.users.domain.dto.GenderRequest;
 import com.example.soso.users.domain.dto.RegionRequest;
 import com.example.soso.users.domain.entity.InterestRequest;
@@ -56,4 +57,11 @@ public class SignupController {
         signupService.saveInterests(session, request.interests());
         return ResponseEntity.ok().build();
     }
+
+    @PostMapping("/budget")
+    public ResponseEntity<Void> setBudget(@RequestBody BudgetRequest request, HttpSession session) {
+        signupService.saveBudget(session, request.budget());
+        return ResponseEntity.ok().build();
+    }
+
 }

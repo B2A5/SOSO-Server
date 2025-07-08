@@ -2,6 +2,7 @@ package com.example.soso.users.service;
 
 import com.example.soso.users.domain.dto.SignupSession;
 import com.example.soso.users.domain.entity.AgeRange;
+import com.example.soso.users.domain.entity.BudgetRange;
 import com.example.soso.users.domain.entity.Gender;
 import com.example.soso.users.domain.entity.InterestType;
 import com.example.soso.users.domain.entity.SignupStep;
@@ -73,6 +74,16 @@ public class SignupServiceImpl implements SignupService {
         signup.setCurrentStep(SignupFlow.nextStep(signup.getUserType(), SignupStep.INTERESTS));
         session.setAttribute(SESSION_KEY, signup);
     }
+
+    public void saveBudget(HttpSession session, BudgetRange budget) {
+        SignupSession signup = (SignupSession) session.getAttribute(SESSION_KEY);
+        validateStep(signup, SignupStep.BUDGET);
+
+        signup.setBudget(budget); // null일 경우도 허용
+        signup.setCurrentStep(SignupFlow.nextStep(signup.getUserType(), SignupStep.BUDGET));
+        session.setAttribute(SESSION_KEY, signup);
+    }
+
 
 
 
