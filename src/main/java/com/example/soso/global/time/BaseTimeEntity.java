@@ -1,4 +1,4 @@
-package com.example.soso.global.timeEntity;
+package com.example.soso.global.time;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
