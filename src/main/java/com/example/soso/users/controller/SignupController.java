@@ -3,6 +3,7 @@ package com.example.soso.users.controller;
 import com.example.soso.users.domain.dto.AgeRangeRequest;
 import com.example.soso.users.domain.dto.GenderRequest;
 import com.example.soso.users.domain.dto.RegionRequest;
+import com.example.soso.users.domain.entity.InterestRequest;
 import com.example.soso.users.domain.entity.UserType;
 import com.example.soso.users.service.SignupService;
 import jakarta.servlet.http.HttpSession;
@@ -46,6 +47,13 @@ public class SignupController {
     public ResponseEntity<Void> setGender(@RequestBody @Valid GenderRequest request,
                                           HttpSession session) {
         signupService.saveGender(session, request.gender());
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/interests")
+    public ResponseEntity<Void> setInterests(@RequestBody @Valid InterestRequest request,
+                                             HttpSession session) {
+        signupService.saveInterests(session, request.interests());
         return ResponseEntity.ok().build();
     }
 }

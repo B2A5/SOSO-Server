@@ -3,10 +3,13 @@ package com.example.soso.users.service;
 import com.example.soso.users.domain.dto.SignupSession;
 import com.example.soso.users.domain.entity.AgeRange;
 import com.example.soso.users.domain.entity.Gender;
+import com.example.soso.users.domain.entity.InterestType;
 import com.example.soso.users.domain.entity.SignupStep;
 import com.example.soso.users.domain.entity.UserType;
 import com.example.soso.users.util.SignupFlow;
 import jakarta.servlet.http.HttpSession;
+import java.util.Collections;
+import java.util.List;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -56,6 +59,21 @@ public class SignupServiceImpl implements SignupService {
         signup.setCurrentStep(SignupFlow.nextStep(signup.getUserType(), SignupStep.GENDER));
         session.setAttribute(SESSION_KEY, signup);
     }
+
+    public void saveInterests(HttpSession session, List<InterestType> interests) {
+        SignupSession signup = (SignupSession) session.getAttribute(SESSION_KEY);
+        validateStep(signup, SignupStep.INTERESTS);
+
+        if (interests == null || interests.isEmpty()) {
+            signup.setInterests(Collections.emptyList());
+        } else {
+            signup.setInterests(interests);
+        }
+
+        signup.setCurrentStep(SignupFlow.nextStep(signup.getUserType(), SignupStep.INTERESTS));
+        session.setAttribute(SESSION_KEY, signup);
+    }
+
 
 
     private void validateStep(SignupSession signup, SignupStep requestedStep) {
