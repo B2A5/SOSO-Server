@@ -24,4 +24,8 @@ public interface SignupService {
     void saveBudget(HttpSession session, BudgetRange budget);
 
     void saveExperience(HttpSession session, StartupExperience experience);
+
+    String saveNiceName(HttpSession session);
+
+    void completeSignup(HttpSession session);
 }

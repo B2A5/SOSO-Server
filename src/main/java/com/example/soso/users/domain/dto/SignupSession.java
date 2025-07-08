@@ -20,6 +20,9 @@ import lombok.Setter;
 @AllArgsConstructor
 public class SignupSession implements Serializable {
 
+    private String username;
+    private String email;
+    private String profileImageUrl;
     private UserType userType;        // 예비창업자 or 주민
     private String regionId;          // 지역 코드 또는 ID
     private AgeRange ageRange;        // 10대 ~ 60대 이상
@@ -28,4 +31,5 @@ public class SignupSession implements Serializable {
     private BudgetRange budget;            // 예산 (null 가능 → 건너뛰기)
     private SignupStep currentStep;
     private StartupExperience startupExperience;
+    private String nickname;
 }

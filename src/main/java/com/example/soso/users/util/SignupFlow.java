@@ -16,7 +16,9 @@ public class SignupFlow {
                 SignupStep.AGE,
                 SignupStep.GENDER,
                 SignupStep.INTERESTS,
-                SignupStep.BUDGET
+                SignupStep.BUDGET,
+                SignupStep.NINAME,
+                SignupStep.COMPLETE
         ));
 
         FLOW.put(UserType.INHABITANT, List.of(
@@ -25,7 +27,9 @@ public class SignupFlow {
                 SignupStep.AGE,
                 SignupStep.GENDER,
                 SignupStep.INTERESTS,
-                SignupStep.STARTUP
+                SignupStep.STARTUP,
+                SignupStep.NINAME,
+                SignupStep.COMPLETE
         ));
     }
 

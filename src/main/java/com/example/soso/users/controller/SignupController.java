@@ -12,6 +12,8 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.Mapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -69,6 +71,18 @@ public class SignupController {
     public ResponseEntity<Void> setExperience(@RequestBody @Valid ExperienceRequest request,
                                               HttpSession session) {
         signupService.saveExperience(session, request.experience());
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/nickname")
+    public ResponseEntity<String> saveNickname(@RequestBody HttpSession session) {
+        String nickname = signupService.saveNiceName(session);
+        return ResponseEntity.ok(nickname);
+    }
+
+    @PostMapping("/complete")
+    public ResponseEntity<Void> completeSignup(HttpSession session) {
+        signupService.completeSignup(session);
         return ResponseEntity.ok().build();
     }
 }
