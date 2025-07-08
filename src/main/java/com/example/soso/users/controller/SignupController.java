@@ -1,26 +1,14 @@
 package com.example.soso.users.controller;
 
-import com.example.soso.users.domain.dto.AgeRangeRequest;
-import com.example.soso.users.domain.dto.BudgetRequest;
-import com.example.soso.users.domain.dto.ExperienceRequest;
-import com.example.soso.users.domain.dto.GenderRequest;
-import com.example.soso.users.domain.dto.RegionRequest;
-import com.example.soso.users.domain.dto.SignupSession;
-import com.example.soso.users.domain.dto.UserTypeRequest;
+import com.example.soso.users.domain.dto.*;
 import com.example.soso.users.domain.entity.InterestRequest;
 import com.example.soso.users.domain.entity.SignupStep;
-import com.example.soso.users.domain.entity.UserType;
 import com.example.soso.users.service.SignupService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.Mapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/signup")
@@ -37,59 +25,58 @@ public class SignupController {
         return ResponseEntity.ok().build();
     }
 
-
     @PostMapping("/user-type")
-    public ResponseEntity<Void> setUserType(@RequestBody @Valid UserTypeRequest request,
-                                            HttpSession session) {
-        signupService.saveUserType(session, request.userType());
-        return ResponseEntity.ok().build();  // 또는 다음 단계 안내 응답
+    public ResponseEntity<SignupStep> setUserType(@RequestBody @Valid UserTypeRequest request,
+                                                  HttpSession session) {
+        SignupStep nextStep = signupService.saveUserType(session, request.userType());
+        return ResponseEntity.ok(nextStep);
     }
 
     @PostMapping("/region")
-    public ResponseEntity<Void> setRegion(@RequestBody @Valid RegionRequest request,
-                                          HttpSession session) {
-        signupService.saveRegion(session, request.regionId());
-        return ResponseEntity.ok().build();
+    public ResponseEntity<SignupStep> setRegion(@RequestBody @Valid RegionRequest request,
+                                                HttpSession session) {
+        SignupStep nextStep = signupService.saveRegion(session, request.regionId());
+        return ResponseEntity.ok(nextStep);
     }
 
     @PostMapping("/age-range")
-    public ResponseEntity<Void> setAgeRange(@RequestBody @Valid AgeRangeRequest request,
-                                            HttpSession session) {
-        signupService.saveAgeRange(session, request.ageRange());
-        return ResponseEntity.ok().build();
+    public ResponseEntity<SignupStep> setAgeRange(@RequestBody @Valid AgeRangeRequest request,
+                                                  HttpSession session) {
+        SignupStep nextStep = signupService.saveAgeRange(session, request.ageRange());
+        return ResponseEntity.ok(nextStep);
     }
 
     @PostMapping("/gender")
-    public ResponseEntity<Void> setGender(@RequestBody @Valid GenderRequest request,
-                                          HttpSession session) {
-        signupService.saveGender(session, request.gender());
-        return ResponseEntity.ok().build();
+    public ResponseEntity<SignupStep> setGender(@RequestBody @Valid GenderRequest request,
+                                                HttpSession session) {
+        SignupStep nextStep = signupService.saveGender(session, request.gender());
+        return ResponseEntity.ok(nextStep);
     }
 
     @PostMapping("/interests")
-    public ResponseEntity<Void> setInterests(@RequestBody @Valid InterestRequest request,
-                                             HttpSession session) {
-        signupService.saveInterests(session, request.interests());
-        return ResponseEntity.ok().build();
+    public ResponseEntity<SignupStep> setInterests(@RequestBody @Valid InterestRequest request,
+                                                   HttpSession session) {
+        SignupStep nextStep = signupService.saveInterests(session, request.interests());
+        return ResponseEntity.ok(nextStep);
     }
 
     @PostMapping("/budget")
-    public ResponseEntity<Void> setBudget(@RequestBody BudgetRequest request, HttpSession session) {
-        signupService.saveBudget(session, request.budget());
-        return ResponseEntity.ok().build();
+    public ResponseEntity<SignupStep> setBudget(@RequestBody BudgetRequest request, HttpSession session) {
+        SignupStep nextStep = signupService.saveBudget(session, request.budget());
+        return ResponseEntity.ok(nextStep);
     }
 
     @PostMapping("/experience")
-    public ResponseEntity<Void> setExperience(@RequestBody @Valid ExperienceRequest request,
-                                              HttpSession session) {
-        signupService.saveExperience(session, request.experience());
-        return ResponseEntity.ok().build();
+    public ResponseEntity<SignupStep> setExperience(@RequestBody @Valid ExperienceRequest request,
+                                                    HttpSession session) {
+        SignupStep nextStep = signupService.saveExperience(session, request.experience());
+        return ResponseEntity.ok(nextStep);
     }
 
     @PostMapping("/nickname")
     public ResponseEntity<String> saveNickname(HttpSession session) {
-        String nickname = signupService.saveNiceName(session);
-        return ResponseEntity.ok(nickname);
+        String nextStep = signupService.saveNiceName(session);
+        return ResponseEntity.ok(nextStep);
     }
 
     @PostMapping("/complete")
@@ -97,4 +84,5 @@ public class SignupController {
         signupService.completeSignup(session);
         return ResponseEntity.ok().build();
     }
+
 }

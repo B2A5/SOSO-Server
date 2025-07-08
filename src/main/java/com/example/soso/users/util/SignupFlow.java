@@ -38,16 +38,9 @@ public class SignupFlow {
         List<SignupStep> steps = FLOW.get(userType);
         int currentIdx = steps.indexOf(currentStep);
 
-        log.info("사용자 타입: {}", userType);
-        log.info("현재 단계: {}", currentStep);
-        log.info("요청한 단계: {}", requestedStep);
-        log.info("현재 단계 인덱스: {}", currentIdx);
-        log.info("다음으로 기대되는 단계: {}",
-                (currentIdx + 1 < steps.size() ? steps.get(currentIdx + 1) : "없음"));
-
         return currentIdx != -1
                 && currentIdx < steps.size()
-                && (steps.get(currentIdx).equals(requestedStep)      // 현재 단계 재요청 허용
+                && (steps.get(currentIdx).equals(requestedStep)
                 || (currentIdx + 1 < steps.size()
                 && steps.get(currentIdx + 1).equals(requestedStep)));
     }
