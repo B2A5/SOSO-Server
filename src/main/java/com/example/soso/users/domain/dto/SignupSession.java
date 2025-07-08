@@ -5,6 +5,7 @@ import com.example.soso.users.domain.entity.BudgetRange;
 import com.example.soso.users.domain.entity.Gender;
 import com.example.soso.users.domain.entity.InterestType;
 import com.example.soso.users.domain.entity.SignupStep;
+import com.example.soso.users.domain.entity.StartupExperience;
 import com.example.soso.users.domain.entity.UserType;
 import java.io.Serializable;
 import java.util.List;
@@ -26,4 +27,5 @@ public class SignupSession implements Serializable {
     private List<InterestType> interests;   // 관심 업종 (문자열 목록)
     private BudgetRange budget;            // 예산 (null 가능 → 건너뛰기)
     private SignupStep currentStep;
+    private StartupExperience startupExperience;
 }

@@ -6,5 +6,6 @@ public enum SignupStep {
     AGE,
     GENDER,  // 연령대 + 성별 선택
     INTERESTS,       // 관심 업종 선택
-    BUDGET           // 예산 입력 (또는 건너뛰기)
+    BUDGET,           // 예산 입력 (또는 건너뛰기)
+    STARTUP
 }

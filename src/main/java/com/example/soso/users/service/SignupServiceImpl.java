@@ -6,6 +6,7 @@ import com.example.soso.users.domain.entity.BudgetRange;
 import com.example.soso.users.domain.entity.Gender;
 import com.example.soso.users.domain.entity.InterestType;
 import com.example.soso.users.domain.entity.SignupStep;
+import com.example.soso.users.domain.entity.StartupExperience;
 import com.example.soso.users.domain.entity.UserType;
 import com.example.soso.users.util.SignupFlow;
 import jakarta.servlet.http.HttpSession;
@@ -84,7 +85,14 @@ public class SignupServiceImpl implements SignupService {
         session.setAttribute(SESSION_KEY, signup);
     }
 
+    public void saveExperience(HttpSession session, StartupExperience experience) {
+        SignupSession signup = (SignupSession) session.getAttribute(SESSION_KEY);
+        validateStep(signup, SignupStep.STARTUP);
 
+        signup.setStartupExperience(experience);
+        signup.setCurrentStep(SignupStep.STARTUP);
+        session.setAttribute(SESSION_KEY, signup);
+    }
 
 
     private void validateStep(SignupSession signup, SignupStep requestedStep) {

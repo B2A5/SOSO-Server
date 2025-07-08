@@ -2,6 +2,7 @@ package com.example.soso.users.controller;
 
 import com.example.soso.users.domain.dto.AgeRangeRequest;
 import com.example.soso.users.domain.dto.BudgetRequest;
+import com.example.soso.users.domain.dto.ExperienceRequest;
 import com.example.soso.users.domain.dto.GenderRequest;
 import com.example.soso.users.domain.dto.RegionRequest;
 import com.example.soso.users.domain.entity.InterestRequest;
@@ -64,4 +65,10 @@ public class SignupController {
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping("/experience")
+    public ResponseEntity<Void> setExperience(@RequestBody @Valid ExperienceRequest request,
+                                              HttpSession session) {
+        signupService.saveExperience(session, request.experience());
+        return ResponseEntity.ok().build();
+    }
 }

@@ -24,7 +24,8 @@ public class SignupFlow {
                 SignupStep.REGION,
                 SignupStep.AGE,
                 SignupStep.GENDER,
-                SignupStep.INTERESTS
+                SignupStep.INTERESTS,
+                SignupStep.STARTUP
         ));
     }
 
