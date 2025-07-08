@@ -15,9 +15,4 @@ public enum BudgetRange {
     BudgetRange(String label) {
         this.label = label;
     }
-
-    @JsonValue
-    public String getLabel() {
-        return label;
-    }
 }

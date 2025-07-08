@@ -5,7 +5,10 @@ import com.example.soso.users.domain.dto.BudgetRequest;
 import com.example.soso.users.domain.dto.ExperienceRequest;
 import com.example.soso.users.domain.dto.GenderRequest;
 import com.example.soso.users.domain.dto.RegionRequest;
+import com.example.soso.users.domain.dto.SignupSession;
+import com.example.soso.users.domain.dto.UserTypeRequest;
 import com.example.soso.users.domain.entity.InterestRequest;
+import com.example.soso.users.domain.entity.SignupStep;
 import com.example.soso.users.domain.entity.UserType;
 import com.example.soso.users.service.SignupService;
 import jakarta.servlet.http.HttpSession;
@@ -26,10 +29,19 @@ public class SignupController {
 
     private final SignupService signupService;
 
+    @PostMapping("/start")
+    public ResponseEntity<Void> startSignup(HttpSession session) {
+        SignupSession signup = new SignupSession();
+        signup.setCurrentStep(SignupStep.USER_TYPE);
+        session.setAttribute("signup", signup);
+        return ResponseEntity.ok().build();
+    }
+
+
     @PostMapping("/user-type")
-    public ResponseEntity<Void> setUserType(@RequestBody @Valid UserType request,
+    public ResponseEntity<Void> setUserType(@RequestBody @Valid UserTypeRequest request,
                                             HttpSession session) {
-        signupService.saveUserType(session, request);
+        signupService.saveUserType(session, request.userType());
         return ResponseEntity.ok().build();  // 또는 다음 단계 안내 응답
     }
 
@@ -75,7 +87,7 @@ public class SignupController {
     }
 
     @PostMapping("/nickname")
-    public ResponseEntity<String> saveNickname(@RequestBody HttpSession session) {
+    public ResponseEntity<String> saveNickname(HttpSession session) {
         String nickname = signupService.saveNiceName(session);
         return ResponseEntity.ok(nickname);
     }

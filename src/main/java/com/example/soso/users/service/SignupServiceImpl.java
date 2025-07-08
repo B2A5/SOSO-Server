@@ -18,8 +18,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class SignupServiceImpl implements SignupService {
@@ -111,16 +113,14 @@ public class SignupServiceImpl implements SignupService {
         }
 
         signup.setNickname(nickname);
-        signup.setCurrentStep(SignupStep.STARTUP);
+        signup.setCurrentStep(SignupStep.NINAME);
         session.setAttribute(SESSION_KEY, signup);
         return nickname;
     }
 
     public void completeSignup(HttpSession session) {
         SignupSession signup = getValidatedSession(session);
-        if (signup.getCurrentStep() != SignupStep.COMPLETE) {
-            throw new IllegalStateException("아직 모든 단계를 완료하지 않았습니다.");
-        }
+        validateStep(signup, SignupStep.COMPLETE);
 
         Users user = UserMapper.fromSignupSession(signup, signup.getUsername(), signup.getEmail(), signup.getProfileImageUrl());
         usersRepository.save(user);
@@ -130,6 +130,8 @@ public class SignupServiceImpl implements SignupService {
 
 
     private void validateStep(SignupSession signup, SignupStep requestedStep) {
+        log.info("검증 단계 시작 - currentStep: {}, requestedStep: {}, userType: {}",
+                signup.getCurrentStep(), requestedStep, signup.getUserType());
         if (signup == null || !SignupFlow.isValidNextStep(signup.getUserType(), signup.getCurrentStep(), requestedStep)) {
             throw new IllegalStateException("현재 사용자 유형에 맞지 않는 단계입니다.");
         }

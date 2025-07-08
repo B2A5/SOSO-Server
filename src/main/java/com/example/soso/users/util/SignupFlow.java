@@ -4,7 +4,9 @@ import com.example.soso.users.domain.entity.SignupStep;
 import com.example.soso.users.domain.entity.UserType;
 import java.util.EnumMap;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class SignupFlow {
 
     private static final EnumMap<UserType, List<SignupStep>> FLOW = new EnumMap<>(UserType.class);
@@ -17,6 +19,7 @@ public class SignupFlow {
                 SignupStep.GENDER,
                 SignupStep.INTERESTS,
                 SignupStep.BUDGET,
+                SignupStep.STARTUP,
                 SignupStep.NINAME,
                 SignupStep.COMPLETE
         ));
@@ -26,8 +29,6 @@ public class SignupFlow {
                 SignupStep.REGION,
                 SignupStep.AGE,
                 SignupStep.GENDER,
-                SignupStep.INTERESTS,
-                SignupStep.STARTUP,
                 SignupStep.NINAME,
                 SignupStep.COMPLETE
         ));
@@ -36,10 +37,21 @@ public class SignupFlow {
     public static boolean isValidNextStep(UserType userType, SignupStep currentStep, SignupStep requestedStep) {
         List<SignupStep> steps = FLOW.get(userType);
         int currentIdx = steps.indexOf(currentStep);
+
+        log.info("사용자 타입: {}", userType);
+        log.info("현재 단계: {}", currentStep);
+        log.info("요청한 단계: {}", requestedStep);
+        log.info("현재 단계 인덱스: {}", currentIdx);
+        log.info("다음으로 기대되는 단계: {}",
+                (currentIdx + 1 < steps.size() ? steps.get(currentIdx + 1) : "없음"));
+
         return currentIdx != -1
-                && currentIdx + 1 < steps.size()
-                && steps.get(currentIdx + 1) == requestedStep;
+                && currentIdx < steps.size()
+                && (steps.get(currentIdx).equals(requestedStep)      // 현재 단계 재요청 허용
+                || (currentIdx + 1 < steps.size()
+                && steps.get(currentIdx + 1).equals(requestedStep)));
     }
+
 
     public static SignupStep nextStep(UserType userType, SignupStep currentStep) {
         List<SignupStep> steps = FLOW.get(userType);

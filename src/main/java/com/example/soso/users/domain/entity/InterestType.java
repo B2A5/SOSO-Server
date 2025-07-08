@@ -16,9 +16,4 @@ public enum InterestType {
     InterestType(String label) {
         this.label = label;
     }
-
-    @JsonValue
-    public String getLabel() {
-        return label;
-    }
 }

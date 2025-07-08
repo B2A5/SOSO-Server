@@ -12,11 +12,12 @@ public class UserMapper {
                 .userType(session.getUserType())
                 .gender(session.getGender())
                 .ageRange(session.getAgeRange())
+                .budget(session.getBudget())
+                .startupExperience(session.getStartupExperience())
                 .location(session.getRegionId())
                 .interests(session.getInterests())
                 .profileImageUrl(profileImageUrl)
                 .build();
     }
-
 
 }

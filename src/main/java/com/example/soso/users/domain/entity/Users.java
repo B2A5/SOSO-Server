@@ -27,9 +27,7 @@ public class Users extends BaseTimeEntity {
     private Long id;
 
     private String username;
-
     private String nickname;
-
     private String email;
 
     @Enumerated(EnumType.STRING)
@@ -43,6 +41,12 @@ public class Users extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private AgeRange ageRange;
 
+    @Enumerated(EnumType.STRING)
+    private BudgetRange budget;
+
+    @Enumerated(EnumType.STRING)
+    private StartupExperience startupExperience;
+
     private String location;
 
     @ElementCollection(fetch = FetchType.LAZY)
@@ -51,14 +55,13 @@ public class Users extends BaseTimeEntity {
     @Column(name = "interest_type")
     private List<InterestType> interests;
 
-
     private String latitude;
     private String longitude;
 
     @Builder
     public Users(String username, String nickname, String email, UserType userType, String profileImageUrl,
-                 Gender gender,
-                 AgeRange ageRange, String location, List<InterestType> interests, String latitude, String longitude) {
+                 Gender gender, AgeRange ageRange, BudgetRange budget, StartupExperience startupExperience,
+                 String location, List<InterestType> interests, String latitude, String longitude) {
         this.username = username;
         this.nickname = nickname;
         this.email = email;
@@ -66,6 +69,8 @@ public class Users extends BaseTimeEntity {
         this.profileImageUrl = profileImageUrl;
         this.gender = gender;
         this.ageRange = ageRange;
+        this.budget = budget;
+        this.startupExperience = startupExperience;
         this.location = location;
         this.interests = interests;
         this.latitude = latitude;

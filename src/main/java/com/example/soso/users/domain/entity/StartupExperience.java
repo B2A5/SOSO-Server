@@ -1,7 +1,5 @@
 package com.example.soso.users.domain.entity;
 
-import com.fasterxml.jackson.annotation.JsonValue;
-
 public enum StartupExperience {
     YES("창업 경험 유"),
     NO("창업 경험 무");
@@ -10,10 +8,5 @@ public enum StartupExperience {
 
     StartupExperience(String label) {
         this.label = label;
-    }
-
-    @JsonValue
-    public String getLabel() {
-        return label;
     }
 }
