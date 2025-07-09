@@ -13,8 +13,6 @@ public record KakaoUserResponse(
             String email
     ) {
         public record Profile(
-                String nickname,
-
                 @JsonProperty("profile_image_url")
                 String profileImageUrl
         ) {}

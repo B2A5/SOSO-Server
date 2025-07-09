@@ -9,7 +9,6 @@ public class KakaoMapper {
         return new KakaoUserProfileDto(
                 "kakao_" + kakaoUser.id(),
                 kakaoUser.kakaoAccount().email(),
-                kakaoUser.kakaoAccount().profile().nickname(),
                 kakaoUser.kakaoAccount().profile().profileImageUrl()
         );
     }

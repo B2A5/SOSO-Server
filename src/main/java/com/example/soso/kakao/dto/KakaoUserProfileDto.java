@@ -1,9 +1,8 @@
 package com.example.soso.kakao.dto;
 
 public record KakaoUserProfileDto (
-        String username,
+        String id,
         String email,
-        String nicName,
         String profileImageUrl
 ){
 }

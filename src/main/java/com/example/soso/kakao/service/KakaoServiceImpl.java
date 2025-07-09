@@ -53,7 +53,6 @@ public class KakaoServiceImpl implements KakaoService {
 
         // 5. 세션에 SignupSession 저장
         SignupSession signup = new SignupSession();
-        signup.setUsername(profile.username());
         signup.setEmail(profile.email());
         signup.setProfileImageUrl(profile.profileImageUrl());
         session.setAttribute("signup", signup);
