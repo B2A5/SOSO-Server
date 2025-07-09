@@ -1,11 +1,8 @@
 package com.example.soso.kakao.dto;
 
-import com.example.soso.users.domain.entity.Roles;
-
 public record KakaoUserProfileDto (
-        String username,
+        String id,
         String email,
-        String nicName,
         String profileImageUrl
 ){
 }

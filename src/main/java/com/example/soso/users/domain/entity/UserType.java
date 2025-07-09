@@ -1,5 +1,8 @@
 package com.example.soso.users.domain.entity;
 
-public enum Roles {
+import lombok.Getter;
+
+@Getter
+public enum UserType {
     FOUNDER, INHABITANT
 }
