@@ -1,5 +1,6 @@
 package com.example.soso.kakao.service;
 
+
 import com.example.soso.kakao.controller.KakaoApiClient;
 import com.example.soso.kakao.controller.KakaoAuthClient;
 import com.example.soso.kakao.dto.KakaoTokenResponse;
@@ -7,7 +8,6 @@ import com.example.soso.kakao.dto.KakaoUserProfileDto;
 import com.example.soso.kakao.dto.KakaoUserResponse;
 import com.example.soso.kakao.mapper.KakaoMapper;
 import com.example.soso.users.domain.dto.SignupSession;
-import com.example.soso.users.domain.entity.SignupStep;
 import com.example.soso.users.repository.UsersRepository;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +29,7 @@ public class KakaoServiceImpl implements KakaoService {
     private String redirectUri;
 
     @Override
-    public void login(String code, String codeVerifier, HttpSession session) {
+    public void login(String code, String codeVerifier,HttpSession session) {
         // 1. 카카오 토큰 요청
         KakaoTokenResponse tokenResponse = kakaoAuthClient.getToken(
                 "authorization_code",
@@ -56,5 +56,6 @@ public class KakaoServiceImpl implements KakaoService {
         signup.setEmail(profile.email());
         signup.setProfileImageUrl(profile.profileImageUrl());
         session.setAttribute("signup", signup);
+
     }
 }
