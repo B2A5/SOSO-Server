@@ -19,9 +19,9 @@ public class KakaoAuthController {
 
     @PostMapping("/login")
     public ResponseEntity<Void> kakaoLogin(
-            @RequestBody KakaoLoginRequest request
+            @RequestBody KakaoLoginRequest request,  HttpSession session
     ) {
-        kakaoService.login(request.code(), request.codeVerifier());
+        kakaoService.login(request.code(), request.codeVerifier(), session);
         return ResponseEntity.ok().build(); // or 201 Created, or redirect 응답
     }
 }
