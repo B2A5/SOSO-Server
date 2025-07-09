@@ -1,11 +1,9 @@
 package com.example.soso.kakao.controller;
 
 import com.example.soso.global.config.FeignConfig;
-import com.example.soso.kakao.dto.KakaoTokenRequest;
 import com.example.soso.kakao.dto.KakaoTokenResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @FeignClient(
