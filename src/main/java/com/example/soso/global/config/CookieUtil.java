@@ -8,7 +8,7 @@ import java.time.Duration;
 public class CookieUtil {
 
     private static final String SAME_SITE = "None";
-    private static final boolean SECURE = true;
+    private static final boolean SECURE = false;
     private static final boolean HTTP_ONLY = true;
     private static final String PATH = "/";
 

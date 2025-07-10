@@ -1,6 +1,7 @@
 package com.example.soso.security.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -28,9 +29,12 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
         try {
             filterChain.doFilter(request, response);
 
+        } catch (ExpiredJwtException e) {
+            log.info("AccessToken 만료됨");
+            setErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED, "ACCESS_TOKEN_EXPIRED");
         } catch (JwtException e) {
-            log.warn("JWT 예외 발생 ({}): {}", e.getClass().getSimpleName(), e.getMessage());
-            setErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED, "유효하지 않은 토큰입니다.");
+            log.warn("JWT 예외 발생: {}", e.getMessage());
+            setErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED, "INVALID_TOKEN");
 
         } catch (AuthenticationException e) {
             log.warn("인증 예외 발생: {}", e.getMessage());
