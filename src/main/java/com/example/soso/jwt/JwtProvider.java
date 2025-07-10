@@ -24,9 +24,21 @@ public class JwtProvider {
         return generateToken(subject, jwtProperties.getAccessTokenValidityInMs());
     }
 
-    public String generateRefreshToken(String subject) {
-        return generateToken(subject, jwtProperties.getRefreshTokenValidityInMs());
+    public String generateRefreshToken() {
+        return generateRefreshToken(jwtProperties.getRefreshTokenValidityInMs());
     }
+
+    private String generateRefreshToken(long validityInMs) {
+        Date now = new Date();
+        Date expiry = new Date(now.getTime() + validityInMs);
+
+        return Jwts.builder()
+                .setIssuedAt(now)
+                .setExpiration(expiry)
+                .signWith(getSigningKey())
+                .compact();
+    }
+
 
     private String generateToken(String subject, long validityInMs) {
         Date now = new Date();

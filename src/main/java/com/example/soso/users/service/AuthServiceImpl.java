@@ -22,27 +22,30 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public JwtTokenDto refreshAccessToken(String refreshToken, HttpServletResponse response) {
+        // 1. 토큰 유효성 검사 (exp, 서명 등)
         if (!jwtProvider.validateToken(refreshToken)) {
             throw new InvalidTokenException(INVALID_TOKEN);
         }
 
-        String userId = jwtProvider.getSubject(refreshToken);
-        String storedToken = refreshTokenService.get(userId);
-
-        if (!refreshToken.equals(storedToken)) {
+        // 2. Redis에서 refreshToken으로 userId 조회
+        String userId = refreshTokenService.getUserIdByRefreshToken(refreshToken);
+        if (userId == null) {
             throw new InvalidTokenException(REFRESH_TOKEN_NOT_FOUND);
         }
 
-        // 1. RTR: refreshToken 교체 및 재저장
-        String newRefreshToken = jwtProvider.generateRefreshToken(userId);
-        refreshTokenService.save(userId, newRefreshToken, jwtProperties.getRefreshTokenValidityInMs());
+        // 3. RTR 적용: 기존 토큰 제거 + 새 토큰 발급 및 저장
+        refreshTokenService.delete(refreshToken); // 기존 토큰 무효화
 
-        // 2. 새 refreshToken 쿠키에 저장
+        String newRefreshToken = jwtProvider.generateRefreshToken(); // userId 없음
+        refreshTokenService.save(newRefreshToken, userId, jwtProperties.getRefreshTokenValidityInMs());
+
+        // 4. 쿠키에 새 refreshToken 저장
         CookieUtil.addRefreshTokenCookie(response, newRefreshToken, jwtProperties.getRefreshTokenValidityInMs());
 
-        // 3. 새 accessToken 발급
+        // 5. 새 accessToken 발급
         String newAccessToken = jwtProvider.generateAccessToken(userId);
 
         return new JwtTokenDto(newAccessToken);
     }
+
 }

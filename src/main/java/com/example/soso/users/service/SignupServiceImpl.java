@@ -170,7 +170,7 @@ public class SignupServiceImpl implements SignupService {
 
     private TokenPair generateTokens(String userId) {
         String accessToken = jwtProvider.generateAccessToken(userId);
-        String refreshToken = jwtProvider.generateRefreshToken(userId);
+        String refreshToken = jwtProvider.generateRefreshToken();
         return new TokenPair(accessToken, refreshToken);
     }
 
