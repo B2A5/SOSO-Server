@@ -1,7 +1,10 @@
 package com.example.soso.users.service;
 
 import static com.example.soso.global.config.CookieUtil.addRefreshTokenCookie;
+import static com.example.soso.global.exception.domain.UserErrorCode.SESSION_NOT_VALID;
+import static com.example.soso.global.exception.domain.UserErrorCode.STEPS_NOT_TYPE;
 
+import com.example.soso.global.exception.util.UserAuthException;
 import com.example.soso.jwt.JwtProperties;
 import com.example.soso.jwt.JwtProvider;
 import com.example.soso.jwt.JwtTokenDto;
@@ -174,7 +177,7 @@ public class SignupServiceImpl implements SignupService {
 
     private void validateStep(SignupSession signup, SignupStep requestedStep) {
         if (signup == null || !SignupFlow.isValidNextStep(signup.getUserType(), signup.getCurrentStep(), requestedStep)) {
-            throw new IllegalStateException("현재 사용자 유형에 맞지 않는 단계입니다.");
+            throw new UserAuthException(STEPS_NOT_TYPE);
         }
     }
 
@@ -182,7 +185,7 @@ public class SignupServiceImpl implements SignupService {
         SignupSession signup = (SignupSession) session.getAttribute(SESSION_KEY);
 
         if (signup == null) {
-            throw new IllegalStateException("회원가입 세션이 존재하지 않습니다.");
+            throw new UserAuthException(SESSION_NOT_VALID);
         }
         return signup;
     }

@@ -1,4 +1,4 @@
-package com.example.soso.users.controller;
+package com.example.soso.users.service;
 
 import com.example.soso.jwt.JwtTokenDto;
 import jakarta.servlet.http.HttpServletResponse;

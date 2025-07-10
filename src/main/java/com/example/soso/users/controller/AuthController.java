@@ -1,6 +1,7 @@
 package com.example.soso.users.controller;
 
 import com.example.soso.jwt.JwtTokenDto;
+import com.example.soso.users.service.AuthService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
