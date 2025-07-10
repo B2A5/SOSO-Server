@@ -1,6 +1,7 @@
 package com.example.soso.users.service;
 
 import com.example.soso.jwt.JwtProvider;
+import com.example.soso.jwt.JwtTokenDto;
 import com.example.soso.users.domain.dto.SignupSession;
 import com.example.soso.users.domain.dto.UserMapper;
 import com.example.soso.users.domain.entity.AgeRange;
@@ -135,15 +136,15 @@ public class SignupServiceImpl implements SignupService {
         return nickname;
     }
 
-    public SignupStep completeSignup(HttpSession session) {
+    public JwtTokenDto completeSignup(HttpSession session) {
         SignupSession signup = getValidatedSession(session);
         validateStep(signup, SignupStep.COMPLETE);
 
         Users user = UserMapper.fromSignupSession(signup, signup.getUsername(), signup.getEmail(), signup.getProfileImageUrl());
         usersRepository.save(user);
-        jwtProvider.generateAccessToken(user.getId());
+        String accessToken = jwtProvider.generateAccessToken(user.getId());
         session.removeAttribute("signup");
-        return SignupStep.COMPLETE;
+        return new JwtTokenDto(accessToken);
     }
 
 

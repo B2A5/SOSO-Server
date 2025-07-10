@@ -1,5 +1,6 @@
 package com.example.soso.users.service;
 
+import com.example.soso.jwt.JwtTokenDto;
 import com.example.soso.users.domain.entity.AgeRange;
 import com.example.soso.users.domain.entity.BudgetRange;
 import com.example.soso.users.domain.entity.Gender;
@@ -28,5 +29,5 @@ public interface SignupService {
 
     String saveNiceName(HttpSession session);
 
-    SignupStep completeSignup(HttpSession session);
+    JwtTokenDto completeSignup(HttpSession session);
 }
