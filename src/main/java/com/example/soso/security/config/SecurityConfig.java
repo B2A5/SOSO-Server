@@ -1,6 +1,7 @@
 package com.example.soso.security.config;
 
 import com.example.soso.jwt.JwtProvider;
+import com.example.soso.security.filter.ExceptionHandlerFilter;
 import com.example.soso.security.filter.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -44,6 +45,7 @@ public class SecurityConfig {
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
+                .addFilterBefore(new ExceptionHandlerFilter(), JwtAuthenticationFilter.class)
                 .addFilterBefore(new JwtAuthenticationFilter(jwtProvider, userDetailsService), UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
