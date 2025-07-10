@@ -1,6 +1,5 @@
 package com.example.soso.users.controller;
 
-import com.example.soso.jwt.JwtProvider;
 import com.example.soso.jwt.JwtTokenDto;
 import com.example.soso.users.domain.dto.*;
 import com.example.soso.users.domain.entity.InterestRequest;
@@ -83,7 +82,7 @@ public class SignupController {
 
     @PostMapping("/complete")
     public ResponseEntity<JwtTokenDto> completeSignup(HttpSession session) {
-        JwtTokenDto jwtAccessToken = signupService.completeSignup(session);
+        JwtTokenDto jwtAccessToken = signupService.completeSignup(session, );
         return ResponseEntity.ok(jwtAccessToken);
     }
 

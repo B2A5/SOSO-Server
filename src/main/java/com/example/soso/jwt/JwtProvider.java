@@ -15,6 +15,7 @@ public class JwtProvider {
 
     private final JwtProperties jwtProperties;
 
+
     private SecretKey getSigningKey() {
         return Keys.hmacShaKeyFor(jwtProperties.getSecretKey().getBytes(StandardCharsets.UTF_8));
     }

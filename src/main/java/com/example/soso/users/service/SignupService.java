@@ -8,6 +8,7 @@ import com.example.soso.users.domain.entity.InterestType;
 import com.example.soso.users.domain.entity.SignupStep;
 import com.example.soso.users.domain.entity.StartupExperience;
 import com.example.soso.users.domain.entity.UserType;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.util.List;
 
@@ -29,5 +30,5 @@ public interface SignupService {
 
     String saveNiceName(HttpSession session);
 
-    JwtTokenDto completeSignup(HttpSession session);
+    JwtTokenDto completeSignup(HttpSession session, HttpServletResponse response);
 }

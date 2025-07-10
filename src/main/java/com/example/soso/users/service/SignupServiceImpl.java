@@ -1,8 +1,13 @@
 package com.example.soso.users.service;
 
+import static com.example.soso.global.config.CookieUtil.addRefreshTokenCookie;
+
+import com.example.soso.jwt.JwtProperties;
 import com.example.soso.jwt.JwtProvider;
 import com.example.soso.jwt.JwtTokenDto;
+import com.example.soso.jwt.RefreshTokenRedisService;
 import com.example.soso.users.domain.dto.SignupSession;
+import com.example.soso.users.domain.dto.TokenPair;
 import com.example.soso.users.domain.dto.UserMapper;
 import com.example.soso.users.domain.entity.AgeRange;
 import com.example.soso.users.domain.entity.BudgetRange;
@@ -15,6 +20,7 @@ import com.example.soso.users.domain.entity.Users;
 import com.example.soso.users.repository.UsersRepository;
 import com.example.soso.users.util.RandomNicknameGenerator;
 import com.example.soso.users.util.SignupFlow;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.util.Collections;
 import java.util.List;
@@ -31,6 +37,8 @@ public class SignupServiceImpl implements SignupService {
     private static final String SESSION_KEY = "signup";
     private final UsersRepository usersRepository;
     private final JwtProvider jwtProvider;
+    private final JwtProperties jwtProperties;
+    private final RefreshTokenRedisService redisService;
 
     public SignupStep saveUserType(HttpSession session, UserType userType) {
         SignupSession signup = getValidatedSession(session);
@@ -136,17 +144,32 @@ public class SignupServiceImpl implements SignupService {
         return nickname;
     }
 
-    public JwtTokenDto completeSignup(HttpSession session) {
+    public JwtTokenDto completeSignup(HttpSession session, HttpServletResponse response) {
+        // 마지막 단계 검증 및 확인
         SignupSession signup = getValidatedSession(session);
         validateStep(signup, SignupStep.COMPLETE);
 
+        // 유저 저장
         Users user = UserMapper.fromSignupSession(signup, signup.getUsername(), signup.getEmail(), signup.getProfileImageUrl());
         usersRepository.save(user);
-        String accessToken = jwtProvider.generateAccessToken(user.getId());
+
+        // 토큰 만들기
+        TokenPair tokenPair = generateTokens(user.getId());
+
+        // 레디스 와 httpOnly 쿠기 저장
+        redisService.save(user.getId(), tokenPair.refreshToken(), jwtProperties.getRefreshTokenValidityInMs());
+        addRefreshTokenCookie(response, tokenPair.refreshToken(), jwtProperties.getRefreshTokenValidityInMs());
+
+        // 세션 삭제
         session.removeAttribute("signup");
-        return new JwtTokenDto(accessToken);
+        return new JwtTokenDto(tokenPair.accessToken());
     }
 
+    private TokenPair generateTokens(String userId) {
+        String accessToken = jwtProvider.generateAccessToken(userId);
+        String refreshToken = jwtProvider.generateRefreshToken(userId);
+        return new TokenPair(accessToken, refreshToken);
+    }
 
 
     private void validateStep(SignupSession signup, SignupStep requestedStep) {
