@@ -51,8 +51,7 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
         response.setContentType("application/json; charset=UTF-8");
 
         Map<String, Object> errorBody = new HashMap<>();
-        errorBody.put("success", false);
-        errorBody.put("status", status);
+        errorBody.put("code", status);
         errorBody.put("message", message);
 
         objectMapper.writeValue(response.getWriter(), errorBody);
