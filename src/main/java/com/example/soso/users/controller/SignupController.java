@@ -5,6 +5,7 @@ import com.example.soso.users.domain.dto.*;
 import com.example.soso.users.domain.entity.InterestRequest;
 import com.example.soso.users.domain.entity.SignupStep;
 import com.example.soso.users.service.SignupService;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -81,8 +82,8 @@ public class SignupController {
     }
 
     @PostMapping("/complete")
-    public ResponseEntity<JwtTokenDto> completeSignup(HttpSession session) {
-        JwtTokenDto jwtAccessToken = signupService.completeSignup(session, );
+    public ResponseEntity<JwtTokenDto> completeSignup(HttpSession session, HttpServletResponse response) {
+        JwtTokenDto jwtAccessToken = signupService.completeSignup(session, response);
         return ResponseEntity.ok(jwtAccessToken);
     }
 
