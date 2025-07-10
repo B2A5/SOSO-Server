@@ -1,6 +1,16 @@
 package com.example.soso.users.service;
 
+import static com.example.soso.global.config.CookieUtil.addRefreshTokenCookie;
+import static com.example.soso.global.exception.domain.UserErrorCode.SESSION_NOT_VALID;
+import static com.example.soso.global.exception.domain.UserErrorCode.STEPS_NOT_TYPE;
+
+import com.example.soso.global.exception.util.UserAuthException;
+import com.example.soso.jwt.JwtProperties;
+import com.example.soso.jwt.JwtProvider;
+import com.example.soso.jwt.JwtTokenDto;
+import com.example.soso.jwt.RefreshTokenRedisService;
 import com.example.soso.users.domain.dto.SignupSession;
+import com.example.soso.users.domain.dto.TokenPair;
 import com.example.soso.users.domain.dto.UserMapper;
 import com.example.soso.users.domain.entity.AgeRange;
 import com.example.soso.users.domain.entity.BudgetRange;
@@ -13,6 +23,7 @@ import com.example.soso.users.domain.entity.Users;
 import com.example.soso.users.repository.UsersRepository;
 import com.example.soso.users.util.RandomNicknameGenerator;
 import com.example.soso.users.util.SignupFlow;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.util.Collections;
 import java.util.List;
@@ -28,6 +39,9 @@ public class SignupServiceImpl implements SignupService {
 
     private static final String SESSION_KEY = "signup";
     private final UsersRepository usersRepository;
+    private final JwtProvider jwtProvider;
+    private final JwtProperties jwtProperties;
+    private final RefreshTokenRedisService redisService;
 
     public SignupStep saveUserType(HttpSession session, UserType userType) {
         SignupSession signup = getValidatedSession(session);
@@ -133,21 +147,37 @@ public class SignupServiceImpl implements SignupService {
         return nickname;
     }
 
-    public SignupStep completeSignup(HttpSession session) {
+    public JwtTokenDto completeSignup(HttpSession session, HttpServletResponse response) {
+        // 마지막 단계 검증 및 확인
         SignupSession signup = getValidatedSession(session);
         validateStep(signup, SignupStep.COMPLETE);
 
+        // 유저 저장
         Users user = UserMapper.fromSignupSession(signup, signup.getUsername(), signup.getEmail(), signup.getProfileImageUrl());
         usersRepository.save(user);
+
+        // 토큰 만들기
+        TokenPair tokenPair = generateTokens(user.getId());
+
+        // 레디스 와 httpOnly 쿠기 저장
+        redisService.save(user.getId(), tokenPair.refreshToken(), jwtProperties.getRefreshTokenValidityInMs());
+        addRefreshTokenCookie(response, tokenPair.refreshToken(), jwtProperties.getRefreshTokenValidityInMs());
+
+        // 세션 삭제
         session.removeAttribute("signup");
-        return SignupStep.COMPLETE;
+        return new JwtTokenDto(tokenPair.accessToken());
     }
 
+    private TokenPair generateTokens(String userId) {
+        String accessToken = jwtProvider.generateAccessToken(userId);
+        String refreshToken = jwtProvider.generateRefreshToken(userId);
+        return new TokenPair(accessToken, refreshToken);
+    }
 
 
     private void validateStep(SignupSession signup, SignupStep requestedStep) {
         if (signup == null || !SignupFlow.isValidNextStep(signup.getUserType(), signup.getCurrentStep(), requestedStep)) {
-            throw new IllegalStateException("현재 사용자 유형에 맞지 않는 단계입니다.");
+            throw new UserAuthException(STEPS_NOT_TYPE);
         }
     }
 
@@ -155,7 +185,7 @@ public class SignupServiceImpl implements SignupService {
         SignupSession signup = (SignupSession) session.getAttribute(SESSION_KEY);
 
         if (signup == null) {
-            throw new IllegalStateException("회원가입 세션이 존재하지 않습니다.");
+            throw new UserAuthException(SESSION_NOT_VALID);
         }
         return signup;
     }

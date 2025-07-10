@@ -1,6 +1,7 @@
 package com.example.soso.kakao.service;
 
-
+import com.example.soso.global.exception.domain.UserErrorCode;
+import com.example.soso.global.exception.util.UserAuthException;
 import com.example.soso.kakao.controller.KakaoApiClient;
 import com.example.soso.kakao.controller.KakaoAuthClient;
 import com.example.soso.kakao.dto.KakaoTokenResponse;
@@ -18,6 +19,10 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class KakaoServiceImpl implements KakaoService {
 
+    private static final String AUTHORIZATION_CODE = "authorization_code";
+    private static final String BEARER_PREFIX = "Bearer ";
+    private static final String SIGNUP_SESSION_KEY = "signup";
+
     private final KakaoAuthClient kakaoAuthClient;
     private final KakaoApiClient kakaoApiClient;
     private final UsersRepository userRepository;
@@ -29,10 +34,10 @@ public class KakaoServiceImpl implements KakaoService {
     private String redirectUri;
 
     @Override
-    public void login(String code, String codeVerifier,HttpSession session) {
+    public void login(String code, String codeVerifier, HttpSession session) {
         // 1. 카카오 토큰 요청
         KakaoTokenResponse tokenResponse = kakaoAuthClient.getToken(
-                "authorization_code",
+                AUTHORIZATION_CODE,
                 clientId,
                 redirectUri,
                 code,
@@ -40,7 +45,7 @@ public class KakaoServiceImpl implements KakaoService {
         );
 
         // 2. 사용자 정보 요청
-        KakaoUserResponse kakaoUser = kakaoApiClient.getUserInfo("Bearer " + tokenResponse.accessToken());
+        KakaoUserResponse kakaoUser = kakaoApiClient.getUserInfo(BEARER_PREFIX + tokenResponse.accessToken());
 
         // 3. 사용자 정보를 Dto로 변환
         KakaoUserProfileDto profile = KakaoMapper.from(kakaoUser);
@@ -48,14 +53,13 @@ public class KakaoServiceImpl implements KakaoService {
         // 4. 기존 유저인지 확인
         boolean exists = userRepository.existsByEmail(profile.email());
         if (exists) {
-            throw new IllegalStateException("이미 가입된 이메일입니다. (소셜 로그인)");
+            throw new UserAuthException(UserErrorCode.EMAIL_ALREADY_REGISTERED);
         }
 
         // 5. 세션에 SignupSession 저장
         SignupSession signup = new SignupSession();
         signup.setEmail(profile.email());
         signup.setProfileImageUrl(profile.profileImageUrl());
-        session.setAttribute("signup", signup);
-
+        session.setAttribute(SIGNUP_SESSION_KEY, signup);
     }
 }
