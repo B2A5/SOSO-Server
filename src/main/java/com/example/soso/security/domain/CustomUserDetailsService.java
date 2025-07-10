@@ -1,0 +1,25 @@
+package com.example.soso.security.domain;
+
+import com.example.soso.users.repository.UsersRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+
+@Service
+@RequiredArgsConstructor
+public class CustomUserDetailsService implements UserDetailsService {
+
+     private final UsersRepository userRepository;
+
+    @Override
+    public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
+
+        if (userId == null || userId.isBlank() || !userRepository.existsById(userId)) {
+            throw new UsernameNotFoundException("유효하지 않은 사용자 ID입니다.");
+        }
+
+        return new CustomUserDetails(userId);
+    }
+}
