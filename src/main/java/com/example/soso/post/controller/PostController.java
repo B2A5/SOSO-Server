@@ -42,7 +42,7 @@ public class PostController {
     }
 
 
-    @PatchMapping(value = "/posts/{postId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PatchMapping(value = "/{postId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Long> updatePost(@PathVariable Long postId,
                                            @ModelAttribute PostUpdateRequest request,
                                            @AuthenticationPrincipal CustomUserDetails userDetails) {
@@ -51,13 +51,18 @@ public class PostController {
         return ResponseEntity.ok(updatedId);
     }
 
-    @DeleteMapping("/posts/{postId}")
+    @DeleteMapping("/{postId}")
     public ResponseEntity<Void> deletePost(@PathVariable Long postId,
                                            @AuthenticationPrincipal CustomUserDetails userDetails) {
         postService.deletePost(postId, userDetails.getUser());
         return ResponseEntity.noContent().build();
     }
 
-
+    @DeleteMapping("/{postId}/hard")
+    public ResponseEntity<Void> hardDeletePost(@PathVariable Long postId,
+                                               @AuthenticationPrincipal CustomUserDetails userDetails) {
+        postService.hardDeletePost(postId, userDetails.getUser());
+        return ResponseEntity.noContent().build();
+    }
 
 }

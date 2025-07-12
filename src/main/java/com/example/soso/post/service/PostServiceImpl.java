@@ -92,6 +92,24 @@ public class PostServiceImpl implements PostService {
         post.delete();
     }
 
+    @Override
+    @Transactional
+    public void hardDeletePost(Long postId, Users user) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new PostException(PostErrorCode.NOT_FOUND));
+
+        if (!post.getUser().getId().equals(user.getId())) {
+            throw new PostException(PostErrorCode.FORBIDDEN);
+        }
+
+        // 이미지 S3 삭제
+        post.getImages().forEach(image -> s3Service.deleteImage(image.getImageUrl()));
+
+        // 실제 DB 삭제
+        postRepository.delete(post);
+    }
+
+
 
 
     /**
