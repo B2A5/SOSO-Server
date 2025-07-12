@@ -6,16 +6,19 @@ import com.example.soso.global.exception.util.PostException;
 import com.example.soso.post.domain.dto.PostCreateRequest;
 import com.example.soso.post.domain.dto.PostMapper;
 import com.example.soso.post.domain.dto.PostResponse;
+import com.example.soso.post.domain.dto.PostUpdateRequest;
 import com.example.soso.post.domain.entity.Post;
 import com.example.soso.post.domain.entity.PostImage;
 import com.example.soso.post.repository.PostImageRepository;
 import com.example.soso.post.repository.PostRepository;
+import com.example.soso.post.service.PostService;
 import com.example.soso.users.domain.entity.Users;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-
 
 @Service
 @RequiredArgsConstructor
@@ -28,25 +31,15 @@ public class PostServiceImpl implements PostService {
     @Override
     @Transactional
     public Long createPost(PostCreateRequest request, Users user) {
-        // 1. 게시글 본문 저장
         Post post = PostMapper.toEntity(request, user);
         postRepository.save(post);
 
-        // 2. 이미지 업로드 + PostImage 저장
-        for (int i = 0; i < request.images().size(); i++) {
-            MultipartFile imageFile = request.images().get(i);
+        List<PostImage> postImages = createPostImages(request.images(), post);
+        postImages.forEach(image -> {
+            postImageRepository.save(image);
+            post.addImage(image);
+        });
 
-            String imageUrl = s3Service.uploadImage(imageFile, "posts");
-
-            PostImage postImage = PostImage.builder()
-                    .imageUrl(imageUrl)
-                    .sequence(i)
-                    .post(post)
-                    .build();
-
-            postImageRepository.save(postImage);
-            post.addImage(postImage); // 연관관계 편의 메서드
-        }
         return post.getId();
     }
 
@@ -59,5 +52,48 @@ public class PostServiceImpl implements PostService {
         return PostMapper.toResponse(post);
     }
 
+    @Override
+    @Transactional
+    public Long updatePost(Long postId, PostUpdateRequest request, Users user) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new PostException(PostErrorCode.NOT_FOUND));
 
+        if (!post.getUser().getId().equals(user.getId())) {
+            throw new PostException(PostErrorCode.FORBIDDEN);
+        }
+
+        // 기존 이미지 S3에서 삭제
+        post.getImages().forEach(image -> s3Service.deleteImage(image.getImageUrl()));
+        post.getImages().clear();
+
+        // 새로운 이미지 업로드 및 PostImage 생성
+        List<PostImage> postImages = createPostImages(request.images(), post);
+        postImages.forEach(post::addImage);
+
+        post.update(request.title(), request.content(), request.category(), postImages);
+        return post.getId();
+    }
+
+
+    /**
+     * 이미지 리스트를 S3에 업로드하고, PostImage 리스트를 생성한다.
+     */
+    private List<PostImage> createPostImages(List<MultipartFile> images, Post post) {
+        List<PostImage> postImages = new ArrayList<>();
+
+        for (int i = 0; i < images.size(); i++) {
+            MultipartFile file = images.get(i);
+            String imageUrl = s3Service.uploadImage(file, "posts");
+
+            PostImage postImage = PostImage.builder()
+                    .imageUrl(imageUrl)
+                    .sequence(i)
+                    .post(post)
+                    .build();
+
+            postImages.add(postImage);
+        }
+
+        return postImages;
+    }
 }

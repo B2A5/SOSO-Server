@@ -2,6 +2,7 @@ package com.example.soso.post.controller;
 
 import com.example.soso.post.domain.dto.PostCreateRequest;
 import com.example.soso.post.domain.dto.PostResponse;
+import com.example.soso.post.domain.dto.PostUpdateRequest;
 import com.example.soso.post.service.PostService;
 import com.example.soso.security.domain.CustomUserDetails;
 import com.example.soso.users.domain.entity.Users;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,5 +39,16 @@ public class PostController {
         PostResponse response = postService.getPost(postId);
         return ResponseEntity.ok(response);
     }
+
+
+    @PatchMapping(value = "/posts/{postId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Long> updatePost(@PathVariable Long postId,
+                                           @ModelAttribute PostUpdateRequest request,
+                                           @AuthenticationPrincipal CustomUserDetails userDetails) {
+        Users user = userDetails.getUser();
+        Long updatedId = postService.updatePost(postId, request, user);
+        return ResponseEntity.ok(updatedId);
+    }
+
 
 }

@@ -16,8 +16,6 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
-@Builder
 public class PostImage {
 
     @Id
@@ -33,6 +31,13 @@ public class PostImage {
     private Post post;
 
     public void setPost(Post post) {
+        this.post = post;
+    }
+
+    @Builder
+    public PostImage(String imageUrl, int sequence, Post post) {
+        this.imageUrl = imageUrl;
+        this.sequence = sequence;
         this.post = post;
     }
 }

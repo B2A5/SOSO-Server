@@ -58,4 +58,19 @@ public class Post extends BaseTimeEntity {
         this.images.add(image);
         image.setPost(this);
     }
+
+    public void update(String title, String content, Category category, List<PostImage> newImages) {
+        if (title != null) {
+            this.title = title;
+        }
+        if (content != null) {
+            this.content = content;
+        }
+        if (category != null) {
+            this.category = category;
+        }
+        if (newImages != null && !newImages.isEmpty()) {
+            this.images = newImages;
+        }
+    }
 }
