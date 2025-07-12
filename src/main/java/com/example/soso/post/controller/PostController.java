@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/posts")
@@ -27,7 +26,8 @@ public class PostController {
 
     private final PostService postService;
 
-    @PostMapping(value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    // 게시글 작성
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Long> createPost(@ModelAttribute PostCreateRequest request,
                                            @AuthenticationPrincipal CustomUserDetails userDetails) {
         Users user = userDetails.getUser();
@@ -35,13 +35,14 @@ public class PostController {
         return ResponseEntity.ok(postId);
     }
 
+    // 게시글 단건 조회
     @GetMapping("/{postId}")
     public ResponseEntity<PostResponse> getPost(@PathVariable Long postId) {
         PostResponse response = postService.getPost(postId);
         return ResponseEntity.ok(response);
     }
 
-
+    // 게시글 수정
     @PatchMapping(value = "/{postId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Long> updatePost(@PathVariable Long postId,
                                            @ModelAttribute PostUpdateRequest request,
@@ -51,6 +52,7 @@ public class PostController {
         return ResponseEntity.ok(updatedId);
     }
 
+    // 게시글 Soft Delete
     @DeleteMapping("/{postId}")
     public ResponseEntity<Void> deletePost(@PathVariable Long postId,
                                            @AuthenticationPrincipal CustomUserDetails userDetails) {
@@ -58,11 +60,11 @@ public class PostController {
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/{postId}/hard")
+    // 게시글 Hard Delete (관리자 또는 강제 삭제)
+    @DeleteMapping("/{postId}/force")
     public ResponseEntity<Void> hardDeletePost(@PathVariable Long postId,
                                                @AuthenticationPrincipal CustomUserDetails userDetails) {
         postService.hardDeletePost(postId, userDetails.getUser());
         return ResponseEntity.noContent().build();
     }
-
 }
