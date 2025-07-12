@@ -3,6 +3,7 @@ package com.example.soso.post.domain.entity;
 import com.example.soso.global.time.BaseTimeEntity;
 import com.example.soso.users.domain.entity.Users;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -53,6 +54,14 @@ public class Post extends BaseTimeEntity {
 
     private int likeCount;
     private int commentCount;
+
+    @Column(nullable = false)
+    private boolean deleted = false;
+
+    public void delete() {
+        this.deleted = true;
+    }
+
 
     public void addImage(PostImage image) {
         this.images.add(image);

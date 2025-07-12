@@ -74,6 +74,25 @@ public class PostServiceImpl implements PostService {
         return post.getId();
     }
 
+    @Override
+    @Transactional
+    public void deletePost(Long postId, Users user) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new PostException(PostErrorCode.NOT_FOUND));
+
+        if (!post.getUser().getId().equals(user.getId())) {
+            throw new PostException(PostErrorCode.FORBIDDEN);
+        }
+
+        // 게시글 연관 이미지 S3에서도 삭제
+        post.getImages().forEach(image -> s3Service.deleteImage(image.getImageUrl()));
+        post.getImages().clear();
+
+        // Soft Delete 처리
+        post.delete();
+    }
+
+
 
     /**
      * 이미지 리스트를 S3에 업로드하고, PostImage 리스트를 생성한다.
