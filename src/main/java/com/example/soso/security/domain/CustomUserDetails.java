@@ -1,5 +1,6 @@
 package com.example.soso.security.domain;
 
+import com.example.soso.users.domain.entity.Users;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -9,10 +10,10 @@ import java.util.Collection;
 @Getter
 public class CustomUserDetails implements UserDetails {
 
-    private final String userId;
+    private final Users user;
 
-    public CustomUserDetails(String userId) {
-        this.userId = userId;
+    public CustomUserDetails(Users user) {
+        this.user = user;
     }
 
     // 권한이 없는 경우 null 또는 빈 리스트
@@ -29,7 +30,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return userId;
+        return user.getId();
     }
 
     @Override public boolean isAccountNonExpired() { return true; }
