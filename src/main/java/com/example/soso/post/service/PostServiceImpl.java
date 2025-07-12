@@ -1,8 +1,11 @@
 package com.example.soso.post.service;
 
 import com.example.soso.global.config.S3Service;
+import com.example.soso.global.exception.domain.PostErrorCode;
+import com.example.soso.global.exception.util.PostException;
 import com.example.soso.post.domain.dto.PostCreateRequest;
 import com.example.soso.post.domain.dto.PostMapper;
+import com.example.soso.post.domain.dto.PostResponse;
 import com.example.soso.post.domain.entity.Post;
 import com.example.soso.post.domain.entity.PostImage;
 import com.example.soso.post.repository.PostImageRepository;
@@ -16,7 +19,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
@@ -24,6 +26,7 @@ public class PostServiceImpl implements PostService {
     private final S3Service s3Service;
 
     @Override
+    @Transactional
     public Long createPost(PostCreateRequest request, Users user) {
         // 1. 게시글 본문 저장
         Post post = PostMapper.toEntity(request, user);
@@ -46,4 +49,15 @@ public class PostServiceImpl implements PostService {
         }
         return post.getId();
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public PostResponse getPost(Long postId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new PostException(PostErrorCode.NOT_FOUND));
+
+        return PostMapper.toResponse(post);
+    }
+
+
 }
