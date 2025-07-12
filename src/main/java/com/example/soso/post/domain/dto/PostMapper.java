@@ -10,7 +10,6 @@ public class PostMapper {
                 .title(dto.title())
                 .content(dto.content())
                 .category(dto.category())
-                .imageUrls(dto.imageUrls())
                 .user(user)
                 .likeCount(0)
                 .commentCount(0)
@@ -26,7 +25,7 @@ public class PostMapper {
                 post.getImageUrls(),
                 post.getLikeCount(),
                 post.getCommentCount(),
-                post.getCreatedAt().toString(),
+                post.getCreatedDate().toString(),
                 toUserSummary(post.getUser())
         );
     }

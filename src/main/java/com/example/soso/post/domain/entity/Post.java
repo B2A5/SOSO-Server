@@ -2,6 +2,7 @@ package com.example.soso.post.domain.entity;
 
 import com.example.soso.global.time.BaseTimeEntity;
 import com.example.soso.users.domain.entity.Users;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -12,7 +13,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
-import java.time.LocalDateTime;
+import jakarta.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
@@ -20,8 +21,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
+
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -40,6 +40,9 @@ public class Post extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private Category category;
 
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PostImage> images = new ArrayList<>();
+
     private String title;
 
     @Lob
@@ -51,9 +54,8 @@ public class Post extends BaseTimeEntity {
     private int likeCount;
     private int commentCount;
 
-    @CreatedDate
-    private LocalDateTime createdAt;
-
-    @LastModifiedDate
-    private LocalDateTime updatedAt;
+    public void addImage(PostImage image) {
+        this.images.add(image);
+        image.setPost(this);
+    }
 }
