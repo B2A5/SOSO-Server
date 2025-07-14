@@ -1,4 +1,4 @@
-package com.example.soso.jwt;
+package com.example.soso.global.jwt;
 
 public record JwtTokenDto(
         String jwtAccessToken

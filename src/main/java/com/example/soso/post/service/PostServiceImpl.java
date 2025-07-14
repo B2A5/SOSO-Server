@@ -1,6 +1,6 @@
 package com.example.soso.post.service;
 
-import com.example.soso.global.config.S3Service;
+import com.example.soso.global.s3.S3Service;
 import com.example.soso.global.exception.domain.PostErrorCode;
 import com.example.soso.global.exception.util.PostException;
 import com.example.soso.post.domain.dto.PostCreateRequest;
@@ -11,7 +11,6 @@ import com.example.soso.post.domain.entity.Post;
 import com.example.soso.post.domain.entity.PostImage;
 import com.example.soso.post.repository.PostImageRepository;
 import com.example.soso.post.repository.PostRepository;
-import com.example.soso.post.service.PostService;
 import com.example.soso.users.domain.entity.Users;
 import java.util.ArrayList;
 import java.util.List;

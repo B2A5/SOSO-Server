@@ -1,6 +1,6 @@
 package com.example.soso.security.filter;
 
-import com.example.soso.jwt.JwtProvider;
+import com.example.soso.global.jwt.JwtProvider;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

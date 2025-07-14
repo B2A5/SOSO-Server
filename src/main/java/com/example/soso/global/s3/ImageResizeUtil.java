@@ -1,4 +1,4 @@
-package com.example.soso.global.config;
+package com.example.soso.global.s3;
 
 import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.web.multipart.MultipartFile;

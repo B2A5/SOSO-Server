@@ -1,4 +1,4 @@
-package com.example.soso.jwt;
+package com.example.soso.global.jwt;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

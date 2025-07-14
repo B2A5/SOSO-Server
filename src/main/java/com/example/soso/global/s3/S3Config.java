@@ -1,4 +1,4 @@
-package com.example.soso.global.config;
+package com.example.soso.global.s3;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

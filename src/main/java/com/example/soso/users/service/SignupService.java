@@ -1,6 +1,6 @@
 package com.example.soso.users.service;
 
-import com.example.soso.jwt.JwtTokenDto;
+import com.example.soso.global.jwt.JwtTokenDto;
 import com.example.soso.users.domain.entity.AgeRange;
 import com.example.soso.users.domain.entity.BudgetRange;
 import com.example.soso.users.domain.entity.Gender;
