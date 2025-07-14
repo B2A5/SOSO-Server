@@ -1,4 +1,4 @@
-package com.example.soso.global.config;
+package com.example.soso.global.s3;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

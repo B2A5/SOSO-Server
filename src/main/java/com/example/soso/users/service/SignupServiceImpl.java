@@ -5,10 +5,10 @@ import static com.example.soso.global.exception.domain.UserErrorCode.SESSION_NOT
 import static com.example.soso.global.exception.domain.UserErrorCode.STEPS_NOT_TYPE;
 
 import com.example.soso.global.exception.util.UserAuthException;
-import com.example.soso.jwt.JwtProperties;
-import com.example.soso.jwt.JwtProvider;
-import com.example.soso.jwt.JwtTokenDto;
-import com.example.soso.jwt.RefreshTokenRedisService;
+import com.example.soso.global.jwt.JwtProperties;
+import com.example.soso.global.jwt.JwtProvider;
+import com.example.soso.global.jwt.JwtTokenDto;
+import com.example.soso.global.redis.RefreshTokenRedisRepository;
 import com.example.soso.users.domain.dto.SignupSession;
 import com.example.soso.users.domain.dto.TokenPair;
 import com.example.soso.users.domain.dto.UserMapper;
@@ -41,7 +41,7 @@ public class SignupServiceImpl implements SignupService {
     private final UsersRepository usersRepository;
     private final JwtProvider jwtProvider;
     private final JwtProperties jwtProperties;
-    private final RefreshTokenRedisService redisService;
+    private final RefreshTokenRedisRepository redisService;
 
     public SignupStep saveUserType(HttpSession session, UserType userType) {
         SignupSession signup = getValidatedSession(session);

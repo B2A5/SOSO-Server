@@ -1,6 +1,6 @@
 package com.example.soso.security.config;
 
-import com.example.soso.jwt.JwtProvider;
+import com.example.soso.global.jwt.JwtProvider;
 import com.example.soso.security.filter.ExceptionHandlerFilter;
 import com.example.soso.security.filter.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;

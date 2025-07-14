@@ -1,13 +1,14 @@
-package com.example.soso.jwt;
+package com.example.soso.global.redis;
 
 import java.time.Duration;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 
-@Service
+
+@Repository
 @RequiredArgsConstructor
-public class RefreshTokenRedisService {
+public class RefreshTokenRedisRepository {
 
     private final RedisTemplate<String, String> redisTemplate;
     private static final String PREFIX = "refresh-token:";

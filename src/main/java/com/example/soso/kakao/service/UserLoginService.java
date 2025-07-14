@@ -3,9 +3,9 @@ package com.example.soso.kakao.service;
 import com.example.soso.global.config.CookieUtil;
 import com.example.soso.global.exception.domain.UserErrorCode;
 import com.example.soso.global.exception.util.UserAuthException;
-import com.example.soso.jwt.JwtProperties;
-import com.example.soso.jwt.JwtProvider;
-import com.example.soso.jwt.RefreshTokenRedisService;
+import com.example.soso.global.jwt.JwtProperties;
+import com.example.soso.global.jwt.JwtProvider;
+import com.example.soso.global.redis.RefreshTokenRedisRepository;
 import com.example.soso.kakao.dto.KakaoLoginResult;
 import com.example.soso.users.repository.UsersRepository;
 import jakarta.servlet.http.HttpServletResponse;
@@ -19,7 +19,7 @@ public class UserLoginService {
     private final UsersRepository userRepository;
     private final JwtProvider jwtProvider;
     private final JwtProperties jwtProperties;
-    private final RefreshTokenRedisService refreshTokenService;
+    private final RefreshTokenRedisRepository refreshTokenService;
 
     public boolean isRegistered(String email) {
         return userRepository.existsByEmail(email);

@@ -2,10 +2,10 @@ package com.example.soso.users.service;
 
 import com.example.soso.global.config.CookieUtil;
 import com.example.soso.global.exception.util.InvalidTokenException;
-import com.example.soso.jwt.JwtProperties;
-import com.example.soso.jwt.JwtProvider;
-import com.example.soso.jwt.JwtTokenDto;
-import com.example.soso.jwt.RefreshTokenRedisService;
+import com.example.soso.global.jwt.JwtProperties;
+import com.example.soso.global.jwt.JwtProvider;
+import com.example.soso.global.jwt.JwtTokenDto;
+import com.example.soso.global.redis.RefreshTokenRedisRepository;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,7 +17,7 @@ import static com.example.soso.global.exception.domain.TokenErrorCode.*;
 public class AuthServiceImpl implements AuthService {
 
     private final JwtProvider jwtProvider;
-    private final RefreshTokenRedisService refreshTokenService;
+    private final RefreshTokenRedisRepository refreshTokenService;
     private final JwtProperties jwtProperties;
 
     @Override

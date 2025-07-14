@@ -1,4 +1,4 @@
-package com.example.soso.jwt;
+package com.example.soso.global.jwt;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;

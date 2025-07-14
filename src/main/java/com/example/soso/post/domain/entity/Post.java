@@ -82,4 +82,8 @@ public class Post extends BaseTimeEntity {
             this.images = newImages;
         }
     }
+
+    public void updateLikeCount(int redisLikeCount) {
+        this.likeCount = redisLikeCount;
+    }
 }

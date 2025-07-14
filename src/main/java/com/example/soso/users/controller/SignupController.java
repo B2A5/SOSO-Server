@@ -1,6 +1,6 @@
 package com.example.soso.users.controller;
 
-import com.example.soso.jwt.JwtTokenDto;
+import com.example.soso.global.jwt.JwtTokenDto;
 import com.example.soso.users.domain.dto.*;
 import com.example.soso.users.domain.entity.InterestRequest;
 import com.example.soso.users.domain.entity.SignupStep;
