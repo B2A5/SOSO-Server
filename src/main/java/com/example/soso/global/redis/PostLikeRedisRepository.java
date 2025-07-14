@@ -1,5 +1,7 @@
 package com.example.soso.global.redis;
 
+import com.example.soso.global.exception.domain.PostErrorCode;
+import com.example.soso.global.exception.util.PostException;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +35,7 @@ public class PostLikeRedisRepository {
     public long getLikeCount(Long postId) {
         String count = redisTemplate.opsForValue().get(getCountKey(postId));
         if (count == null) {
-            return 0;
+            throw new PostException(PostErrorCode.LIKE_COUNT_NOT_FOUND);
         }
         return Long.parseLong(count);
     }
