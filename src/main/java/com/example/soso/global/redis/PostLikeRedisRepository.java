@@ -1,5 +1,7 @@
 package com.example.soso.global.redis;
 
+import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
@@ -42,5 +44,14 @@ public class PostLikeRedisRepository {
 
     private String getCountKey(Long postId) {
         return LIKE_COUNT_KEY_PREFIX + postId;
+    }
+
+    public Set<Long> getAllPostIdsWithLikes() {
+        Set<String> keys = redisTemplate.keys("like:count:*");
+        if (keys == null) return Set.of();
+
+        return keys.stream()
+                .map(key -> Long.parseLong(key.replace("like:count:", "")))
+                .collect(Collectors.toSet());
     }
 }
