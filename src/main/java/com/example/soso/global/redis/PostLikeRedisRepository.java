@@ -14,7 +14,7 @@ public class PostLikeRedisRepository {
     private static final String LIKE_SET_KEY_PREFIX = "post:likes:";
     private static final String LIKE_COUNT_KEY_PREFIX = "post:likeCount:";
 
-    public boolean isMember(Long postId, String userId) {
+    public boolean isLiked(Long postId, String userId) {
         return Boolean.TRUE.equals(redisTemplate.opsForSet().isMember(getSetKey(postId), userId));
     }
 
