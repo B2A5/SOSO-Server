@@ -1,5 +1,8 @@
 package com.example.soso.post.service;
 
+import com.example.soso.global.exception.domain.UserErrorCode;
+import com.example.soso.global.exception.util.BaseException;
+import com.example.soso.global.exception.util.UserAuthException;
 import com.example.soso.global.s3.S3Service;
 import com.example.soso.global.exception.domain.PostErrorCode;
 import com.example.soso.global.exception.util.PostException;
@@ -12,6 +15,7 @@ import com.example.soso.post.domain.entity.PostImage;
 import com.example.soso.post.repository.PostImageRepository;
 import com.example.soso.post.repository.PostRepository;
 import com.example.soso.users.domain.entity.Users;
+import com.example.soso.users.repository.UsersRepository;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -26,11 +30,14 @@ public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
     private final PostImageRepository postImageRepository;
     private final S3Service s3Service;
+    private final UsersRepository usersRepository;
 
     @Override
     @Transactional
-    public Long createPost(PostCreateRequest request, Users user) {
-        Post post = PostMapper.toEntity(request, user);
+    public Long createPost(PostCreateRequest request, String userId) {
+        Users users = getUserById(userId);
+
+        Post post = PostMapper.toEntity(request, users);
         postRepository.save(post);
 
         List<PostImage> postImages = createPostImages(request.images(), post);
@@ -47,25 +54,24 @@ public class PostServiceImpl implements PostService {
     public PostResponse getPost(Long postId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new PostException(PostErrorCode.NOT_FOUND));
-
         return PostMapper.toResponse(post);
     }
 
     @Override
     @Transactional
-    public Long updatePost(Long postId, PostUpdateRequest request, Users user) {
+    public Long updatePost(Long postId, PostUpdateRequest request, String userId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new PostException(PostErrorCode.NOT_FOUND));
 
-        if (!post.getUser().getId().equals(user.getId())) {
+        Users users = getUserById(userId);
+
+        if (!post.getUser().getId().equals(users.getId())) {
             throw new PostException(PostErrorCode.FORBIDDEN);
         }
 
-        // 기존 이미지 S3에서 삭제
         post.getImages().forEach(image -> s3Service.deleteImage(image.getImageUrl()));
         post.getImages().clear();
 
-        // 새로운 이미지 업로드 및 PostImage 생성
         List<PostImage> postImages = createPostImages(request.images(), post);
         postImages.forEach(post::addImage);
 
@@ -75,41 +81,31 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
-    public void deletePost(Long postId, Users user) {
+    public void deletePost(Long postId, String userId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new PostException(PostErrorCode.NOT_FOUND));
 
-        if (!post.getUser().getId().equals(user.getId())) {
-            throw new PostException(PostErrorCode.FORBIDDEN);
-        }
+        postRepository.findByIdAndUserId(postId, userId)
+                .orElseThrow(() -> new PostException(PostErrorCode.FORBIDDEN));
 
-        // 게시글 연관 이미지 S3에서도 삭제
         post.getImages().forEach(image -> s3Service.deleteImage(image.getImageUrl()));
         post.getImages().clear();
 
-        // Soft Delete 처리
-        post.delete();
+        post.delete(); // soft delete
     }
 
     @Override
     @Transactional
-    public void hardDeletePost(Long postId, Users user) {
+    public void hardDeletePost(Long postId, String userId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new PostException(PostErrorCode.NOT_FOUND));
 
-        if (!post.getUser().getId().equals(user.getId())) {
-            throw new PostException(PostErrorCode.FORBIDDEN);
-        }
+        postRepository.findByIdAndUserId(postId, userId)
+                .orElseThrow(() -> new PostException(PostErrorCode.FORBIDDEN));
 
-        // 이미지 S3 삭제
         post.getImages().forEach(image -> s3Service.deleteImage(image.getImageUrl()));
-
-        // 실제 DB 삭제
-        postRepository.delete(post);
+        postRepository.delete(post); // 실제 DB 삭제
     }
-
-
-
 
     /**
      * 이미지 리스트를 S3에 업로드하고, PostImage 리스트를 생성한다.
@@ -131,5 +127,13 @@ public class PostServiceImpl implements PostService {
         }
 
         return postImages;
+    }
+
+    /**
+     * 사용자 ID로 사용자 엔티티를 조회한다.
+     */
+    private Users getUserById(String userId) {
+        return usersRepository.findById(userId)
+                .orElseThrow(() -> new UserAuthException(UserErrorCode.USER_NOT_FOUND));
     }
 }
