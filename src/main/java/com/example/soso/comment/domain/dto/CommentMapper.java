@@ -21,7 +21,8 @@ public class CommentMapper {
                 comment.getId(),
                 comment.getContent(),
                 comment.getLikeCount(),
-                comment.getCreatedDate().toString(),
+                comment.getLastModifiedDate().toString(),
+
                 PostMapper.toUserSummary(comment.getUser())
         );
     }

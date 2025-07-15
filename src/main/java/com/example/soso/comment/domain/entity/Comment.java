@@ -41,4 +41,9 @@ public class Comment extends BaseTimeEntity {
 
     private int likeCount;
 
+    public void updateContent(String content) {
+        if(content != null) {
+            this.content = content;
+        }
+    }
 }

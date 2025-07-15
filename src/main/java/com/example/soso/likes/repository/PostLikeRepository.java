@@ -4,6 +4,6 @@ import com.example.soso.likes.domain.PostLike;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PostLikeRepository extends JpaRepository<PostLike, Long> {
-    boolean existsByPostIdAndUserId(Long postId, Long userId);
-    void deleteByPostIdAndUserId(Long postId, Long userId);
+    boolean existsByPostIdAndUserId(Long postId, String userId);
+    void deleteByPostIdAndUserId(Long postId, String userId);
 }
