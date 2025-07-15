@@ -5,7 +5,6 @@ import com.example.soso.post.domain.dto.PostResponse;
 import com.example.soso.post.domain.dto.PostUpdateRequest;
 import com.example.soso.post.service.PostService;
 import com.example.soso.security.domain.CustomUserDetails;
-import com.example.soso.users.domain.entity.Users;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -30,8 +29,8 @@ public class PostController {
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Long> createPost(@ModelAttribute PostCreateRequest request,
                                            @AuthenticationPrincipal CustomUserDetails userDetails) {
-        Users user = userDetails.getUser();
-        Long postId = postService.createPost(request, user);
+        String userId = userDetails.getUser().getId();
+        Long postId = postService.createPost(request, userId);
         return ResponseEntity.ok(postId);
     }
 
@@ -47,8 +46,8 @@ public class PostController {
     public ResponseEntity<Long> updatePost(@PathVariable Long postId,
                                            @ModelAttribute PostUpdateRequest request,
                                            @AuthenticationPrincipal CustomUserDetails userDetails) {
-        Users user = userDetails.getUser();
-        Long updatedId = postService.updatePost(postId, request, user);
+        String userId = userDetails.getUser().getId();
+        Long updatedId = postService.updatePost(postId, request, userId);
         return ResponseEntity.ok(updatedId);
     }
 
@@ -56,7 +55,8 @@ public class PostController {
     @DeleteMapping("/{postId}")
     public ResponseEntity<Void> deletePost(@PathVariable Long postId,
                                            @AuthenticationPrincipal CustomUserDetails userDetails) {
-        postService.deletePost(postId, userDetails.getUser());
+        String userId = userDetails.getUser().getId();
+        postService.deletePost(postId, userId);
         return ResponseEntity.noContent().build();
     }
 
@@ -64,7 +64,8 @@ public class PostController {
     @DeleteMapping("/{postId}/force")
     public ResponseEntity<Void> hardDeletePost(@PathVariable Long postId,
                                                @AuthenticationPrincipal CustomUserDetails userDetails) {
-        postService.hardDeletePost(postId, userDetails.getUser());
+        String userId = userDetails.getUser().getId();
+        postService.hardDeletePost(postId, userId);
         return ResponseEntity.noContent().build();
     }
 }
