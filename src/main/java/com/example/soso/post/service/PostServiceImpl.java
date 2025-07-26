@@ -3,7 +3,7 @@ package com.example.soso.post.service;
 import com.example.soso.global.exception.domain.UserErrorCode;
 import com.example.soso.global.exception.util.BaseException;
 import com.example.soso.global.exception.util.UserAuthException;
-import com.example.soso.global.s3.S3Service;
+import com.example.soso.global.s3.GcsService;
 import com.example.soso.global.exception.domain.PostErrorCode;
 import com.example.soso.global.exception.util.PostException;
 import com.example.soso.post.domain.dto.PostCreateRequest;
@@ -29,7 +29,7 @@ public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
     private final PostImageRepository postImageRepository;
-    private final S3Service s3Service;
+    private final GcsService gcsService;
     private final UsersRepository usersRepository;
 
     @Override
@@ -69,7 +69,7 @@ public class PostServiceImpl implements PostService {
             throw new PostException(PostErrorCode.FORBIDDEN);
         }
 
-        post.getImages().forEach(image -> s3Service.deleteImage(image.getImageUrl()));
+        post.getImages().forEach(image -> gcsService.deleteImage(image.getImageUrl()));
         post.getImages().clear();
 
         List<PostImage> postImages = createPostImages(request.images(), post);
@@ -88,7 +88,7 @@ public class PostServiceImpl implements PostService {
         postRepository.findByIdAndUserId(postId, userId)
                 .orElseThrow(() -> new PostException(PostErrorCode.FORBIDDEN));
 
-        post.getImages().forEach(image -> s3Service.deleteImage(image.getImageUrl()));
+        post.getImages().forEach(image -> gcsService.deleteImage(image.getImageUrl()));
         post.getImages().clear();
 
         post.delete(); // soft delete
@@ -103,19 +103,23 @@ public class PostServiceImpl implements PostService {
         postRepository.findByIdAndUserId(postId, userId)
                 .orElseThrow(() -> new PostException(PostErrorCode.FORBIDDEN));
 
-        post.getImages().forEach(image -> s3Service.deleteImage(image.getImageUrl()));
+        post.getImages().forEach(image -> gcsService.deleteImage(image.getImageUrl()));
         postRepository.delete(post); // 실제 DB 삭제
     }
 
     /**
-     * 이미지 리스트를 S3에 업로드하고, PostImage 리스트를 생성한다.
+     * 이미지 리스트가 null 또는 비어 있을 경우 안전하게 처리
      */
     private List<PostImage> createPostImages(List<MultipartFile> images, Post post) {
         List<PostImage> postImages = new ArrayList<>();
 
+        if (images == null || images.isEmpty()) {
+            return postImages;
+        }
+
         for (int i = 0; i < images.size(); i++) {
             MultipartFile file = images.get(i);
-            String imageUrl = s3Service.uploadImage(file, "posts");
+            String imageUrl = gcsService.uploadImage(file, "posts");
 
             PostImage postImage = PostImage.builder()
                     .imageUrl(imageUrl)
@@ -129,9 +133,6 @@ public class PostServiceImpl implements PostService {
         return postImages;
     }
 
-    /**
-     * 사용자 ID로 사용자 엔티티를 조회한다.
-     */
     private Users getUserById(String userId) {
         return usersRepository.findById(userId)
                 .orElseThrow(() -> new UserAuthException(UserErrorCode.USER_NOT_FOUND));
