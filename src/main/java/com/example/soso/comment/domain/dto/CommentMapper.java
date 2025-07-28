@@ -1,8 +1,8 @@
 package com.example.soso.comment.domain.dto;
 
 import com.example.soso.comment.domain.entity.Comment;
-import com.example.soso.post.domain.dto.PostMapper;
 import com.example.soso.post.domain.entity.Post;
+import com.example.soso.users.domain.dto.UserMapper;
 import com.example.soso.users.domain.entity.Users;
 
 public class CommentMapper {
@@ -16,14 +16,13 @@ public class CommentMapper {
                 .build();
     }
 
-    public static CommentResponse toResponse(Comment comment) {
-        return new CommentResponse(
+    public static PostCommentResponse toResponse(Comment comment) {
+        return new PostCommentResponse(
                 comment.getId(),
                 comment.getContent(),
                 comment.getLikeCount(),
                 comment.getLastModifiedDate().toString(),
-
-                PostMapper.toUserSummary(comment.getUser())
+                UserMapper.toUserSummary(comment.getUser())
         );
     }
-}
+    }
