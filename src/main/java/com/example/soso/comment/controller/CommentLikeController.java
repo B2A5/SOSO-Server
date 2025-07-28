@@ -1,10 +1,12 @@
 package com.example.soso.comment.controller;
 
 import com.example.soso.comment.domain.dto.CommentLikeResponse;
+import com.example.soso.comment.domain.dto.LikedCommentIdListResponse;
 import com.example.soso.comment.service.CommentLikeService;
 import com.example.soso.security.domain.CustomUserDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -43,10 +45,15 @@ public class CommentLikeController {
         return ResponseEntity.ok(liked);
     }
 
-    @Operation(summary = "댓글 좋아요 수 조회", description = "해당 댓글의 좋아요 수를 반환합니다.")
-    @GetMapping("/{commentId}/like-count")
-    public ResponseEntity<Long> getLikeCount(@PathVariable Long commentId) {
-        long count = commentLikeService.getLikeCount(commentId);
-        return ResponseEntity.ok(count);
+    @GetMapping("/liked")
+    @Operation(summary = "사용자가 좋아요 누른 댓글 ID 목록 조회", description = "해당 게시글 내에서 사용자가 좋아요를 누른 댓글들의 ID 목록을 조회합니다.")
+    public ResponseEntity<LikedCommentIdListResponse> getLikedCommentIds(
+            @PathVariable Long postId,
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
+
+        String userId = userDetails.getUser().getId();
+        List<Long> likedIds = commentLikeService.getLikedCommentIds(postId, userId);
+        return ResponseEntity.ok(new LikedCommentIdListResponse(likedIds));
     }
+
 }
