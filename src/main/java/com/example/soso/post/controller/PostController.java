@@ -10,6 +10,7 @@ import com.example.soso.post.domain.entity.Category;
 import com.example.soso.post.service.PostService;
 import com.example.soso.security.domain.CustomUserDetails;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -63,18 +64,39 @@ public class PostController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping
-    @Operation(summary = "게시글 목록 조회", description = "카테고리 및 정렬 기준에 따라 커서 기반으로 게시글 목록을 조회합니다.")
-    public ResponseEntity<PostCursorResponse> getPosts(
+    @GetMapping("/cursor")
+    @Operation(summary = "커서 기반 게시글 목록 조회", description = "카테고리 및 정렬 기준에 따라 커서 기반으로 게시글 목록을 조회합니다.")
+    public ResponseEntity<PostCursorResponse> getPostsByCursor(
+            @Parameter(description = "카테고리 (예: DAILYANDHOBBY, FOOD, QUESTION, ETC)", example = "FOOD")
             @RequestParam(required = false) Category category,
+
+            @Parameter(description = "정렬 기준 (LATEST: 최신순, LIKE: 좋아요순, COMMENT: 댓글순)", example = "LATEST")
             @RequestParam(defaultValue = "LATEST") PostSortType sort,
-            @RequestParam(defaultValue = "10") int size,
+
+            @Parameter(
+                    description = """
+                커서 값 (정렬 기준에 따라 마지막으로 받은 게시글의 필드 값)
+                - 최신순: 마지막 게시글의 createdAt (예: 2025-07-28T16:00:00)
+                - 좋아요순: 마지막 게시글의 likeCount (예: 123)
+                - 댓글순: 마지막 게시글의 commentCount (예: 15)
+                """,
+                    example = "2025-07-28T16:00:00"
+            )
             @RequestParam(required = false) String cursor,
-            @RequestParam(required = false) Long idAfter
+
+            @Parameter(
+                    description = "보조 정렬 기준으로 사용되는 마지막 게시글의 ID\n정렬 필드 값이 동일한 게시글 간 순서를 판별하기 위해 사용됩니다.",
+                    example = "57"
+            )
+            @RequestParam(required = false) Long idAfter,
+
+            @Parameter(description = "한 페이지에 가져올 게시글 수", example = "10")
+            @RequestParam(defaultValue = "10") int size
     ) {
-      PostCursorResponse response = postService.getPostsByCursor(category, sort, size, cursor, idAfter);
-     return ResponseEntity.ok(response);
+        PostCursorResponse response = postService.getPostsByCursor(category, sort, size, cursor, idAfter);
+        return ResponseEntity.ok(response);
     }
+
 
 
     @Operation(

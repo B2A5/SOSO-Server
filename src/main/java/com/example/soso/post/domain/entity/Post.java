@@ -49,9 +49,6 @@ public class Post extends BaseTimeEntity {
     @Lob
     private String content;
 
-    @ElementCollection
-    private List<String> imageUrls = new ArrayList<>();
-
     private int likeCount;
     private int commentCount;
 
