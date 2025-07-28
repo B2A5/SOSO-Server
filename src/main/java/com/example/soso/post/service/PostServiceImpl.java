@@ -1,6 +1,5 @@
 package com.example.soso.post.service;
 
-import com.example.soso.comment.domain.repository.CommentRepository;
 import com.example.soso.global.exception.domain.UserErrorCode;
 import com.example.soso.global.exception.util.UserAuthException;
 import com.example.soso.global.s3.GcsService;
@@ -39,7 +38,7 @@ public class PostServiceImpl implements PostService {
     private final GcsService gcsService;
     private final UsersRepository usersRepository;
     private final PostLikeRepository postLikeRepository;
-    private final CommentRepository commentRepository;
+
 
     @Override
     @Transactional
@@ -71,34 +70,35 @@ public class PostServiceImpl implements PostService {
     @Override
     @Transactional(readOnly = true)
     public PostCursorResponse getPostsByCursor(Category category, PostSortType sort,
-                                               int size, String cursor, Long idAfter) {
-        List<Post> posts = postRepository.findAllByCursorPaging(category, sort, size, cursor, idAfter);
+                                               int size, String cursor, Long idAfter, String userId) {
+
+        // 1개 더 가져와서 hasNext 판단
+        List<PostSummaryResponse> posts = postRepository.findAllByCursorPaging(category, sort, size + 1, cursor, idAfter, userId);
 
         boolean hasNext = posts.size() > size;
-        if (hasNext) {
-            posts.remove(size); // limit = size + 1 했기 때문에 마지막 하나 제거
-        }
-
-        List<PostSummaryResponse> postResponses = posts.stream()
-                .map(PostMapper::toSummaryResponse)
-                .toList();
 
         String nextCursor = null;
         Long nextIdAfter = null;
 
         if (hasNext) {
-            Post lastPost = posts.get(posts.size() - 1);
+            /** 커서 기준이 될 마지막 게시물 (제거 전에 보관)
+             */
+            PostSummaryResponse lastPost = posts.get(size);
             nextCursor = switch (sort) {
-                case LATEST -> lastPost.getCreatedDate().toString();
-                case LIKE -> String.valueOf(lastPost.getLikeCount());
-                case COMMENT -> String.valueOf(lastPost.getCommentCount());
+                case LATEST -> lastPost.createdAt().toString();
+                case LIKE -> String.valueOf(lastPost.likeCount());
+                case COMMENT -> String.valueOf(lastPost.commentCount());
             };
-            nextIdAfter = lastPost.getId();
+            nextIdAfter = lastPost.postId();
+
+            // 응답에서 제외
+            posts.remove(size);
         }
 
         CursorDto cursorDto = new CursorDto(hasNext, nextCursor, nextIdAfter);
-        return new PostCursorResponse(postResponses, cursorDto);
+        return new PostCursorResponse(posts, cursorDto);
     }
+
 
     @Override
     @Transactional

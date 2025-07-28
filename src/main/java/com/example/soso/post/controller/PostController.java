@@ -91,9 +91,11 @@ public class PostController {
             @RequestParam(required = false) Long idAfter,
 
             @Parameter(description = "한 페이지에 가져올 게시글 수", example = "10")
-            @RequestParam(defaultValue = "10") int size
+            @RequestParam(defaultValue = "10") int size,
+            @AuthenticationPrincipal CustomUserDetails customUserDetails
     ) {
-        PostCursorResponse response = postService.getPostsByCursor(category, sort, size, cursor, idAfter);
+        String userId = customUserDetails.getUser().getId();
+        PostCursorResponse response = postService.getPostsByCursor(category, sort, size, cursor, idAfter, userId);
         return ResponseEntity.ok(response);
     }
 

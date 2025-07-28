@@ -16,7 +16,7 @@ public interface PostService {
 
     PostCreateResponse updatePost(Long postId, PostUpdateRequest request, String user);
 
-    PostCursorResponse getPostsByCursor(Category category, PostSortType sort, int size, String cursor, Long idAfter);
+    PostCursorResponse getPostsByCursor(Category category, PostSortType sort, int size, String cursor, Long idAfter, String userId);
 
     void deletePost(Long postId,String user);
 

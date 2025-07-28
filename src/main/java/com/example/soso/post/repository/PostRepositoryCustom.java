@@ -2,6 +2,7 @@ package com.example.soso.post.repository;
 
 
 import com.example.soso.post.domain.dto.PostSortType;
+import com.example.soso.post.domain.dto.PostSummaryResponse;
 import com.example.soso.post.domain.entity.Category;
 import com.example.soso.post.domain.entity.Post;
 
@@ -17,7 +18,8 @@ public interface PostRepositoryCustom {
      * @param size     요청 개수
      * @param cursor   정렬 기준 커서 값
      * @param idAfter  보조 정렬용 ID (동일 정렬값일 경우)
+     * @param userId
      * @return 게시글 목록 (size + 1개 조회)
      */
-    List<Post> findAllByCursorPaging(Category category, PostSortType sort, int size, String cursor, Long idAfter);
+    List<PostSummaryResponse> findAllByCursorPaging(Category category, PostSortType sort, int size, String cursor, Long idAfter, String userId);
 }

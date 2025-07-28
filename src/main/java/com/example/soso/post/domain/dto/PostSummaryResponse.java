@@ -23,6 +23,9 @@ public record PostSummaryResponse(
         @Schema(description = "댓글 수", example = "5")
         int commentCount,
 
+        @Schema(description = "내가 좋아요 누름 게시글", example = "true")
+        boolean likeByPost,
+
         @Schema(description = "작성 시간", example = "2025-07-28T15:30:00")
         String createdAt,
 
