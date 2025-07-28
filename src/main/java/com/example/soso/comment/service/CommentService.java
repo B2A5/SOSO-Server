@@ -9,9 +9,9 @@ public interface CommentService {
 
     void create(Long postId, String userId, CommentCreateRequest request);
 
-    void update(Long commentId, String userId, CommentCreateRequest request);
+    void update(Long postId, Long commentId, String userId, CommentCreateRequest request);
 
     List<PostCommentResponse> getcomments(Long postId, String userId);
 
-    void delete(Long commentId, String userId);
+    void delete(Long postId, Long commentId, String userId);
 }

@@ -9,7 +9,6 @@ import com.example.soso.global.exception.domain.PostErrorCode;
 import com.example.soso.global.exception.domain.UserErrorCode;
 import com.example.soso.global.exception.util.PostException;
 import com.example.soso.global.exception.util.UserAuthException;
-import com.example.soso.likes.repository.CommentLikeRepository;
 import com.example.soso.post.domain.entity.Post;
 import com.example.soso.post.repository.PostRepository;
 import com.example.soso.users.domain.entity.Users;
@@ -42,13 +41,13 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional
-    public void update(Long commentId, String userId, CommentCreateRequest request) {
-        Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new PostException(PostErrorCode.COMMENT_NOT_FOUND));
-        validateCommentOwner(comment, userId);
+    public void update(Long postId, Long commentId, String userId, CommentCreateRequest request) {
+        Comment comment = commentRepository.findByIdAndPostId(commentId, postId)
+                .orElseThrow(() -> new PostException(PostErrorCode.NOT_FOUND));
+        validateCommentOwner(comment.getId(), userId);
         comment.updateContent(request.content());
-
     }
+
 
     @Override
     public List<PostCommentResponse> getcomments(Long postId, String userId) {
@@ -65,15 +64,15 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional
-    public void delete(Long commentId, String userId) {
-        Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new PostException(PostErrorCode.COMMENT_NOT_FOUND));
-        validateCommentOwner(comment, userId);
+    public void delete(Long postId, Long commentId, String userId) {
+        Comment comment = commentRepository.findByIdAndPostId(commentId, postId)
+                .orElseThrow(() -> new PostException(PostErrorCode.NOT_FOUND));
+        validateCommentOwner(comment.getId(), userId);
         commentRepository.delete(comment);
     }
 
-    private void validateCommentOwner(Comment comment, String userId) {
-        commentRepository.findByIdAndUserId(comment.getId(), userId)
+    private void validateCommentOwner(Long commentId, String userId) {
+        commentRepository.findByIdAndUserId(commentId, userId)
                 .orElseThrow(() -> new IllegalArgumentException("본인이 작성한 댓글만 수정/삭제할 수 있습니다."));
     }
 }
