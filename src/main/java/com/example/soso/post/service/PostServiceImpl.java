@@ -1,11 +1,12 @@
 package com.example.soso.post.service;
 
+import com.example.soso.comment.domain.repository.CommentRepository;
 import com.example.soso.global.exception.domain.UserErrorCode;
-import com.example.soso.global.exception.util.BaseException;
 import com.example.soso.global.exception.util.UserAuthException;
 import com.example.soso.global.s3.GcsService;
 import com.example.soso.global.exception.domain.PostErrorCode;
 import com.example.soso.global.exception.util.PostException;
+import com.example.soso.likes.repository.PostLikeRepository;
 import com.example.soso.post.domain.dto.PostCreateRequest;
 import com.example.soso.post.domain.dto.PostMapper;
 import com.example.soso.post.domain.dto.PostResponse;
@@ -31,6 +32,8 @@ public class PostServiceImpl implements PostService {
     private final PostImageRepository postImageRepository;
     private final GcsService gcsService;
     private final UsersRepository usersRepository;
+    private final PostLikeRepository postLikeRepository;
+    private final CommentRepository commentRepository;
 
     @Override
     @Transactional
@@ -51,23 +54,19 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional(readOnly = true)
-    public PostResponse getPost(Long postId) {
+    public PostResponse getPost(Long postId, String userId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new PostException(PostErrorCode.NOT_FOUND));
-        return PostMapper.toResponse(post);
+        boolean isLiked = postLikeRepository.existsByPostIdAndUserId(postId, userId);
+
+        return PostMapper.toResponse(post, isLiked);
     }
 
     @Override
     @Transactional
     public Long updatePost(Long postId, PostUpdateRequest request, String userId) {
-        Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new PostException(PostErrorCode.NOT_FOUND));
-
-        Users users = getUserById(userId);
-
-        if (!post.getUser().getId().equals(users.getId())) {
-            throw new PostException(PostErrorCode.FORBIDDEN);
-        }
+        Post post = postRepository.findByIdAndUserId(postId, userId)
+                .orElseThrow(() -> new PostException(PostErrorCode.FORBIDDEN));
 
         post.getImages().forEach(image -> gcsService.deleteImage(image.getImageUrl()));
         post.getImages().clear();

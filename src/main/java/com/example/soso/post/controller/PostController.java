@@ -44,16 +44,18 @@ public class PostController {
     }
 
     @Operation(
-            summary = "게시글 단건 조회",
-            description = "게시글 ID를 통해 해당 게시글의 정보를 조회합니다.",
+            summary = "게시글 보기",
+            description = "게시글을 확인 합니다.",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "게시글 조회 성공", content = @Content(schema = @Schema(implementation = PostResponse.class))),
-                    @ApiResponse(responseCode = "404", description = "게시글이 존재하지 않음")
+                    @ApiResponse(responseCode = "200", description = "게시글 ID 반환"),
+                    @ApiResponse(responseCode = "403", description = "수정 권한 없음")
             }
     )
     @GetMapping("/{postId}")
-    public ResponseEntity<PostResponse> getPost(@PathVariable Long postId) {
-        PostResponse response = postService.getPost(postId);
+    public ResponseEntity<PostResponse> getPostDetail(@PathVariable Long postId,
+                                                      @AuthenticationPrincipal CustomUserDetails userDetails) {
+        String userId = userDetails.getUser().getId();
+        PostResponse response = postService.getPost(postId, userId);
         return ResponseEntity.ok(response);
     }
 

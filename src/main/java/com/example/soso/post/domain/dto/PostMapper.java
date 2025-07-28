@@ -2,6 +2,7 @@ package com.example.soso.post.domain.dto;
 
 import com.example.soso.post.domain.entity.Post;
 import com.example.soso.post.domain.entity.PostImage;
+import com.example.soso.users.domain.dto.UserMapper;
 import com.example.soso.users.domain.entity.Users;
 
 public class PostMapper {
@@ -17,7 +18,7 @@ public class PostMapper {
                 .build();
     }
 
-    public static PostResponse toResponse(Post post) {
+    public static PostResponse toResponse(Post post, boolean isLiked) {
         return new PostResponse(
                 post.getId(),
                 post.getTitle(),
@@ -27,19 +28,10 @@ public class PostMapper {
                         .map(PostImage::getImageUrl)
                         .toList(),
                 post.getLikeCount(),
-                post.getCommentCount(),
+                isLiked,
                 post.getCreatedDate().toString(),
-                toUserSummary(post.getUser())
+                UserMapper.toUserSummary(post.getUser())
         );
     }
 
-
-
-    public static UserSummaryResponse toUserSummary(Users user) {
-        return new UserSummaryResponse(
-                user.getNickname(),
-                user.getLocation(),
-                user.getProfileImageUrl()
-        );
-    }
 }

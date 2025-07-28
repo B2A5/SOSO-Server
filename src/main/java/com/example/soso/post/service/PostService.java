@@ -8,7 +8,7 @@ public interface PostService {
 
     Long createPost(PostCreateRequest request, String user);
 
-    PostResponse getPost(Long postId);
+    PostResponse getPost(Long postId, String userId);
 
     Long updatePost(Long postId, PostUpdateRequest request, String user);
 

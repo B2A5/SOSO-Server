@@ -1,12 +1,11 @@
 package com.example.soso.post.domain.dto;
 
-import com.example.soso.post.domain.dto.UserSummaryResponse;
 import com.example.soso.post.domain.entity.Category;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.List;
 
-@Schema(description = "게시글 조회 응답 DTO")
+@Schema(description = "게시글 상세 조회 응답 DTO")
 public record PostResponse(
 
         @Schema(description = "게시글 ID", example = "101")
@@ -24,11 +23,11 @@ public record PostResponse(
         @Schema(description = "이미지 URL 목록", example = "[\"https://example.com/image1.jpg\"]")
         List<String> imageUrls,
 
-        @Schema(description = "좋아요 수", example = "10")
+        @Schema(description = "게시글 좋아요 수", example = "10")
         int likeCount,
 
-        @Schema(description = "댓글 수", example = "3")
-        int commentCount,
+        @Schema(description = "내가 게시글 좋아요를 눌렀는지 여부", example = "true")
+        boolean isLiked,
 
         @Schema(description = "작성일시 (ISO 형식)", example = "2025-07-26T10:30:00")
         String createdAt,
