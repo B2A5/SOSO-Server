@@ -76,4 +76,23 @@ public class InhabitantSignupController {
         JwtTokenDto jwtAccessToken = signupService.completeSignup(session, response);
         return ResponseEntity.ok(jwtAccessToken);
     }
+
+    @Operation(summary = "[2단계 뒤로가기] 지역 정보 조회")
+    @GetMapping("/region/data")
+    public ResponseEntity<RegionRequest> getRegion(HttpSession session) {
+        return ResponseEntity.ok(signupService.getRegion(session));
+    }
+
+    @Operation(summary = "[3단계 뒤로가기] 나이대 정보 조회")
+    @GetMapping("/age-range/data")
+    public ResponseEntity<AgeRangeRequest> getAgeRange(HttpSession session) {
+        return ResponseEntity.ok(signupService.getAgeRange(session));
+    }
+
+    @Operation(summary = "[4단계 뒤로가기] 성별 정보 조회")
+    @GetMapping("/gender/data")
+    public ResponseEntity<GenderRequest> getGender(HttpSession session) {
+        return ResponseEntity.ok(signupService.getGender(session));
+    }
+
 }

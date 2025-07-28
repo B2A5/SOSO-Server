@@ -104,4 +104,42 @@ public class FounderSignupController {
         JwtTokenDto jwtAccessToken = signupService.completeSignup(session, response);
         return ResponseEntity.ok(jwtAccessToken);
     }
+
+    @Operation(summary = "[2단계 뒤로가기] 지역 정보 조회")
+    @GetMapping("/region/data")
+    public ResponseEntity<RegionRequest> getRegion(HttpSession session) {
+        return ResponseEntity.ok(signupService.getRegion(session));
+    }
+
+    @Operation(summary = "[3단계 뒤로가기] 나이대 정보 조회")
+    @GetMapping("/age-range/data")
+    public ResponseEntity<AgeRangeRequest> getAgeRange(HttpSession session) {
+        return ResponseEntity.ok(signupService.getAgeRange(session));
+    }
+
+    @Operation(summary = "[4단계 뒤로가기] 성별 정보 조회")
+    @GetMapping("/gender/data")
+    public ResponseEntity<GenderRequest> getGender(HttpSession session) {
+        return ResponseEntity.ok(signupService.getGender(session));
+    }
+
+    @Operation(summary = "[5단계 뒤로가기] 관심사 정보 조회")
+    @GetMapping("/interests/data")
+    public ResponseEntity<InterestRequest> getInterests(HttpSession session) {
+        return ResponseEntity.ok(signupService.getInterests(session));
+    }
+
+    @Operation(summary = "[6단계 뒤로가기] 예산 정보 조회")
+    @GetMapping("/budget/data")
+    public ResponseEntity<BudgetRequest> getBudget(HttpSession session) {
+        return ResponseEntity.ok(signupService.getBudget(session));
+    }
+
+    @Operation(summary = "[7단계 뒤로가기] 창업 경험 정보 조회")
+    @GetMapping("/experience/data")
+    public ResponseEntity<ExperienceRequest> getExperience(HttpSession session) {
+        return ResponseEntity.ok(signupService.getExperience(session));
+    }
+
+
 }
