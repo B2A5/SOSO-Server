@@ -1,16 +1,17 @@
 package com.example.soso.post.service;
 
 import com.example.soso.post.domain.dto.PostCreateRequest;
+import com.example.soso.post.domain.dto.PostCreateResponse;
 import com.example.soso.post.domain.dto.PostResponse;
 import com.example.soso.post.domain.dto.PostUpdateRequest;
 
 public interface PostService {
 
-    Long createPost(PostCreateRequest request, String user);
+    PostCreateResponse createPost(PostCreateRequest request, String user);
 
     PostResponse getPost(Long postId, String userId);
 
-    Long updatePost(Long postId, PostUpdateRequest request, String user);
+    PostCreateResponse updatePost(Long postId, PostUpdateRequest request, String user);
 
     void deletePost(Long postId,String user);
 

@@ -8,6 +8,7 @@ import com.example.soso.global.exception.domain.PostErrorCode;
 import com.example.soso.global.exception.util.PostException;
 import com.example.soso.likes.repository.PostLikeRepository;
 import com.example.soso.post.domain.dto.PostCreateRequest;
+import com.example.soso.post.domain.dto.PostCreateResponse;
 import com.example.soso.post.domain.dto.PostMapper;
 import com.example.soso.post.domain.dto.PostResponse;
 import com.example.soso.post.domain.dto.PostUpdateRequest;
@@ -37,7 +38,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
-    public Long createPost(PostCreateRequest request, String userId) {
+    public PostCreateResponse createPost(PostCreateRequest request, String userId) {
         Users users = getUserById(userId);
 
         Post post = PostMapper.toEntity(request, users);
@@ -49,7 +50,7 @@ public class PostServiceImpl implements PostService {
             post.addImage(image);
         });
 
-        return post.getId();
+        return new PostCreateResponse(post.getId());
     }
 
     @Override
@@ -64,7 +65,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
-    public Long updatePost(Long postId, PostUpdateRequest request, String userId) {
+    public PostCreateResponse updatePost(Long postId, PostUpdateRequest request, String userId) {
         Post post = postRepository.findByIdAndUserId(postId, userId)
                 .orElseThrow(() -> new PostException(PostErrorCode.FORBIDDEN));
 
@@ -75,7 +76,7 @@ public class PostServiceImpl implements PostService {
         postImages.forEach(post::addImage);
 
         post.update(request.title(), request.content(), request.category(), postImages);
-        return post.getId();
+        return new PostCreateResponse(post.getId());
     }
 
     @Override

@@ -41,20 +41,20 @@ public class PostLikeController {
         return ResponseEntity.ok(response);
     }
 
-    @Operation(summary = "게시글 좋아요 여부 확인", description = "사용자가 해당 게시글에 좋아요를 눌렀는지 확인합니다.")
-    @ApiResponse(responseCode = "200", description = "좋아요 여부 반환", content = @Content(schema = @Schema(implementation = Boolean.class)))
-    @GetMapping("/{postId}/like")
-    public ResponseEntity<Boolean> isLiked(@PathVariable Long postId,
-                                           @AuthenticationPrincipal CustomUserDetails userDetails) {
-        boolean liked = postLikeService.isPostLiked(postId, userDetails.getUser().getId());
-        return ResponseEntity.ok(liked);
-    }
+//    @Operation(summary = "게시글 좋아요 여부 확인", description = "사용자가 해당 게시글에 좋아요를 눌렀는지 확인합니다.")
+//    @ApiResponse(responseCode = "200", description = "좋아요 여부 반환", content = @Content(schema = @Schema(implementation = Boolean.class)))
+//    @GetMapping("/{postId}/like")
+//    public ResponseEntity<Boolean> isLiked(@PathVariable Long postId,
+//                                           @AuthenticationPrincipal CustomUserDetails userDetails) {
+//        boolean liked = postLikeService.isPostLiked(postId, userDetails.getUser().getId());
+//        return ResponseEntity.ok(liked);
+//    }
 
-    @Operation(summary = "게시글 좋아요 수 조회", description = "해당 게시글의 총 좋아요 수를 반환합니다.")
-    @ApiResponse(responseCode = "200", description = "좋아요 수 반환", content = @Content(schema = @Schema(implementation = Long.class)))
-    @GetMapping("/{postId}/like/count")
-    public ResponseEntity<Long> getLikeCount(@PathVariable Long postId) {
-        long count = postLikeService.getPostLikeCount(postId);
-        return ResponseEntity.ok(count);
-    }
+//    @Operation(summary = "게시글 좋아요 수 조회", description = "해당 게시글의 총 좋아요 수를 반환합니다.")
+//    @ApiResponse(responseCode = "200", description = "좋아요 수 반환", content = @Content(schema = @Schema(implementation = Long.class)))
+//    @GetMapping("/{postId}/like/count")
+//    public ResponseEntity<Long> getLikeCount(@PathVariable Long postId) {
+//        long count = postLikeService.getPostLikeCount(postId);
+//        return ResponseEntity.ok(count);
+//    }
 }

@@ -1,6 +1,7 @@
 package com.example.soso.post.controller;
 
 import com.example.soso.post.domain.dto.PostCreateRequest;
+import com.example.soso.post.domain.dto.PostCreateResponse;
 import com.example.soso.post.domain.dto.PostResponse;
 import com.example.soso.post.domain.dto.PostUpdateRequest;
 import com.example.soso.post.service.PostService;
@@ -34,12 +35,12 @@ public class PostController {
             }
     )
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Long> createPost(
+    public ResponseEntity<PostCreateResponse> createPost(
             @ModelAttribute @Valid PostCreateRequest request,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
         String userId = userDetails.getUser().getId();
-        Long postId = postService.createPost(request, userId);
+        PostCreateResponse postId = postService.createPost(request, userId);
         return ResponseEntity.ok(postId);
     }
 
@@ -68,13 +69,13 @@ public class PostController {
             }
     )
     @PatchMapping(value = "/{postId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Long> updatePost(
+    public ResponseEntity<PostCreateResponse> updatePost(
             @PathVariable Long postId,
             @ModelAttribute @Valid PostUpdateRequest request,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
         String userId = userDetails.getUser().getId();
-        Long updatedId = postService.updatePost(postId, request, userId);
+        PostCreateResponse updatedId = postService.updatePost(postId, request, userId);
         return ResponseEntity.ok(updatedId);
     }
 
