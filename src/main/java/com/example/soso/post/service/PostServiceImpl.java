@@ -7,11 +7,16 @@ import com.example.soso.global.s3.GcsService;
 import com.example.soso.global.exception.domain.PostErrorCode;
 import com.example.soso.global.exception.util.PostException;
 import com.example.soso.likes.repository.PostLikeRepository;
+import com.example.soso.post.domain.dto.CursorDto;
 import com.example.soso.post.domain.dto.PostCreateRequest;
 import com.example.soso.post.domain.dto.PostCreateResponse;
+import com.example.soso.post.domain.dto.PostCursorResponse;
 import com.example.soso.post.domain.dto.PostMapper;
 import com.example.soso.post.domain.dto.PostResponse;
+import com.example.soso.post.domain.dto.PostSortType;
+import com.example.soso.post.domain.dto.PostSummaryResponse;
 import com.example.soso.post.domain.dto.PostUpdateRequest;
+import com.example.soso.post.domain.entity.Category;
 import com.example.soso.post.domain.entity.Post;
 import com.example.soso.post.domain.entity.PostImage;
 import com.example.soso.post.repository.PostImageRepository;
@@ -61,6 +66,38 @@ public class PostServiceImpl implements PostService {
         boolean isLiked = postLikeRepository.existsByPostIdAndUserId(postId, userId);
 
         return PostMapper.toResponse(post, isLiked);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public PostCursorResponse getPostsByCursor(Category category, PostSortType sort,
+                                               int size, String cursor, Long idAfter) {
+        List<Post> posts = postRepository.findAllByCursorPaging(category, sort, size, cursor, idAfter);
+
+        boolean hasNext = posts.size() > size;
+        if (hasNext) {
+            posts.remove(size); // limit = size + 1 했기 때문에 마지막 하나 제거
+        }
+
+        List<PostSummaryResponse> postResponses = posts.stream()
+                .map(PostMapper::toSummaryResponse)
+                .toList();
+
+        String nextCursor = null;
+        Long nextIdAfter = null;
+
+        if (hasNext) {
+            Post lastPost = posts.get(posts.size() - 1);
+            nextCursor = switch (sort) {
+                case LATEST -> lastPost.getCreatedDate().toString();
+                case LIKE -> String.valueOf(lastPost.getLikeCount());
+                case COMMENT -> String.valueOf(lastPost.getCommentCount());
+            };
+            nextIdAfter = lastPost.getId();
+        }
+
+        CursorDto cursorDto = new CursorDto(hasNext, nextCursor, nextIdAfter);
+        return new PostCursorResponse(postResponses, cursorDto);
     }
 
     @Override

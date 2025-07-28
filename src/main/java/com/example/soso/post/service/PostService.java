@@ -2,8 +2,11 @@ package com.example.soso.post.service;
 
 import com.example.soso.post.domain.dto.PostCreateRequest;
 import com.example.soso.post.domain.dto.PostCreateResponse;
+import com.example.soso.post.domain.dto.PostCursorResponse;
 import com.example.soso.post.domain.dto.PostResponse;
+import com.example.soso.post.domain.dto.PostSortType;
 import com.example.soso.post.domain.dto.PostUpdateRequest;
+import com.example.soso.post.domain.entity.Category;
 
 public interface PostService {
 
@@ -12,6 +15,8 @@ public interface PostService {
     PostResponse getPost(Long postId, String userId);
 
     PostCreateResponse updatePost(Long postId, PostUpdateRequest request, String user);
+
+    PostCursorResponse getPostsByCursor(Category category, PostSortType sort, int size, String cursor, Long idAfter);
 
     void deletePost(Long postId,String user);
 

@@ -33,5 +33,22 @@ public class PostMapper {
                 UserMapper.toUserSummary(post.getUser())
         );
     }
+    public static PostSummaryResponse toSummaryResponse(Post post) {
+        return new PostSummaryResponse(
+                post.getId(),
+                post.getTitle(),
+                post.getContent(), // 필요 시 substring 처리 가능
+                post.getCategory().name(),
+                post.getLikeCount(),
+                post.getCommentCount(),
+                post.getCreatedDate().toString(),
+                new UserSummaryResponse(
+                        post.getUser().getNickname(),
+                        post.getUser().getLocation(),
+                        post.getUser().getProfileImageUrl(),
+                        post.getUser().getUserType()
+                )
+        );
+    }
 
 }

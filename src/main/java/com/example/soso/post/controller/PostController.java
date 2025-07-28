@@ -72,8 +72,8 @@ public class PostController {
             @RequestParam(required = false) String cursor,
             @RequestParam(required = false) Long idAfter
     ) {
-        PostCursorResponse response = postService.getPosts(category, sort, size, cursor, idAfter);
-        return ResponseEntity.ok(response);
+      PostCursorResponse response = postService.getPostsByCursor(category, sort, size, cursor, idAfter);
+     return ResponseEntity.ok(response);
     }
 
 
