@@ -9,12 +9,18 @@ import com.example.soso.global.jwt.JwtProperties;
 import com.example.soso.global.jwt.JwtProvider;
 import com.example.soso.global.jwt.JwtTokenDto;
 import com.example.soso.global.redis.RefreshTokenRedisRepository;
+import com.example.soso.users.domain.dto.AgeRangeRequest;
+import com.example.soso.users.domain.dto.BudgetRequest;
+import com.example.soso.users.domain.dto.ExperienceRequest;
+import com.example.soso.users.domain.dto.GenderRequest;
+import com.example.soso.users.domain.dto.RegionRequest;
 import com.example.soso.users.domain.dto.SignupSession;
 import com.example.soso.users.domain.dto.TokenPair;
 import com.example.soso.users.domain.dto.UserMapper;
 import com.example.soso.users.domain.entity.AgeRange;
 import com.example.soso.users.domain.entity.BudgetRange;
 import com.example.soso.users.domain.entity.Gender;
+import com.example.soso.users.domain.entity.InterestRequest;
 import com.example.soso.users.domain.entity.InterestType;
 import com.example.soso.users.domain.entity.SignupStep;
 import com.example.soso.users.domain.entity.StartupExperience;
@@ -172,6 +178,36 @@ public class SignupServiceImpl implements SignupService {
         String accessToken = jwtProvider.generateAccessToken(userId);
         String refreshToken = jwtProvider.generateRefreshToken();
         return new TokenPair(accessToken, refreshToken);
+    }
+
+    public RegionRequest getRegion(HttpSession session) {
+        SignupSession signup = getValidatedSession(session);
+        return new RegionRequest(signup.getRegionId());
+    }
+
+    public AgeRangeRequest getAgeRange(HttpSession session) {
+        SignupSession signup = getValidatedSession(session);
+        return new AgeRangeRequest(signup.getAgeRange());
+    }
+
+    public GenderRequest getGender(HttpSession session) {
+        SignupSession signup = getValidatedSession(session);
+        return new GenderRequest(signup.getGender());
+    }
+
+    public InterestRequest getInterests(HttpSession session) {
+        SignupSession signup = getValidatedSession(session);
+        return new InterestRequest(signup.getInterests());
+    }
+
+    public BudgetRequest getBudget(HttpSession session) {
+        SignupSession signup = getValidatedSession(session);
+        return new BudgetRequest(signup.getBudget());
+    }
+
+    public ExperienceRequest getExperience(HttpSession session) {
+        SignupSession signup = getValidatedSession(session);
+        return new ExperienceRequest(signup.getStartupExperience());
     }
 
 
