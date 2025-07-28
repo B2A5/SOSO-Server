@@ -2,8 +2,11 @@ package com.example.soso.post.controller;
 
 import com.example.soso.post.domain.dto.PostCreateRequest;
 import com.example.soso.post.domain.dto.PostCreateResponse;
+import com.example.soso.post.domain.dto.PostCursorResponse;
 import com.example.soso.post.domain.dto.PostResponse;
+import com.example.soso.post.domain.dto.PostSortType;
 import com.example.soso.post.domain.dto.PostUpdateRequest;
+import com.example.soso.post.domain.entity.Category;
 import com.example.soso.post.service.PostService;
 import com.example.soso.security.domain.CustomUserDetails;
 import io.swagger.v3.oas.annotations.Operation;
@@ -59,6 +62,20 @@ public class PostController {
         PostResponse response = postService.getPost(postId, userId);
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping
+    @Operation(summary = "게시글 목록 조회", description = "카테고리 및 정렬 기준에 따라 커서 기반으로 게시글 목록을 조회합니다.")
+    public ResponseEntity<PostCursorResponse> getPosts(
+            @RequestParam(required = false) Category category,
+            @RequestParam(defaultValue = "LATEST") PostSortType sort,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String cursor,
+            @RequestParam(required = false) Long idAfter
+    ) {
+        PostCursorResponse response = postService.getPosts(category, sort, size, cursor, idAfter);
+        return ResponseEntity.ok(response);
+    }
+
 
     @Operation(
             summary = "게시글 수정",
