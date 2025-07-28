@@ -2,6 +2,7 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.5.3'
 	id 'io.spring.dependency-management' version '1.1.7'
+	// QueryDSL용 플러그인 추가 X (Spring Boot 3.0+부터는 직접 sourceSets 설정 권장)
 }
 
 group = 'com.example'
@@ -10,6 +11,26 @@ version = '0.0.1-SNAPSHOT'
 java {
 	toolchain {
 		languageVersion = JavaLanguageVersion.of(21)
+	}
+}
+
+def querydslDir = layout.buildDirectory.dir("generated/querydsl").get().asFile
+
+sourceSets {
+	main {
+		java.srcDirs += querydslDir
+	}
+}
+
+tasks.withType(JavaCompile).configureEach {
+	options.compilerArgs += [
+			"-Aquerydsl.generatedSourcesDir=${querydslDir}"
+	]
+}
+
+tasks.named("clean") {
+	doLast {
+		delete querydslDir
 	}
 }
 
@@ -28,7 +49,6 @@ dependencyManagement {
 		mavenBom "org.springframework.cloud:spring-cloud-dependencies:2025.0.0"
 	}
 }
-
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -53,11 +73,15 @@ dependencies {
 
 	implementation 'net.coobird:thumbnailator:0.4.20'
 
-	// https://mvnrepository.com/artifact/com.google.cloud/google-cloud-storage
 	implementation 'com.google.cloud:google-cloud-storage:2.53.0'
 
-	// https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-starter-webmvc-ui
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.8'
+
+	// QueryDSL for Jakarta
+	implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
+	annotationProcessor 'com.querydsl:querydsl-apt:5.0.0:jakarta'
+	annotationProcessor 'jakarta.persistence:jakarta.persistence-api:3.1.0'
+	annotationProcessor 'jakarta.annotation:jakarta.annotation-api:2.1.1'
 }
 
 tasks.named('test') {
