@@ -1,5 +1,6 @@
 package com.example.soso.post.domain.dto;
 
+import com.example.soso.users.domain.entity.UserType;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(description = "작성자 요약 정보 DTO")
@@ -12,6 +13,10 @@ public record UserSummaryResponse(
         String location,
 
         @Schema(description = "프로필 이미지 URL", example = "https://example.com/profile.jpg")
-        String profileImageUrl
+        String profileImageUrl,
 
-) {}
+        @Schema(description = "창업자인지, 주민이지")
+        UserType userType
+
+) {
+}

@@ -1,5 +1,6 @@
 package com.example.soso.users.domain.dto;
 
+import com.example.soso.post.domain.dto.UserSummaryResponse;
 import com.example.soso.users.domain.entity.Users;
 
 public class UserMapper {
@@ -18,6 +19,10 @@ public class UserMapper {
                 .interests(session.getInterests())
                 .profileImageUrl(profileImageUrl)
                 .build();
+    }
+
+    public static UserSummaryResponse toUserSummary(Users users){
+        return new UserSummaryResponse(users.getUsername(), users.getLocation(), users.getProfileImageUrl(), users.getUserType());
     }
 
 }
