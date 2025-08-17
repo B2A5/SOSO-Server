@@ -41,6 +41,7 @@ public class KakaoAuthController {
         KakaoLoginResult result = kakaoService.login(
                 request.code(),
                 request.codeVerifier(),
+                request.redirectUri(),
                 session,
                 response
         );

@@ -19,11 +19,14 @@ import org.springframework.stereotype.Repository;
 @Repository
 @RequiredArgsConstructor
 public class PostRepositoryImpl implements PostRepositoryCustom {
-
+    // JPAQueryFactory는 Querydsl을 사용하여 데이터베이스 쿼리를 작성하고 실행하는 데 사용되는 클래스입니다.
     private final JPAQueryFactory queryFactory;
+    // PostCursorWhere와 PostCursorOrder는 커서 기반 페이징을 위한 조건과 정렬을 처리하는 유틸리티 클래스입니다.
     private final PostCursorWhere postCursorWhere;
+    // PostCursorOrder는 커서 기반 페이징을 위한 정렬 방식을 정의하는 유틸리티 클래스입니다.
     private final PostCursorOrder postCursorOrder;
 
+    // findAllByCursorPaging 메서드는 카테고리와 정렬 기준에 따라 커서 기반으로 게시글 목록을 조회하는 기능을 제공합니다.
     public List<PostSummaryResponse> findAllByCursorPaging(
             Category category,
             PostSortType sort,

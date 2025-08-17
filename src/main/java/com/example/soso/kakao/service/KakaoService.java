@@ -6,6 +6,6 @@ import jakarta.servlet.http.HttpSession;
 
 public interface KakaoService {
 
-   KakaoLoginResult login(String code, String codeVerifier, HttpSession session, HttpServletResponse
+   KakaoLoginResult login(String code, String codeVerifier, String redirectUri, HttpSession session, HttpServletResponse
            response);
 }

@@ -5,6 +5,7 @@ import com.example.soso.global.jwt.JwtProvider;
 import com.example.soso.security.filter.ExceptionHandlerFilter;
 import com.example.soso.security.filter.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,7 +14,6 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfigurationSource;
 
 @Configuration
@@ -22,6 +22,7 @@ public class SecurityConfig {
 
     private final JwtProvider jwtProvider;
     private final UserDetailsService userDetailsService;
+
     private final CorsConfigurationSource corsConfigurationSource;
 
 
@@ -41,9 +42,10 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/**",
                                 "/auth/**",
-                                "/login",
-                                "/signup",
-                                "/swagger-ui/**"
+                                "/login/**",
+                                "/signup/**",
+                                "/swagger-ui/**",
+                                "/kafka/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
