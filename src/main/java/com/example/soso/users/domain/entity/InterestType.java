@@ -1,5 +1,6 @@
 package com.example.soso.users.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -33,8 +34,22 @@ public enum InterestType {
         this.label = label;
     }
 
-    @JsonValue
     public String getLabel() {
         return label;
+    }
+
+    @JsonCreator
+    public static InterestType fromValue(String value) {
+        if (value == null || value.trim().isEmpty()) {
+            return null;
+        }
+        
+        for (InterestType type : InterestType.values()) {
+            if (type.name().equals(value)) {
+                return type;
+            }
+        }
+        
+        throw new IllegalArgumentException("Unknown interest type: " + value);
     }
 }

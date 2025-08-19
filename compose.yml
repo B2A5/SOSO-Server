@@ -33,9 +33,7 @@ services:
       - redisdata:/data
 
   app:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: localTest/soso-server:latest
     container_name: soso-app
     depends_on:
       db:
@@ -51,7 +49,20 @@ services:
       DB_HOST: db
       REDIS_HOST: redis
       # 필요시 프로필 사용 예: SPRING_PROFILES_ACTIVE: docker
-    # (선택) 개발 편의: 코드 마운트 등은 스프링 Devtools 환경일 때만 고려
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+
+  watchtower:
+    image: containrrr/watchtower
+    container_name: watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - WATCHTOWER_POLL_INTERVAL=30
+      - WATCHTOWER_CLEANUP=true
+      - WATCHTOWER_INCLUDE_RESTARTING=true
+    command: --interval 30 --cleanup
+    restart: unless-stopped
 
 volumes:
   dbdata:

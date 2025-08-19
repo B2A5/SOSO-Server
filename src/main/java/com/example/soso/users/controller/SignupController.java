@@ -92,7 +92,14 @@ public class SignupController {
     @PostMapping("/interests")
     public ResponseEntity<SignupStep> setInterests(@RequestBody @Valid InterestRequest request,
                                                    HttpSession session) {
-        SignupStep nextStep = signupService.saveInterests(session, request.interests());
+        // null 값들을 필터링 (프론트에서 빈 문자열을 보낼 경우 @JsonCreator에서 null로 변환됨)
+        var filteredInterests = request.interests() != null ? 
+            request.interests().stream()
+                .filter(java.util.Objects::nonNull)
+                .toList() : 
+            null;
+        
+        SignupStep nextStep = signupService.saveInterests(session, filteredInterests);
         return ResponseEntity.ok(nextStep);
     }
 
@@ -182,10 +189,4 @@ public class SignupController {
         private String jwtAccessToken;
     }
 
-    // 필요 시 세션 초기화 유틸을 사용할 수 있습니다.
-    // private void initSignupIfAbsent(HttpSession session) {
-    //     if (session.getAttribute("signup") == null) {
-    //         session.setAttribute("signup", new SignupSession(/* 기본값 설정 */));
-    //     }
-    // }
 }
