@@ -18,9 +18,9 @@ public class KakaoServiceImpl implements KakaoService {
 
 
     @Override
-    public KakaoLoginResult login(String code, String codeVerifier, HttpSession session, HttpServletResponse
+    public KakaoLoginResult login(String code, String codeVerifier, String redirectUri, HttpSession session, HttpServletResponse
             response) {
-        KakaoUserProfileDto profile = kakaoOAuthService.fetchUserProfile(code, codeVerifier);
+        KakaoUserProfileDto profile = kakaoOAuthService.fetchUserProfile(code, codeVerifier, redirectUri);
 
         if (userLoginService.isRegistered(profile.email())) {
             return userLoginService.login(profile.email(), response);

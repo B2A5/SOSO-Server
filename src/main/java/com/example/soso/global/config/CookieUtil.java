@@ -13,6 +13,7 @@ public class CookieUtil {
     private static final String PATH = "/";
 
     public static void addRefreshTokenCookie(HttpServletResponse response, String refreshToken, long maxAgeMs) {
+
         ResponseCookie cookie = ResponseCookie.from("refreshToken", refreshToken)
                 .httpOnly(HTTP_ONLY)
                 .secure(SECURE)

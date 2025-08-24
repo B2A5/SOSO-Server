@@ -1,0 +1,69 @@
+services:
+  db:
+    image: mysql:8.4
+    container_name: soso-mysql
+    command: ["mysqld", "--mysql-native-password=ON"]
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpw
+      MYSQL_DATABASE: ${DB_NAME:-soso}
+      MYSQL_USER: ${DB_USER:-soso_user}
+      MYSQL_PASSWORD: ${DB_PASS:-12341234}
+    ports:
+      - "3307:3306"
+    volumes:
+      - dbdata:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p$${MYSQL_ROOT_PASSWORD} || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7
+    container_name: soso-redis
+    ports:
+      - "6379:6379"
+    command: ["redis-server", "--appendonly", "yes"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    volumes:
+      - redisdata:/data
+
+  app:
+    image: localTest/soso-server:latest
+    container_name: soso-app
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    env_file:
+      - ./.env
+    environment:
+      # Compose 네트워크에서 서비스명으로 접근 (db/redis)
+      DB_HOST: db
+      REDIS_HOST: redis
+      # 필요시 프로필 사용 예: SPRING_PROFILES_ACTIVE: docker
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+
+  watchtower:
+    image: containrrr/watchtower
+    container_name: watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - WATCHTOWER_POLL_INTERVAL=30
+      - WATCHTOWER_CLEANUP=true
+      - WATCHTOWER_INCLUDE_RESTARTING=true
+    command: --interval 30 --cleanup
+    restart: unless-stopped
+
+volumes:
+  dbdata:
+  redisdata:
