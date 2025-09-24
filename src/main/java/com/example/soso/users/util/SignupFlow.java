@@ -84,6 +84,9 @@ public class SignupFlow {
 
     public static List<SignupStep> getCompletedSteps(UserType userType, SignupStep currentStep) {
         List<SignupStep> steps = FLOW.get(userType);
+        if (steps == null || currentStep == null) {
+            return List.of();
+        }
         int currentIdx = steps.indexOf(currentStep);
         return (currentIdx >= 0) ? steps.subList(0, currentIdx + 1) : List.of();
     }

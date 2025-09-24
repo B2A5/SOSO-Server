@@ -1,7 +1,11 @@
 package com.example.soso.users.controller;
 
+import com.example.soso.users.domain.dto.AgeRangeRequest;
+import com.example.soso.users.domain.dto.BudgetRequest;
+import com.example.soso.users.domain.dto.GenderRequest;
 import com.example.soso.users.domain.dto.RegionRequest;
 import com.example.soso.users.domain.dto.UserTypeRequest;
+import com.example.soso.users.domain.entity.InterestRequest;
 import com.example.soso.users.domain.entity.SignupStep;
 import com.example.soso.users.service.SignupService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -41,6 +45,38 @@ public class SignupController {
     public ResponseEntity<SignupStep> setRegion(@RequestBody @Valid RegionRequest request,
                                                 HttpSession session) {
         SignupStep nextStep = signupService.saveRegion(session, request.regionId());
+        return ResponseEntity.ok(nextStep);
+    }
+
+    @Operation(summary = "[3단계] 연령대 설정 (공통)")
+    @PostMapping("/age-range")
+    public ResponseEntity<SignupStep> setAgeRange(@RequestBody @Valid AgeRangeRequest request,
+                                                  HttpSession session) {
+        SignupStep nextStep = signupService.saveAgeRange(session, request.ageRange());
+        return ResponseEntity.ok(nextStep);
+    }
+
+    @Operation(summary = "[4단계] 성별 설정 (공통)")
+    @PostMapping("/gender")
+    public ResponseEntity<SignupStep> setGender(@RequestBody @Valid GenderRequest request,
+                                                HttpSession session) {
+        SignupStep nextStep = signupService.saveGender(session, request.gender());
+        return ResponseEntity.ok(nextStep);
+    }
+
+    @Operation(summary = "[5단계] 관심업종 설정 (FOUNDER 전용)")
+    @PostMapping("/interests")
+    public ResponseEntity<SignupStep> setInterests(@RequestBody @Valid InterestRequest request,
+                                                   HttpSession session) {
+        SignupStep nextStep = signupService.saveInterests(session, request.interests());
+        return ResponseEntity.ok(nextStep);
+    }
+
+    @Operation(summary = "[6단계] 예산 설정 (FOUNDER 전용)")
+    @PostMapping("/budget")
+    public ResponseEntity<SignupStep> setBudget(@RequestBody @Valid BudgetRequest request,
+                                                HttpSession session) {
+        SignupStep nextStep = signupService.saveBudget(session, request.budget());
         return ResponseEntity.ok(nextStep);
     }
 }
