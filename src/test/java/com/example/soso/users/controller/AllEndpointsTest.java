@@ -313,7 +313,7 @@ class AllEndpointsTest {
                                 }
                                 """))
                 .andDo(print())
-                .andExpect(status().isInternalServerError());
+                .andExpect(status().isBadRequest());
 
         // 잘못된 연령대
         mockMvc.perform(post("/signup/age-range")
@@ -325,7 +325,7 @@ class AllEndpointsTest {
                                 }
                                 """))
                 .andDo(print())
-                .andExpect(status().isInternalServerError());
+                .andExpect(status().isBadRequest());
 
         // 잘못된 관심업종
         mockMvc.perform(post("/signup/interests")
@@ -337,7 +337,7 @@ class AllEndpointsTest {
                                 }
                                 """))
                 .andDo(print())
-                .andExpect(status().isInternalServerError());
+                .andExpect(status().isBadRequest());
 
         // 필수 필드 누락
         mockMvc.perform(post("/signup/user-type")

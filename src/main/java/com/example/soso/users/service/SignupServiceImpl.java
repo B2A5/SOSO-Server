@@ -33,7 +33,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 import java.util.function.Consumer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -54,6 +53,9 @@ public class SignupServiceImpl implements SignupService {
         SignupSession signup = getValidatedSession(session);
         // USER_TYPE은 첫 단계이므로 특별 처리
         if (!SignupFlow.isFirstStep(SignupStep.USER_TYPE, userType)) {
+            log.warn("Invalid first step request: userType={}, sessionId={}",
+                    userType,
+                    session != null ? session.getId() : "null");
             throw new IllegalStateException("잘못된 단계입니다.");
         }
 
@@ -212,11 +214,18 @@ public class SignupServiceImpl implements SignupService {
 
     private void validateStep(SignupSession signup, SignupStep requestedStep) {
         if (signup == null) {
+            log.warn("Signup session is null during step validation for requestedStep={}", requestedStep);
             throw new UserAuthException(SESSION_NOT_VALID);
         }
 
         // For step processing, we use strict validation - only current or immediate next step
+        // 한국어: 단계 처리의 경우 엄격한 검증을 사용합니다 - 현재 단계 또는 바로 다음 단계만 허용
         if (!SignupFlow.isValidProcessingStep(signup.getUserType(), signup.getCurrentStep(), requestedStep)) {
+            log.warn("Signup step validation failed: userType={}, currentStep={}, requestedStep={}, email={}",
+                    signup.getUserType(),
+                    signup.getCurrentStep(),
+                    requestedStep,
+                    signup.getEmail());
             throw new UserAuthException(STEPS_NOT_TYPE);
         }
     }
@@ -225,6 +234,7 @@ public class SignupServiceImpl implements SignupService {
         SignupSession signup = (SignupSession) session.getAttribute(SESSION_KEY);
 
         if (signup == null) {
+            log.warn("Signup session missing or expired: sessionId={}", session != null ? session.getId() : "null");
             throw new UserAuthException(SESSION_NOT_VALID);
         }
         return signup;

@@ -186,7 +186,7 @@ class SignupIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
                                 {
-                                    "budget": "UNDER_50"
+                                    "budget": "THOUSANDS_3000_5000"
                                 }
                                 """))
                 .andDo(print())
@@ -227,7 +227,7 @@ class SignupIntegrationTest {
                                 }
                                 """))
                 .andDo(print())
-                .andExpect(status().isUnauthorized()); // 단계 검증 실패로 401 반환
+                .andExpect(status().isBadRequest()); // 단계 검증 실패로 400 반환
     }
 
     @Test
@@ -246,7 +246,7 @@ class SignupIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"gender\": \"MALE\"}"))
                 .andDo(print())
-                .andExpect(status().isUnauthorized()); // STEPS_NOT_TYPE는 401 반환
+                .andExpect(status().isBadRequest()); // 단계 순서 오류 -> 400 반환
     }
 
     @Test

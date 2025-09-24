@@ -12,8 +12,8 @@ public enum UserErrorCode implements BaseErrorCode {
     INVALID_USER_ID("유효하지 않은 사용자 ID입니다.", HttpStatus.BAD_REQUEST),
     UNAUTHORIZED_USER("인증되지 않은 사용자입니다.", HttpStatus.UNAUTHORIZED),
     EMAIL_ALREADY_REGISTERED("이미 등록된 이메일 입니다.", HttpStatus.BAD_REQUEST),
-    STEPS_NOT_TYPE("현재 사용자 맞지 않는 단계 입니다.", HttpStatus.BAD_REQUEST),
-    SESSION_NOT_VALID("유효 하지 않은 세션 입니다.", HttpStatus.UNAUTHORIZED);
+    STEPS_NOT_TYPE("현재 진행 단계에서 허용되지 않는 요청입니다.", HttpStatus.BAD_REQUEST),
+    SESSION_NOT_VALID("회원가입 세션이 만료되었습니다. 다시 로그인 해주세요.", HttpStatus.UNAUTHORIZED);
 
     private final String message;
     private final HttpStatus httpStatus;

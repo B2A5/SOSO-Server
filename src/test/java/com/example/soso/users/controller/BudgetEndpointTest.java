@@ -160,7 +160,7 @@ class BudgetEndpointTest {
                                 }
                                 """))
                 .andDo(print())
-                .andExpect(status().isInternalServerError());
+                .andExpect(status().isBadRequest());
 
         // null budget
         mockMvc.perform(post("/signup/budget")
