@@ -1,210 +1,83 @@
 package com.example.soso.users.controller;
 
-import com.example.soso.users.domain.entity.AgeRange;
-import com.example.soso.users.domain.entity.Gender;
-import com.example.soso.users.domain.entity.SignupStep;
-import com.example.soso.users.domain.entity.UserType;
-import com.example.soso.users.service.SignupService;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.servlet.http.HttpSession;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureWebMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockHttpSession;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
-
-import java.util.List;
-
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
-@AutoConfigureWebMvc
-@DisplayName("공통 회원가입 컨트롤러 테스트")
+import com.example.soso.global.jwt.JwtTokenDto;
+import com.example.soso.users.domain.dto.ExperienceRequest;
+import com.example.soso.users.domain.entity.SignupStep;
+import com.example.soso.users.domain.entity.StartupExperience;
+import com.example.soso.users.service.SignupService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+
+@WebMvcTest(SignupController.class)
 class SignupControllerTest {
 
     @Autowired
-    private WebApplicationContext webApplicationContext;
-
-    @MockBean
-    private SignupService signupService;
+    private MockMvc mockMvc;
 
     @Autowired
     private ObjectMapper objectMapper;
 
-    private MockMvc mockMvc;
-    private MockHttpSession mockSession;
-
-    @BeforeEach
-    void setUp() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-        mockSession = new MockHttpSession();
-    }
+    @MockBean
+    private SignupService signupService;
 
     @Test
-    @DisplayName("유저 타입 설정 성공 테스트")
-    void setUserType_Success() throws Exception {
-        // given
-        when(signupService.saveUserType(any(HttpSession.class), eq(UserType.INHABITANT)))
-                .thenReturn(SignupStep.REGION);
-
-        String requestBody = """
-                {
-                    "userType": "INHABITANT"
-                }
-                """;
-
-        // when & then
-        mockMvc.perform(post("/signup/user-type")
-                        .session(mockSession)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(requestBody))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$").value("REGION"));
-    }
-
-    @Test
-    @DisplayName("지역 설정 성공 테스트")
-    void setRegion_Success() throws Exception {
-        // given
-        when(signupService.saveRegion(any(HttpSession.class), eq("SEOUL")))
-                .thenReturn(SignupStep.AGE);
-
-        String requestBody = """
-                {
-                    "regionId": "SEOUL"
-                }
-                """;
-
-        // when & then
-        mockMvc.perform(post("/signup/region")
-                        .session(mockSession)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(requestBody))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$").value("AGE"));
-    }
-
-    @Test
-    @DisplayName("연령대 설정 성공 테스트")
-    void setAgeRange_Success() throws Exception {
-        // given
-        when(signupService.saveAgeRange(any(HttpSession.class), eq(AgeRange.TWENTIES)))
-                .thenReturn(SignupStep.GENDER);
-
-        String requestBody = """
-                {
-                    "ageRange": "TWENTIES"
-                }
-                """;
-
-        // when & then
-        mockMvc.perform(post("/signup/age-range")
-                        .session(mockSession)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(requestBody))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$").value("GENDER"));
-    }
-
-    @Test
-    @DisplayName("성별 설정 성공 테스트")
-    void setGender_Success() throws Exception {
-        // given
-        when(signupService.saveGender(any(HttpSession.class), eq(Gender.MALE)))
+    @DisplayName("경험 단계가 정상 처리되면 다음 단계 정보를 반환한다")
+    void postExperience() throws Exception {
+        when(signupService.saveExperience(any(HttpSession.class), eq(StartupExperience.YES)))
                 .thenReturn(SignupStep.NINAME);
 
-        String requestBody = """
-                {
-                    "gender": "MALE"
-                }
-                """;
-
-        // when & then
-        mockMvc.perform(post("/signup/gender")
-                        .session(mockSession)
+        mockMvc.perform(post("/signup/experience")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(requestBody))
+                        .content(objectMapper.writeValueAsString(new ExperienceRequest(StartupExperience.YES))))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$").value("NINAME"));
+                .andExpect(content().json("\"NINAME\""));
     }
 
     @Test
-    @DisplayName("관심업종 설정 성공 테스트")
-    void setInterests_Success() throws Exception {
-        // given
-        when(signupService.saveInterests(any(HttpSession.class), any(List.class)))
-                .thenReturn(SignupStep.BUDGET);
+    @DisplayName("닉네임 생성이 성공하면 생성된 닉네임을 반환한다")
+    void postNickname() throws Exception {
+        when(signupService.saveNiceName(any(HttpSession.class))).thenReturn("닉네임");
 
-        String requestBody = """
-                {
-                    "interests": ["MANUFACTURING", "WHOLESALE_RETAIL"]
-                }
-                """;
-
-        // when & then
-        mockMvc.perform(post("/signup/interests")
-                        .session(mockSession)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(requestBody))
+        mockMvc.perform(post("/signup/nickname"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$").value("BUDGET"));
+                .andExpect(content().string("닉네임"));
     }
 
     @Test
-    @DisplayName("유효하지 않은 유저 타입으로 요청시 실패")
-    void setUserType_InvalidUserType() throws Exception {
-        String requestBody = """
-                {
-                    "userType": "INVALID_TYPE"
-                }
-                """;
+    @DisplayName("회원가입 완료 시 JWT 토큰을 반환한다")
+    void postComplete() throws Exception {
+        when(signupService.completeSignup(any(HttpSession.class), any(HttpServletResponse.class)))
+                .thenReturn(new JwtTokenDto("access"));
 
-        mockMvc.perform(post("/signup/user-type")
-                        .session(mockSession)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(requestBody))
-                .andExpect(status().isInternalServerError());
+        mockMvc.perform(post("/signup/complete"))
+                .andExpect(status().isOk())
+                .andExpect(content().json("{\"jwtAccessToken\":\"access\"}"));
     }
 
     @Test
-    @DisplayName("유효하지 않은 연령대로 요청시 실패")
-    void setAgeRange_InvalidAgeRange() throws Exception {
-        String requestBody = """
-                {
-                    "ageRange": "INVALID_AGE"
-                }
-                """;
+    @DisplayName("창업 경험 데이터 조회")
+    void getExperienceData() throws Exception {
+        when(signupService.getExperience(any(HttpSession.class)))
+                .thenReturn(new ExperienceRequest(StartupExperience.NO));
 
-        mockMvc.perform(post("/signup/age-range")
-                        .session(mockSession)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(requestBody))
-                .andExpect(status().isInternalServerError());
-    }
-
-    @Test
-    @DisplayName("필수 값 누락시 실패")
-    void setUserType_MissingRequiredField() throws Exception {
-        String requestBody = """
-                {
-                }
-                """;
-
-        mockMvc.perform(post("/signup/user-type")
-                        .session(mockSession)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(requestBody))
-                .andExpect(status().isBadRequest());
+        mockMvc.perform(get("/signup/experience/data"))
+                .andExpect(status().isOk())
+                .andExpect(content().json("{\"experience\":\"NO\"}"));
     }
 }

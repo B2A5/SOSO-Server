@@ -1,7 +1,9 @@
 package com.example.soso.users.controller;
 
+import com.example.soso.global.jwt.JwtTokenDto;
 import com.example.soso.users.domain.dto.AgeRangeRequest;
 import com.example.soso.users.domain.dto.BudgetRequest;
+import com.example.soso.users.domain.dto.ExperienceRequest;
 import com.example.soso.users.domain.dto.GenderRequest;
 import com.example.soso.users.domain.dto.RegionRequest;
 import com.example.soso.users.domain.dto.UserTypeRequest;
@@ -10,11 +12,16 @@ import com.example.soso.users.domain.entity.SignupStep;
 import com.example.soso.users.service.SignupService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "Signup - Common", description = """
 공통 회원가입 엔드포인트
@@ -22,8 +29,8 @@ import org.springframework.web.bind.annotation.*;
 1. /signup/user-type (유저 타입 선택 - 공통)
 2. /signup/region (지역 선택 - 공통)
 이후 타입별로 분기:
-- INHABITANT: /signup/inhabitant/*
-- FOUNDER: /signup/founder/*
+- INHABITANT: /signup/* (닉네임, 완료)
+- FOUNDER: /signup/* (관심, 예산, 창업 경험, 닉네임, 완료)
 """)
 @RestController
 @RequestMapping("/signup")
@@ -78,5 +85,34 @@ public class SignupController {
                                                 HttpSession session) {
         SignupStep nextStep = signupService.saveBudget(session, request.budget());
         return ResponseEntity.ok(nextStep);
+    }
+
+    @Operation(summary = "[7단계] 창업 경험 설정 (FOUNDER 전용)")
+    @PostMapping("/experience")
+    public ResponseEntity<SignupStep> setExperience(@RequestBody @Valid ExperienceRequest request,
+                                                    HttpSession session) {
+        SignupStep nextStep = signupService.saveExperience(session, request.experience());
+        return ResponseEntity.ok(nextStep);
+    }
+
+    @Operation(summary = "[8단계] 닉네임 생성 (공통)")
+    @PostMapping("/nickname")
+    public ResponseEntity<String> saveNickname(HttpSession session) {
+        String nickname = signupService.saveNiceName(session);
+        return ResponseEntity.ok(nickname);
+    }
+
+    @Operation(summary = "[9단계] 회원가입 완료 (공통)")
+    @PostMapping("/complete")
+    public ResponseEntity<JwtTokenDto> completeSignup(HttpSession session,
+                                                      HttpServletResponse response) {
+        JwtTokenDto jwtAccessToken = signupService.completeSignup(session, response);
+        return ResponseEntity.ok(jwtAccessToken);
+    }
+
+    @Operation(summary = "[7단계 뒤로가기] 창업 경험 정보 조회 (FOUNDER 전용)")
+    @GetMapping("/experience/data")
+    public ResponseEntity<ExperienceRequest> getExperience(HttpSession session) {
+        return ResponseEntity.ok(signupService.getExperience(session));
     }
 }
