@@ -7,7 +7,7 @@ import com.example.soso.users.domain.entity.InterestType;
 import com.example.soso.users.domain.entity.SignupStep;
 import com.example.soso.users.domain.entity.UserType;
 import com.example.soso.users.service.SignupService;
-import com.fasterxml.jackson.databind.ObjectMapper;
+
 import jakarta.servlet.http.HttpSession;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -41,9 +41,6 @@ class AllEndpointsTest {
 
     @MockBean
     private SignupService signupService;
-
-    @Autowired
-    private ObjectMapper objectMapper;
 
     private MockMvc mockMvc;
     private MockHttpSession mockSession;

@@ -475,7 +475,7 @@ class SignupControllerIntegrationTest {
 
     private void initializeSession() {
         SignupSession signupSession = new SignupSession();
-        signupSession.setUsername("testuser");
+        signupSession.setUsername("testUser");
         signupSession.setEmail("test@example.com");
         signupSession.setProfileImageUrl("https://example.com/profile.jpg");
         mockSession.setAttribute("signup", signupSession);

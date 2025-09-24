@@ -1,8 +1,6 @@
 package com.example.soso.users.integration;
 
-import com.example.soso.users.domain.entity.*;
 import com.example.soso.users.domain.dto.SignupSession;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -38,9 +36,7 @@ class SignupIntegrationTest {
     @Autowired
     private WebApplicationContext webApplicationContext;
 
-    @Autowired
-    private ObjectMapper objectMapper;
-
+    
     private MockMvc mockMvc;
     private MockHttpSession session;
 
@@ -50,7 +46,7 @@ class SignupIntegrationTest {
         session = new MockHttpSession();
         // 세션에 SignupSession 객체 초기화
         SignupSession signupSession = new SignupSession();
-        signupSession.setUsername("testuser");
+        signupSession.setUsername("testUser");
         signupSession.setEmail("test@example.com");
         signupSession.setProfileImageUrl("https://example.com/profile.jpg");
         session.setAttribute("signup", signupSession);

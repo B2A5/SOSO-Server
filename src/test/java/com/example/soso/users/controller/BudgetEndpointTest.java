@@ -3,7 +3,6 @@ package com.example.soso.users.controller;
 import com.example.soso.users.domain.entity.BudgetRange;
 import com.example.soso.users.domain.entity.SignupStep;
 import com.example.soso.users.service.SignupService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpSession;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -29,6 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureWebMvc
 @DisplayName("예산 선택 엔드포인트 테스트")
 class BudgetEndpointTest {
+    
 
     @Autowired
     private WebApplicationContext webApplicationContext;
@@ -36,9 +36,7 @@ class BudgetEndpointTest {
     @MockBean
     private SignupService signupService;
 
-    @Autowired
-    private ObjectMapper objectMapper;
-
+    
     private MockMvc mockMvc;
     private MockHttpSession mockSession;
 

@@ -109,13 +109,13 @@ class RandomNicknameGeneratorTest {
 
     @Test
     @DisplayName("deprecated 메서드 호환성 테스트")
-    @SuppressWarnings("deprecation")
     void generateUniqueNickname_LegacyMethod_ShouldWork() {
         // given
         Set<String> takenNicknames = Set.of("웃는문어", "날쌘문어");
+        Predicate<String> isNicknameTaken = takenNicknames::contains;
 
         // when
-        String nickname = RandomNicknameGenerator.generateUniqueNickname(takenNicknames);
+        String nickname = RandomNicknameGenerator.generateUniqueNickname(isNicknameTaken);
 
         // then
         assertThat(nickname).isNotNull();
@@ -125,10 +125,9 @@ class RandomNicknameGeneratorTest {
 
     @Test
     @DisplayName("빈 Set으로 호출 시 정상 동작")
-    @SuppressWarnings("deprecation")
     void generateUniqueNickname_WithEmptySet_ShouldWork() {
         // given
-        Set<String> emptySet = new HashSet<>();
+        Predicate<String> emptySet = nickname -> false;
 
         // when
         String nickname = RandomNicknameGenerator.generateUniqueNickname(emptySet);

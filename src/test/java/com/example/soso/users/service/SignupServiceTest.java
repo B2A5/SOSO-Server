@@ -272,7 +272,7 @@ class SignupServiceTest {
             // given
             signupSession.setUserType(UserType.FOUNDER);
             signupSession.setCurrentStep(SignupStep.COMPLETE);
-            signupSession.setUsername("testuser");
+            signupSession.setUsername("testUser");
             signupSession.setEmail("test@example.com");
             signupSession.setProfileImageUrl("https://example.com/profile.jpg");
             signupSession.setNickname("테스트문어");
@@ -367,7 +367,7 @@ class SignupServiceTest {
 
     private SignupSession createMockSignupSession() {
         SignupSession session = new SignupSession();
-        session.setUsername("testuser");
+        session.setUsername("testUser");
         session.setEmail("test@example.com");
         session.setProfileImageUrl("https://example.com/profile.jpg");
         return session;
