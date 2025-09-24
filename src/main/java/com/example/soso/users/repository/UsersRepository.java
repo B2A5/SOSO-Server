@@ -12,6 +12,8 @@ public interface UsersRepository extends JpaRepository<Users, String> {
     @Query("SELECT u.nickname FROM Users as u")
     Set<String> findAllNicknames();
 
+    boolean existsByNickname(String nickname);
+
     boolean existsByEmail(String email);
 
     boolean existsById(String id);

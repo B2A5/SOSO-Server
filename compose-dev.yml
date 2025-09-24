@@ -1,0 +1,38 @@
+# 로컬 개발용 Docker Compose (DB + Redis만)
+services:
+  db:
+    image: mysql:8.4
+    container_name: soso-mysql-dev
+    command: ["mysqld", "--mysql-native-password=ON"]
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpw
+      MYSQL_DATABASE: ${DB_NAME:-soso}
+      MYSQL_USER: ${DB_USER:-soso_user}
+      MYSQL_PASSWORD: ${DB_PASS:-12341234}
+    ports:
+      - "3307:3306"
+    volumes:
+      - dbdata_dev:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p$${MYSQL_ROOT_PASSWORD} || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7
+    container_name: soso-redis-dev
+    ports:
+      - "6379:6379"
+    command: ["redis-server", "--appendonly", "yes"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    volumes:
+      - redisdata_dev:/data
+
+volumes:
+  dbdata_dev:
+  redisdata_dev:

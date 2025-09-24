@@ -40,16 +40,18 @@ public enum InterestType {
 
     @JsonCreator
     public static InterestType fromValue(String value) {
-        if (value == null || value.trim().isEmpty()) {
-            return null;
-        }
-        
+        // 먼저 enum 이름으로 시도
         for (InterestType type : InterestType.values()) {
             if (type.name().equals(value)) {
                 return type;
             }
         }
-        
-        throw new IllegalArgumentException("Unknown interest type: " + value);
+        // enum 이름으로 찾을 수 없으면 label로 시도
+        for (InterestType type : InterestType.values()) {
+            if (type.getLabel().equals(value)) {
+                return type;
+            }
+        }
+        throw new IllegalArgumentException("Unknown InterestType: " + value);
     }
 }
