@@ -34,6 +34,7 @@ import jakarta.servlet.http.HttpSession;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Consumer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -51,105 +52,101 @@ public class SignupServiceImpl implements SignupService {
 
     public SignupStep saveUserType(HttpSession session, UserType userType) {
         SignupSession signup = getValidatedSession(session);
-
+        // USER_TYPE은 첫 단계이므로 특별 처리
         if (!SignupFlow.isFirstStep(SignupStep.USER_TYPE, userType)) {
             throw new IllegalStateException("잘못된 단계입니다.");
         }
 
         signup.setUserType(userType);
+        log.debug("User type set to: {}", userType);
+
         SignupStep nextStep = SignupFlow.nextStep(userType, SignupStep.USER_TYPE);
         signup.setCurrentStep(nextStep);
         session.setAttribute(SESSION_KEY, signup);
+
+        log.info("Signup step processed: {} -> {}, UserType: {}", SignupStep.USER_TYPE, nextStep, userType);
         return nextStep;
     }
 
-
     public SignupStep saveRegion(HttpSession session, String regionId) {
-        SignupSession signup = getValidatedSession(session);
-        validateStep(signup, SignupStep.REGION);
-
-        signup.setRegionId(regionId);
-        SignupStep nextStep = SignupFlow.nextStep(signup.getUserType(), SignupStep.REGION);
-        signup.setCurrentStep(nextStep);
-        session.setAttribute(SESSION_KEY, signup);
-        return nextStep;
+        return processSignupStep(session, SignupStep.REGION, signup -> {
+            signup.setRegionId(regionId);
+            log.debug("Region set to: {}", regionId);
+        });
     }
 
     public SignupStep saveAgeRange(HttpSession session, AgeRange ageRange) {
-        SignupSession signup = getValidatedSession(session);
-        validateStep(signup, SignupStep.AGE);
-
-        signup.setAgeRange(ageRange);
-        SignupStep nextStep = SignupFlow.nextStep(signup.getUserType(), SignupStep.AGE);
-        signup.setCurrentStep(nextStep);
-        session.setAttribute(SESSION_KEY, signup);
-        return nextStep;
+        return processSignupStep(session, SignupStep.AGE, signup -> {
+            signup.setAgeRange(ageRange);
+            log.debug("Age range set to: {}", ageRange);
+        });
     }
 
     public SignupStep saveGender(HttpSession session, Gender gender) {
-        SignupSession signup = getValidatedSession(session);
-        validateStep(signup, SignupStep.GENDER);
-
-        signup.setGender(gender);
-        SignupStep nextStep = SignupFlow.nextStep(signup.getUserType(), SignupStep.GENDER);
-        signup.setCurrentStep(nextStep);
-        session.setAttribute(SESSION_KEY, signup);
-        return nextStep;
+        return processSignupStep(session, SignupStep.GENDER, signup -> {
+            signup.setGender(gender);
+            log.debug("Gender set to: {}", gender);
+        });
     }
 
     public SignupStep saveInterests(HttpSession session, List<InterestType> interests) {
-        SignupSession signup = getValidatedSession(session);
-        validateStep(signup, SignupStep.INTERESTS);
-
-        if (interests == null || interests.isEmpty()) {
-            signup.setInterests(Collections.emptyList());
-        } else {
-            signup.setInterests(interests);
-        }
-
-        SignupStep nextStep = SignupFlow.nextStep(signup.getUserType(), SignupStep.INTERESTS);
-        signup.setCurrentStep(nextStep);
-        session.setAttribute(SESSION_KEY, signup);
-        return nextStep;
+        return processSignupStep(session, SignupStep.INTERESTS, signup -> {
+            if (interests == null || interests.isEmpty()) {
+                signup.setInterests(Collections.emptyList());
+            } else {
+                signup.setInterests(interests);
+            }
+            log.debug("Interests set to: {}", interests);
+        });
     }
 
     public SignupStep saveBudget(HttpSession session, BudgetRange budget) {
-        SignupSession signup = getValidatedSession(session);
-        validateStep(signup, SignupStep.BUDGET);
-
-        signup.setBudget(budget); // null일 경우도 허용
-        SignupStep nextStep = SignupFlow.nextStep(signup.getUserType(), SignupStep.BUDGET);
-        signup.setCurrentStep(nextStep);
-        session.setAttribute(SESSION_KEY, signup);
-        return nextStep;
+        return processSignupStep(session, SignupStep.BUDGET, signup -> {
+            signup.setBudget(budget); // null일 경우도 허용
+            log.debug("Budget set to: {}", budget);
+        });
     }
 
     public SignupStep saveExperience(HttpSession session, StartupExperience experience) {
-        SignupSession signup = getValidatedSession(session);
-        validateStep(signup, SignupStep.STARTUP);
+        return processSignupStep(session, SignupStep.STARTUP, signup -> {
+            signup.setStartupExperience(experience);
+            log.debug("Experience set to: {}", experience);
+        });
+    }
 
-        signup.setStartupExperience(experience);
-        SignupStep nextStep = SignupFlow.nextStep(signup.getUserType(), SignupStep.STARTUP);
+    /**
+     * 회원가입 단계 처리 템플릿 메서드
+     * 공통 로직: 세션 검증 -> 단계 검증 -> 데이터 업데이트 -> 다음 단계 계산 -> 세션 저장
+     */
+    private SignupStep processSignupStep(HttpSession session, SignupStep currentStep, Consumer<SignupSession> updater) {
+        SignupSession signup = getValidatedSession(session);
+        validateStep(signup, currentStep);
+
+        updater.accept(signup);
+
+        SignupStep nextStep = SignupFlow.nextStep(signup.getUserType(), currentStep);
         signup.setCurrentStep(nextStep);
         session.setAttribute(SESSION_KEY, signup);
+
+        log.info("Signup step processed: {} -> {}, UserType: {}", currentStep, nextStep, signup.getUserType());
         return nextStep;
     }
 
-    public String saveNiceName(HttpSession session){
+    public String saveNiceName(HttpSession session) {
         SignupSession signup = getValidatedSession(session);
         validateStep(signup, SignupStep.NINAME);
 
-        Set<String> takenNicknames = usersRepository.findAllNicknames();
         String nickname = signup.getNickname();
 
-        if (nickname == null || takenNicknames.contains(nickname)) {
-            nickname = RandomNicknameGenerator.generateUniqueNickname(takenNicknames);
-            signup.setNickname(nickname);
+        if (nickname == null || usersRepository.existsByNickname(nickname)) {
+            nickname = RandomNicknameGenerator.generateUniqueNickname(usersRepository::existsByNickname);
         }
 
         signup.setNickname(nickname);
         signup.setCurrentStep(SignupStep.NINAME);
         session.setAttribute(SESSION_KEY, signup);
+
+        log.info("Nickname generated and set: {}", nickname);
         return nickname;
     }
 
@@ -181,38 +178,45 @@ public class SignupServiceImpl implements SignupService {
     }
 
     public RegionRequest getRegion(HttpSession session) {
-        SignupSession signup = getValidatedSession(session);
-        return new RegionRequest(signup.getRegionId());
+        return getSignupData(session, signup -> new RegionRequest(signup.getRegionId()));
     }
 
     public AgeRangeRequest getAgeRange(HttpSession session) {
-        SignupSession signup = getValidatedSession(session);
-        return new AgeRangeRequest(signup.getAgeRange());
+        return getSignupData(session, signup -> new AgeRangeRequest(signup.getAgeRange()));
     }
 
     public GenderRequest getGender(HttpSession session) {
-        SignupSession signup = getValidatedSession(session);
-        return new GenderRequest(signup.getGender());
+        return getSignupData(session, signup -> new GenderRequest(signup.getGender()));
     }
 
     public InterestRequest getInterests(HttpSession session) {
-        SignupSession signup = getValidatedSession(session);
-        return new InterestRequest(signup.getInterests());
+        return getSignupData(session, signup -> new InterestRequest(signup.getInterests()));
     }
 
     public BudgetRequest getBudget(HttpSession session) {
-        SignupSession signup = getValidatedSession(session);
-        return new BudgetRequest(signup.getBudget());
+        return getSignupData(session, signup -> new BudgetRequest(signup.getBudget()));
     }
 
     public ExperienceRequest getExperience(HttpSession session) {
+        return getSignupData(session, signup -> new ExperienceRequest(signup.getStartupExperience()));
+    }
+
+    /**
+     * 회원가입 데이터 조회 템플릿 메서드
+     */
+    private <T> T getSignupData(HttpSession session, java.util.function.Function<SignupSession, T> extractor) {
         SignupSession signup = getValidatedSession(session);
-        return new ExperienceRequest(signup.getStartupExperience());
+        return extractor.apply(signup);
     }
 
 
     private void validateStep(SignupSession signup, SignupStep requestedStep) {
-        if (signup == null || !SignupFlow.isValidNextStep(signup.getUserType(), signup.getCurrentStep(), requestedStep)) {
+        if (signup == null) {
+            throw new UserAuthException(SESSION_NOT_VALID);
+        }
+
+        // For step processing, we use strict validation - only current or immediate next step
+        if (!SignupFlow.isValidProcessingStep(signup.getUserType(), signup.getCurrentStep(), requestedStep)) {
             throw new UserAuthException(STEPS_NOT_TYPE);
         }
     }

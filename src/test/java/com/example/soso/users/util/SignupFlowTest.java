@@ -130,12 +130,36 @@ class SignupFlowTest {
     }
 
     @Test
+    @DisplayName("첫 번째 단계 확인 - null 안전성 테스트")
+    void isFirstStep_NullSafety() {
+        assertThat(SignupFlow.isFirstStep(null, UserType.INHABITANT)).isFalse();
+        assertThat(SignupFlow.isFirstStep(SignupStep.USER_TYPE, null)).isFalse();
+        assertThat(SignupFlow.isFirstStep(null, null)).isFalse();
+    }
+
+    @Test
     @DisplayName("마지막 단계 확인")
     void isLastStep() {
         assertThat(SignupFlow.isLastStep(SignupStep.COMPLETE, UserType.INHABITANT)).isTrue();
         assertThat(SignupFlow.isLastStep(SignupStep.COMPLETE, UserType.FOUNDER)).isTrue();
         assertThat(SignupFlow.isLastStep(SignupStep.NINAME, UserType.INHABITANT)).isFalse();
         assertThat(SignupFlow.isLastStep(SignupStep.NINAME, UserType.FOUNDER)).isFalse();
+    }
+
+    @Test
+    @DisplayName("마지막 단계 확인 - null 안전성 테스트")
+    void isLastStep_NullSafety() {
+        assertThat(SignupFlow.isLastStep(null, UserType.INHABITANT)).isFalse();
+        assertThat(SignupFlow.isLastStep(SignupStep.COMPLETE, null)).isFalse();
+        assertThat(SignupFlow.isLastStep(null, null)).isFalse();
+    }
+
+    @Test
+    @DisplayName("다음 단계 조회 - null 안전성 테스트")
+    void nextStep_NullSafety() {
+        assertThat(SignupFlow.nextStep(null, SignupStep.USER_TYPE)).isNull();
+        assertThat(SignupFlow.nextStep(UserType.INHABITANT, null)).isNull();
+        assertThat(SignupFlow.nextStep(null, null)).isNull();
     }
 
     @Test

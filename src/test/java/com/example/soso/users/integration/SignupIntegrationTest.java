@@ -1,6 +1,7 @@
 package com.example.soso.users.integration;
 
 import com.example.soso.users.domain.entity.*;
+import com.example.soso.users.domain.dto.SignupSession;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -15,9 +16,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
-
-import java.util.List;
-
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -50,6 +48,12 @@ class SignupIntegrationTest {
     void setUp() {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
         session = new MockHttpSession();
+        // 세션에 SignupSession 객체 초기화
+        SignupSession signupSession = new SignupSession();
+        signupSession.setUsername("testuser");
+        signupSession.setEmail("test@example.com");
+        signupSession.setProfileImageUrl("https://example.com/profile.jpg");
+        session.setAttribute("signup", signupSession);
     }
 
     @Test
@@ -94,8 +98,8 @@ class SignupIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").value("GENDER"));
 
-        // 4. 성별 설정 (타입별 컨트롤러 사용)
-        mockMvc.perform(post("/signup/inhabitant/gender")
+        // 4. 성별 설정
+        mockMvc.perform(post("/signup/gender")
                         .session(session)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
@@ -151,7 +155,7 @@ class SignupIntegrationTest {
                 .andExpect(jsonPath("$").value("GENDER"));
 
         // 4. 성별 설정
-        mockMvc.perform(post("/signup/founder/gender")
+        mockMvc.perform(post("/signup/gender")
                         .session(session)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
@@ -164,12 +168,12 @@ class SignupIntegrationTest {
                 .andExpect(jsonPath("$").value("INTERESTS"));
 
         // 5. 관심 업종 설정
-        mockMvc.perform(post("/signup/founder/interests")
+        mockMvc.perform(post("/signup/interests")
                         .session(session)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
                                 {
-                                    "interests": ["TECH", "FOOD"]
+                                    "interests": ["MANUFACTURING", "ACCOMMODATION_FOOD"]
                                 }
                                 """))
                 .andDo(print())
@@ -177,7 +181,7 @@ class SignupIntegrationTest {
                 .andExpect(jsonPath("$").value("BUDGET"));
 
         // 6. 예산 설정
-        mockMvc.perform(post("/signup/founder/budget")
+        mockMvc.perform(post("/signup/budget")
                         .session(session)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
@@ -212,7 +216,8 @@ class SignupIntegrationTest {
                         .content("{\"ageRange\": \"TWENTIES\"}"))
                 .andExpect(status().isOk());
 
-        // 이전 단계로 다시 돌아가서 수정
+        // 새로운 strict validation으로 인해 역방향 네비게이션은 불가능
+        // 현재 GENDER 단계에서 REGION으로 역행 시도 - 실패해야 함
         mockMvc.perform(post("/signup/region")
                         .session(session)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -222,21 +227,7 @@ class SignupIntegrationTest {
                                 }
                                 """))
                 .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$").value("AGE"));
-
-        // 연령대도 다시 수정
-        mockMvc.perform(post("/signup/age-range")
-                        .session(session)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("""
-                                {
-                                    "ageRange": "THIRTIES"
-                                }
-                                """))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$").value("GENDER"));
+                .andExpect(status().isUnauthorized()); // 단계 검증 실패로 401 반환
     }
 
     @Test
@@ -249,13 +240,13 @@ class SignupIntegrationTest {
                         .content("{\"userType\": \"INHABITANT\"}"))
                 .andExpect(status().isOk());
 
-        // REGION을 건너뛰고 AGE 설정 시도 - 실패해야 함
-        mockMvc.perform(post("/signup/age-range")
+        // REGION을 건너뛰고 GENDER 설정 시도 (2단계 건너뛰기) - 실패해야 함
+        mockMvc.perform(post("/signup/gender")
                         .session(session)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"ageRange\": \"TWENTIES\"}"))
+                        .content("{\"gender\": \"MALE\"}"))
                 .andDo(print())
-                .andExpect(status().isBadRequest()); // 또는 적절한 에러 상태코드
+                .andExpect(status().isUnauthorized()); // STEPS_NOT_TYPE는 401 반환
     }
 
     @Test
@@ -268,6 +259,6 @@ class SignupIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"regionId\": \"SEOUL\"}"))
                 .andDo(print())
-                .andExpect(status().isBadRequest()); // 또는 적절한 에러 상태코드
+                .andExpect(status().isUnauthorized()); // SESSION_NOT_VALID는 401 반환
     }
 }

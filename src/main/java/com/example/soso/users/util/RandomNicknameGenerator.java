@@ -19,15 +19,38 @@ public class RandomNicknameGenerator {
     private static final String FIXED_ANIMAL = "문어";
     private static final Random RANDOM = new Random();
 
-    // 이미 존재하는 닉네임을 제외하고 하나 생성
-    public static String generateUniqueNickname(Set<String> existingNicknames) {
+    // 이미 존재하는 닉네임을 제외하고 하나 생성 (성능 최적화된 버전)
+    public static String generateUniqueNickname(java.util.function.Predicate<String> existsChecker) {
         List<String> shuffled = new ArrayList<>(PREFIXES);
         Collections.shuffle(shuffled);
 
         for (String prefix : shuffled) {
             String candidate = prefix + FIXED_ANIMAL;
-            if (!existingNicknames.contains(candidate)) {
+            if (!existsChecker.test(candidate)) {
                 return candidate;
+            }
+        }
+
+        // 모든 기본 닉네임이 사용 중일 경우, 숫자를 붙여서 생성
+        return generateWithNumber(existsChecker);
+    }
+
+    // 이전 버전과의 호환성을 위해 유지 (deprecated)
+    @Deprecated(since = "1.0", forRemoval = true)
+    public static String generateUniqueNickname(Set<String> existingNicknames) {
+        return generateUniqueNickname(existingNicknames::contains);
+    }
+
+    private static String generateWithNumber(java.util.function.Predicate<String> existsChecker) {
+        List<String> shuffled = new ArrayList<>(PREFIXES);
+        Collections.shuffle(shuffled);
+
+        for (String prefix : shuffled) {
+            for (int i = 1; i <= 999; i++) {
+                String candidate = prefix + FIXED_ANIMAL + i;
+                if (!existsChecker.test(candidate)) {
+                    return candidate;
+                }
             }
         }
 
