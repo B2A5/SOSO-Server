@@ -1,7 +1,6 @@
 package com.example.soso.users.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(description = "관심 업종 유형")

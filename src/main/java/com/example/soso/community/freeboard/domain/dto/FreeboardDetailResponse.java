@@ -1,0 +1,74 @@
+package com.example.soso.community.freeboard.domain.dto;
+
+import com.example.soso.post.domain.entity.Category;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+@Schema(description = "자유게시판 글 상세 조회 응답")
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class FreeboardDetailResponse {
+
+    @Schema(description = "게시글 ID", example = "123")
+    private Long postId;
+
+    @Schema(description = "작성자 정보")
+    private AuthorInfo author;
+
+    @Schema(description = "카테고리", example = "restaurant")
+    private Category category;
+
+    @Schema(description = "제목", example = "맛있는 라면집 추천해요!")
+    private String title;
+
+    @Schema(description = "내용", example = "어제 갔던 라면집이 정말 맛있어서...")
+    private String content;
+
+    @Schema(description = "첨부된 이미지 URL 목록")
+    private List<String> imageUrls;
+
+    @Schema(description = "좋아요 수", example = "15")
+    private int likeCount;
+
+    @Schema(description = "댓글 수", example = "8")
+    private int commentCount;
+
+    @Schema(description = "조회 수", example = "102")
+    private int viewCount;
+
+    @Schema(description = "현재 사용자의 좋아요 여부", example = "true")
+    private boolean isLiked;
+
+    @Schema(description = "작성 시간", example = "2024-12-25T10:30:00")
+    private LocalDateTime createdAt;
+
+    @Schema(description = "수정 시간", example = "2024-12-25T14:20:00")
+    private LocalDateTime updatedAt;
+
+    @Schema(description = "작성자 여부 (현재 사용자가 작성자인지)", example = "true")
+    private boolean isAuthor;
+
+    @Schema(description = "작성자 정보")
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class AuthorInfo {
+        @Schema(description = "작성자 ID", example = "user123")
+        private String userId;
+
+        @Schema(description = "작성자 닉네임", example = "맛집탐험가")
+        private String nickname;
+
+        @Schema(description = "작성자 프로필 이미지 URL")
+        private String profileImageUrl;
+    }
+}
