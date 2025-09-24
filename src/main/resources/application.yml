@@ -16,7 +16,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: ${JPA_DDL:update}   # 운영은 validate/none 권장
+      ddl-auto: ${JPA_DDL:update} # 운영은 validate/none 권장
     properties:
       hibernate:
         format_sql: true
@@ -54,14 +54,14 @@ spring:
 
   cloud:
     aws:
-        region: ${AWS_REGION:ap-northeast-2}
-        s3:
-            bucket: ${AWS_S3_BUCKET:dreampaste-soso-image-storage}
-            base-url: ${S3_BASE_URL:https://dreampaste-soso-image-storage.s3.ap-northeast-2.amazonaws.com}
+      region: ${AWS_REGION:ap-northeast-2}
+      s3:
+        bucket: ${AWS_S3_BUCKET:dreampaste-soso-image-storage}
+        base-url: ${S3_BASE_URL:https://dreampaste-soso-image-storage.s3.ap-northeast-2.amazonaws.com}
     gcp:
-        storage:
-            bucket: ${GCP_STORAGE_BUCKET:unused}
-            base-url: ${GCP_STORAGE_BASE_URL:unused}
+      storage:
+        bucket: ${GCP_STORAGE_BUCKET:unused}
+        base-url: ${GCP_STORAGE_BASE_URL:unused}
 kafka:
   topics:
     vote-events: vote-events

@@ -34,7 +34,6 @@ public enum InterestType {
         this.label = label;
     }
 
-    @JsonValue
     public String getLabel() {
         return label;
     }

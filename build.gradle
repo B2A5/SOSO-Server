@@ -47,6 +47,7 @@ repositories {
 dependencyManagement {
 	imports {
 		mavenBom "org.springframework.cloud:spring-cloud-dependencies:2025.0.0"
+
 	}
 }
 
@@ -75,7 +76,8 @@ dependencies {
 	implementation 'net.coobird:thumbnailator:0.4.20'
 
 	implementation 'com.google.cloud:google-cloud-storage:2.53.0'
-
+	implementation platform("software.amazon.awssdk:bom:2.25.63")
+	implementation 'software.amazon.awssdk:s3'             // s3 SDK
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.8'
 
 	// QueryDSL for Jakarta

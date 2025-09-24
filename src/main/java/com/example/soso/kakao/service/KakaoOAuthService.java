@@ -20,10 +20,10 @@ public class KakaoOAuthService {
     @Value("${oauth.kakao.client-id}")
     private String clientId;
 
-    @Value("${oauth.kakao.redirect-uri}")
-    private String redirectUri;
+    //@Value("${oauth.kakao.redirect-uri}")
+    //private String redirectUri;
 
-    public KakaoUserProfileDto fetchUserProfile(String code, String codeVerifier) {
+    public KakaoUserProfileDto fetchUserProfile(String code, String codeVerifier, String redirectUri) {
         KakaoTokenResponse tokenResponse = kakaoAuthClient.getToken(
                 "authorization_code", clientId, redirectUri, code, codeVerifier);
         KakaoUserResponse userResponse = kakaoApiClient.getUserInfo("Bearer " + tokenResponse.accessToken());
