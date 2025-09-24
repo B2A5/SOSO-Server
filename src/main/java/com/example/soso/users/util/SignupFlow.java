@@ -36,13 +36,22 @@ public class SignupFlow {
 
     public static boolean isValidNextStep(UserType userType, SignupStep currentStep, SignupStep requestedStep) {
         List<SignupStep> steps = FLOW.get(userType);
-        int currentIdx = steps.indexOf(currentStep);
 
-        return currentIdx != -1
-                && currentIdx < steps.size()
-                && (steps.get(currentIdx).equals(requestedStep)
-                || (currentIdx + 1 < steps.size()
-                && steps.get(currentIdx + 1).equals(requestedStep)));
+        if (userType == null || steps == null) {
+            return false;
+        }
+
+        int currentIdx = steps.indexOf(currentStep);
+        int requestedIdx = steps.indexOf(requestedStep);
+
+        // 유효한 단계인지 확인
+        if (currentIdx == -1 || requestedIdx == -1) {
+            return false;
+        }
+
+        // 이미 완료된 단계(이전 단계) 또는 다음 단계로의 이동 허용
+        // requestedIdx <= currentIdx + 1: 현재까지 완료된 단계 + 다음 단계까지 허용
+        return requestedIdx <= currentIdx + 1;
     }
 
 
@@ -59,5 +68,23 @@ public class SignupFlow {
     public static boolean isLastStep(SignupStep step, UserType userType) {
         List<SignupStep> steps = FLOW.get(userType);
         return steps.get(steps.size() - 1) == step;
+    }
+
+    public static SignupStep getPreviousStep(UserType userType, SignupStep currentStep) {
+        List<SignupStep> steps = FLOW.get(userType);
+        int currentIdx = steps.indexOf(currentStep);
+        return (currentIdx > 0) ? steps.get(currentIdx - 1) : null;
+    }
+
+    public static boolean canGoToPreviousStep(UserType userType, SignupStep currentStep) {
+        List<SignupStep> steps = FLOW.get(userType);
+        int currentIdx = steps.indexOf(currentStep);
+        return currentIdx > 0;
+    }
+
+    public static List<SignupStep> getCompletedSteps(UserType userType, SignupStep currentStep) {
+        List<SignupStep> steps = FLOW.get(userType);
+        int currentIdx = steps.indexOf(currentStep);
+        return (currentIdx >= 0) ? steps.subList(0, currentIdx + 1) : List.of();
     }
 }

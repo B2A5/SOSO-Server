@@ -61,3 +61,7 @@ hs_err_pid*
 replay_pid*
 
 .yml
+
+# Environment variables
+.env
+.env.*
