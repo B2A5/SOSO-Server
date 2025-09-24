@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Random;
 import java.util.Set;
 
 public class RandomNicknameGenerator {
@@ -17,7 +16,6 @@ public class RandomNicknameGenerator {
     );
 
     private static final String FIXED_ANIMAL = "문어";
-    private static final Random RANDOM = new Random();
 
     // 이미 존재하는 닉네임을 제외하고 하나 생성 (성능 최적화된 버전)
     public static String generateUniqueNickname(java.util.function.Predicate<String> existsChecker) {

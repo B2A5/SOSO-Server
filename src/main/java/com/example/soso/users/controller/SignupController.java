@@ -76,6 +76,7 @@ public class SignupController {
     @PostMapping("/user-type")
     public ResponseEntity<SignupStep> setUserType(@RequestBody @Valid UserTypeRequest request,
                                                   @Parameter(hidden = true) HttpSession session) {
+        // USER_TYPE 단계는 회원가입 세션 초기화 및 이후 플로우 분기를 담당한다.
         SignupStep nextStep = signupService.saveUserType(session, request.userType());
         return ResponseEntity.ok(nextStep);
     }
@@ -105,6 +106,7 @@ public class SignupController {
     @PostMapping("/region")
     public ResponseEntity<SignupStep> setRegion(@RequestBody @Valid RegionRequest request,
                                                 @Parameter(hidden = true) HttpSession session) {
+        // 뒤로가기를 고려해 동일 단계 재호출이 가능하다.
         SignupStep nextStep = signupService.saveRegion(session, request.regionId());
         return ResponseEntity.ok(nextStep);
     }
@@ -191,6 +193,7 @@ public class SignupController {
     @PostMapping("/interests")
     public ResponseEntity<SignupStep> setInterests(@RequestBody @Valid InterestRequest request,
                                                    @Parameter(hidden = true) HttpSession session) {
+        // 예비 창업자 전용 단계로, 주민이 호출하면 400을 응답한다.
         SignupStep nextStep = signupService.saveInterests(session, request.interests());
         return ResponseEntity.ok(nextStep);
     }
@@ -264,7 +267,8 @@ public class SignupController {
     )
     @PostMapping("/nickname")
     public ResponseEntity<String> saveNickname(@Parameter(hidden = true) HttpSession session) {
-        String nickname = signupService.saveNiceName(session);
+        // 생성된 닉네임은 세션에 저장되고 중복 시 새 닉네임으로 대체된다.
+        String nickname = signupService.saveNickname(session);
         return ResponseEntity.ok(nickname);
     }
 
@@ -303,6 +307,7 @@ public class SignupController {
     )
     @GetMapping("/experience/data")
     public ResponseEntity<ExperienceRequest> getExperience(@Parameter(hidden = true) HttpSession session) {
+        // 프런트의 "뒤로가기" 기능에서 사용. 세션에 저장된 값을 그대로 반환한다.
         return ResponseEntity.ok(signupService.getExperience(session));
     }
 }

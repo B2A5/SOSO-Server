@@ -109,7 +109,7 @@ class SignupIntegrationTest {
                                 """))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$").value("NINAME"));
+                .andExpect(jsonPath("$").value("NICKNAME"));
     }
 
     @Test
@@ -197,7 +197,7 @@ class SignupIntegrationTest {
     @Test
     @DisplayName("역방향 네비게이션 테스트 - 이전 단계로 돌아가기")
     void backwardNavigationTest() throws Exception {
-        // 초기 단계들 완료
+        // 초기 단계들 완료 (주민)
         mockMvc.perform(post("/signup/user-type")
                         .session(session)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -216,18 +216,35 @@ class SignupIntegrationTest {
                         .content("{\"ageRange\": \"TWENTIES\"}"))
                 .andExpect(status().isOk());
 
-        // 새로운 strict validation으로 인해 역방향 네비게이션은 불가능
-        // 현재 GENDER 단계에서 REGION으로 역행 시도 - 실패해야 함
+        mockMvc.perform(post("/signup/gender")
+                        .session(session)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"gender\": \"MALE\"}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").value("NICKNAME"));
+
+        // 지역으로 되돌아가기
         mockMvc.perform(post("/signup/region")
                         .session(session)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("""
-                                {
-                                    "regionId": "BUSAN"
-                                }
-                                """))
-                .andDo(print())
-                .andExpect(status().isBadRequest()); // 단계 검증 실패로 400 반환
+                        .content("{\"regionId\": \"BUSAN\"}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").value("AGE"));
+
+        // 나이대 재설정 후 다시 성별로 이동 가능
+        mockMvc.perform(post("/signup/age-range")
+                        .session(session)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"ageRange\": \"THIRTIES\"}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").value("GENDER"));
+
+        mockMvc.perform(post("/signup/gender")
+                        .session(session)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"gender\": \"FEMALE\"}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").value("NICKNAME"));
     }
 
     @Test
@@ -246,7 +263,8 @@ class SignupIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"gender\": \"MALE\"}"))
                 .andDo(print())
-                .andExpect(status().isBadRequest()); // 단계 순서 오류 -> 400 반환
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("다음 단계: region"));
     }
 
     @Test

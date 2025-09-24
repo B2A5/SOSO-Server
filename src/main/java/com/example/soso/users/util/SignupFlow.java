@@ -6,6 +6,11 @@ import java.util.EnumMap;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * 회원가입 단계 흐름표를 한 곳에서 관리한다.
+ * 사용자 유형(예비 창업자/일반 거주민)에 따라 허용되는 단계가 다르기 때문에
+ * 컨트롤러/서비스는 이 유틸에서 검증 로직과 다음 단계 정보를 가져간다.
+ */
 @Slf4j
 public class SignupFlow {
 
@@ -20,7 +25,7 @@ public class SignupFlow {
                 SignupStep.INTERESTS,
                 SignupStep.BUDGET,
                 SignupStep.STARTUP,
-                SignupStep.NINAME,
+                SignupStep.NICKNAME,
                 SignupStep.COMPLETE
         ));
 
@@ -29,11 +34,15 @@ public class SignupFlow {
                 SignupStep.REGION,
                 SignupStep.AGE,
                 SignupStep.GENDER,
-                SignupStep.NINAME,
+                SignupStep.NICKNAME,
                 SignupStep.COMPLETE
         ));
     }
 
+    /**
+     * 기존 단계 검증 로직 (데이터 조회 등에서 사용)
+     * 현재 단계에서 다음 단계로 이동 가능한지 여부를 확인한다.
+     */
     public static boolean isValidNextStep(UserType userType, SignupStep currentStep, SignupStep requestedStep) {
         List<SignupStep> steps = FLOW.get(userType);
 
@@ -54,43 +63,80 @@ public class SignupFlow {
         return requestedIdx <= currentIdx + 1;
     }
 
+    /**
+     * 사용자 유형에 해당하는 전체 단계 목록을 반환한다.
+     */
+    public static List<SignupStep> getFlow(UserType userType) {
+        return FLOW.getOrDefault(userType, List.of());
+    }
+
     private static List<SignupStep> getFlowSteps(UserType userType) {
         return FLOW.get(userType);
     }
 
     /**
-     * 엄격한 단계 검증 - 처리 엔드포인트용
-     * 현재 단계나 바로 다음 단계만 허용
+     * 특정 단계가 해당 사용자 유형의 플로우에 포함되어 있는지 확인한다.
+     */
+    public static boolean isStepSupported(UserType userType, SignupStep step) {
+        return getFlow(userType).contains(step);
+    }
+
+    public static int indexOf(UserType userType, SignupStep step) {
+        return getFlow(userType).indexOf(step);
+    }
+
+    /**
+     * 현재 플로우의 첫 단계.
+     */
+    public static SignupStep firstStep(UserType userType) {
+        List<SignupStep> steps = getFlow(userType);
+        return steps.isEmpty() ? null : steps.get(0);
+    }
+
+    public static SignupStep lastStep(UserType userType) {
+        List<SignupStep> steps = getFlow(userType);
+        return steps.isEmpty() ? null : steps.get(steps.size() - 1);
+    }
+
+    /**
+     * 실제 API 요청을 처리할 때 사용하는 단계 검증 로직.
+     *  - 이미 완료한 단계(뒤로가기) : 허용
+     *  - 현재 기대 단계보다 앞서는 단계(건너뛰기) : 거부
+     *  - 전체 플로우 완료 후 완료 단계 재호출 : 허용
      */
     public static boolean isValidProcessingStep(UserType userType, SignupStep currentStep, SignupStep requestedStep) {
         if (userType == null || requestedStep == null) {
             return false;
         }
 
-        List<SignupStep> steps = getFlowSteps(userType);
-        if (steps == null) {
+        List<SignupStep> steps = getFlow(userType);
+        if (steps.isEmpty()) {
             return false;
         }
 
-        int currentIdx = steps.indexOf(currentStep);
         int requestedIdx = steps.indexOf(requestedStep);
-
-        // 유효한 단계인지 확인
         if (requestedIdx == -1) {
             return false;
         }
 
-        // currentStep이 null이면 첫 단계만 허용
         if (currentStep == null) {
-            return requestedStep == SignupStep.USER_TYPE;
+            // 모든 필수 단계가 완료된 상태. 마지막 단계 재진입은 허용
+            SignupStep last = lastStep(userType);
+            return requestedStep == last;
         }
 
+        int currentIdx = steps.indexOf(currentStep);
         if (currentIdx == -1) {
             return false;
         }
 
-        // 현재 단계이거나 바로 다음 단계만 허용
-        return requestedIdx == currentIdx || requestedIdx == currentIdx + 1;
+        // 현재 기대 단계보다 이전 단계라면 허용 (뒤로가기 포함)
+        if (requestedIdx <= currentIdx) {
+            return true;
+        }
+
+        // 예상 단계보다 앞서는 경우는 허용하지 않음 (스킵 방지)
+        return false;
     }
 
 

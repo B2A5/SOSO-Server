@@ -115,15 +115,19 @@ class SignupServiceTest {
         }
 
         @Test
-        @DisplayName("잘못된 단계에서 호출 시 예외 발생")
-        void saveRegion_WithWrongStep_ShouldThrowException() {
+        @DisplayName("진행 중 뒤로가기로 인한 지역 재설정 허용")
+        void saveRegion_AfterProgress_ShouldAllowBackNavigation() {
             // given
             signupSession.setUserType(UserType.FOUNDER);
-            signupSession.setCurrentStep(SignupStep.GENDER); // 잘못된 단계 - REGION 다음이 AGE이므로 GENDER는 훨씬 뒤 단계
+            signupSession.setCurrentStep(SignupStep.GENDER); // 이미 AGE까지 완료된 상태라고 가정
 
-            // when & then
-            assertThatThrownBy(() -> signupService.saveRegion(mockSession, "11010"))
-                    .isInstanceOf(UserAuthException.class);
+            // when
+            SignupStep next = signupService.saveRegion(mockSession, "22020");
+
+            // then
+            assertThat(next).isEqualTo(SignupStep.AGE);
+            assertThat(signupSession.getRegionId()).isEqualTo("22020");
+            assertThat(signupSession.getCurrentStep()).isEqualTo(SignupStep.AGE);
         }
     }
 
@@ -172,7 +176,8 @@ class SignupServiceTest {
 
             // when & then
             assertThatThrownBy(() -> signupService.saveInterests(mockSession, List.of(InterestType.OTHER)))
-                    .isInstanceOf(UserAuthException.class);
+                    .isInstanceOf(IllegalArgumentException.class)
+                    .hasMessage("해당 사용자 유형에서 사용할 수 없는 단계입니다.");
         }
     }
 
@@ -221,17 +226,18 @@ class SignupServiceTest {
         void saveNickname_WhenNicknameAvailable_ShouldSucceed() {
             // given
             signupSession.setUserType(UserType.FOUNDER);
-            signupSession.setCurrentStep(SignupStep.NINAME);
+            signupSession.setCurrentStep(SignupStep.NICKNAME);
             when(usersRepository.existsByNickname(anyString())).thenReturn(false);
 
             // when
-            String result = signupService.saveNiceName(mockSession);
+            String result = signupService.saveNickname(mockSession);
 
             // then
             assertThat(result).isNotNull();
             assertThat(result).endsWith("문어");
             assertThat(signupSession.getNickname()).isEqualTo(result);
             verify(usersRepository).existsByNickname(result);
+            assertThat(signupSession.getCurrentStep()).isEqualTo(SignupStep.COMPLETE);
         }
 
         @Test
@@ -239,19 +245,20 @@ class SignupServiceTest {
         void saveNickname_WhenExistingNicknameDuplicated_ShouldGenerateNew() {
             // given
             signupSession.setUserType(UserType.FOUNDER);
-            signupSession.setCurrentStep(SignupStep.NINAME);
+            signupSession.setCurrentStep(SignupStep.NICKNAME);
             signupSession.setNickname("이미있는닉네임");
 
             when(usersRepository.existsByNickname("이미있는닉네임")).thenReturn(true);
             when(usersRepository.existsByNickname(argThat(nick -> nick.endsWith("문어")))).thenReturn(false);
 
             // when
-            String result = signupService.saveNiceName(mockSession);
+            String result = signupService.saveNickname(mockSession);
 
             // then
             assertThat(result).isNotEqualTo("이미있는닉네임");
             assertThat(result).endsWith("문어");
             assertThat(signupSession.getNickname()).isEqualTo(result);
+            assertThat(signupSession.getCurrentStep()).isEqualTo(SignupStep.COMPLETE);
         }
     }
 
@@ -297,7 +304,8 @@ class SignupServiceTest {
 
             // when & then
             assertThatThrownBy(() -> signupService.completeSignup(mockSession, httpServletResponse))
-                    .isInstanceOf(UserAuthException.class);
+                    .isInstanceOf(IllegalArgumentException.class)
+                    .hasMessage("다음 단계: budget");
         }
     }
 

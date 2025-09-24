@@ -54,19 +54,19 @@ class SignupControllerTest {
     @DisplayName("경험 단계가 정상 처리되면 다음 단계 정보를 반환한다")
     void postExperience() throws Exception {
         when(signupService.saveExperience(any(HttpSession.class), eq(StartupExperience.YES)))
-                .thenReturn(SignupStep.NINAME);
+                .thenReturn(SignupStep.NICKNAME);
 
         mockMvc.perform(post("/signup/experience")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(new ExperienceRequest(StartupExperience.YES))))
                 .andExpect(status().isOk())
-                .andExpect(content().json("\"NINAME\""));
+                .andExpect(content().json("\"NICKNAME\""));
     }
 
     @Test
     @DisplayName("닉네임 생성이 성공하면 생성된 닉네임을 반환한다")
     void postNickname() throws Exception {
-        when(signupService.saveNiceName(any(HttpSession.class))).thenReturn("닉네임");
+        when(signupService.saveNickname(any(HttpSession.class))).thenReturn("닉네임");
 
         mockMvc.perform(post("/signup/nickname"))
                 .andExpect(status().isOk())

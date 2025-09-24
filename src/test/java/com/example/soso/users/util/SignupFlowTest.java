@@ -19,16 +19,6 @@ class SignupFlowTest {
     @Test
     @DisplayName("INHABITANT 플로우 단계 순서 확인")
     void inhabitantFlowStepsOrder() {
-        // when
-        List<SignupStep> expectedSteps = List.of(
-                SignupStep.USER_TYPE,
-                SignupStep.REGION,
-                SignupStep.AGE,
-                SignupStep.GENDER,
-                SignupStep.NINAME,
-                SignupStep.COMPLETE
-        );
-
         // then
         assertThat(SignupFlow.nextStep(UserType.INHABITANT, SignupStep.USER_TYPE))
                 .isEqualTo(SignupStep.REGION);
@@ -37,8 +27,8 @@ class SignupFlowTest {
         assertThat(SignupFlow.nextStep(UserType.INHABITANT, SignupStep.AGE))
                 .isEqualTo(SignupStep.GENDER);
         assertThat(SignupFlow.nextStep(UserType.INHABITANT, SignupStep.GENDER))
-                .isEqualTo(SignupStep.NINAME);
-        assertThat(SignupFlow.nextStep(UserType.INHABITANT, SignupStep.NINAME))
+                .isEqualTo(SignupStep.NICKNAME);
+        assertThat(SignupFlow.nextStep(UserType.INHABITANT, SignupStep.NICKNAME))
                 .isEqualTo(SignupStep.COMPLETE);
         assertThat(SignupFlow.nextStep(UserType.INHABITANT, SignupStep.COMPLETE))
                 .isNull();
@@ -61,8 +51,8 @@ class SignupFlowTest {
         assertThat(SignupFlow.nextStep(UserType.FOUNDER, SignupStep.BUDGET))
                 .isEqualTo(SignupStep.STARTUP);
         assertThat(SignupFlow.nextStep(UserType.FOUNDER, SignupStep.STARTUP))
-                .isEqualTo(SignupStep.NINAME);
-        assertThat(SignupFlow.nextStep(UserType.FOUNDER, SignupStep.NINAME))
+                .isEqualTo(SignupStep.NICKNAME);
+        assertThat(SignupFlow.nextStep(UserType.FOUNDER, SignupStep.NICKNAME))
                 .isEqualTo(SignupStep.COMPLETE);
         assertThat(SignupFlow.nextStep(UserType.FOUNDER, SignupStep.COMPLETE))
                 .isNull();
@@ -83,12 +73,12 @@ class SignupFlowTest {
                 Arguments.of(UserType.INHABITANT, SignupStep.USER_TYPE, SignupStep.REGION, true),
                 Arguments.of(UserType.INHABITANT, SignupStep.REGION, SignupStep.AGE, true),
                 Arguments.of(UserType.INHABITANT, SignupStep.AGE, SignupStep.GENDER, true),
-                Arguments.of(UserType.INHABITANT, SignupStep.GENDER, SignupStep.NINAME, true),
+                Arguments.of(UserType.INHABITANT, SignupStep.GENDER, SignupStep.NICKNAME, true),
 
                 // INHABITANT 역방향 네비게이션 (허용)
                 Arguments.of(UserType.INHABITANT, SignupStep.AGE, SignupStep.USER_TYPE, true),
                 Arguments.of(UserType.INHABITANT, SignupStep.GENDER, SignupStep.REGION, true),
-                Arguments.of(UserType.INHABITANT, SignupStep.NINAME, SignupStep.AGE, true),
+                Arguments.of(UserType.INHABITANT, SignupStep.NICKNAME, SignupStep.AGE, true),
 
                 // INHABITANT 현재 단계 유지 (허용)
                 Arguments.of(UserType.INHABITANT, SignupStep.AGE, SignupStep.AGE, true),
@@ -142,8 +132,8 @@ class SignupFlowTest {
     void isLastStep() {
         assertThat(SignupFlow.isLastStep(SignupStep.COMPLETE, UserType.INHABITANT)).isTrue();
         assertThat(SignupFlow.isLastStep(SignupStep.COMPLETE, UserType.FOUNDER)).isTrue();
-        assertThat(SignupFlow.isLastStep(SignupStep.NINAME, UserType.INHABITANT)).isFalse();
-        assertThat(SignupFlow.isLastStep(SignupStep.NINAME, UserType.FOUNDER)).isFalse();
+        assertThat(SignupFlow.isLastStep(SignupStep.NICKNAME, UserType.INHABITANT)).isFalse();
+        assertThat(SignupFlow.isLastStep(SignupStep.NICKNAME, UserType.FOUNDER)).isFalse();
     }
 
     @Test

@@ -161,7 +161,7 @@ class AllEndpointsTest {
     @DisplayName("[4단계] 성별 엔드포인트 - INHABITANT")
     void testGenderEndpointInhabitant() throws Exception {
         when(signupService.saveGender(any(HttpSession.class), eq(Gender.MALE)))
-                .thenReturn(SignupStep.NINAME);
+                .thenReturn(SignupStep.NICKNAME);
 
         mockMvc.perform(post("/signup/gender")
                         .session(mockSession)
@@ -173,7 +173,7 @@ class AllEndpointsTest {
                                 """))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$").value("NINAME"));
+                .andExpect(jsonPath("$").value("NICKNAME"));
     }
 
     @Test

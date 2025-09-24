@@ -118,7 +118,7 @@ class SignupControllerIntegrationTest {
                                 {"experience": "NO"}
                                 """))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$").value("NINAME"));
+                .andExpect(jsonPath("$").value("NICKNAME"));
 
         // 8단계: 닉네임 생성
         mockMvc.perform(post("/signup/nickname")
@@ -184,7 +184,7 @@ class SignupControllerIntegrationTest {
                                 {"gender": "FEMALE"}
                                 """))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$").value("NINAME"));
+                .andExpect(jsonPath("$").value("NICKNAME"));
 
         // 5단계: 닉네임 생성
         mockMvc.perform(post("/signup/nickname")
@@ -214,7 +214,8 @@ class SignupControllerIntegrationTest {
                         .content("""
                                 {"regionId": "11010"}
                                 """))
-                .andExpect(status().is4xxClientError());
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("해당 사용자 유형에서 사용할 수 없는 단계입니다."));
     }
 
     @Test
@@ -239,7 +240,202 @@ class SignupControllerIntegrationTest {
                         .content("""
                                 {"interests": ["MANUFACTURING"]}
                                 """))
-                .andExpect(status().is4xxClientError());
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("해당 사용자 유형에서 사용할 수 없는 단계입니다."));
+    }
+
+    @Test
+    @DisplayName("뒤로가기 후 순서대로 재진행 가능")
+    void backwardNavigation_RevisitStepsSuccessfully() throws Exception {
+        startFounderFlowUpToGender();
+
+        // 뒤로가서 지역 재설정
+        mockMvc.perform(post("/signup/region")
+                        .session(mockSession)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {"regionId": "22020"}
+                                """))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").value("AGE"));
+
+        // 연령대 재설정
+        mockMvc.perform(post("/signup/age-range")
+                        .session(mockSession)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {"ageRange": "THIRTIES"}
+                                """))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").value("GENDER"));
+
+        // 다시 성별 설정
+        mockMvc.perform(post("/signup/gender")
+                        .session(mockSession)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {"gender": "FEMALE"}
+                                """))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").value("INTERESTS"));
+    }
+
+    @Test
+    @DisplayName("뒤로가기 후 단계 건너뛰면 실패하고 다음 단계 안내")
+    void backwardNavigation_SkipStep_ShouldFail() throws Exception {
+        startFounderFlowUpToGender();
+
+        // 뒤로가서 지역 재설정
+        mockMvc.perform(post("/signup/region")
+                        .session(mockSession)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {"regionId": "33030"}
+                                """))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").value("AGE"));
+
+        // 연령대 재설정까지 완료
+        mockMvc.perform(post("/signup/age-range")
+                        .session(mockSession)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {"ageRange": "TWENTIES"}
+                                """))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").value("GENDER"));
+
+        // 성별을 건너뛰고 관심사로 이동 시도 -> 실패
+        mockMvc.perform(post("/signup/interests")
+                        .session(mockSession)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {"interests": ["MANUFACTURING"]}
+                                """))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("다음 단계: gender"));
+    }
+
+    @Test
+    @DisplayName("여러 단계 이전으로 이동 후 다시 진행 가능")
+    void backwardNavigation_MultipleStepsSuccess() throws Exception {
+        startFounderFlowThroughBudget();
+
+        // 나이대로 돌아가기
+        mockMvc.perform(post("/signup/age-range")
+                        .session(mockSession)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {"ageRange": "FORTIES"}
+                                """))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").value("GENDER"));
+
+        // 성별 재설정
+        mockMvc.perform(post("/signup/gender")
+                        .session(mockSession)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {"gender": "MALE"}
+                                """))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").value("INTERESTS"));
+
+        // 관심사, 예산, 경험 순으로 다시 진행
+        mockMvc.perform(post("/signup/interests")
+                        .session(mockSession)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {"interests": ["ACCOMMODATION_FOOD"]}
+                                """))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").value("BUDGET"));
+
+        mockMvc.perform(post("/signup/budget")
+                        .session(mockSession)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {"budget": "THOUSANDS_5000_7000"}
+                                """))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").value("STARTUP"));
+    }
+
+    @Test
+    @DisplayName("유형 변경 시 새로운 플로우를 따르도록 제한")
+    void changeUserType_ShouldRestrictFounderOnlySteps() throws Exception {
+        // 창업자로 진행 중 일부 단계 수행
+        mockMvc.perform(post("/signup/user-type")
+                        .session(mockSession)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {"userType": "FOUNDER"}
+                                """))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(post("/signup/region")
+                        .session(mockSession)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {"regionId": "11010"}
+                                """))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(post("/signup/age-range")
+                        .session(mockSession)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {"ageRange": "TWENTIES"}
+                                """))
+                .andExpect(status().isOk());
+
+        // 주민으로 변경
+        mockMvc.perform(post("/signup/user-type")
+                        .session(mockSession)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {"userType": "INHABITANT"}
+                                """))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").value("REGION"));
+
+        // 주민 플로우 단계 진행
+        mockMvc.perform(post("/signup/region")
+                        .session(mockSession)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {"regionId": "11560"}
+                                """))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").value("AGE"));
+
+        mockMvc.perform(post("/signup/age-range")
+                        .session(mockSession)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {"ageRange": "THIRTIES"}
+                                """))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").value("GENDER"));
+
+        mockMvc.perform(post("/signup/gender")
+                        .session(mockSession)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {"gender": "MALE"}
+                                """))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").value("NICKNAME"));
+
+        // 주민 상태에서 창업자 전용 단계 접근 시도
+        mockMvc.perform(post("/signup/interests")
+                        .session(mockSession)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {"interests": ["MANUFACTURING"]}
+                                """))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("해당 사용자 유형에서 사용할 수 없는 단계입니다."));
     }
 
     @Test
@@ -345,5 +541,60 @@ class SignupControllerIntegrationTest {
                                 {"experience": "NO"}
                                 """))
                 .andExpect(status().isOk());
+    }
+
+    private void startFounderFlowUpToGender() throws Exception {
+        mockMvc.perform(post("/signup/user-type")
+                        .session(mockSession)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {"userType": "FOUNDER"}
+                                """))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(post("/signup/region")
+                        .session(mockSession)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {"regionId": "11010"}
+                                """))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(post("/signup/age-range")
+                        .session(mockSession)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {"ageRange": "TWENTIES"}
+                                """))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(post("/signup/gender")
+                        .session(mockSession)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {"gender": "MALE"}
+                                """))
+                .andExpect(status().isOk());
+    }
+
+    private void startFounderFlowThroughBudget() throws Exception {
+        startFounderFlowUpToGender();
+
+        mockMvc.perform(post("/signup/interests")
+                        .session(mockSession)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {"interests": ["MANUFACTURING", "ACCOMMODATION_FOOD"]}
+                                """))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(post("/signup/budget")
+                        .session(mockSession)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {"budget": "THOUSANDS_3000_5000"}
+                                """))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").value("STARTUP"));
     }
 }

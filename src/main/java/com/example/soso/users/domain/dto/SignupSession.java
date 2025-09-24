@@ -14,6 +14,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * 회원가입 진행 상황을 세션에 저장하기 위한 DTO.
+ * 프런트/백 간의 상태 공유를 위해 필요한 최소 정보만을 담는다.
+ *  - currentStep : 사용자가 현재 어디까지 완료했는지
+ *  - userType 등 : 단계 전환에 필요한 누적 입력값
+ */
 @Getter
 @Setter
 @NoArgsConstructor

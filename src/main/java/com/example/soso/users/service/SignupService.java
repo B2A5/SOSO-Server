@@ -34,7 +34,7 @@ public interface SignupService {
 
     SignupStep saveExperience(HttpSession session, StartupExperience experience);
 
-    String saveNiceName(HttpSession session);
+    String saveNickname(HttpSession session);
 
     JwtTokenDto completeSignup(HttpSession session, HttpServletResponse response);
 
