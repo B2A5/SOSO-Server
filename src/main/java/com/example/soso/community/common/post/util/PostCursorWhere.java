@@ -12,7 +12,7 @@ public class PostCursorWhere {
     public BooleanBuilder build(QPost post, PostSortType sort, String cursor, Long idAfter) {
         BooleanBuilder condition = new BooleanBuilder();
 
-        if (cursor == null) return condition; // 커서 없으면 조건 없음
+        if (cursor == null || idAfter == null) return condition; // 커서나 idAfter가 없으면 조건 없음
 
         switch (sort) {
             case LATEST -> {

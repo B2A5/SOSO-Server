@@ -39,29 +39,56 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
         QPostLike like = QPostLike.postLike;
 
         BooleanBuilder condition = new BooleanBuilder();
+        // 삭제되지 않은 게시글만 조회
+        condition.and(post.deleted.eq(false));
         if (category != null) {
             condition.and(post.category.eq(category));
         }
         condition.and(postCursorWhere.build(post, sort, cursor, idAfter));
         OrderSpecifier<?>[] order = postCursorOrder.build(post, sort);
 
-        return queryFactory
-                .select(Projections.constructor(PostSummaryResponse.class,
-                        post.id,
-                        post.title,
-                        post.content,
-                        post.likeCount,
-                        post.commentCount,
-                        like.id.isNotNull() // 내가 좋아요 눌렀는지 여부
-                ))
-                .from(post)
-                .leftJoin(like)
-                .on(like.post.id.eq(post.id)
-                        .and(like.user.id.eq(userId)))
-                .where(condition)
-                .orderBy(order)
-                .limit(size + 1)
-                .fetch();
+        // PostSummaryResponse 생성자 순서: postId, title, content, category, likeCount, commentCount, likeByPost, createdAt, user
+        // userId가 null인 경우 좋아요 정보 없이 조회
+        if (userId == null) {
+            return queryFactory
+                    .select(Projections.constructor(PostSummaryResponse.class,
+                            post.id, // Long postId
+                            post.title, // String title
+                            post.content, // String content
+                            post.category.stringValue(), // String category
+                            post.likeCount, // int likeCount
+                            post.commentCount, // int commentCount
+                            com.querydsl.core.types.dsl.Expressions.constant(false), // boolean likeByPost
+                            post.createdDate.stringValue(), // String createdAt
+                            com.querydsl.core.types.dsl.Expressions.nullExpression(com.example.soso.community.common.post.domain.dto.UserSummaryResponse.class) // UserSummaryResponse user
+                    ))
+                    .from(post)
+                    .where(condition)
+                    .orderBy(order)
+                    .limit(size + 1)
+                    .fetch();
+        } else {
+            return queryFactory
+                    .select(Projections.constructor(PostSummaryResponse.class,
+                            post.id, // Long postId
+                            post.title, // String title
+                            post.content, // String content
+                            post.category.stringValue(), // String category
+                            post.likeCount, // int likeCount
+                            post.commentCount, // int commentCount
+                            like.id.isNotNull(), // boolean likeByPost
+                            post.createdDate.stringValue(), // String createdAt
+                            com.querydsl.core.types.dsl.Expressions.nullExpression(com.example.soso.community.common.post.domain.dto.UserSummaryResponse.class) // UserSummaryResponse user
+                    ))
+                    .from(post)
+                    .leftJoin(like)
+                    .on(like.post.id.eq(post.id)
+                            .and(like.user.id.eq(userId)))
+                    .where(condition)
+                    .orderBy(order)
+                    .limit(size + 1)
+                    .fetch();
+        }
     }
 
 }

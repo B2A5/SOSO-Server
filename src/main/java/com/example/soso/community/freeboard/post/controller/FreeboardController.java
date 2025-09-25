@@ -202,7 +202,7 @@ public class FreeboardController {
     })
     @GetMapping
     public ResponseEntity<FreeboardCursorResponse> getPostsByCursor(
-            @RequestParam(required = false) Category category,
+            @RequestParam(value = "category", required = false) String categoryParam,
             @RequestParam(defaultValue = "LATEST") FreeboardSortType sort,
             @RequestParam(required = false) String cursor,
             @RequestParam(defaultValue = "10") int size
@@ -217,14 +217,31 @@ public class FreeboardController {
             userId = userDetails.getUser().getId();
         }
 
+        // Category 파라미터 변환
+        Category category = null;
+        if (categoryParam != null) {
+            try {
+                category = Category.fromValue(categoryParam);
+            } catch (IllegalArgumentException e) {
+                log.warn("잘못된 카테고리 파라미터: {}", categoryParam);
+                return ResponseEntity.badRequest().build();
+            }
+        }
+
         log.info("자유게시판 목록 조회 요청: category={}, sort={}, cursor={}, size={}, userId={}",
                 category, sort, cursor != null ? "present" : "null", size, userId != null ? userId : "anonymous");
 
-        FreeboardCursorResponse response = freeboardService.getPostsByCursor(category, sort, size, cursor, userId);
+        try {
+            FreeboardCursorResponse response = freeboardService.getPostsByCursor(category, sort, size, cursor, userId);
 
-        log.debug("자유게시판 목록 조회 완료: resultCount={}, hasNext={}",
-                response.getPosts().size(), response.isHasNext());
-        return ResponseEntity.ok(response);
+            log.debug("자유게시판 목록 조회 완료: resultCount={}, hasNext={}",
+                    response.getPosts().size(), response.isHasNext());
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            log.error("자유게시판 목록 조회 중 에러 발생: category={}, sort={}, cursor={}, size={}, userId={}, error={}",
+                    category, sort, cursor, size, userId, e.getMessage(), e);
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @Operation(

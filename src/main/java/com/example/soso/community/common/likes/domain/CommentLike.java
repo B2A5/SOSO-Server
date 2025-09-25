@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
 @Entity
-@Table(uniqueConstraints = {
+@Table(name = "comment_likes", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"comment_id", "user_id"})
 })
 public class CommentLike {

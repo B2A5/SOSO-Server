@@ -171,7 +171,8 @@ class FreeboardServiceTest {
         testPost.addImage(postImage);
 
         when(postRepository.findByIdAndDeletedFalse(postId)).thenReturn(Optional.of(testPost));
-        when(usersRepository.findById("testUser123")).thenReturn(Optional.of(testUser));
+        // getPost 메서드에서 findUserById를 호출하지 않으므로 mocking 제거
+        // when(usersRepository.findById("testUser123")).thenReturn(Optional.of(testUser));
         when(postLikeRepository.existsByPost_IdAndUser_Id(postId, "testUser123")).thenReturn(true);
 
         // when
@@ -190,7 +191,8 @@ class FreeboardServiceTest {
         assertThat(result.getCommentCount()).isEqualTo(8);
 
         verify(postRepository).findByIdAndDeletedFalse(postId);
-        verify(usersRepository).findById("testUser123");
+        // userId가 null이 아니더라도 getPost 메서드에서 findUserById를 호출하지 않음
+        // verify(usersRepository).findById("testUser123"); // 제거
         verify(postLikeRepository).existsByPost_IdAndUser_Id(postId, "testUser123");
     }
 
@@ -381,8 +383,9 @@ class FreeboardServiceTest {
         // given
         when(postRepository.findByDeletedFalse(any(Pageable.class)))
                 .thenReturn(new PageImpl<>(List.of()));
-        when(postLikeRepository.findPostIdsByPostIdsAndUserId(anyList(), eq("testUser123")))
-                .thenReturn(Set.of());
+        // 빈 리스트일 때 getLikedPostIds에서 조기 리턴하므로 mocking 제거
+        // when(postLikeRepository.findPostIdsByPostIdsAndUserId(anyList(), eq("testUser123")))
+        //         .thenReturn(Set.of());
 
         // when & then - 최대 크기 초과
         FreeboardCursorResponse result1 = freeboardService.getPostsByCursor(
@@ -403,8 +406,9 @@ class FreeboardServiceTest {
         // given
         when(postRepository.findByDeletedFalse(any(Pageable.class)))
                 .thenReturn(new PageImpl<>(List.of()));
-        when(postLikeRepository.findPostIdsByPostIdsAndUserId(anyList(), eq("testUser123")))
-                .thenReturn(Set.of());
+        // 빈 리스트일 때 getLikedPostIds에서 조기 리턴하므로 mocking 제거
+        // when(postLikeRepository.findPostIdsByPostIdsAndUserId(anyList(), eq("testUser123")))
+        //         .thenReturn(Set.of());
 
         // when & then
         for (FreeboardSortType sortType : FreeboardSortType.values()) {
