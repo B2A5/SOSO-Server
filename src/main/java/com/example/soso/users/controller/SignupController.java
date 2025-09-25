@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "회원가입", description = """
+@Tag(name = "Signup", description = """
 **회원가입 단계별 API**
 
 **전제조건**: 카카오 로그인 후 회원가입 세션이 생성되어 있어야 합니다.

@@ -331,11 +331,23 @@ class FreeboardControllerTest {
     @Test
     @DisplayName("인증되지 않은 사용자 요청 실패")
     void unauthenticatedRequest_ShouldFail() throws Exception {
+        // given
+        FreeboardCursorResponse mockResponse = FreeboardCursorResponse.builder()
+                .posts(List.of())
+                .hasNext(false)
+                .nextCursor(null)
+                .build();
+
+        when(freeboardService.getPostsByCursor(any(), any(), anyInt(), any(), isNull()))
+                .thenReturn(mockResponse);
+
         // when & then
+        // 리스트 조회는 익명 사용자도 가능
         mockMvc.perform(get("/community/freeboard"))
                 .andDo(print())
-                .andExpect(status().isInternalServerError());
+                .andExpect(status().isOk());
 
+        // 게시글 작성은 인증 필요 (multipart 요청 시 필수 파라미터가 없으면 BadRequest가 먼저 발생)
         mockMvc.perform(post("/community/freeboard")
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andDo(print())

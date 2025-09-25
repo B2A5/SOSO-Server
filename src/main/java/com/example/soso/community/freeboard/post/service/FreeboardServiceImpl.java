@@ -321,7 +321,7 @@ public class FreeboardServiceImpl implements FreeboardService {
         return FreeboardCursorResponse.FreeboardSummary.builder()
                 .postId(postSummary.postId())
                 .author(authorInfo)
-                .category(Category.valueOf(postSummary.category()))
+                .category(parseCategory(postSummary.category()))
                 .title(postSummary.title())
                 .contentPreview(postSummary.content().length() > 100 ?
                     postSummary.content().substring(0, 100) + "..." :
@@ -405,5 +405,24 @@ public class FreeboardServiceImpl implements FreeboardService {
 
     // 커서 정보를 담는 내부 클래스
     private record CursorInfo(Long lastId, String lastValue) {
+    }
+
+    // Category 파싱을 위한 유틸리티 메서드 (enum name과 value 모두 지원)
+    private Category parseCategory(String categoryStr) {
+        if (categoryStr == null) {
+            return null;
+        }
+
+        try {
+            // 먼저 enum name으로 시도 (QueryDSL stringValue()로 나온 값)
+            return Category.valueOf(categoryStr);
+        } catch (IllegalArgumentException e1) {
+            try {
+                // enum name 실패 시 value로 시도
+                return Category.fromValue(categoryStr);
+            } catch (IllegalArgumentException e2) {
+                throw new IllegalArgumentException("Unknown Category: " + categoryStr);
+            }
+        }
     }
 }

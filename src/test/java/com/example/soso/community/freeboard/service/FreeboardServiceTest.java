@@ -11,6 +11,8 @@ import com.example.soso.community.common.post.domain.entity.Post;
 import com.example.soso.community.common.post.domain.entity.PostImage;
 import com.example.soso.community.common.post.repository.PostImageRepository;
 import com.example.soso.community.common.post.repository.PostRepository;
+import com.example.soso.community.common.post.domain.dto.PostSortType;
+import com.example.soso.community.common.post.domain.dto.PostSummaryResponse;
 import com.example.soso.users.domain.entity.Users;
 import com.example.soso.users.repository.UsersRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -216,23 +218,16 @@ class FreeboardServiceTest {
     @DisplayName("카테고리별 게시글 목록 조회")
     void getPostsByCursor_ByCategory(Category category) {
         // given
-        Post postWithCategory = Post.builder()
-                .id(1L)
-                .category(category)
-                .title("테스트 제목")
-                .content("테스트 내용")
-                .user(testUser)
-                .likeCount(15)
-                .commentCount(8)
-                .build();
+        PostSummaryResponse mockPostSummary = new PostSummaryResponse(
+                1L, "테스트 제목", "테스트 내용", category.getValue(),
+                15, 8, false, "2024-12-25T10:30:00", null
+        );
 
-        List<Post> mockPosts = List.of(postWithCategory);
-        Page<Post> mockPage = new PageImpl<>(mockPosts);
+        List<PostSummaryResponse> mockPostSummaries = List.of(mockPostSummary);
 
-        when(postRepository.findByCategoryAndDeletedFalse(eq(category), any(Pageable.class)))
-                .thenReturn(mockPage);
-        when(postLikeRepository.findPostIdsByPostIdsAndUserId(anyList(), eq("testUser123")))
-                .thenReturn(Set.of());
+        when(postRepository.findAllByCursorPaging(
+                eq(category), eq(PostSortType.LATEST), eq(11), eq(null), eq(null), eq("testUser123")))
+                .thenReturn(mockPostSummaries);
 
         // when
         FreeboardCursorResponse result = freeboardService.getPostsByCursor(
@@ -244,20 +239,24 @@ class FreeboardServiceTest {
         assertThat(result.getPosts().get(0).getCategory()).isEqualTo(category);
         assertThat(result.isHasNext()).isFalse();
 
-        verify(postRepository).findByCategoryAndDeletedFalse(eq(category), any(Pageable.class));
+        verify(postRepository).findAllByCursorPaging(
+                eq(category), eq(PostSortType.LATEST), eq(11), eq(null), eq(null), eq("testUser123"));
     }
 
     @Test
     @DisplayName("전체 카테고리 게시글 목록 조회")
     void getPostsByCursor_AllCategories() {
         // given
-        List<Post> mockPosts = List.of(testPost);
-        Page<Post> mockPage = new PageImpl<>(mockPosts);
+        PostSummaryResponse mockPostSummary = new PostSummaryResponse(
+                123L, "테스트 제목", "테스트 내용", Category.RESTAURANT.getValue(),
+                10, 5, true, "2024-12-25T10:30:00", null
+        );
 
-        when(postRepository.findByDeletedFalse(any(Pageable.class)))
-                .thenReturn(mockPage);
-        when(postLikeRepository.findPostIdsByPostIdsAndUserId(anyList(), eq("testUser123")))
-                .thenReturn(Set.of(123L));
+        List<PostSummaryResponse> mockPostSummaries = List.of(mockPostSummary);
+
+        when(postRepository.findAllByCursorPaging(
+                eq(null), eq(PostSortType.LATEST), eq(11), eq(null), eq(null), eq("testUser123")))
+                .thenReturn(mockPostSummaries);
 
         // when
         FreeboardCursorResponse result = freeboardService.getPostsByCursor(
@@ -269,7 +268,8 @@ class FreeboardServiceTest {
         assertThat(result.getPosts().get(0).isLiked()).isTrue(); // 좋아요 한 게시글
         assertThat(result.isHasNext()).isFalse();
 
-        verify(postRepository).findByDeletedFalse(any(Pageable.class));
+        verify(postRepository).findAllByCursorPaging(
+                eq(null), eq(PostSortType.LATEST), eq(11), eq(null), eq(null), eq("testUser123"));
     }
 
     @Test
@@ -381,34 +381,32 @@ class FreeboardServiceTest {
     @DisplayName("페이지 크기 제한 테스트")
     void getPostsByCursor_PageSizeLimit() {
         // given
-        when(postRepository.findByDeletedFalse(any(Pageable.class)))
-                .thenReturn(new PageImpl<>(List.of()));
-        // 빈 리스트일 때 getLikedPostIds에서 조기 리턴하므로 mocking 제거
-        // when(postLikeRepository.findPostIdsByPostIdsAndUserId(anyList(), eq("testUser123")))
-        //         .thenReturn(Set.of());
+        when(postRepository.findAllByCursorPaging(any(), any(), anyInt(), any(), any(), anyString()))
+                .thenReturn(List.of());
 
         // when & then - 최대 크기 초과
         FreeboardCursorResponse result1 = freeboardService.getPostsByCursor(
                 null, FreeboardSortType.LATEST, 100, null, "testUser123"); // 50으로 제한됨
 
         assertThat(result1).isNotNull();
+        verify(postRepository).findAllByCursorPaging(
+                eq(null), eq(PostSortType.LATEST), eq(51), eq(null), eq(null), eq("testUser123")); // 50 + 1
 
         // 음수 크기
         FreeboardCursorResponse result2 = freeboardService.getPostsByCursor(
                 null, FreeboardSortType.LATEST, -5, null, "testUser123"); // 10으로 기본값
 
         assertThat(result2).isNotNull();
+        verify(postRepository).findAllByCursorPaging(
+                eq(null), eq(PostSortType.LATEST), eq(11), eq(null), eq(null), eq("testUser123")); // 10 + 1
     }
 
     @Test
     @DisplayName("정렬 기준별 테스트")
     void getPostsByCursor_DifferentSortTypes() {
         // given
-        when(postRepository.findByDeletedFalse(any(Pageable.class)))
-                .thenReturn(new PageImpl<>(List.of()));
-        // 빈 리스트일 때 getLikedPostIds에서 조기 리턴하므로 mocking 제거
-        // when(postLikeRepository.findPostIdsByPostIdsAndUserId(anyList(), eq("testUser123")))
-        //         .thenReturn(Set.of());
+        when(postRepository.findAllByCursorPaging(any(), any(), anyInt(), any(), any(), anyString()))
+                .thenReturn(List.of());
 
         // when & then
         for (FreeboardSortType sortType : FreeboardSortType.values()) {
@@ -418,28 +416,23 @@ class FreeboardServiceTest {
             assertThat(result).isNotNull();
         }
 
-        verify(postRepository, times(4)).findByDeletedFalse(any(Pageable.class));
+        // 총 4번 호출되었는지 확인 (FreeboardSortType.values() 개수)
+        verify(postRepository, times(4)).findAllByCursorPaging(any(), any(), anyInt(), any(), any(), anyString());
     }
 
     @Test
     @DisplayName("내용 미리보기 생성 테스트")
     void createContentPreview_Test() {
         // given
-        Post longContentPost = Post.builder()
-                .id(456L)
-                .user(testUser)
-                .category(Category.DAILY_HOBBY)
-                .title("긴 내용 테스트")
-                .content("a".repeat(150)) // 100자 초과 내용
-                .likeCount(0)
-                .commentCount(0)
-                .images(new ArrayList<>())
-                .build();
+        String longContent = "a".repeat(150); // 100자 초과 내용
+        PostSummaryResponse mockPostSummary = new PostSummaryResponse(
+                456L, "긴 내용 테스트", longContent, Category.DAILY_HOBBY.getValue(),
+                0, 0, false, "2024-12-25T10:30:00", null
+        );
 
-        when(postRepository.findByDeletedFalse(any(Pageable.class)))
-                .thenReturn(new PageImpl<>(List.of(longContentPost)));
-        when(postLikeRepository.findPostIdsByPostIdsAndUserId(anyList(), eq("testUser123")))
-                .thenReturn(Set.of());
+        when(postRepository.findAllByCursorPaging(
+                eq(null), eq(PostSortType.LATEST), eq(11), eq(null), eq(null), eq("testUser123")))
+                .thenReturn(List.of(mockPostSummary));
 
         // when
         FreeboardCursorResponse result = freeboardService.getPostsByCursor(

@@ -175,23 +175,57 @@ public class FreeboardController {
             parameters = {
                     @Parameter(
                             name = "category",
-                            description = "필터링할 카테고리",
-                            example = "restaurant"
+                            description = """
+                                    필터링할 카테고리 (선택사항)
+
+                                    **사용 가능한 값:**
+                                    - daily-hobby: 일상/취미
+                                    - restaurant: 맛집
+                                    - living-convenience: 생활/꿀팁
+                                    - neighborhood-news: 동네소식
+                                    - startup: 창업
+                                    - others: 기타
+
+                                    **미입력 시:** 전체 게시글 조회
+                                    """,
+                            example = "restaurant",
+                            schema = @io.swagger.v3.oas.annotations.media.Schema(
+                                    allowableValues = {
+                                            "daily-hobby", "restaurant", "living-convenience",
+                                            "neighborhood-news", "startup", "others"
+                                    }
+                            )
                     ),
                     @Parameter(
                             name = "sort",
-                            description = "정렬 기준",
+                            description = """
+                                    정렬 기준
+
+                                    - LATEST: 최신순 (기본값)
+                                    - LIKE: 좋아요순
+                                    - COMMENT: 댓글순
+                                    - VIEW: 조회순
+                                    """,
                             example = "LATEST"
                     ),
                     @Parameter(
                             name = "cursor",
-                            description = "커서 값 (다음 페이지를 위한)",
+                            description = """
+                                    커서 기반 페이징을 위한 커서 값
+
+                                    **첫 요청:** cursor 없이 요청
+                                    **다음 페이지:** 이전 응답의 nextCursor 값 사용
+                                    """,
                             example = "eyJpZCI6MTIzLCJzb3J0VmFsdWUiOiIyMDI0LTEyLTI1VDEwOjAwOjAwIn0="
                     ),
                     @Parameter(
                             name = "size",
-                            description = "페이지 크기 (1-50)",
-                            example = "10"
+                            description = "페이지 크기 (1-50, 기본값: 10)",
+                            example = "10",
+                            schema = @io.swagger.v3.oas.annotations.media.Schema(
+                                    minimum = "1",
+                                    maximum = "50"
+                            )
                     )
             }
     )

@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.*;
  * - 대댓글 지원
  */
 @Slf4j
-@Tag(name = "Freeboard Comments", description = "자유게시판 댓글 API")
+@Tag(name = "Freeboard Comment", description = "자유게시판 댓글 API")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/community/freeboard/{freeboardId}/comments")
