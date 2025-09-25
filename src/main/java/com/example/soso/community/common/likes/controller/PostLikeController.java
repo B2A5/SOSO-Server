@@ -9,11 +9,13 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Post Like", description = "게시글 좋아요 API")
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/posts")
@@ -27,6 +29,11 @@ public class PostLikeController {
     @PostMapping("/{postId}/like")
     public ResponseEntity<PostLikeResponse> likePost(@PathVariable Long postId,
                                                      @AuthenticationPrincipal CustomUserDetails userDetails) {
+        if (userDetails == null) {
+            log.warn("likePost 요청 시 인증 정보 없음: postId={}", postId);
+            return ResponseEntity.status(401).build();
+        }
+
         PostLikeResponse response = postLikeService.likePost(postId, userDetails.getUser().getId());
         return ResponseEntity.ok(response);
     }
@@ -37,6 +44,11 @@ public class PostLikeController {
     @DeleteMapping("/{postId}/like")
     public ResponseEntity<PostLikeResponse> unlikePost(@PathVariable Long postId,
                                                        @AuthenticationPrincipal CustomUserDetails userDetails) {
+        if (userDetails == null) {
+            log.warn("unlikePost 요청 시 인증 정보 없음: postId={}", postId);
+            return ResponseEntity.status(401).build();
+        }
+
         PostLikeResponse response = postLikeService.unlikePost(postId, userDetails.getUser().getId());
         return ResponseEntity.ok(response);
     }

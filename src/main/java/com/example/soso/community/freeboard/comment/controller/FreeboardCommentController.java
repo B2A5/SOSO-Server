@@ -16,6 +16,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -83,6 +85,11 @@ public class FreeboardCommentController {
             @RequestBody @Valid FreeboardCommentCreateRequest request,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
+        if (userDetails == null) {
+            log.warn("자유게시판 댓글 작성 요청 시 인증 정보 없음: freeboardId={}", freeboardId);
+            return ResponseEntity.status(401).build();
+        }
+
         log.info("자유게시판 댓글 작성 요청: freeboardId={}, userId={}, parentCommentId={}",
                 freeboardId, userDetails.getUser().getId(), request.getParentCommentId());
 
@@ -150,13 +157,21 @@ public class FreeboardCommentController {
             @PathVariable Long freeboardId,
             @RequestParam(defaultValue = "LATEST") FreeboardCommentSortType sort,
             @RequestParam(required = false) String cursor,
-            @RequestParam(defaultValue = "20") int size,
-            @AuthenticationPrincipal CustomUserDetails userDetails
+            @RequestParam(defaultValue = "20") int size
     ) {
-        log.info("자유게시판 댓글 목록 조회 요청: freeboardId={}, sort={}, cursor={}, size={}, userId={}",
-                freeboardId, sort, cursor != null ? "present" : "null", size, userDetails.getUser().getId());
+        // 선택적 인증 처리
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userId = null;
+        if (authentication != null && authentication.isAuthenticated() &&
+            !"anonymousUser".equals(authentication.getPrincipal()) &&
+            authentication.getPrincipal() instanceof CustomUserDetails) {
+            CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+            userId = userDetails.getUser().getId();
+        }
 
-        String userId = userDetails.getUser().getId();
+        log.info("자유게시판 댓글 목록 조회 요청: freeboardId={}, sort={}, cursor={}, size={}, userId={}",
+                freeboardId, sort, cursor != null ? "present" : "null", size, userId != null ? userId : "anonymous");
+
         FreeboardCommentCursorResponse response = commentService.getCommentsByCursor(freeboardId, sort, size, cursor, userId);
 
         log.debug("자유게시판 댓글 목록 조회 완료: resultCount={}, hasNext={}",
@@ -195,6 +210,11 @@ public class FreeboardCommentController {
             @RequestBody @Valid FreeboardCommentUpdateRequest request,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
+        if (userDetails == null) {
+            log.warn("자유게시판 댓글 수정 요청 시 인증 정보 없음: freeboardId={}, commentId={}", freeboardId, commentId);
+            return ResponseEntity.status(401).build();
+        }
+
         log.info("자유게시판 댓글 수정 요청: freeboardId={}, commentId={}, userId={}",
                 freeboardId, commentId, userDetails.getUser().getId());
 
@@ -231,6 +251,11 @@ public class FreeboardCommentController {
             @PathVariable Long commentId,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
+        if (userDetails == null) {
+            log.warn("자유게시판 댓글 삭제 요청 시 인증 정보 없음: freeboardId={}, commentId={}", freeboardId, commentId);
+            return ResponseEntity.status(401).build();
+        }
+
         log.info("자유게시판 댓글 삭제 요청: freeboardId={}, commentId={}, userId={}",
                 freeboardId, commentId, userDetails.getUser().getId());
 
@@ -266,6 +291,11 @@ public class FreeboardCommentController {
             @PathVariable Long commentId,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
+        if (userDetails == null) {
+            log.warn("자유게시판 댓글 영구 삭제 요청 시 인증 정보 없음: freeboardId={}, commentId={}", freeboardId, commentId);
+            return ResponseEntity.status(401).build();
+        }
+
         log.warn("자유게시판 댓글 영구 삭제 요청: freeboardId={}, commentId={}, userId={}",
                 freeboardId, commentId, userDetails.getUser().getId());
 

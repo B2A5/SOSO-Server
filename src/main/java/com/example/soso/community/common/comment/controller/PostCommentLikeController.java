@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/posts/{postId}/comments")
@@ -30,6 +32,11 @@ public class PostCommentLikeController {
     public ResponseEntity<CommentLikeResponse> likeComment(@PathVariable Long postId,
                                                            @PathVariable Long commentId,
                                                            @AuthenticationPrincipal CustomUserDetails userDetails) {
+        if (userDetails == null) {
+            log.warn("likeComment 요청 시 인증 정보 없음: postId={}, commentId={}", postId, commentId);
+            return ResponseEntity.status(401).build();
+        }
+
         String userId = userDetails.getUser().getId();
         CommentLikeResponse response = postCommentLikeService.likeComment(postId,commentId, userId);
         return ResponseEntity.ok(response);
@@ -40,6 +47,11 @@ public class PostCommentLikeController {
     public ResponseEntity<CommentLikeResponse> unlikeComment(@PathVariable Long postId,
                                                              @PathVariable Long commentId,
                                                              @AuthenticationPrincipal CustomUserDetails userDetails) {
+        if (userDetails == null) {
+            log.warn("unlikeComment 요청 시 인증 정보 없음: postId={}, commentId={}", postId, commentId);
+            return ResponseEntity.status(401).build();
+        }
+
         String userId = userDetails.getUser().getId();
         CommentLikeResponse result = postCommentLikeService.unlikeComment(postId, commentId, userId);
         return ResponseEntity.ok(result);
@@ -50,6 +62,11 @@ public class PostCommentLikeController {
     public ResponseEntity<Boolean> isLiked(@PathVariable Long postId,
                                            @PathVariable Long commentId,
                                            @AuthenticationPrincipal CustomUserDetails userDetails) {
+        if (userDetails == null) {
+            log.warn("isLiked 요청 시 인증 정보 없음: postId={}, commentId={}", postId, commentId);
+            return ResponseEntity.status(401).build();
+        }
+
         String userId = userDetails.getUser().getId();
         boolean liked = postCommentLikeService.isLiked(postId, commentId, userId);
         return ResponseEntity.ok(liked);
@@ -60,6 +77,10 @@ public class PostCommentLikeController {
     public ResponseEntity<LikedCommentIdListResponse> getLikedCommentIds(
             @PathVariable Long postId,
             @AuthenticationPrincipal CustomUserDetails userDetails) {
+        if (userDetails == null) {
+            log.warn("getLikedCommentIds 요청 시 인증 정보 없음: postId={}", postId);
+            return ResponseEntity.status(401).build();
+        }
 
         String userId = userDetails.getUser().getId();
         List<Long> likedIds = postCommentLikeService.getLikedCommentIds(postId, userId);

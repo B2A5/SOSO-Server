@@ -7,6 +7,7 @@ import com.example.soso.security.domain.CustomUserDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Slf4j
 @RestController
 @RequestMapping("/posts/{postId}/comments")
 @RequiredArgsConstructor
@@ -29,6 +31,11 @@ public class PostCommentController {
     @Operation(summary = "게시글 댓글 목록 조회", description = "게시글에 달린 댓글을 조회합니다.")
     public ResponseEntity<List<PostCommentResponse>> getAllComments(@PathVariable Long postId,
                                                                     @AuthenticationPrincipal CustomUserDetails userDetails) {
+        if (userDetails == null) {
+            log.warn("getAllComments 요청 시 인증 정보 없음: postId={}", postId);
+            return ResponseEntity.status(401).build();
+        }
+
         String userId = userDetails.getUser().getId();
         List<PostCommentResponse> response = commentService.getcomments(postId, userId);
         return ResponseEntity.ok(response);
@@ -39,6 +46,11 @@ public class PostCommentController {
     public ResponseEntity<Void> createComment(@PathVariable Long postId,
                                               @RequestBody CommentCreateRequest request,
                                               @AuthenticationPrincipal CustomUserDetails user) {
+        if (user == null) {
+            log.warn("createComment 요청 시 인증 정보 없음: postId={}", postId);
+            return ResponseEntity.status(401).build();
+        }
+
         commentService.create(postId, user.getUser().getId(), request);
         return ResponseEntity.status(201).build();
     }
@@ -49,6 +61,11 @@ public class PostCommentController {
                                               @PathVariable Long commentId,
                                               @RequestBody CommentCreateRequest request,
                                               @AuthenticationPrincipal CustomUserDetails user) {
+        if (user == null) {
+            log.warn("updateComment 요청 시 인증 정보 없음: postId={}, commentId={}", postId, commentId);
+            return ResponseEntity.status(401).build();
+        }
+
         commentService.update(postId, commentId, user.getUser().getId(), request);
         return ResponseEntity.ok().build();
     }
@@ -58,6 +75,11 @@ public class PostCommentController {
     public ResponseEntity<Void> deleteComment(@PathVariable Long postId,
                                               @PathVariable Long commentId,
                                               @AuthenticationPrincipal CustomUserDetails user) {
+        if (user == null) {
+            log.warn("deleteComment 요청 시 인증 정보 없음: postId={}, commentId={}", postId, commentId);
+            return ResponseEntity.status(401).build();
+        }
+
         commentService.delete(postId, commentId, user.getUser().getId());
         return ResponseEntity.noContent().build();
     }

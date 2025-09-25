@@ -33,6 +33,11 @@ public class FreeboardLikeController {
         @PathVariable Long postId,
         @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
+        if (userDetails == null) {
+            log.warn("toggleLike 요청 시 인증 정보 없음: postId={}", postId);
+            return ResponseEntity.status(401).build();
+        }
+
         log.info("자유게시판 게시글 좋아요 토글: postId={}, userId={}", postId, userDetails.getUsername());
 
         boolean isLiked = freeboardLikeService.toggleLike(postId, userDetails.getUsername());
@@ -50,6 +55,11 @@ public class FreeboardLikeController {
         @PathVariable Long postId,
         @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
+        if (userDetails == null) {
+            log.warn("getLikeStatus 요청 시 인증 정보 없음: postId={}", postId);
+            return ResponseEntity.status(401).build();
+        }
+
         log.debug("자유게시판 게시글 좋아요 상태 조회: postId={}, userId={}", postId, userDetails.getUsername());
 
         boolean isLiked = freeboardLikeService.isLikedByUser(postId, userDetails.getUsername());

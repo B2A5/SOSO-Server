@@ -4,8 +4,10 @@ package com.example.soso.security.config;
 import com.example.soso.global.jwt.JwtProvider;
 import com.example.soso.security.filter.ExceptionHandlerFilter;
 import com.example.soso.security.filter.JwtAuthenticationFilter;
+import com.example.soso.security.handler.JwtAccessDeniedHandler;
+import com.example.soso.security.handler.JwtAuthenticationEntryPoint;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Qualifier;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,14 +18,16 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfigurationSource;
 
+@Slf4j
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfig {
 
     private final JwtProvider jwtProvider;
     private final UserDetailsService userDetailsService;
-
     private final CorsConfigurationSource corsConfigurationSource;
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
 
     @Bean
@@ -38,15 +42,23 @@ public class SecurityConfig {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 세션 완전 끔
                 )
+                .exceptionHandling(exceptions -> exceptions
+                        .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                        .accessDeniedHandler(jwtAccessDeniedHandler)
+                )
                 .authorizeHttpRequests(auth -> auth
+                        // 인증 없이 접근 가능한 경로들
                         .requestMatchers(
-                                "/**",
-                                "/auth/**",
-                                "/login/**",
-                                "/signup/**",
-                                "/swagger-ui/**",
-                                "/kafka/**"
+                                "/auth/**",           // 인증 관련
+                                "/login/**",          // 로그인
+                                "/signup/**",         // 회원가입
+                                "/swagger-ui/**",     // API 문서
+                                "/v3/api-docs/**",    // API 문서
+                                "/kafka/**"           // 카프카
                         ).permitAll()
+                        // 자유게시판 조회 (인증 불필요)
+                        .requestMatchers("GET", "/community/freeboard/**").permitAll()
+                        // 그 외 모든 요청은 인증 필요
                         .anyRequest().authenticated()
                 )
                 .with(JwtSecurityDsl.customDsl(), dsl -> dsl.enable(true));

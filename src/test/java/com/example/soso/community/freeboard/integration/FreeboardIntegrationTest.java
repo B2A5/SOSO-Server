@@ -243,21 +243,63 @@ class FreeboardIntegrationTest {
     }
 
     @Test
-    @DisplayName("인증되지 않은 사용자 접근 테스트")
-    void unauthenticatedAccessTest() throws Exception {
-        // 인증 없이 게시글 목록 조회 시도
+    @DisplayName("비인증 사용자 조회 테스트 (정상적으로 조회 가능)")
+    void unauthenticatedReadAccessTest() throws Exception {
+        // 먼저 인증된 사용자가 게시글을 작성
+        TestUser testUser = createTestUserWithToken();
+        String authHeader = "Bearer " + testUser.accessToken;
+
+        MvcResult createResult = mockMvc.perform(multipart("/community/freeboard")
+                        .param("title", "공개 게시글")
+                        .param("content", "모든 사용자가 볼 수 있는 글입니다.")
+                        .param("category", "RESTAURANT")
+                        .header("Authorization", authHeader)
+                        .contentType(MediaType.MULTIPART_FORM_DATA))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        String createResponseContent = createResult.getResponse().getContentAsString();
+        FreeboardCreateResponse createResponse = objectMapper.readValue(createResponseContent, FreeboardCreateResponse.class);
+        Long postId = createResponse.getPostId();
+
+        // 인증 없이 게시글 목록 조회 (성공해야 함)
         mockMvc.perform(get("/community/freeboard"))
                 .andDo(print())
-                .andExpect(status().isInternalServerError()); // @AuthenticationPrincipal이 null이므로 에러
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.posts").isArray());
 
-        // 인증 없이 게시글 작성 시도
+        // 인증 없이 게시글 상세 조회 (성공해야 함)
+        mockMvc.perform(get("/community/freeboard/{freeboardId}", postId))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.postId").value(postId))
+                .andExpect(jsonPath("$.title").value("공개 게시글"));
+
+        // 인증 없이 댓글 목록 조회 (성공해야 함)
+        mockMvc.perform(get("/community/freeboard/{freeboardId}/comments", postId))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.comments").isArray());
+    }
+
+    @Test
+    @DisplayName("인증되지 않은 사용자 작성/수정/삭제 접근 테스트 (401 에러)")
+    void unauthenticatedWriteAccessTest() throws Exception {
+        // 인증 없이 게시글 작성 시도 (401 에러)
         mockMvc.perform(multipart("/community/freeboard")
                         .param("title", "테스트")
                         .param("content", "테스트")
                         .param("category", "RESTAURANT")
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andDo(print())
-                .andExpect(status().isInternalServerError()); // @AuthenticationPrincipal이 null이므로 에러
+                .andExpect(status().isUnauthorized()); // 401 에러
+
+        // 인증 없이 댓글 작성 시도 (401 에러)
+        mockMvc.perform(post("/community/freeboard/1/comments")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"content\": \"테스트 댓글\"}"))
+                .andDo(print())
+                .andExpect(status().isUnauthorized()); // 401 에러
     }
 
     /**

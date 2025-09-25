@@ -17,12 +17,14 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Post", description = "게시글 관련 API")
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/posts")
@@ -43,6 +45,11 @@ public class PostController {
             @ModelAttribute @Valid PostCreateRequest request,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
+        if (userDetails == null) {
+            log.warn("createPost 요청 시 인증 정보 없음");
+            return ResponseEntity.status(401).build();
+        }
+
         String userId = userDetails.getUser().getId();
         PostCreateResponse postId = postService.createPost(request, userId);
         return ResponseEntity.ok(postId);
@@ -59,6 +66,11 @@ public class PostController {
     @GetMapping("/{postId}")
     public ResponseEntity<PostResponse> getPostDetail(@PathVariable Long postId,
                                                       @AuthenticationPrincipal CustomUserDetails userDetails) {
+        if (userDetails == null) {
+            log.warn("getPostDetail 요청 시 인증 정보 없음: postId={}", postId);
+            return ResponseEntity.status(401).build();
+        }
+
         String userId = userDetails.getUser().getId();
         PostResponse response = postService.getPost(postId, userId);
         return ResponseEntity.ok(response);
@@ -94,6 +106,11 @@ public class PostController {
             @RequestParam(defaultValue = "10") int size,
             @AuthenticationPrincipal CustomUserDetails customUserDetails
     ) {
+        if (customUserDetails == null) {
+            log.warn("getPostsByCursor 요청 시 인증 정보 없음");
+            return ResponseEntity.status(401).build();
+        }
+
         String userId = customUserDetails.getUser().getId();
         PostCursorResponse response = postService.getPostsByCursor(category, sort, size, cursor, idAfter, userId);
         return ResponseEntity.ok(response);
@@ -115,6 +132,11 @@ public class PostController {
             @ModelAttribute @Valid PostUpdateRequest request,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
+        if (userDetails == null) {
+            log.warn("updatePost 요청 시 인증 정보 없음: postId={}", postId);
+            return ResponseEntity.status(401).build();
+        }
+
         String userId = userDetails.getUser().getId();
         PostCreateResponse updatedId = postService.updatePost(postId, request, userId);
         return ResponseEntity.ok(updatedId);
@@ -133,6 +155,11 @@ public class PostController {
             @PathVariable Long postId,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
+        if (userDetails == null) {
+            log.warn("deletePost 요청 시 인증 정보 없음: postId={}", postId);
+            return ResponseEntity.status(401).build();
+        }
+
         String userId = userDetails.getUser().getId();
         postService.deletePost(postId, userId);
         return ResponseEntity.noContent().build();
@@ -151,6 +178,11 @@ public class PostController {
             @PathVariable Long postId,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
+        if (userDetails == null) {
+            log.warn("hardDeletePost 요청 시 인증 정보 없음: postId={}", postId);
+            return ResponseEntity.status(401).build();
+        }
+
         String userId = userDetails.getUser().getId();
         postService.hardDeletePost(postId, userId);
         return ResponseEntity.noContent().build();
