@@ -94,17 +94,14 @@ class FreeboardControllerTest {
         when(freeboardService.createPost(any(FreeboardCreateRequest.class), eq("testUser123")))
                 .thenReturn(mockResponse);
 
-        MockMultipartFile titlePart = new MockMultipartFile("title", "", "text/plain", "맛있는 라면집 추천".getBytes());
-        MockMultipartFile contentPart = new MockMultipartFile("content", "", "text/plain", "어제 갔던 라면집이 정말 맛있었어요!".getBytes());
-        MockMultipartFile categoryPart = new MockMultipartFile("category", "", "text/plain", "restaurant".getBytes());
         MockMultipartFile imagePart = new MockMultipartFile("images", "test.jpg", "image/jpeg", "test image content".getBytes());
 
         // when & then
         mockMvc.perform(multipart("/community/freeboard")
-                        .file(titlePart)
-                        .file(contentPart)
-                        .file(categoryPart)
                         .file(imagePart)
+                        .param("title", "맛있는 라면집 추천")
+                        .param("content", "어제 갔던 라면집이 정말 맛있었어요!")
+                        .param("category", "RESTAURANT")
                         .with(SecurityMockMvcRequestPostProcessors.user(testUserDetails))
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andDo(print())
@@ -115,16 +112,11 @@ class FreeboardControllerTest {
     @Test
     @DisplayName("자유게시판 글 작성 - 빈 제목으로 실패")
     void createPost_EmptyTitle_ShouldFail() throws Exception {
-        // given
-        MockMultipartFile titlePart = new MockMultipartFile("title", "", "text/plain", "".getBytes());
-        MockMultipartFile contentPart = new MockMultipartFile("content", "", "text/plain", "내용".getBytes());
-        MockMultipartFile categoryPart = new MockMultipartFile("category", "", "text/plain", "restaurant".getBytes());
-
         // when & then
         mockMvc.perform(multipart("/community/freeboard")
-                        .file(titlePart)
-                        .file(contentPart)
-                        .file(categoryPart)
+                        .param("title", "")
+                        .param("content", "내용")
+                        .param("category", "RESTAURANT")
                         .with(SecurityMockMvcRequestPostProcessors.user(testUserDetails))
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andDo(print())
@@ -227,15 +219,13 @@ class FreeboardControllerTest {
         when(freeboardService.updatePost(eq(postId), any(FreeboardUpdateRequest.class), eq("testUser123")))
                 .thenReturn(mockResponse);
 
-        MockMultipartFile titlePart = new MockMultipartFile("title", "", "text/plain", "수정된 제목".getBytes());
-        MockMultipartFile contentPart = new MockMultipartFile("content", "", "text/plain", "수정된 내용".getBytes());
-        MockMultipartFile categoryPart = new MockMultipartFile("category", "", "text/plain", "living-convenience".getBytes());
+        
 
         // when & then
         mockMvc.perform(multipart("/community/freeboard/{freeboardId}", postId)
-                        .file(titlePart)
-                        .file(contentPart)
-                        .file(categoryPart)
+                        .param("title", "수정된 제목")
+                        .param("content", "수정된 내용")
+                        .param("category", "LIVING_CONVENIENCE")
                         .with(SecurityMockMvcRequestPostProcessors.user(testUserDetails))
                         .with(request -> {
                             request.setMethod("PATCH");

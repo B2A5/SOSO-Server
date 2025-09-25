@@ -214,7 +214,17 @@ class FreeboardServiceTest {
     @DisplayName("카테고리별 게시글 목록 조회")
     void getPostsByCursor_ByCategory(Category category) {
         // given
-        List<Post> mockPosts = List.of(testPost);
+        Post postWithCategory = Post.builder()
+                .id(1L)
+                .category(category)
+                .title("테스트 제목")
+                .content("테스트 내용")
+                .user(testUser)
+                .likeCount(15)
+                .commentCount(8)
+                .build();
+
+        List<Post> mockPosts = List.of(postWithCategory);
         Page<Post> mockPage = new PageImpl<>(mockPosts);
 
         when(postRepository.findByCategoryAndDeletedFalse(eq(category), any(Pageable.class)))

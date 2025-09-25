@@ -22,8 +22,13 @@ import org.springframework.web.context.WebApplicationContext;
 
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+import com.example.soso.security.domain.CustomUserDetails;
+import com.example.soso.users.domain.entity.Users;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureWebMvc
@@ -47,29 +52,42 @@ class FreeboardIntegrationTest {
     private ObjectMapper objectMapper;
 
     private MockMvc mockMvc;
+    private CustomUserDetails testUserDetails;
 
     @BeforeEach
     void setUp() {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
                 .apply(springSecurity())
                 .build();
+
+        // 테스트용 사용자 설정
+        Users testUser = Users.builder()
+                .nickname("테스터")
+                .email("test@example.com")
+                .profileImageUrl("https://example.com/profile.jpg")
+                .build();
+        // 리플렉션을 사용하여 id 설정
+        try {
+            java.lang.reflect.Field idField = Users.class.getDeclaredField("id");
+            idField.setAccessible(true);
+            idField.set(testUser, "testUser");
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to set user ID", e);
+        }
+
+        testUserDetails = new CustomUserDetails(testUser);
     }
 
     @Test
-    @WithMockUser(username = "testUser", roles = "USER")
     @DisplayName("자유게시판 전체 플로우 테스트: 게시글 작성 → 조회 → 댓글 작성 → 수정 → 삭제")
     void completeWorkflow_Success() throws Exception {
         // 1. 게시글 작성
-        MockMultipartFile titlePart = new MockMultipartFile("title", "", "text/plain", "통합테스트 게시글".getBytes());
-        MockMultipartFile contentPart = new MockMultipartFile("content", "", "text/plain", "통합테스트를 위한 게시글입니다.".getBytes());
-        MockMultipartFile categoryPart = new MockMultipartFile("category", "", "text/plain", "daily-hobby".getBytes());
-        MockMultipartFile imagePart = new MockMultipartFile("images", "test.jpg", "image/jpeg", "test image content".getBytes());
 
         MvcResult createResult = mockMvc.perform(multipart("/community/freeboard")
-                        .file(titlePart)
-                        .file(contentPart)
-                        .file(categoryPart)
-                        .file(imagePart)
+                        .param("title", "테스트 제목")
+                        .param("content", "테스트 내용")
+                        .param("category", "RESTAURANT")
+                        .with(SecurityMockMvcRequestPostProcessors.user(testUserDetails))
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -159,14 +177,11 @@ class FreeboardIntegrationTest {
                 .andExpect(jsonPath("$.commentId").value(commentId));
 
         // 9. 게시글 수정
-        MockMultipartFile updatedTitlePart = new MockMultipartFile("title", "", "text/plain", "수정된 제목".getBytes());
-        MockMultipartFile updatedContentPart = new MockMultipartFile("content", "", "text/plain", "수정된 내용입니다.".getBytes());
-        MockMultipartFile updatedCategoryPart = new MockMultipartFile("category", "", "text/plain", "restaurant".getBytes());
 
         mockMvc.perform(multipart("/community/freeboard/{freeboardId}", postId)
-                        .file(updatedTitlePart)
-                        .file(updatedContentPart)
-                        .file(updatedCategoryPart)
+                        .param("title", "수정된 제목")
+                        .param("content", "수정된 내용")
+                        .param("category", "LIVING_CONVENIENCE")
                         .with(request -> {
                             request.setMethod("PATCH");
                             return request;
@@ -211,17 +226,10 @@ class FreeboardIntegrationTest {
         for (int i = 0; i < categories.length; i++) {
             Category category = categories[i];
 
-            MockMultipartFile titlePart = new MockMultipartFile("title", "", "text/plain",
-                    (category.getLabel() + " 테스트 제목").getBytes());
-            MockMultipartFile contentPart = new MockMultipartFile("content", "", "text/plain",
-                    (category.getLabel() + " 관련 내용입니다.").getBytes());
-            MockMultipartFile categoryPart = new MockMultipartFile("category", "", "text/plain",
-                    category.getValue().getBytes());
-
             MvcResult result = mockMvc.perform(multipart("/community/freeboard")
-                            .file(titlePart)
-                            .file(contentPart)
-                            .file(categoryPart)
+                            .param("title", category.getLabel() + " 테스트 제목")
+                            .param("content", category.getLabel() + " 관련 내용입니다.")
+                            .param("category", category.name())
                             .contentType(MediaType.MULTIPART_FORM_DATA))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.postId").exists())
@@ -261,14 +269,12 @@ class FreeboardIntegrationTest {
     @DisplayName("정렬 옵션별 게시글 조회 테스트")
     void sortingOptionsWorkflow_Success() throws Exception {
         // 테스트용 게시글 작성
-        MockMultipartFile titlePart = new MockMultipartFile("title", "", "text/plain", "정렬 테스트".getBytes());
-        MockMultipartFile contentPart = new MockMultipartFile("content", "", "text/plain", "정렬 테스트용 게시글입니다.".getBytes());
-        MockMultipartFile categoryPart = new MockMultipartFile("category", "", "text/plain", "daily-hobby".getBytes());
+        
 
         mockMvc.perform(multipart("/community/freeboard")
-                        .file(titlePart)
-                        .file(contentPart)
-                        .file(categoryPart)
+                        .param("title", "테스트 제목")
+                        .param("content", "테스트 내용")
+                        .param("category", "RESTAURANT")
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andExpect(status().isOk());
 
@@ -288,14 +294,12 @@ class FreeboardIntegrationTest {
     @DisplayName("권한 검증 테스트 - 다른 사용자의 게시글/댓글 수정/삭제 시도")
     void authorizationTest() throws Exception {
         // user1이 게시글 작성
-        MockMultipartFile titlePart = new MockMultipartFile("title", "", "text/plain", "user1의 게시글".getBytes());
-        MockMultipartFile contentPart = new MockMultipartFile("content", "", "text/plain", "user1이 작성한 내용".getBytes());
-        MockMultipartFile categoryPart = new MockMultipartFile("category", "", "text/plain", "daily-hobby".getBytes());
+        
 
         MvcResult createResult = mockMvc.perform(multipart("/community/freeboard")
-                        .file(titlePart)
-                        .file(contentPart)
-                        .file(categoryPart)
+                        .param("title", "테스트 제목")
+                        .param("content", "테스트 내용")
+                        .param("category", "RESTAURANT")
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andExpect(status().isOk())
                 .andReturn();
