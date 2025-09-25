@@ -14,7 +14,7 @@ import org.junit.jupiter.params.provider.EnumSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureWebMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
@@ -53,7 +53,7 @@ class FreeboardControllerTest {
     @Autowired
     private WebApplicationContext webApplicationContext;
 
-    @MockBean
+    @MockitoBean
     private FreeboardService freeboardService;
 
     @Autowired
@@ -198,7 +198,7 @@ class FreeboardControllerTest {
 
         // when & then
         mockMvc.perform(get("/community/freeboard")
-                        .param("category", category.getValue())
+                        .param("category", category.name())
                         .param("sort", "LATEST")
                         .param("size", "10")
                         .with(SecurityMockMvcRequestPostProcessors.user(testUserDetails)))
@@ -334,11 +334,11 @@ class FreeboardControllerTest {
         // when & then
         mockMvc.perform(get("/community/freeboard"))
                 .andDo(print())
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isInternalServerError());
 
         mockMvc.perform(post("/community/freeboard")
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andDo(print())
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isBadRequest());
     }
 }

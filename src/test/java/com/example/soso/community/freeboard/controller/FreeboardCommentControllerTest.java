@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureWebMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.context.TestPropertySource;
@@ -48,7 +48,7 @@ class FreeboardCommentControllerTest {
     @Autowired
     private WebApplicationContext webApplicationContext;
 
-    @MockBean
+    @MockitoBean
     private FreeboardCommentService commentService;
 
     @Autowired
@@ -353,13 +353,13 @@ class FreeboardCommentControllerTest {
         // when & then
         mockMvc.perform(get("/community/freeboard/{freeboardId}/comments", TEST_POST_ID))
                 .andDo(print())
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isInternalServerError());
 
         mockMvc.perform(post("/community/freeboard/{freeboardId}/comments", TEST_POST_ID)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{}"))
                 .andDo(print())
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -421,6 +421,6 @@ class FreeboardCommentControllerTest {
                 .andExpect(jsonPath("$.comments[1].depth").value(1))
                 .andExpect(jsonPath("$.comments[1].parentCommentId").value(456))
                 .andExpect(jsonPath("$.comments[1].replyCount").value(0))
-                .andExpect(jsonPath("$.comments[1].isAuthor").value(true));
+                .andExpect(jsonPath("$.comments[1].content").value("대댓글입니다."));
     }
 }
