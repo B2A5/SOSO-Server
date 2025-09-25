@@ -1,7 +1,7 @@
 package com.example.soso.global.scheduler;
 
 import com.example.soso.global.redis.PostLikeRedisRepository;
-import com.example.soso.post.repository.PostRepository;
+import com.example.soso.community.common.post.repository.PostRepository;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

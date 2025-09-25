@@ -1,6 +1,6 @@
 package com.example.soso.global.scheduler;
 
-import com.example.soso.comment.domain.repository.CommentRepository;
+import com.example.soso.community.common.comment.domain.repository.CommentRepository;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,8 +1,8 @@
 package com.example.soso.community.freeboard.controller;
 
-import com.example.soso.community.freeboard.domain.dto.*;
-import com.example.soso.community.freeboard.service.FreeboardService;
-import com.example.soso.post.domain.entity.Category;
+import com.example.soso.community.freeboard.post.domain.dto.*;
+import com.example.soso.community.freeboard.post.service.FreeboardService;
+import com.example.soso.community.common.post.domain.entity.Category;
 import com.example.soso.security.domain.CustomUserDetails;
 import com.example.soso.users.domain.entity.Users;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -70,11 +70,18 @@ class FreeboardControllerTest {
 
         // 테스트용 사용자 설정
         Users testUser = Users.builder()
-                .id("testUser123")
                 .nickname("테스터")
                 .email("test@example.com")
                 .profileImageUrl("https://example.com/profile.jpg")
                 .build();
+        // 리플렉션을 사용하여 id 설정
+        try {
+            java.lang.reflect.Field idField = Users.class.getDeclaredField("id");
+            idField.setAccessible(true);
+            idField.set(testUser, "testUser123");
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to set user ID", e);
+        }
 
         testUserDetails = new CustomUserDetails(testUser);
     }

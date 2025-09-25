@@ -1,6 +1,6 @@
 package com.example.soso.users.domain.dto;
 
-import com.example.soso.post.domain.dto.UserSummaryResponse;
+import com.example.soso.community.common.post.domain.dto.UserSummaryResponse;
 import com.example.soso.users.domain.entity.Users;
 
 public class UserMapper {
