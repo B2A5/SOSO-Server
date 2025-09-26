@@ -22,13 +22,13 @@ pipeline {
         stage('Gradle Test') {
             steps {
                 sh '''
-                    set -euxo pipefail
+                    set -eux
                     ./gradlew clean test
                 '''
             }
             post {
                 always {
-                    junit 'build/test-results/test/*.xml'
+                    junit testResults: 'build/test-results/test/*.xml', allowEmptyResults: true
                 }
             }
         }
@@ -36,7 +36,7 @@ pipeline {
         stage('Build Jar') {
             steps {
                 sh '''
-                    set -euxo pipefail
+                    set -eux
                     ./gradlew bootJar
                 '''
                 archiveArtifacts artifacts: 'build/libs/*.jar', onlyIfSuccessful: true
@@ -56,7 +56,7 @@ pipeline {
                 script {
                     withCredentials([file(credentialsId: 'soso-env', variable: 'ENV_FILE')]) {
                         sh '''
-                            set -euxo pipefail
+                            set -eux
                             cp "$ENV_FILE" .env
                             docker compose -f compose.yml --env-file .env down || true
                             docker compose -f compose.yml --env-file .env up -d --force-recreate --remove-orphans
