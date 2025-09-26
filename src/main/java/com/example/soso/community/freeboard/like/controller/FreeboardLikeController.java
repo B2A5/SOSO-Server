@@ -2,6 +2,7 @@ package com.example.soso.community.freeboard.like.controller;
 
 import com.example.soso.community.freeboard.like.service.FreeboardLikeService;
 import com.example.soso.security.domain.CustomUserDetails;
+import com.example.soso.global.exception.domain.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -62,14 +63,15 @@ public class FreeboardLikeController {
             )
     })
     @PostMapping
-    public ResponseEntity<Boolean> toggleLike(
+    public ResponseEntity<?> toggleLike(
             @Parameter(description = "자유게시판 게시글 ID", example = "123")
             @PathVariable Long freeboardId,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
         if (userDetails == null) {
             log.warn("toggleLike 요청 시 인증 정보 없음: freeboardId={}", freeboardId);
-            return ResponseEntity.status(401).build();
+            ErrorResponse errorResponse = new ErrorResponse("AUTHENTICATION_FAILED", "인증이 필요합니다.");
+            return ResponseEntity.status(401).body(errorResponse);
         }
 
         log.info("자유게시판 게시글 좋아요 토글: freeboardId={}, userId={}", freeboardId, userDetails.getUsername());
@@ -110,14 +112,15 @@ public class FreeboardLikeController {
             )
     })
     @GetMapping
-    public ResponseEntity<Boolean> getLikeStatus(
+    public ResponseEntity<?> getLikeStatus(
             @Parameter(description = "자유게시판 게시글 ID", example = "123")
             @PathVariable Long freeboardId,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
         if (userDetails == null) {
             log.warn("getLikeStatus 요청 시 인증 정보 없음: freeboardId={}", freeboardId);
-            return ResponseEntity.status(401).build();
+            ErrorResponse errorResponse = new ErrorResponse("AUTHENTICATION_FAILED", "인증이 필요합니다.");
+            return ResponseEntity.status(401).body(errorResponse);
         }
 
         log.debug("자유게시판 게시글 좋아요 상태 조회: freeboardId={}, userId={}", freeboardId, userDetails.getUsername());

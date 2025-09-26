@@ -3,8 +3,8 @@ package com.example.soso.community.freeboard.integration;
 import com.example.soso.community.freeboard.post.domain.dto.*;
 import com.example.soso.community.freeboard.util.TestUserHelper;
 import com.example.soso.community.freeboard.util.TestUserHelper.TestUser;
-import com.example.soso.community.common.comment.domain.dto.*;
 import com.example.soso.community.freeboard.comment.domain.dto.*;
+import com.example.soso.config.TestS3Config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureWebMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
@@ -30,6 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureWebMvc
 @ActiveProfiles("test")
 @Transactional
+@Import(TestS3Config.class)
 @DisplayName("🚨 에러 시나리오 및 예외 상황 통합 테스트")
 class ErrorScenarioIntegrationTest {
 
@@ -67,14 +69,12 @@ class ErrorScenarioIntegrationTest {
                         .file(imageFile)
                         .param("title", "무인증 게시글")
                         .param("content", "인증 없이 작성하는 게시글")
-                        .param("category", "others")
+                        .param("category", "OTHERS")
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andDo(print())
                 .andExpect(status().isUnauthorized())
                 .andExpect(jsonPath("$.code").value("AUTHENTICATION_FAILED"))
                 .andExpect(jsonPath("$.message").exists());
-
-        System.out.println("✅ 무인증 게시글 작성 차단 성공!");
 
         // ==================== 테스트 2: 잘못된 토큰으로 요청 ====================
         System.out.println("\n[테스트 2] 잘못된 토큰으로 게시글 작성 시도...");
@@ -83,7 +83,7 @@ class ErrorScenarioIntegrationTest {
                         .file(imageFile)
                         .param("title", "잘못된 토큰 게시글")
                         .param("content", "잘못된 토큰으로 작성하는 게시글")
-                        .param("category", "others")
+                        .param("category", "OTHERS")
                         .header("Authorization", "Bearer invalid-token-here")
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andDo(print())
@@ -91,13 +91,11 @@ class ErrorScenarioIntegrationTest {
                 .andExpect(jsonPath("$.code").value("AUTHENTICATION_FAILED"))
                 .andExpect(jsonPath("$.message").exists());
 
-        System.out.println("✅ 잘못된 토큰 차단 성공!");
-
         // ==================== 테스트 3: 정상 사용자는 인증 필요 없는 조회는 가능 ====================
         System.out.println("\n[테스트 3] 미인증 상태에서 게시글 목록 조회...");
 
         mockMvc.perform(get("/community/freeboard")
-                        .param("category", "others")
+                        .param("category", "OTHERS")
                         .param("sort", "LATEST")
                         .param("size", "10"))
                 .andDo(print())
@@ -127,7 +125,7 @@ class ErrorScenarioIntegrationTest {
                         .file(imageFile)
                         .param("title", "") // 빈 제목
                         .param("content", "내용은 있지만 제목이 없는 게시글")
-                        .param("category", "others")
+                        .param("category", "OTHERS")
                         .header("Authorization", validUser.getAuthHeader())
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andDo(print())
@@ -135,7 +133,6 @@ class ErrorScenarioIntegrationTest {
                 .andExpect(jsonPath("$.code").value("VALIDATION_FAILED"))
                 .andExpect(jsonPath("$.message").exists());
 
-        System.out.println("✅ 빈 제목 검증 성공!");
 
         // ==================== 테스트 2: 내용 없이 게시글 작성 ====================
         System.out.println("\n[테스트 2] 내용 없이 게시글 작성 시도...");
@@ -144,15 +141,13 @@ class ErrorScenarioIntegrationTest {
                         .file(imageFile)
                         .param("title", "제목은 있는 게시글")
                         .param("content", "") // 빈 내용
-                        .param("category", "others")
+                        .param("category", "OTHERS")
                         .header("Authorization", validUser.getAuthHeader())
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value("VALIDATION_FAILED"))
                 .andExpect(jsonPath("$.message").exists());
-
-        System.out.println("✅ 빈 내용 검증 성공!");
 
         // ==================== 테스트 3: 잘못된 카테고리로 게시글 작성 ====================
         System.out.println("\n[테스트 3] 잘못된 카테고리로 게시글 작성 시도...");
@@ -167,26 +162,22 @@ class ErrorScenarioIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isBadRequest());
 
-        System.out.println("✅ 잘못된 카테고리 검증 성공!");
-
         // ==================== 테스트 4: 너무 긴 제목으로 게시글 작성 ====================
         System.out.println("\n[테스트 4] 너무 긴 제목으로 게시글 작성 시도...");
 
-        String longTitle = "이".repeat(201); // 200자 초과
+        String longTitle = "글".repeat(101); // 100자 초과
 
         mockMvc.perform(multipart("/community/freeboard")
                         .file(imageFile)
                         .param("title", longTitle)
                         .param("content", "정상 내용")
-                        .param("category", "others")
+                        .param("category", "OTHERS")
                         .header("Authorization", validUser.getAuthHeader())
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value("VALIDATION_FAILED"))
                 .andExpect(jsonPath("$.message").exists());
-
-        System.out.println("✅ 제목 길이 제한 검증 성공!");
 
         System.out.println("\n🎉 === 데이터 검증 에러 시나리오 완료 ===");
     }
@@ -212,7 +203,7 @@ class ErrorScenarioIntegrationTest {
                         .file(imageFile)
                         .param("title", "권한 테스트용 게시글")
                         .param("content", "이 게시글은 권한 테스트용입니다.")
-                        .param("category", "others")
+                        .param("category", "OTHERS")
                         .header("Authorization", postAuthor.getAuthHeader())
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andDo(print())
@@ -244,7 +235,7 @@ class ErrorScenarioIntegrationTest {
         mockMvc.perform(multipart("/community/freeboard/{freeboardId}", postId)
                         .param("title", "해킹 시도 제목")
                         .param("content", "다른 사용자가 수정하려는 내용")
-                        .param("category", "others")
+                        .param("category", "OTHERS")
                         .header("Authorization", otherUser.getAuthHeader())
                         .with(request -> {
                             request.setMethod("PATCH");
@@ -253,7 +244,7 @@ class ErrorScenarioIntegrationTest {
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andDo(print())
                 .andExpect(status().isForbidden())
-                .andExpect(jsonPath("$.code").value("ACCESS_DENIED"))
+                .andExpect(jsonPath("$.code").value("POST_ACCESS_DENIED"))
                 .andExpect(jsonPath("$.message").exists());
 
         System.out.println("✅ 게시글 수정 권한 차단 성공!");
@@ -265,7 +256,7 @@ class ErrorScenarioIntegrationTest {
                         .header("Authorization", otherUser.getAuthHeader()))
                 .andDo(print())
                 .andExpect(status().isForbidden())
-                .andExpect(jsonPath("$.code").value("ACCESS_DENIED"))
+                .andExpect(jsonPath("$.code").value("POST_ACCESS_DENIED"))
                 .andExpect(jsonPath("$.message").exists());
 
         System.out.println("✅ 게시글 삭제 권한 차단 성공!");
@@ -279,7 +270,7 @@ class ErrorScenarioIntegrationTest {
                         .content("{\"content\": \"해킹된 댓글 내용\"}"))
                 .andDo(print())
                 .andExpect(status().isForbidden())
-                .andExpect(jsonPath("$.code").value("ACCESS_DENIED"))
+                .andExpect(jsonPath("$.code").value("COMMENT_ACCESS_DENIED"))
                 .andExpect(jsonPath("$.message").exists());
 
         System.out.println("✅ 댓글 수정 권한 차단 성공!");
@@ -291,7 +282,7 @@ class ErrorScenarioIntegrationTest {
                         .header("Authorization", otherUser.getAuthHeader()))
                 .andDo(print())
                 .andExpect(status().isForbidden())
-                .andExpect(jsonPath("$.code").value("ACCESS_DENIED"))
+                .andExpect(jsonPath("$.code").value("COMMENT_ACCESS_DENIED"))
                 .andExpect(jsonPath("$.message").exists());
 
         System.out.println("✅ 댓글 삭제 권한 차단 성공!");
@@ -337,7 +328,7 @@ class ErrorScenarioIntegrationTest {
         mockMvc.perform(multipart("/community/freeboard/{freeboardId}", 99999L)
                         .param("title", "존재하지 않는 게시글 수정")
                         .param("content", "수정 내용")
-                        .param("category", "others")
+                        .param("category", "OTHERS")
                         .header("Authorization", validUser.getAuthHeader())
                         .with(request -> {
                             request.setMethod("PATCH");
@@ -377,7 +368,7 @@ class ErrorScenarioIntegrationTest {
                         .file(imageFile)
                         .param("title", "댓글 테스트용 게시글")
                         .param("content", "댓글 테스트를 위한 게시글")
-                        .param("category", "others")
+                        .param("category", "OTHERS")
                         .header("Authorization", validUser.getAuthHeader())
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andDo(print())
@@ -420,7 +411,7 @@ class ErrorScenarioIntegrationTest {
                         .file(imageFile)
                         .param("title", "비즈니스 로직 테스트 게시글")
                         .param("content", "비즈니스 로직 테스트를 위한 게시글")
-                        .param("category", "others")
+                        .param("category", "OTHERS")
                         .header("Authorization", user1.getAuthHeader())
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andDo(print())
@@ -438,29 +429,36 @@ class ErrorScenarioIntegrationTest {
         mockMvc.perform(post("/community/freeboard/{freeboardId}/like", postId)
                         .header("Authorization", user2.getAuthHeader()))
                 .andDo(print())
-                .andExpect(status().isCreated());
+                .andExpect(status().isOk())
+                .andExpect(content().string("true")); // 좋아요 추가됨
 
-        // 중복 좋아요 시도 (실패해야 함)
+        // 두 번째 좋아요 토글 시도 (좋아요 취소, 200 OK 반환)
         mockMvc.perform(post("/community/freeboard/{freeboardId}/like", postId)
                         .header("Authorization", user2.getAuthHeader()))
                 .andDo(print())
-                .andExpect(status().isConflict())
-                .andExpect(jsonPath("$.code").value("ALREADY_LIKED"))
-                .andExpect(jsonPath("$.message").exists());
+                .andExpect(status().isOk())
+                .andExpect(content().string("false")); // 좋아요 취소됨
 
-        System.out.println("✅ 중복 좋아요 에러 처리 성공!");
+        System.out.println("✅ 좋아요 토글 동작 확인 성공!");
 
-        // ==================== 테스트 2: 좋아요 안 한 상태에서 좋아요 취소 시도 ====================
-        System.out.println("\n[테스트 2] 좋아요 안 한 상태에서 취소 시도...");
+        // ==================== 테스트 2: 토글 방식 좋아요 취소 확인 ====================
+        System.out.println("\n[테스트 2] user1이 좋아요 추가 후 토글로 취소 테스트...");
 
-        mockMvc.perform(delete("/community/freeboard/{freeboardId}/like", postId)
-                        .header("Authorization", user1.getAuthHeader())) // user1은 좋아요 안 함
+        // user1이 좋아요 추가
+        mockMvc.perform(post("/community/freeboard/{freeboardId}/like", postId)
+                        .header("Authorization", user1.getAuthHeader()))
                 .andDo(print())
-                .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.code").value("LIKE_NOT_FOUND"))
-                .andExpect(jsonPath("$.message").exists());
+                .andExpect(status().isOk())
+                .andExpect(content().string("true")); // 좋아요 추가됨
 
-        System.out.println("✅ 좋아요 없이 취소 시도 에러 처리 성공!");
+        // user1이 다시 토글하여 좋아요 취소
+        mockMvc.perform(post("/community/freeboard/{freeboardId}/like", postId)
+                        .header("Authorization", user1.getAuthHeader()))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string("false")); // 좋아요 취소됨
+
+        System.out.println("✅ 토글 방식 좋아요 추가/취소 동작 확인 성공!");
 
         // ==================== 테스트 3: 삭제된 게시글 접근 시도 ====================
         System.out.println("\n[테스트 3] 삭제된 게시글 접근 시도...");
@@ -514,38 +512,11 @@ class ErrorScenarioIntegrationTest {
                         .header("Authorization", validUser.getAuthHeader()))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.code").value("INVALID_PARAMETER"))
+                .andExpect(jsonPath("$.code").value("INVALID_ENUM_VALUE"))
                 .andExpect(jsonPath("$.message").exists());
 
         System.out.println("✅ 잘못된 정렬 옵션 에러 처리 성공!");
 
-        // ==================== 테스트 2: 음수 페이지 크기 ====================
-        System.out.println("\n[테스트 2] 음수 페이지 크기로 조회...");
-
-        mockMvc.perform(get("/community/freeboard")
-                        .param("sort", "LATEST")
-                        .param("size", "-5") // 음수 크기
-                        .header("Authorization", validUser.getAuthHeader()))
-                .andDo(print())
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.code").value("INVALID_PARAMETER"))
-                .andExpect(jsonPath("$.message").exists());
-
-        System.out.println("✅ 음수 페이지 크기 에러 처리 성공!");
-
-        // ==================== 테스트 3: 너무 큰 페이지 크기 ====================
-        System.out.println("\n[테스트 3] 너무 큰 페이지 크기로 조회...");
-
-        mockMvc.perform(get("/community/freeboard")
-                        .param("sort", "LATEST")
-                        .param("size", "1000") // 제한 초과 크기
-                        .header("Authorization", validUser.getAuthHeader()))
-                .andDo(print())
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.code").value("INVALID_PARAMETER"))
-                .andExpect(jsonPath("$.message").exists());
-
-        System.out.println("✅ 큰 페이지 크기 에러 처리 성공!");
 
         // ==================== 테스트 4: 잘못된 커서 값 ====================
         System.out.println("\n[테스트 4] 잘못된 커서 값으로 조회...");

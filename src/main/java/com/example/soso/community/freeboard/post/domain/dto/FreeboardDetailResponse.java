@@ -2,6 +2,7 @@ package com.example.soso.community.freeboard.post.domain.dto;
 
 import com.example.soso.community.common.post.domain.entity.Category;
 import com.example.soso.users.domain.entity.UserType;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -46,6 +47,7 @@ public class FreeboardDetailResponse {
     private int viewCount;
 
     @Schema(description = "현재 사용자의 좋아요 여부", example = "true")
+    @JsonProperty("isLiked")
     private boolean isLiked;
 
     @Schema(description = "작성 시간", example = "2024-12-25T10:30:00")

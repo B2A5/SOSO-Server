@@ -4,6 +4,7 @@ import com.example.soso.community.freeboard.post.domain.dto.*;
 import com.example.soso.community.freeboard.util.TestUserHelper;
 import com.example.soso.community.freeboard.util.TestUserHelper.TestUser;
 import com.example.soso.community.freeboard.comment.domain.dto.*;
+import com.example.soso.config.TestS3Config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureWebMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
@@ -29,6 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureWebMvc
 @ActiveProfiles("test")
 @Transactional
+@Import(TestS3Config.class)
 @DisplayName("💖 좋아요 시스템 통합 테스트")
 class LikeSystemIntegrationTest {
 
@@ -88,7 +91,7 @@ class LikeSystemIntegrationTest {
                         .file(imageFile)
                         .param("title", postTitle)
                         .param("content", postContent)
-                        .param("category", "BUSINESS_STARTUP")
+                        .param("category", "STARTUP")
                         .header("Authorization", postAuthor.getAuthHeader())
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andDo(print())
@@ -107,7 +110,7 @@ class LikeSystemIntegrationTest {
         mockMvc.perform(post("/community/freeboard/{freeboardId}/like", postId)
                         .header("Authorization", liker1.getAuthHeader()))
                 .andDo(print())
-                .andExpect(status().isCreated());
+                .andExpect(status().isOk());
 
         System.out.println("✅ 첫 번째 좋아요 완료!");
 
@@ -128,7 +131,7 @@ class LikeSystemIntegrationTest {
         mockMvc.perform(post("/community/freeboard/{freeboardId}/like", postId)
                         .header("Authorization", liker2.getAuthHeader()))
                 .andDo(print())
-                .andExpect(status().isCreated());
+                .andExpect(status().isOk());
 
         System.out.println("✅ 두 번째 좋아요 완료!");
 
@@ -170,7 +173,7 @@ class LikeSystemIntegrationTest {
         mockMvc.perform(post("/community/freeboard/{freeboardId}/comments/{commentId}/like", postId, commentId)
                         .header("Authorization", postAuthor.getAuthHeader()))
                 .andDo(print())
-                .andExpect(status().isCreated());
+                .andExpect(status().isOk());
 
         System.out.println("✅ 댓글 좋아요 완료!");
 
@@ -180,12 +183,12 @@ class LikeSystemIntegrationTest {
         mockMvc.perform(post("/community/freeboard/{freeboardId}/comments/{commentId}/like", postId, commentId)
                         .header("Authorization", liker1.getAuthHeader()))
                 .andDo(print())
-                .andExpect(status().isCreated());
+                .andExpect(status().isOk());
 
         mockMvc.perform(post("/community/freeboard/{freeboardId}/comments/{commentId}/like", postId, commentId)
                         .header("Authorization", liker2.getAuthHeader()))
                 .andDo(print())
-                .andExpect(status().isCreated());
+                .andExpect(status().isOk());
 
         System.out.println("✅ 댓글에 총 3개의 좋아요 완료!");
 
@@ -207,11 +210,12 @@ class LikeSystemIntegrationTest {
         // ==================== STEP 9: 좋아요 취소 시나리오 ====================
         System.out.println("\n[STEP 9] 좋아요 취소 시나리오...");
 
-        // liker1이 게시글 좋아요 취소
-        mockMvc.perform(delete("/community/freeboard/{freeboardId}/like", postId)
+        // liker1이 게시글 좋아요 취소 (토글)
+        mockMvc.perform(post("/community/freeboard/{freeboardId}/like", postId)
                         .header("Authorization", liker1.getAuthHeader()))
                 .andDo(print())
-                .andExpect(status().isNoContent());
+                .andExpect(status().isOk())
+                .andExpect(content().string("false")); // 좋아요 취소됨
 
         System.out.println("✅ 게시글 좋아요 취소 완료!");
 
@@ -228,10 +232,11 @@ class LikeSystemIntegrationTest {
         // ==================== STEP 10: 댓글 좋아요도 취소 ====================
         System.out.println("\n[STEP 10] 댓글 좋아요 취소 시나리오...");
 
-        mockMvc.perform(delete("/community/freeboard/{freeboardId}/comments/{commentId}/like", postId, commentId)
+        mockMvc.perform(post("/community/freeboard/{freeboardId}/comments/{commentId}/like", postId, commentId)
                         .header("Authorization", liker1.getAuthHeader()))
                 .andDo(print())
-                .andExpect(status().isNoContent());
+                .andExpect(status().isOk())
+                .andExpect(content().string("false")); // 댓글 좋아요 취소됨
 
         System.out.println("✅ 댓글 좋아요 취소 완료!");
 
@@ -279,7 +284,7 @@ class LikeSystemIntegrationTest {
                         .file(imageFile)
                         .param("title", "테스트 게시글")
                         .param("content", "좋아요 테스트용 게시글")
-                        .param("category", "ETC")
+                        .param("category", "OTHERS")
                         .header("Authorization", validUser.getAuthHeader())
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andDo(print())
@@ -306,15 +311,16 @@ class LikeSystemIntegrationTest {
         mockMvc.perform(post("/community/freeboard/{freeboardId}/like", validPostId)
                         .header("Authorization", validUser.getAuthHeader()))
                 .andDo(print())
-                .andExpect(status().isCreated());
+                .andExpect(status().isOk());
 
-        // 중복 좋아요 시도
+        // 두 번째 좋아요 토글 시도 (좋아요 취소됨)
         mockMvc.perform(post("/community/freeboard/{freeboardId}/like", validPostId)
                         .header("Authorization", validUser.getAuthHeader()))
                 .andDo(print())
-                .andExpect(status().isConflict());
+                .andExpect(status().isOk())
+                .andExpect(content().string("false")); // 좋아요 취소됨
 
-        System.out.println("✅ 중복 좋아요 차단 성공!");
+        System.out.println("✅ 좋아요 토글 동작 확인 성공!");
 
         // ==================== 테스트 3: 존재하지 않는 게시글에 좋아요 ====================
         System.out.println("\n[테스트 3] 존재하지 않는 게시글에 좋아요...");
@@ -331,12 +337,13 @@ class LikeSystemIntegrationTest {
 
         TestUser anotherUser = testUserHelper.createInhabitantUser();
 
-        mockMvc.perform(delete("/community/freeboard/{freeboardId}/like", validPostId)
+        mockMvc.perform(post("/community/freeboard/{freeboardId}/like", validPostId)
                         .header("Authorization", anotherUser.getAuthHeader()))
                 .andDo(print())
-                .andExpect(status().isNotFound());
+                .andExpect(status().isOk())
+                .andExpect(content().string("true")); // 좋아요 추가됨 (처음 누르는 것)
 
-        System.out.println("✅ 좋아요 없이 취소 시도 차단 성공!");
+        System.out.println("✅ 다른 사용자 좋아요 동작 확인 성공!");
 
         System.out.println("\n🎉 === 좋아요 제약 조건 테스트 완료 ===");
     }
@@ -359,7 +366,7 @@ class LikeSystemIntegrationTest {
                         .param("title", "🔥 지역 창업 커뮤니티 대박 소식! 투자 유치 성공!")
                         .param("content", "드디어 우리 지역 창업 커뮤니티가 Series A 투자를 받았습니다! 🎉\n" +
                                 "모든 분들의 응원 덕분입니다. 앞으로 더 많은 창업가들을 지원하겠습니다!")
-                        .param("category", "BUSINESS_STARTUP")
+                        .param("category", "STARTUP")
                         .header("Authorization", influencerAuthor.getAuthHeader())
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andDo(print())
@@ -386,7 +393,7 @@ class LikeSystemIntegrationTest {
             mockMvc.perform(post("/community/freeboard/{freeboardId}/like", viralPostId)
                             .header("Authorization", users[i].getAuthHeader()))
                     .andDo(print())
-                    .andExpect(status().isCreated());
+                    .andExpect(status().isOk());
 
             System.out.println("✅ 사용자 " + (i+1) + " 좋아요 완료!");
         }

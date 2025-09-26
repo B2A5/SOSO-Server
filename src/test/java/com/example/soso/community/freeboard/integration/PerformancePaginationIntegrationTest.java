@@ -5,6 +5,7 @@ import com.example.soso.community.freeboard.util.TestUserHelper;
 import com.example.soso.community.freeboard.util.TestUserHelper.TestUser;
 import com.example.soso.community.common.comment.domain.dto.*;
 import com.example.soso.community.freeboard.comment.domain.dto.*;
+import com.example.soso.config.TestS3Config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -12,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureWebMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
@@ -33,6 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureWebMvc
 @ActiveProfiles("test")
 @Transactional
+@Import(TestS3Config.class)
 @DisplayName("⚡ 성능 및 커서 페이징 통합 테스트")
 class PerformancePaginationIntegrationTest {
 
@@ -70,7 +73,7 @@ class PerformancePaginationIntegrationTest {
         }
 
         List<Long> postIds = new ArrayList<>();
-        String[] categories = {"RESTAURANT", "ACCOMMODATION_LODGING", "LIVING_CONVENIENCE", "BUSINESS_STARTUP", "ETC"};
+        String[] categories = {"RESTAURANT", "DAILY_HOBBY", "LIVING_CONVENIENCE", "STARTUP", "OTHERS"};
 
         long startTime = System.currentTimeMillis();
 
@@ -220,7 +223,7 @@ class PerformancePaginationIntegrationTest {
 
         // ==================== STEP 1: 카테고리별 테스트 데이터 생성 ====================
         TestUser author = testUserHelper.createFounderUser();
-        String[] categories = {"RESTAURANT", "ACCOMMODATION_LODGING", "LIVING_CONVENIENCE", "BUSINESS_STARTUP", "ETC"};
+        String[] categories = {"RESTAURANT", "DAILY_HOBBY", "LIVING_CONVENIENCE", "STARTUP", "OTHERS"};
 
         System.out.println("\n[STEP 1] 각 카테고리별로 3개씩 게시글 생성...");
 
@@ -322,7 +325,7 @@ class PerformancePaginationIntegrationTest {
                         .param("content", "이 게시글은 많은 댓글을 받을 예정인 인기 게시글입니다!\n" +
                                 "댓글 페이징 테스트를 위해 생성되었습니다.\n" +
                                 "많은 댓글 부탁드려요! 💬")
-                        .param("category", "ETC")
+                        .param("category", "OTHERS")
                         .header("Authorization", postAuthor.getAuthHeader())
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andExpect(status().isOk())
@@ -462,7 +465,7 @@ class PerformancePaginationIntegrationTest {
                             .file(imageFile)
                             .param("title", "초기 게시글 " + i + "번")
                             .param("content", "커서 테스트를 위한 초기 게시글 " + i + "번입니다.")
-                            .param("category", "ETC")
+                            .param("category", "OTHERS")
                             .header("Authorization", author1.getAuthHeader())
                             .contentType(MediaType.MULTIPART_FORM_DATA))
                     .andExpect(status().isOk());
@@ -510,7 +513,7 @@ class PerformancePaginationIntegrationTest {
                             .file(imageFile)
                             .param("title", "🆕 새 게시글 " + i + "번 (페이징 중 추가)")
                             .param("content", "페이징 테스트 중간에 추가된 게시글 " + i + "번입니다.")
-                            .param("category", "ETC")
+                            .param("category", "OTHERS")
                             .header("Authorization", author2.getAuthHeader())
                             .contentType(MediaType.MULTIPART_FORM_DATA))
                     .andExpect(status().isOk());

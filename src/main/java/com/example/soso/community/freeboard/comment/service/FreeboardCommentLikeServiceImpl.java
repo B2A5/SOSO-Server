@@ -55,6 +55,10 @@ public class FreeboardCommentLikeServiceImpl implements FreeboardCommentLikeServ
         if (alreadyLiked) {
             // 좋아요 취소
             commentLikeRedisRepository.removeLike(commentId, userId);
+
+            // DB에서도 좋아요 정보 삭제
+            commentLikeRepository.deleteByComment_IdAndUser_Id(commentId, userId);
+
             log.info("댓글 좋아요 취소 완료: commentId={}, userId={}", commentId, userId);
             return false;
         } else {

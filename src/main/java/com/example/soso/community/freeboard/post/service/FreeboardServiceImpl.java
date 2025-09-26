@@ -25,10 +25,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.Base64;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.JsonNode;
 
 /**
  * 자유게시판 비즈니스 로직 구현체
@@ -50,6 +54,7 @@ public class FreeboardServiceImpl implements FreeboardService {
     private final UsersRepository usersRepository;
     private final PostLikeRepository postLikeRepository;
     private final ImageUploadService imageUploadService;
+    private final ObjectMapper objectMapper;
 
     private static final String FREEBOARD_DIRECTORY = "freeboard";
     private static final int CONTENT_PREVIEW_LENGTH = 100;
@@ -137,14 +142,17 @@ public class FreeboardServiceImpl implements FreeboardService {
     public FreeboardCursorResponse getPostsByCursor(Category category, FreeboardSortType sort, int size, String cursor, String userId) {
         log.debug("자유게시판 목록 조회: category={}, sort={}, size={}, userId={}", category, sort, size, userId);
 
-        // 페이지 크기 제한
+        // 페이지 크기 제한 및 자동 보정
         if (size > 50) size = 50;
         if (size < 1) size = 10;
+
+        // 커서 파싱
+        CursorInfo cursorInfo = parseCursor(cursor, sort);
 
         // PostRepositoryCustom의 findAllByCursorPaging 메서드 사용
         PostSortType postSortType = convertToPostSortType(sort);
         List<PostSummaryResponse> postSummaries = postRepository.findAllByCursorPaging(
-            category, postSortType, size + 1, cursor, null, userId
+            category, postSortType, size + 1, cursorInfo.lastValue(), cursorInfo.lastId(), userId
         );
 
         // 총 게시글 수 조회
@@ -163,8 +171,12 @@ public class FreeboardServiceImpl implements FreeboardService {
                 .map(this::convertToFreeboardSummary)
                 .toList();
 
-        // 다음 커서 생성 (간단히 null로 처리, 실제로는 커서 생성 로직 필요)
-        String nextCursor = hasNext ? "next" : null;
+        // 다음 커서 생성
+        String nextCursor = null;
+        if (hasNext && !postSummaries.isEmpty()) {
+            PostSummaryResponse lastPost = postSummaries.get(postSummaries.size() - 1);
+            nextCursor = generateCursorFromPostSummary(lastPost, sort);
+        }
 
         return FreeboardCursorResponse.builder()
                 .posts(summaries)
@@ -300,14 +312,59 @@ public class FreeboardServiceImpl implements FreeboardService {
         }
 
         try {
-            // Base64 디코딩 후 JSON 파싱 (간단 구현)
-            String decodedCursor = new String(Base64.getDecoder().decode(cursor));
-            // 실제로는 JSON 라이브러리 사용 권장
-            // 여기서는 간단히 구현
-            return new CursorInfo(null, null);
-        } catch (Exception e) {
+            String decodedCursor = new String(Base64.getDecoder().decode(cursor), StandardCharsets.UTF_8);
+            JsonNode jsonNode = objectMapper.readTree(decodedCursor);
+
+            JsonNode idNode = jsonNode.get("id");
+            JsonNode sortValueNode = jsonNode.get("sortValue");
+
+            if (idNode == null || !idNode.isNumber() || sortValueNode == null || sortValueNode.isNull()) {
+                throw new PostException(PostErrorCode.INVALID_CURSOR);
+            }
+
+            long id = idNode.asLong();
+            String sortValue = sortValueNode.asText();
+
+            if (!StringUtils.hasText(sortValue) || !isValidSortValue(sort, sortValue)) {
+                throw new PostException(PostErrorCode.INVALID_CURSOR);
+            }
+
+            log.debug("커서 파싱 성공: id={}, sortValue={}", id, sortValue);
+            return new CursorInfo(id, sortValue);
+        } catch (IllegalArgumentException e) {
+            log.warn("커서 Base64 디코딩 실패: cursor={}, error={}", cursor, e.getMessage());
+            throw new PostException(PostErrorCode.INVALID_CURSOR);
+        } catch (PostException e) {
             log.warn("커서 파싱 실패: cursor={}, error={}", cursor, e.getMessage());
-            return new CursorInfo(null, null);
+            throw e;
+        } catch (Exception e) {
+            log.warn("커서 파싱 중 예기치 못한 오류: cursor={}, error={}", cursor, e.getMessage());
+            throw new PostException(PostErrorCode.INVALID_CURSOR);
+        }
+    }
+
+    private boolean isValidSortValue(FreeboardSortType sort, String sortValue) {
+        return switch (sort) {
+            case LATEST, VIEW -> isParsableDate(sortValue);
+            case LIKE, COMMENT -> isParsableNumber(sortValue);
+        };
+    }
+
+    private boolean isParsableDate(String value) {
+        try {
+            LocalDateTime.parse(value, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    private boolean isParsableNumber(String value) {
+        try {
+            Long.parseLong(value);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
         }
     }
 
@@ -405,16 +462,47 @@ public class FreeboardServiceImpl implements FreeboardService {
     }
 
     private String generateCursor(Post post, FreeboardSortType sort) {
-        // 실제 구현에서는 JSON으로 커서 정보 직렬화
-        String cursorValue = switch (sort) {
-            case LATEST -> post.getCreatedAt().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
-            case LIKE -> String.valueOf(post.getLikeCount());
-            case COMMENT -> String.valueOf(post.getCommentCount());
-            case VIEW -> post.getCreatedAt().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME); // TODO: viewCount 사용
-        };
+        try {
+            String cursorValue = switch (sort) {
+                case LATEST -> post.getCreatedAt().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+                case LIKE -> String.valueOf(post.getLikeCount());
+                case COMMENT -> String.valueOf(post.getCommentCount());
+                case VIEW -> post.getCreatedAt().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME); // TODO: viewCount 사용
+            };
 
-        String cursorData = String.format("{\"id\":%d,\"sortValue\":\"%s\"}", post.getId(), cursorValue);
-        return Base64.getEncoder().encodeToString(cursorData.getBytes());
+            Map<String, Object> cursorData = Map.of(
+                "id", post.getId(),
+                "sortValue", cursorValue
+            );
+
+            String jsonString = objectMapper.writeValueAsString(cursorData);
+            return Base64.getEncoder().encodeToString(jsonString.getBytes());
+        } catch (Exception e) {
+            log.warn("커서 생성 실패: postId={}, sort={}, error={}", post.getId(), sort, e.getMessage());
+            return null;
+        }
+    }
+
+    private String generateCursorFromPostSummary(PostSummaryResponse postSummary, FreeboardSortType sort) {
+        try {
+            String cursorValue = switch (sort) {
+                case LATEST -> postSummary.createdAt().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+                case LIKE -> String.valueOf(postSummary.likeCount());
+                case COMMENT -> String.valueOf(postSummary.commentCount());
+                case VIEW -> postSummary.createdAt().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME); // TODO: viewCount 사용
+            };
+
+            Map<String, Object> cursorData = Map.of(
+                "id", postSummary.postId(),
+                "sortValue", cursorValue
+            );
+
+            String jsonString = objectMapper.writeValueAsString(cursorData);
+            return Base64.getEncoder().encodeToString(jsonString.getBytes());
+        } catch (Exception e) {
+            log.warn("커서 생성 실패: postId={}, sort={}, error={}", postSummary.postId(), sort, e.getMessage());
+            return null;
+        }
     }
 
     // 커서 정보를 담는 내부 클래스

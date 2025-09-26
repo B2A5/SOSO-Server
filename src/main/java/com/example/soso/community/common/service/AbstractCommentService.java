@@ -169,7 +169,7 @@ public abstract class AbstractCommentService<T, R, U, S> {
     // 공통 유틸리티 메서드들
     protected Post findPostById(Long postId) {
         return postRepository.findByIdAndDeletedFalse(postId)
-                .orElseThrow(() -> new PostException(PostErrorCode.NOT_FOUND));
+                .orElseThrow(() -> new PostException(PostErrorCode.POST_NOT_FOUND));
     }
 
     protected Users findUserById(String userId) {

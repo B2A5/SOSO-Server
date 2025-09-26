@@ -14,6 +14,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 @Slf4j
 @RestControllerAdvice
@@ -63,6 +64,36 @@ public class GlobalExceptionHandler {
     }
 
     /**
+     * MethodArgumentTypeMismatchException 처리 (URL 파라미터 타입 오류, 특히 Enum 값 오류)
+     */
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ErrorResponse> handleMethodArgumentTypeMismatch(MethodArgumentTypeMismatchException ex) {
+        Class<?> targetType = ex.getRequiredType();
+
+        if (targetType != null && targetType.isEnum()) {
+            String invalidValue = String.valueOf(ex.getValue());
+            String allowedValues = Arrays.stream(targetType.getEnumConstants())
+                    .map(Object::toString)
+                    .collect(Collectors.joining(", "));
+
+            String message = String.format("'%s'은(는) 허용되지 않는 값입니다. 사용 가능한 값: [%s]",
+                    invalidValue, allowedValues);
+
+            log.warn("Invalid enum parameter: parameterName={}, enumType={}, invalidValue={}",
+                    ex.getName(), targetType.getSimpleName(), invalidValue);
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(new ErrorResponse("INVALID_ENUM_VALUE", message));
+        }
+
+        log.warn("Method argument type mismatch: parameterName={}, expectedType={}, actualValue={}",
+                ex.getName(), targetType, ex.getValue());
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorResponse("INVALID_PARAMETER_TYPE", "잘못된 파라미터 타입입니다."));
+    }
+
+    /**
      * IllegalArgumentException -> 400으로 변환
      */
     @ExceptionHandler(IllegalArgumentException.class)
@@ -89,7 +120,7 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity
                 .badRequest()
-                .body(new ErrorResponse("VALIDATION_ERROR", message));
+                .body(new ErrorResponse("VALIDATION_FAILED", message));
     }
 
     /**

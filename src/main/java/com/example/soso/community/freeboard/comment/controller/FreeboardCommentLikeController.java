@@ -2,6 +2,7 @@ package com.example.soso.community.freeboard.comment.controller;
 
 import com.example.soso.community.freeboard.comment.service.FreeboardCommentLikeService;
 import com.example.soso.security.domain.CustomUserDetails;
+import com.example.soso.global.exception.domain.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -62,7 +63,7 @@ public class FreeboardCommentLikeController {
             )
     })
     @PostMapping
-    public ResponseEntity<Boolean> toggleCommentLike(
+    public ResponseEntity<?> toggleCommentLike(
             @Parameter(description = "자유게시판 게시글 ID", example = "123")
             @PathVariable Long freeboardId,
             @Parameter(description = "댓글 ID", example = "456")
@@ -71,7 +72,8 @@ public class FreeboardCommentLikeController {
     ) {
         if (userDetails == null) {
             log.warn("toggleCommentLike 요청 시 인증 정보 없음: freeboardId={}, commentId={}", freeboardId, commentId);
-            return ResponseEntity.status(401).build();
+            ErrorResponse errorResponse = new ErrorResponse("AUTHENTICATION_FAILED", "인증이 필요합니다.");
+            return ResponseEntity.status(401).body(errorResponse);
         }
 
         log.info("자유게시판 댓글 좋아요 토글: freeboardId={}, commentId={}, userId={}",
@@ -113,7 +115,7 @@ public class FreeboardCommentLikeController {
             )
     })
     @GetMapping
-    public ResponseEntity<Boolean> getCommentLikeStatus(
+    public ResponseEntity<?> getCommentLikeStatus(
             @Parameter(description = "자유게시판 게시글 ID", example = "123")
             @PathVariable Long freeboardId,
             @Parameter(description = "댓글 ID", example = "456")
@@ -122,7 +124,8 @@ public class FreeboardCommentLikeController {
     ) {
         if (userDetails == null) {
             log.warn("getCommentLikeStatus 요청 시 인증 정보 없음: freeboardId={}, commentId={}", freeboardId, commentId);
-            return ResponseEntity.status(401).build();
+            ErrorResponse errorResponse = new ErrorResponse("AUTHENTICATION_FAILED", "인증이 필요합니다.");
+            return ResponseEntity.status(401).body(errorResponse);
         }
 
         log.debug("자유게시판 댓글 좋아요 상태 조회: freeboardId={}, commentId={}, userId={}",

@@ -3,6 +3,7 @@ package com.example.soso.community.freeboard.comment.controller;
 import com.example.soso.community.freeboard.comment.domain.dto.*;
 import com.example.soso.community.freeboard.comment.service.FreeboardCommentService;
 import com.example.soso.security.domain.CustomUserDetails;
+import com.example.soso.global.exception.domain.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -79,7 +80,7 @@ public class FreeboardCommentController {
             )
     })
     @PostMapping
-    public ResponseEntity<FreeboardCommentCreateResponse> createComment(
+    public ResponseEntity<?> createComment(
             @Parameter(description = "게시글 ID", example = "123")
             @PathVariable Long freeboardId,
             @RequestBody @Valid FreeboardCommentCreateRequest request,
@@ -87,7 +88,8 @@ public class FreeboardCommentController {
     ) {
         if (userDetails == null) {
             log.warn("자유게시판 댓글 작성 요청 시 인증 정보 없음: freeboardId={}", freeboardId);
-            return ResponseEntity.status(401).build();
+            ErrorResponse errorResponse = new ErrorResponse("AUTHENTICATION_FAILED", "인증이 필요합니다.");
+            return ResponseEntity.status(401).body(errorResponse);
         }
 
         log.info("자유게시판 댓글 작성 요청: freeboardId={}, userId={}, parentCommentId={}",
@@ -202,7 +204,7 @@ public class FreeboardCommentController {
             @ApiResponse(responseCode = "404", description = "댓글을 찾을 수 없음")
     })
     @PatchMapping("/{commentId}")
-    public ResponseEntity<FreeboardCommentCreateResponse> updateComment(
+    public ResponseEntity<?> updateComment(
             @Parameter(description = "게시글 ID", example = "123")
             @PathVariable Long freeboardId,
             @Parameter(description = "댓글 ID", example = "456")
@@ -212,7 +214,8 @@ public class FreeboardCommentController {
     ) {
         if (userDetails == null) {
             log.warn("자유게시판 댓글 수정 요청 시 인증 정보 없음: freeboardId={}, commentId={}", freeboardId, commentId);
-            return ResponseEntity.status(401).build();
+            ErrorResponse errorResponse = new ErrorResponse("AUTHENTICATION_FAILED", "인증이 필요합니다.");
+            return ResponseEntity.status(401).body(errorResponse);
         }
 
         log.info("자유게시판 댓글 수정 요청: freeboardId={}, commentId={}, userId={}",
@@ -244,7 +247,7 @@ public class FreeboardCommentController {
             @ApiResponse(responseCode = "404", description = "댓글을 찾을 수 없음")
     })
     @DeleteMapping("/{commentId}")
-    public ResponseEntity<Void> deleteComment(
+    public ResponseEntity<?> deleteComment(
             @Parameter(description = "게시글 ID", example = "123")
             @PathVariable Long freeboardId,
             @Parameter(description = "댓글 ID", example = "456")
@@ -253,7 +256,8 @@ public class FreeboardCommentController {
     ) {
         if (userDetails == null) {
             log.warn("자유게시판 댓글 삭제 요청 시 인증 정보 없음: freeboardId={}, commentId={}", freeboardId, commentId);
-            return ResponseEntity.status(401).build();
+            ErrorResponse errorResponse = new ErrorResponse("AUTHENTICATION_FAILED", "인증이 필요합니다.");
+            return ResponseEntity.status(401).body(errorResponse);
         }
 
         log.info("자유게시판 댓글 삭제 요청: freeboardId={}, commentId={}, userId={}",
@@ -284,7 +288,7 @@ public class FreeboardCommentController {
             @ApiResponse(responseCode = "404", description = "댓글을 찾을 수 없음")
     })
     @DeleteMapping("/{commentId}/force")
-    public ResponseEntity<Void> hardDeleteComment(
+    public ResponseEntity<?> hardDeleteComment(
             @Parameter(description = "게시글 ID", example = "123")
             @PathVariable Long freeboardId,
             @Parameter(description = "댓글 ID", example = "456")
@@ -293,7 +297,8 @@ public class FreeboardCommentController {
     ) {
         if (userDetails == null) {
             log.warn("자유게시판 댓글 영구 삭제 요청 시 인증 정보 없음: freeboardId={}, commentId={}", freeboardId, commentId);
-            return ResponseEntity.status(401).build();
+            ErrorResponse errorResponse = new ErrorResponse("AUTHENTICATION_FAILED", "인증이 필요합니다.");
+            return ResponseEntity.status(401).body(errorResponse);
         }
 
         log.warn("자유게시판 댓글 영구 삭제 요청: freeboardId={}, commentId={}, userId={}",

@@ -2,6 +2,7 @@ package com.example.soso.community.freeboard.comment.service;
 
 import com.example.soso.community.common.comment.domain.entity.Comment;
 import com.example.soso.community.common.comment.domain.repository.CommentRepository;
+import com.example.soso.community.common.likes.repository.CommentLikeRepository;
 import com.example.soso.community.common.post.domain.entity.Post;
 import com.example.soso.community.common.post.repository.PostRepository;
 import com.example.soso.community.common.service.AbstractCommentService;
@@ -28,10 +29,14 @@ public class FreeboardCommentServiceImpl
                                   FreeboardCommentCursorResponse, FreeboardCommentSortType>
     implements FreeboardCommentService {
 
+    private final CommentLikeRepository commentLikeRepository;
+
     public FreeboardCommentServiceImpl(CommentRepository commentRepository,
                                      PostRepository postRepository,
-                                     UsersRepository usersRepository) {
+                                     UsersRepository usersRepository,
+                                     CommentLikeRepository commentLikeRepository) {
         super(commentRepository, postRepository, usersRepository);
+        this.commentLikeRepository = commentLikeRepository;
     }
 
     @Override
@@ -138,6 +143,13 @@ public class FreeboardCommentServiceImpl
         int replyCount = commentRepository.countByParentIdAndDeletedFalse(comment.getId());
         int depth = comment.getParent() != null ? 1 : 0;
 
+        // 댓글 좋아요 수 조회
+        int likeCount = commentLikeRepository.countByComment_Id(comment.getId());
+
+        // 현재 사용자의 댓글 좋아요 여부 확인
+        boolean isLiked = userId != null &&
+                commentLikeRepository.existsByComment_IdAndUser_Id(comment.getId(), userId);
+
         return FreeboardCommentCursorResponse.FreeboardCommentSummary.builder()
                 .commentId(comment.getId())
                 .postId(comment.getPost().getId())
@@ -149,6 +161,8 @@ public class FreeboardCommentServiceImpl
                         .build())
                 .content(comment.isDeleted() ? "삭제된 댓글입니다." : comment.getContent())
                 .replyCount(replyCount)
+                .likeCount(likeCount)
+                .isLiked(isLiked)
                 .depth(depth)
                 .deleted(comment.isDeleted())
                 .isAuthor(comment.getUser().getId().equals(userId))

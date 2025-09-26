@@ -1,5 +1,6 @@
 package com.example.soso.community.freeboard.comment.domain.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -51,6 +52,13 @@ public class FreeboardCommentCursorResponse {
 
         @Schema(description = "대댓글 수", example = "3")
         private int replyCount;
+
+        @Schema(description = "댓글 좋아요 수", example = "5")
+        private int likeCount;
+
+        @Schema(description = "현재 사용자의 댓글 좋아요 여부", example = "true")
+        @JsonProperty("isLiked")
+        private boolean isLiked;
 
         @Schema(description = "댓글 깊이 (0: 일반 댓글, 1: 대댓글)", example = "0")
         private int depth;
