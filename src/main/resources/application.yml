@@ -55,9 +55,14 @@ spring:
   cloud:
     aws:
       region: ${AWS_REGION:ap-northeast-2}
+      credentials:
+        access-key: ${AWS_ACCESS_KEY_ID:}
+        secret-key: ${AWS_SECRET_ACCESS_KEY:}
       s3:
         bucket: ${AWS_S3_BUCKET:dreampaste-soso-image-storage}
         base-url: ${S3_BASE_URL:https://dreampaste-soso-image-storage.s3.ap-northeast-2.amazonaws.com}
+        endpoint: ${AWS_S3_ENDPOINT:}
+        path-style-access: ${AWS_S3_PATH_STYLE_ACCESS:false}
     gcp:
       storage:
         bucket: ${GCP_STORAGE_BUCKET:unused}

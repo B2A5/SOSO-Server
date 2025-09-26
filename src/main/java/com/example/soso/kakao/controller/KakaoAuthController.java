@@ -14,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "Kakao Auth", description = "카카오 소셜 로그인 API")
+@Tag(name = "Auth", description = "인증/인가 관련 API")
 @RestController
 @RequestMapping("/auth/kakao")
 @RequiredArgsConstructor

@@ -5,8 +5,14 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
+import org.springdoc.core.customizers.OpenApiCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.IntStream;
+
 
 @Configuration
 public class SwaggerConfig {
@@ -28,6 +34,27 @@ public class SwaggerConfig {
                                         .type(SecurityScheme.Type.HTTP)
                                         .scheme("bearer")
                                         .bearerFormat("JWT")));
+    }
+
+    @Bean
+    public OpenApiCustomizer customOpenAPI() {
+        List<String> tagOrder = List.of(
+                "Signup", "Auth", "Freeboard", "Freeboard Like", "Freeboard Comment", "Freeboard Comment Like"
+        );
+
+        return openApi -> openApi.setTags(
+                openApi.getTags().stream()
+                        .sorted(Comparator.comparingInt(tag -> {
+                            String tagName = tag.getName();
+                            for (int i = 0; i < tagOrder.size(); i++) {
+                                if (tagName.equals(tagOrder.get(i))) {
+                                    return i;
+                                }
+                            }
+                            return tagOrder.size();
+                        }))
+                        .toList()
+        );
     }
 }
 

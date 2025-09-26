@@ -34,9 +34,12 @@ public class AuthController {
     @PostMapping("/refresh")
     public ResponseEntity<JwtTokenDto> refreshToken(
             @Parameter(description = "HttpOnly 쿠키에 저장된 Refresh Token", example = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...")
-            @CookieValue("refreshToken") String refreshToken,
+            @CookieValue(value = "refreshToken", required = false) String refreshToken,
             HttpServletResponse response
     ) {
+        if (refreshToken == null) {
+            return ResponseEntity.badRequest().build();
+        }
         JwtTokenDto jwtToken = authService.refreshAccessToken(refreshToken, response);
         return ResponseEntity.ok(jwtToken);
     }
