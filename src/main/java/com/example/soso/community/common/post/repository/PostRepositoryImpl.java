@@ -8,6 +8,7 @@ import com.example.soso.community.common.post.domain.entity.Post;
 import com.example.soso.community.common.post.domain.entity.QPost;
 import com.example.soso.community.common.post.util.PostCursorOrder;
 import com.example.soso.community.common.post.util.PostCursorWhere;
+import com.example.soso.users.domain.entity.QUsers;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
@@ -37,6 +38,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
     ) {
         QPost post = QPost.post;
         QPostLike like = QPostLike.postLike;
+        QUsers user = QUsers.users;
 
         BooleanBuilder condition = new BooleanBuilder();
         // 삭제되지 않은 게시글만 조회
@@ -60,9 +62,16 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                             post.commentCount, // int commentCount
                             com.querydsl.core.types.dsl.Expressions.constant(false), // boolean likeByPost
                             post.createdDate, // LocalDateTime createdAt
-                            com.querydsl.core.types.dsl.Expressions.nullExpression(com.example.soso.community.common.post.domain.dto.UserSummaryResponse.class) // UserSummaryResponse user
+                            Projections.constructor(com.example.soso.community.common.post.domain.dto.UserSummaryResponse.class,
+                                    user.id,
+                                    user.nickname,
+                                    user.location,
+                                    user.profileImageUrl,
+                                    user.userType
+                            ) // UserSummaryResponse user
                     ))
                     .from(post)
+                    .join(post.user, user)
                     .where(condition)
                     .orderBy(order)
                     .limit(size + 1)
@@ -78,9 +87,16 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                             post.commentCount, // int commentCount
                             like.id.isNotNull(), // boolean likeByPost
                             post.createdDate, // LocalDateTime createdAt
-                            com.querydsl.core.types.dsl.Expressions.nullExpression(com.example.soso.community.common.post.domain.dto.UserSummaryResponse.class) // UserSummaryResponse user
+                            Projections.constructor(com.example.soso.community.common.post.domain.dto.UserSummaryResponse.class,
+                                    user.id,
+                                    user.nickname,
+                                    user.location,
+                                    user.profileImageUrl,
+                                    user.userType
+                            ) // UserSummaryResponse user
                     ))
                     .from(post)
+                    .join(post.user, user)
                     .leftJoin(like)
                     .on(like.post.id.eq(post.id)
                             .and(like.user.id.eq(userId)))

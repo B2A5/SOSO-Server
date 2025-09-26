@@ -1,6 +1,7 @@
 // src/main/java/com/example/soso/global/s3/S3Service.java
 package com.example.soso.global.s3;
 
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,6 +26,11 @@ public class S3Service {
 
     @Value("${spring.cloud.aws.s3.base-url}")
     private String baseUrl;
+
+    @PostConstruct
+    private void normalizeBaseUrl() {
+        this.baseUrl = trimTrailingSlashes(baseUrl);
+    }
     // 이미지 업로드
     public String uploadImage(MultipartFile file, String dir) {
         try {
@@ -40,7 +46,7 @@ public class S3Service {
 
             s3.putObject(put, RequestBody.fromBytes(resized));
 
-            return baseUrl + "/" + key;
+            return buildObjectUrl(key);
 
         } catch (IOException e) {
             log.error("S3 이미지 업로드 실패", e);
@@ -49,6 +55,10 @@ public class S3Service {
     }
     // 이미지 삭제
     public void deleteImage(String imageUrl) {
+        if (!hasText(baseUrl) || !hasText(imageUrl) || !imageUrl.startsWith(baseUrl + "/")) {
+            log.warn("유효하지 않은 이미지 URL로 삭제 요청: {}", imageUrl);
+            return;
+        }
         String key = extractKeyFromUrl(imageUrl);
         try {
             s3.deleteObject(DeleteObjectRequest.builder()
@@ -63,6 +73,9 @@ public class S3Service {
     }
     // 이미지가 존재하는지 확인
     public boolean isImageExists(String imageUrl) {
+        if (!hasText(baseUrl) || !hasText(imageUrl) || !imageUrl.startsWith(baseUrl + "/")) {
+            return false;
+        }
         String key = extractKeyFromUrl(imageUrl);
         try {
             s3.headObject(HeadObjectRequest.builder()
@@ -78,7 +91,34 @@ public class S3Service {
 
     // 이미지 URL에서 키 추출
     private String extractKeyFromUrl(String url) {
-        String prefix = baseUrl.endsWith("/") ? baseUrl : baseUrl + "/";
-        return url.replace(prefix, "");
+        if (!hasText(url) || !hasText(baseUrl)) {
+            return url;
+        }
+
+        String prefix = baseUrl + "/";
+        if (!url.startsWith(prefix)) {
+            return url;
+        }
+
+        return url.substring(prefix.length());
+    }
+
+    private String buildObjectUrl(String key) {
+        return baseUrl + "/" + key;
+    }
+
+    private String trimTrailingSlashes(String value) {
+        if (value == null) {
+            return null;
+        }
+        int end = value.length();
+        while (end > 0 && value.charAt(end - 1) == '/') {
+            end--;
+        }
+        return value.substring(0, end);
+    }
+
+    private boolean hasText(String value) {
+        return value != null && !value.trim().isEmpty();
     }
 }

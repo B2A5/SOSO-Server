@@ -1,5 +1,6 @@
 package com.example.soso.global.image.service;
 
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -117,7 +118,7 @@ public class ImageUploadService {
 
             s3Client.putObject(putObjectRequest, RequestBody.fromInputStream(image.getInputStream(), image.getSize()));
 
-            String imageUrl = baseUrl + "/" + key;
+            String imageUrl = buildObjectUrl(key);
             log.debug("이미지 업로드 성공: key={}, url={}", key, imageUrl);
             return imageUrl;
 
@@ -133,12 +134,12 @@ public class ImageUploadService {
      * @param imageUrl 삭제할 이미지 URL
      */
     public void deleteImage(String imageUrl) {
-        if (imageUrl == null || !imageUrl.startsWith(baseUrl)) {
+        if (!hasText(baseUrl) || !hasText(imageUrl) || !imageUrl.startsWith(baseUrl + "/")) {
             log.warn("유효하지 않은 이미지 URL로 삭제 요청: {}", imageUrl);
             return;
         }
 
-        String key = imageUrl.substring(baseUrl.length() + 1);
+        String key = imageUrl.substring((baseUrl + "/").length());
 
         try {
             DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()
@@ -184,6 +185,11 @@ public class ImageUploadService {
         for (MultipartFile image : images) {
             validateSingleImage(image);
         }
+    }
+
+    @PostConstruct
+    private void normalizeBaseUrl() {
+        baseUrl = trimTrailingSlashes(baseUrl);
     }
 
     /**
@@ -259,5 +265,24 @@ public class ImageUploadService {
      */
     public int getMaxImageCount() {
         return MAX_IMAGE_COUNT;
+    }
+
+    private String buildObjectUrl(String key) {
+        return baseUrl + "/" + key;
+    }
+
+    private String trimTrailingSlashes(String value) {
+        if (value == null) {
+            return null;
+        }
+        int end = value.length();
+        while (end > 0 && value.charAt(end - 1) == '/') {
+            end--;
+        }
+        return value.substring(0, end);
+    }
+
+    private boolean hasText(String value) {
+        return value != null && !value.trim().isEmpty();
     }
 }

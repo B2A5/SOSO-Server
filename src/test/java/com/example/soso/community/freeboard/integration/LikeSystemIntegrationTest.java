@@ -3,7 +3,6 @@ package com.example.soso.community.freeboard.integration;
 import com.example.soso.community.freeboard.post.domain.dto.*;
 import com.example.soso.community.freeboard.util.TestUserHelper;
 import com.example.soso.community.freeboard.util.TestUserHelper.TestUser;
-import com.example.soso.community.common.comment.domain.dto.*;
 import com.example.soso.community.freeboard.comment.domain.dto.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;

@@ -325,7 +325,7 @@ public class FreeboardServiceImpl implements FreeboardService {
         FreeboardCursorResponse.PostAuthorInfo authorInfo = null;
         if (postSummary.user() != null) {
             authorInfo = FreeboardCursorResponse.PostAuthorInfo.builder()
-                    .userId("unknown") // UserSummaryResponse에 ID가 없으므로 임시값 사용
+                    .userId(postSummary.user().userId())
                     .nickname(postSummary.user().nickname())
                     .profileImageUrl(postSummary.user().profileImageUrl())
                     .userType(postSummary.user().userType())

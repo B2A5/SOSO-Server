@@ -22,7 +22,7 @@ public class UserMapper {
     }
 
     public static UserSummaryResponse toUserSummary(Users users){
-        return new UserSummaryResponse(users.getUsername(), users.getLocation(), users.getProfileImageUrl(), users.getUserType());
+        return new UserSummaryResponse(users.getId(), users.getUsername(), users.getLocation(), users.getProfileImageUrl(), users.getUserType());
     }
 
 }
