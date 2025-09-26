@@ -97,6 +97,7 @@ public class PostServiceImpl implements PostService {
                 case LATEST -> lastPost.createdAt().toString();
                 case LIKE -> String.valueOf(lastPost.likeCount());
                 case COMMENT -> String.valueOf(lastPost.commentCount());
+                case VIEW -> String.valueOf(lastPost.viewCount());
             };
             nextIdAfter = lastPost.postId();
 

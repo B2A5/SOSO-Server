@@ -24,6 +24,9 @@ public record PostSummaryResponse(
         @Schema(description = "댓글 수", example = "5")
         int commentCount,
 
+        @Schema(description = "조회 수", example = "120")
+        int viewCount,
+
         @Schema(description = "내가 좋아요 누름 게시글", example = "true")
         boolean likeByPost,
 

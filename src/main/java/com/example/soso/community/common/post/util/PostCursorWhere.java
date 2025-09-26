@@ -36,6 +36,13 @@ public class PostCursorWhere {
                                 .or(post.commentCount.eq(commentCount).and(post.id.lt(idAfter)))
                 );
             }
+            case VIEW -> {
+                int viewCount = Integer.parseInt(cursor);
+                condition.and(
+                        post.viewCount.lt(viewCount)
+                                .or(post.viewCount.eq(viewCount).and(post.id.lt(idAfter)))
+                );
+            }
         }
 
         return condition;

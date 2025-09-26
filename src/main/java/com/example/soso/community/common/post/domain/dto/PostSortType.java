@@ -12,5 +12,8 @@ public enum PostSortType {
     LIKE,
 
     @Schema(description = "댓글순 (commentCount DESC)")
-    COMMENT
+    COMMENT,
+
+    @Schema(description = "조회순 (viewCount DESC)")
+    VIEW
 }

@@ -191,6 +191,7 @@ class FreeboardServiceTest {
         // assertThat(result.isAuthor()).isTrue(); // 같은 사용자 - TODO: Check method generation
         assertThat(result.getLikeCount()).isEqualTo(15);
         assertThat(result.getCommentCount()).isEqualTo(8);
+        assertThat(result.getViewCount()).isEqualTo(1);
 
         verify(postRepository).findByIdAndDeletedFalse(postId);
         // userId가 null이 아니더라도 getPost 메서드에서 findUserById를 호출하지 않음
@@ -220,7 +221,7 @@ class FreeboardServiceTest {
         // given
         PostSummaryResponse mockPostSummary = new PostSummaryResponse(
                 1L, "테스트 제목", "테스트 내용", category,
-                15, 8, false, LocalDateTime.of(2024, 12, 25, 10, 30, 0), null
+                15, 8, 120, false, LocalDateTime.of(2024, 12, 25, 10, 30, 0), null
         );
 
         List<PostSummaryResponse> mockPostSummaries = List.of(mockPostSummary);
@@ -249,7 +250,7 @@ class FreeboardServiceTest {
         // given
         PostSummaryResponse mockPostSummary = new PostSummaryResponse(
                 123L, "테스트 제목", "테스트 내용", Category.RESTAURANT,
-                10, 5, true, LocalDateTime.of(2024, 12, 25, 10, 30, 0), null
+                10, 5, 77, true, LocalDateTime.of(2024, 12, 25, 10, 30, 0), null
         );
 
         List<PostSummaryResponse> mockPostSummaries = List.of(mockPostSummary);
@@ -427,7 +428,7 @@ class FreeboardServiceTest {
         String longContent = "a".repeat(150); // 100자 초과 내용
         PostSummaryResponse mockPostSummary = new PostSummaryResponse(
                 456L, "긴 내용 테스트", longContent, Category.DAILY_HOBBY,
-                0, 0, false, LocalDateTime.of(2024, 12, 25, 10, 30, 0), null
+                0, 0, 5, false, LocalDateTime.of(2024, 12, 25, 10, 30, 0), null
         );
 
         when(postRepository.findAllByCursorPaging(

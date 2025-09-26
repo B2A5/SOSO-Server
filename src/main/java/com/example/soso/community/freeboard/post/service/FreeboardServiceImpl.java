@@ -94,12 +94,15 @@ public class FreeboardServiceImpl implements FreeboardService {
     }
 
     @Override
+    @Transactional
     public FreeboardDetailResponse getPost(Long postId, String userId) {
         log.debug("자유게시판 글 조회: postId={}, userId={}", postId, userId);
 
         // 게시글 조회 (삭제되지 않은 글만) - 비인증 사용자도 조회 가능
         Post post = postRepository.findByIdAndDeletedFalse(postId)
                 .orElseThrow(() -> new PostException(PostErrorCode.POST_NOT_FOUND));
+
+        post.increaseViewCount();
 
         // 좋아요 여부 확인 (인증된 사용자인 경우만)
         boolean isLiked = userId != null && postLikeRepository.existsByPost_IdAndUser_Id(postId, userId);
@@ -128,7 +131,7 @@ public class FreeboardServiceImpl implements FreeboardService {
                 .imageUrls(imageUrls)
                 .likeCount(post.getLikeCount())
                 .commentCount(post.getCommentCount())
-                .viewCount(0) // TODO: 조회수 기능 구현 필요
+                .viewCount(post.getViewCount())
                 .isLiked(isLiked)
                 .createdAt(post.getCreatedAt())
                 .updatedAt(post.getUpdatedAt())
@@ -345,7 +348,8 @@ public class FreeboardServiceImpl implements FreeboardService {
 
     private boolean isValidSortValue(FreeboardSortType sort, String sortValue) {
         return switch (sort) {
-            case LATEST, VIEW -> isParsableDate(sortValue);
+            case LATEST -> isParsableDate(sortValue);
+            case VIEW -> isParsableNumber(sortValue);
             case LIKE, COMMENT -> isParsableNumber(sortValue);
         };
     }
@@ -373,7 +377,7 @@ public class FreeboardServiceImpl implements FreeboardService {
             case LATEST -> PostSortType.LATEST;
             case LIKE -> PostSortType.LIKE;
             case COMMENT -> PostSortType.COMMENT;
-            case VIEW -> PostSortType.LATEST; // PostSortType에 VIEW가 없으므로 LATEST로 처리
+            case VIEW -> PostSortType.VIEW;
         };
     }
 
@@ -401,7 +405,7 @@ public class FreeboardServiceImpl implements FreeboardService {
                 .commentCount(postSummary.commentCount())
                 .isLiked(postSummary.likeByPost())
                 .createdAt(postSummary.createdAt())
-                .viewCount(0) // TODO: viewCount 필드 추가 필요
+                .viewCount(postSummary.viewCount())
                 .thumbnailUrl(null) // TODO: thumbnailUrl 처리 필요
                 .imageCount(0) // TODO: imageCount 처리 필요
                 .updatedAt(null) // TODO: updatedAt 처리 필요
@@ -413,7 +417,7 @@ public class FreeboardServiceImpl implements FreeboardService {
             case LATEST -> Sort.by(Sort.Direction.DESC, "createdAt");
             case LIKE -> Sort.by(Sort.Direction.DESC, "likeCount", "createdAt");
             case COMMENT -> Sort.by(Sort.Direction.DESC, "commentCount", "createdAt");
-            case VIEW -> Sort.by(Sort.Direction.DESC, "createdAt"); // TODO: viewCount 필드 추가 후 수정
+            case VIEW -> Sort.by(Sort.Direction.DESC, "viewCount", "createdAt");
         };
     }
 
@@ -447,7 +451,7 @@ public class FreeboardServiceImpl implements FreeboardService {
                 .imageCount(imageUrls.size())
                 .likeCount(post.getLikeCount())
                 .commentCount(post.getCommentCount())
-                .viewCount(0) // TODO: 조회수 기능 구현
+                .viewCount(post.getViewCount())
                 .isLiked(isLiked)
                 .createdAt(post.getCreatedAt())
                 .updatedAt(post.getUpdatedAt())
@@ -467,7 +471,7 @@ public class FreeboardServiceImpl implements FreeboardService {
                 case LATEST -> post.getCreatedAt().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
                 case LIKE -> String.valueOf(post.getLikeCount());
                 case COMMENT -> String.valueOf(post.getCommentCount());
-                case VIEW -> post.getCreatedAt().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME); // TODO: viewCount 사용
+                case VIEW -> String.valueOf(post.getViewCount());
             };
 
             Map<String, Object> cursorData = Map.of(
@@ -489,7 +493,7 @@ public class FreeboardServiceImpl implements FreeboardService {
                 case LATEST -> postSummary.createdAt().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
                 case LIKE -> String.valueOf(postSummary.likeCount());
                 case COMMENT -> String.valueOf(postSummary.commentCount());
-                case VIEW -> postSummary.createdAt().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME); // TODO: viewCount 사용
+                case VIEW -> String.valueOf(postSummary.viewCount());
             };
 
             Map<String, Object> cursorData = Map.of(

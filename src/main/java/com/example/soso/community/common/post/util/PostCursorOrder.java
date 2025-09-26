@@ -22,6 +22,10 @@ public class PostCursorOrder {
                     post.commentCount.desc(),
                     post.id.desc()
             };
+            case VIEW -> new OrderSpecifier[]{
+                    post.viewCount.desc(),
+                    post.id.desc()
+            };
         };
     }
 

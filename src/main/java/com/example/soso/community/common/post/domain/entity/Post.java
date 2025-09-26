@@ -56,6 +56,10 @@ public class Post extends BaseTimeEntity {
 
     @Column(nullable = false)
     @Builder.Default
+    private int viewCount = 0;
+
+    @Column(nullable = false)
+    @Builder.Default
     private boolean deleted = false;
 
     public void delete() {
@@ -89,6 +93,10 @@ public class Post extends BaseTimeEntity {
 
     public void updateCommentCount(int commentCount) {
         this.commentCount = commentCount;
+    }
+
+    public void increaseViewCount() {
+        this.viewCount++;
     }
 
     public LocalDateTime getCreatedAt() {
