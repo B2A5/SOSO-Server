@@ -111,8 +111,8 @@ public class FreeboardCommentServiceImpl
     @Override
     protected Sort buildSort(FreeboardCommentSortType sortType) {
         return switch (sortType) {
-            case LATEST -> Sort.by(Sort.Direction.DESC, "createdAt");
-            case OLDEST -> Sort.by(Sort.Direction.ASC, "createdAt");
+            case LATEST -> Sort.by(Sort.Direction.DESC, "createdDate");
+            case OLDEST -> Sort.by(Sort.Direction.ASC, "createdDate");
         };
     }
 
@@ -130,7 +130,7 @@ public class FreeboardCommentServiceImpl
                 .commentId(comment.getId())
                 .postId(comment.getPost().getId())
                 .parentCommentId(comment.getParent() != null ? comment.getParent().getId() : null)
-                .author(FreeboardCommentCursorResponse.AuthorInfo.builder()
+                .author(FreeboardCommentCursorResponse.CommentAuthorInfo.builder()
                         .userId(comment.getUser().getId())
                         .nickname(comment.getUser().getNickname())
                         .profileImageUrl(comment.getUser().getProfileImageUrl())
@@ -140,8 +140,8 @@ public class FreeboardCommentServiceImpl
                 .depth(depth)
                 .isDeleted(comment.isDeleted())
                 .isAuthor(comment.getUser().getId().equals(userId))
-                .createdAt(comment.getCreatedAt())
-                .updatedAt(comment.getUpdatedAt())
+                .createdAt(comment.getCreatedDate())
+                .updatedAt(comment.getLastModifiedDate())
                 .build();
     }
 }

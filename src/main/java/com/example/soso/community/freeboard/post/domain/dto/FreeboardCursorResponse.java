@@ -1,6 +1,7 @@
 package com.example.soso.community.freeboard.post.domain.dto;
 
 import com.example.soso.community.common.post.domain.entity.Category;
+import com.example.soso.users.domain.entity.UserType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,6 +30,9 @@ public class FreeboardCursorResponse {
     @Schema(description = "현재 페이지 크기", example = "10")
     private int size;
 
+    @Schema(description = "총 게시글 수", example = "150")
+    private long totalCount;
+
     @Schema(description = "게시글 요약 정보")
     @Getter
     @NoArgsConstructor
@@ -39,7 +43,7 @@ public class FreeboardCursorResponse {
         private Long postId;
 
         @Schema(description = "작성자 정보")
-        private AuthorInfo author;
+        private PostAuthorInfo author;
 
         @Schema(description = "카테고리", example = "restaurant")
         private Category category;
@@ -80,7 +84,7 @@ public class FreeboardCursorResponse {
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
-    public static class AuthorInfo {
+    public static class PostAuthorInfo {
         @Schema(description = "작성자 ID", example = "user123")
         private String userId;
 
@@ -89,5 +93,8 @@ public class FreeboardCursorResponse {
 
         @Schema(description = "작성자 프로필 이미지 URL")
         private String profileImageUrl;
+
+        @Schema(description = "작성자 유형", example = "INHABITANT")
+        private UserType userType;
     }
 }

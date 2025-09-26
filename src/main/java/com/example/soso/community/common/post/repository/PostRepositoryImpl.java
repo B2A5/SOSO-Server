@@ -55,11 +55,11 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                             post.id, // Long postId
                             post.title, // String title
                             post.content, // String content
-                            post.category.stringValue(), // String category
+                            post.category, // Category category
                             post.likeCount, // int likeCount
                             post.commentCount, // int commentCount
                             com.querydsl.core.types.dsl.Expressions.constant(false), // boolean likeByPost
-                            post.createdDate.stringValue(), // String createdAt
+                            post.createdDate, // LocalDateTime createdAt
                             com.querydsl.core.types.dsl.Expressions.nullExpression(com.example.soso.community.common.post.domain.dto.UserSummaryResponse.class) // UserSummaryResponse user
                     ))
                     .from(post)
@@ -73,11 +73,11 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                             post.id, // Long postId
                             post.title, // String title
                             post.content, // String content
-                            post.category.stringValue(), // String category
+                            post.category, // Category category
                             post.likeCount, // int likeCount
                             post.commentCount, // int commentCount
                             like.id.isNotNull(), // boolean likeByPost
-                            post.createdDate.stringValue(), // String createdAt
+                            post.createdDate, // LocalDateTime createdAt
                             com.querydsl.core.types.dsl.Expressions.nullExpression(com.example.soso.community.common.post.domain.dto.UserSummaryResponse.class) // UserSummaryResponse user
                     ))
                     .from(post)

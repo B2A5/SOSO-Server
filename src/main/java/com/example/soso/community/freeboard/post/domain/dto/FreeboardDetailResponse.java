@@ -1,6 +1,7 @@
 package com.example.soso.community.freeboard.post.domain.dto;
 
 import com.example.soso.community.common.post.domain.entity.Category;
+import com.example.soso.users.domain.entity.UserType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,7 +22,7 @@ public class FreeboardDetailResponse {
     private Long postId;
 
     @Schema(description = "작성자 정보")
-    private AuthorInfo author;
+    private PostDetailAuthorInfo author;
 
     @Schema(description = "카테고리", example = "restaurant")
     private Category category;
@@ -56,12 +57,18 @@ public class FreeboardDetailResponse {
     @Schema(description = "작성자 여부 (현재 사용자가 작성자인지)", example = "true")
     private boolean isAuthor;
 
+    @Schema(description = "편집 가능 여부 (인증된 사용자이고 작성자인 경우)", example = "true")
+    private boolean canEdit;
+
+    @Schema(description = "삭제 가능 여부 (인증된 사용자이고 작성자인 경우)", example = "true")
+    private boolean canDelete;
+
     @Schema(description = "작성자 정보")
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
-    public static class AuthorInfo {
+    public static class PostDetailAuthorInfo {
         @Schema(description = "작성자 ID", example = "user123")
         private String userId;
 
@@ -70,5 +77,11 @@ public class FreeboardDetailResponse {
 
         @Schema(description = "작성자 프로필 이미지 URL")
         private String profileImageUrl;
+
+        @Schema(description = "작성자 유형", example = "INHABITANT")
+        private UserType userType;
+
+        @Schema(description = "작성자 주소", example = "서울시 강남구")
+        private String address;
     }
 }

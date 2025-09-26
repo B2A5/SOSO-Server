@@ -44,7 +44,7 @@ public class FreeboardCommentCursorResponse {
         private Long parentCommentId;
 
         @Schema(description = "작성자 정보")
-        private AuthorInfo author;
+        private CommentAuthorInfo author;
 
         @Schema(description = "댓글 내용", example = "좋은 정보 감사합니다!")
         private String content;
@@ -73,7 +73,7 @@ public class FreeboardCommentCursorResponse {
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
-    public static class AuthorInfo {
+    public static class CommentAuthorInfo {
         @Schema(description = "작성자 ID", example = "user123")
         private String userId;
 

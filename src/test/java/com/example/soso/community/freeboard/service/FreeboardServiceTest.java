@@ -219,8 +219,8 @@ class FreeboardServiceTest {
     void getPostsByCursor_ByCategory(Category category) {
         // given
         PostSummaryResponse mockPostSummary = new PostSummaryResponse(
-                1L, "테스트 제목", "테스트 내용", category.getValue(),
-                15, 8, false, "2024-12-25T10:30:00", null
+                1L, "테스트 제목", "테스트 내용", category,
+                15, 8, false, LocalDateTime.of(2024, 12, 25, 10, 30, 0), null
         );
 
         List<PostSummaryResponse> mockPostSummaries = List.of(mockPostSummary);
@@ -248,8 +248,8 @@ class FreeboardServiceTest {
     void getPostsByCursor_AllCategories() {
         // given
         PostSummaryResponse mockPostSummary = new PostSummaryResponse(
-                123L, "테스트 제목", "테스트 내용", Category.RESTAURANT.getValue(),
-                10, 5, true, "2024-12-25T10:30:00", null
+                123L, "테스트 제목", "테스트 내용", Category.RESTAURANT,
+                10, 5, true, LocalDateTime.of(2024, 12, 25, 10, 30, 0), null
         );
 
         List<PostSummaryResponse> mockPostSummaries = List.of(mockPostSummary);
@@ -426,8 +426,8 @@ class FreeboardServiceTest {
         // given
         String longContent = "a".repeat(150); // 100자 초과 내용
         PostSummaryResponse mockPostSummary = new PostSummaryResponse(
-                456L, "긴 내용 테스트", longContent, Category.DAILY_HOBBY.getValue(),
-                0, 0, false, "2024-12-25T10:30:00", null
+                456L, "긴 내용 테스트", longContent, Category.DAILY_HOBBY,
+                0, 0, false, LocalDateTime.of(2024, 12, 25, 10, 30, 0), null
         );
 
         when(postRepository.findAllByCursorPaging(

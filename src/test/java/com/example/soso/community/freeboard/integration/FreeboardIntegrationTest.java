@@ -13,8 +13,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureWebMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -30,19 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureWebMvc
-@TestPropertySource(properties = {
-        "spring.datasource.url=jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=MySQL;DATABASE_TO_LOWER=TRUE;CASE_INSENSITIVE_IDENTIFIERS=TRUE",
-        "spring.datasource.driver-class-name=org.h2.Driver",
-        "spring.datasource.username=sa",
-        "spring.datasource.password=",
-        "spring.jpa.hibernate.ddl-auto=create-drop",
-        "spring.jpa.database-platform=org.hibernate.dialect.H2Dialect",
-        "spring.session.store-type=none",
-        // JWT 설정 추가
-        "jwt.secret-key=ThisIsAVerySecretKeyForTestingPurposesAndItShouldBeLongEnoughToMeetTheRequirements",
-        "jwt.access-token-validity-in-ms=3600000",
-        "jwt.refresh-token-validity-in-ms=1209600000"
-})
+@ActiveProfiles("test")
 @DisplayName("자유게시판 통합 테스트 (JWT 토큰 기반)")
 class FreeboardIntegrationTest {
 
@@ -89,42 +77,6 @@ class FreeboardIntegrationTest {
     }
 
     @Test
-    @DisplayName("자유게시판 단순 테스트: 게시글 작성만")
-    void simpleTest() throws Exception {
-        // 테스트 사용자 생성
-        TestUser testUser = createTestUserWithToken();
-        String authHeader = "Bearer " + testUser.accessToken;
-
-        System.out.println("=== 테스트 사용자 ID: " + testUser.user.getId() + " ===");
-
-        // 1. 게시글 작성
-        MvcResult createResult = mockMvc.perform(multipart("/community/freeboard")
-                        .param("title", "테스트 제목")
-                        .param("content", "테스트 내용")
-                        .param("category", "restaurant")
-                        .header("Authorization", authHeader)
-                        .contentType(MediaType.MULTIPART_FORM_DATA))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.postId").exists())
-                .andReturn();
-
-        // 게시글 ID 추출
-        String createResponseContent = createResult.getResponse().getContentAsString();
-        System.out.println("=== 게시글 작성 응답: " + createResponseContent + " ===");
-
-        FreeboardCreateResponse createResponse = objectMapper.readValue(createResponseContent, FreeboardCreateResponse.class);
-        Long postId = createResponse.getPostId();
-        System.out.println("=== 생성된 게시글 ID: " + postId + " ===");
-
-        // 2. 게시글 상세 조회
-        mockMvc.perform(get("/community/freeboard/{freeboardId}", postId)
-                        .header("Authorization", authHeader))
-                .andDo(print())
-                .andExpect(status().isOk());
-    }
-
-    @Test
     @DisplayName("자유게시판 전체 플로우 테스트: 게시글 작성 → 조회 → 댓글 작성 → 수정 → 삭제")
     void completeWorkflow_Success() throws Exception {
         // 테스트 사용자 생성
@@ -135,7 +87,7 @@ class FreeboardIntegrationTest {
         MvcResult createResult = mockMvc.perform(multipart("/community/freeboard")
                         .param("title", "테스트 제목")
                         .param("content", "테스트 내용")
-                        .param("category", "restaurant")
+                        .param("category", "RESTAURANT")
                         .header("Authorization", authHeader)
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andDo(print())
@@ -252,7 +204,7 @@ class FreeboardIntegrationTest {
         MvcResult createResult = mockMvc.perform(multipart("/community/freeboard")
                         .param("title", "공개 게시글")
                         .param("content", "모든 사용자가 볼 수 있는 글입니다.")
-                        .param("category", "restaurant")
+                .param("category", "RESTAURANT")
                         .header("Authorization", authHeader)
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andExpect(status().isOk())
@@ -289,7 +241,7 @@ class FreeboardIntegrationTest {
         mockMvc.perform(multipart("/community/freeboard")
                         .param("title", "테스트")
                         .param("content", "테스트")
-                        .param("category", "restaurant")
+                        .param("category", "RESTAURANT")
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andDo(print())
                 .andExpect(status().isUnauthorized()); // 401 에러

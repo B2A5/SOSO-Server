@@ -70,6 +70,7 @@ class UnauthenticatedAccessTest {
                 .nickname("테스터_" + System.currentTimeMillis())
                 .email("test" + System.currentTimeMillis() + "@example.com")
                 .profileImageUrl("https://example.com/profile.jpg")
+                .userType(com.example.soso.users.domain.entity.UserType.INHABITANT)
                 .build();
 
         Users savedUser = usersRepository.save(testUser);
@@ -82,7 +83,7 @@ class UnauthenticatedAccessTest {
         MvcResult createResult = mockMvc.perform(multipart("/community/freeboard")
                         .param("title", "공개 테스트 게시글")
                         .param("content", "누구나 볼 수 있는 게시글입니다.")
-                        .param("category", "RESTAURANT")
+                        .param("category", "restaurant")
                         .header("Authorization", authHeader)
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andExpect(status().isOk())
@@ -122,7 +123,7 @@ class UnauthenticatedAccessTest {
         mockMvc.perform(multipart("/community/freeboard")
                         .param("title", "테스트")
                         .param("content", "테스트")
-                        .param("category", "RESTAURANT")
+                        .param("category", "restaurant")
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andDo(print())
                 .andExpect(status().isUnauthorized());
@@ -138,7 +139,7 @@ class UnauthenticatedAccessTest {
         mockMvc.perform(multipart("/community/freeboard/1")
                         .param("title", "수정 시도")
                         .param("content", "수정 내용")
-                        .param("category", "RESTAURANT")
+                        .param("category", "restaurant")
                         .with(request -> {
                             request.setMethod("PATCH");
                             return request;

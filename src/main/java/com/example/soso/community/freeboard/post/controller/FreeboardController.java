@@ -255,7 +255,7 @@ public class FreeboardController {
         Category category = null;
         if (categoryParam != null) {
             try {
-                category = Category.fromValue(categoryParam);
+                category = Category.valueOf(categoryParam.toUpperCase());
             } catch (IllegalArgumentException e) {
                 log.warn("잘못된 카테고리 파라미터: {}", categoryParam);
                 return ResponseEntity.badRequest().build();

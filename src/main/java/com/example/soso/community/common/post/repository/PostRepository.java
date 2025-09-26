@@ -18,4 +18,9 @@ public interface PostRepository extends JpaRepository<Post, Long> , PostReposito
     Page<Post> findByDeletedFalse(Pageable pageable);
 
     Page<Post> findByCategoryAndDeletedFalse(Category category, Pageable pageable);
+
+    // 카테고리별 게시글 수 조회
+    long countByDeletedFalse();
+
+    long countByCategoryAndDeletedFalse(Category category);
 }

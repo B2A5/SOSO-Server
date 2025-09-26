@@ -130,7 +130,7 @@ class FreeboardControllerTest {
         Long postId = 123L;
         FreeboardDetailResponse mockResponse = FreeboardDetailResponse.builder()
                 .postId(postId)
-                .author(FreeboardDetailResponse.AuthorInfo.builder()
+                .author(FreeboardDetailResponse.PostDetailAuthorInfo.builder()
                         .userId("author123")
                         .nickname("작성자")
                         .profileImageUrl("https://example.com/author.jpg")
@@ -158,7 +158,7 @@ class FreeboardControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.postId").value(postId))
                 .andExpect(jsonPath("$.title").value("맛있는 라면집 추천"))
-                .andExpect(jsonPath("$.category").value("restaurant"))
+                .andExpect(jsonPath("$.category").value("RESTAURANT"))
                 .andExpect(jsonPath("$.author.nickname").value("작성자"))
                 .andExpect(jsonPath("$.likeCount").value(15))
                 .andExpect(jsonPath("$.commentCount").value(8));
@@ -176,7 +176,7 @@ class FreeboardControllerTest {
                                 .category(category)
                                 .title("테스트 제목")
                                 .contentPreview("테스트 내용 미리보기...")
-                                .author(FreeboardCursorResponse.AuthorInfo.builder()
+                                .author(FreeboardCursorResponse.PostAuthorInfo.builder()
                                         .userId("author123")
                                         .nickname("작성자")
                                         .build())
@@ -205,7 +205,7 @@ class FreeboardControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.posts").isArray())
-                .andExpect(jsonPath("$.posts[0].category").value(category.getValue()))
+                .andExpect(jsonPath("$.posts[0].category").value(category.toString()))
                 .andExpect(jsonPath("$.hasNext").value(false))
                 .andExpect(jsonPath("$.size").value(1));
     }

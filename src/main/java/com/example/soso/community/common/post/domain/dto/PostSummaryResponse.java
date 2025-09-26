@@ -1,5 +1,6 @@
 package com.example.soso.community.common.post.domain.dto;
 
+import com.example.soso.community.common.post.domain.entity.Category;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(description = "게시글 요약 응답")
@@ -14,8 +15,8 @@ public record PostSummaryResponse(
         @Schema(description = "게시글 내용", example = "방금 생긴 카페 너무 좋아요!")
         String content,
 
-        @Schema(description = "카테고리", example = "DAILYANDHOBBY")
-        String category,
+        @Schema(description = "카테고리", example = "RESTAURANT")
+        Category category,
 
         @Schema(description = "좋아요 수", example = "10")
         int likeCount,
@@ -27,7 +28,7 @@ public record PostSummaryResponse(
         boolean likeByPost,
 
         @Schema(description = "작성 시간", example = "2025-07-28T15:30:00")
-        String createdAt,
+        java.time.LocalDateTime createdAt,
 
         @Schema(description = "작성자 정보")
         UserSummaryResponse user

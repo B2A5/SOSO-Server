@@ -104,13 +104,18 @@ public class FreeboardServiceImpl implements FreeboardService {
                 .map(PostImage::getImageUrl)
                 .toList();
 
+        // 작성자 여부 확인
+        boolean isAuthor = userId != null && post.getUser().getId().equals(userId);
+
         // 응답 DTO 생성
         return FreeboardDetailResponse.builder()
                 .postId(post.getId())
-                .author(FreeboardDetailResponse.AuthorInfo.builder()
+                .author(FreeboardDetailResponse.PostDetailAuthorInfo.builder()
                         .userId(post.getUser().getId())
                         .nickname(post.getUser().getNickname())
                         .profileImageUrl(post.getUser().getProfileImageUrl())
+                        .userType(post.getUser().getUserType())
+                        .address(post.getUser().getLocation())
                         .build())
                 .category(post.getCategory())
                 .title(post.getTitle())
@@ -122,7 +127,9 @@ public class FreeboardServiceImpl implements FreeboardService {
                 .isLiked(isLiked)
                 .createdAt(post.getCreatedAt())
                 .updatedAt(post.getUpdatedAt())
-                .isAuthor(userId != null && post.getUser().getId().equals(userId))
+                .isAuthor(isAuthor)
+                .canEdit(userId != null && isAuthor) // 인증된 사용자이고 작성자인 경우만 편집 가능
+                .canDelete(userId != null && isAuthor) // 인증된 사용자이고 작성자인 경우만 삭제 가능
                 .build();
     }
 
@@ -139,6 +146,11 @@ public class FreeboardServiceImpl implements FreeboardService {
         List<PostSummaryResponse> postSummaries = postRepository.findAllByCursorPaging(
             category, postSortType, size + 1, cursor, null, userId
         );
+
+        // 총 게시글 수 조회
+        long totalCount = category != null
+            ? postRepository.countByCategoryAndDeletedFalse(category)
+            : postRepository.countByDeletedFalse();
 
         // 다음 페이지 존재 여부 확인
         boolean hasNext = postSummaries.size() > size;
@@ -159,6 +171,7 @@ public class FreeboardServiceImpl implements FreeboardService {
                 .hasNext(hasNext)
                 .nextCursor(nextCursor)
                 .size(summaries.size())
+                .totalCount(totalCount)
                 .build();
     }
 
@@ -309,19 +322,20 @@ public class FreeboardServiceImpl implements FreeboardService {
 
     private FreeboardCursorResponse.FreeboardSummary convertToFreeboardSummary(PostSummaryResponse postSummary) {
         // UserSummaryResponse에서 AuthorInfo로 변환
-        FreeboardCursorResponse.AuthorInfo authorInfo = null;
+        FreeboardCursorResponse.PostAuthorInfo authorInfo = null;
         if (postSummary.user() != null) {
-            authorInfo = FreeboardCursorResponse.AuthorInfo.builder()
+            authorInfo = FreeboardCursorResponse.PostAuthorInfo.builder()
                     .userId("unknown") // UserSummaryResponse에 ID가 없으므로 임시값 사용
                     .nickname(postSummary.user().nickname())
                     .profileImageUrl(postSummary.user().profileImageUrl())
+                    .userType(postSummary.user().userType())
                     .build();
         }
 
         return FreeboardCursorResponse.FreeboardSummary.builder()
                 .postId(postSummary.postId())
                 .author(authorInfo)
-                .category(parseCategory(postSummary.category()))
+                .category(postSummary.category())
                 .title(postSummary.title())
                 .contentPreview(postSummary.content().length() > 100 ?
                     postSummary.content().substring(0, 100) + "..." :
@@ -329,7 +343,7 @@ public class FreeboardServiceImpl implements FreeboardService {
                 .likeCount(postSummary.likeCount())
                 .commentCount(postSummary.commentCount())
                 .isLiked(postSummary.likeByPost())
-                .createdAt(LocalDateTime.parse(postSummary.createdAt()))
+                .createdAt(postSummary.createdAt())
                 .viewCount(0) // TODO: viewCount 필드 추가 필요
                 .thumbnailUrl(null) // TODO: thumbnailUrl 처리 필요
                 .imageCount(0) // TODO: imageCount 처리 필요
@@ -364,7 +378,7 @@ public class FreeboardServiceImpl implements FreeboardService {
 
         return FreeboardCursorResponse.FreeboardSummary.builder()
                 .postId(post.getId())
-                .author(FreeboardCursorResponse.AuthorInfo.builder()
+                .author(FreeboardCursorResponse.PostAuthorInfo.builder()
                         .userId(post.getUser().getId())
                         .nickname(post.getUser().getNickname())
                         .profileImageUrl(post.getUser().getProfileImageUrl())
@@ -407,22 +421,4 @@ public class FreeboardServiceImpl implements FreeboardService {
     private record CursorInfo(Long lastId, String lastValue) {
     }
 
-    // Category 파싱을 위한 유틸리티 메서드 (enum name과 value 모두 지원)
-    private Category parseCategory(String categoryStr) {
-        if (categoryStr == null) {
-            return null;
-        }
-
-        try {
-            // 먼저 enum name으로 시도 (QueryDSL stringValue()로 나온 값)
-            return Category.valueOf(categoryStr);
-        } catch (IllegalArgumentException e1) {
-            try {
-                // enum name 실패 시 value로 시도
-                return Category.fromValue(categoryStr);
-            } catch (IllegalArgumentException e2) {
-                throw new IllegalArgumentException("Unknown Category: " + categoryStr);
-            }
-        }
-    }
 }
