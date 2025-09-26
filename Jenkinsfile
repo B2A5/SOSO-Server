@@ -24,7 +24,10 @@ pipeline {
                 sh '''
                     set -eux
                     export SPRING_PROFILES_ACTIVE=test
-                    ./gradlew clean test -Dspring.profiles.active=test
+                    echo "Running tests with profile: $SPRING_PROFILES_ACTIVE"
+                    echo "Java version: $(java -version 2>&1 | head -1)"
+                    echo "Available profiles: test"
+                    ./gradlew clean test -Dspring.profiles.active=test --info --stacktrace -Dspring.config.activate.on-profile=test
                 '''
             }
             post {
