@@ -23,7 +23,8 @@ pipeline {
             steps {
                 sh '''
                     set -eux
-                    ./gradlew clean test
+                    export SPRING_PROFILES_ACTIVE=test
+                    ./gradlew clean test -Dspring.profiles.active=test
                 '''
             }
             post {
