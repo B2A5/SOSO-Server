@@ -65,18 +65,22 @@ public class FreeboardCommentController {
             @ApiResponse(
                     responseCode = "400",
                     description = "잘못된 요청",
-                    content = @Content(examples = {
-                            @ExampleObject(name = "빈 내용", value = "{\"code\": \"INVALID_INPUT\", \"message\": \"댓글 내용은 필수입니다.\"}"),
-                            @ExampleObject(name = "부모 댓글 없음", value = "{\"code\": \"PARENT_COMMENT_NOT_FOUND\", \"message\": \"부모 댓글을 찾을 수 없습니다.\"}")
-                    })
-            ),
-            @ApiResponse(
-                    responseCode = "401",
-                    description = "인증 실패"
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorResponse.class),
+                            examples = {
+                                    @ExampleObject(name = "빈 내용", value = "{\"code\": \"VALIDATION_FAILED\", \"message\": \"[content] 댓글 내용은 필수입니다.\"}"),
+                                    @ExampleObject(name = "댓글 길이 초과", value = "{\"code\": \"COMMENT_CONTENT_TOO_LONG\", \"message\": \"댓글이 너무 깁니다.\"}"),
+                                    @ExampleObject(name = "대댓글 제한", value = "{\"code\": \"REPLY_DEPTH_EXCEEDED\", \"message\": \"대댓글의 대댓글은 허용되지 않습니다.\"}")
+                            }
+                    )
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "게시글을 찾을 수 없음"
+                    description = "게시글을 찾을 수 없음",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorResponse.class),
+                            examples = @ExampleObject(value = "{\"code\": \"POST_NOT_FOUND\", \"message\": \"게시글을 찾을 수 없습니다.\"}")
+                    )
             )
     })
     @PostMapping
@@ -138,19 +142,28 @@ public class FreeboardCommentController {
             @ApiResponse(
                     responseCode = "200",
                     description = "조회 성공",
-                    content = @Content(schema = @Schema(implementation = FreeboardCommentCursorResponse.class))
+                    content = @Content(
+                            schema = @Schema(implementation = FreeboardCommentCursorResponse.class),
+                            examples = @ExampleObject(
+                                    value = "{\"comments\":[{\"commentId\":456,\"postId\":123,\"parentCommentId\":null,\"author\":{\"userId\":\"commenter1\",\"nickname\":\"댓글러\",\"profileImageUrl\":\"https://cdn.example.com/user.jpg\"},\"content\":\"첫 댓글입니다.\",\"replyCount\":0,\"likeCount\":0,\"isLiked\":false,\"depth\":0,\"deleted\":false,\"isAuthor\":false,\"createdAt\":\"2025-01-01T10:10:00\",\"updatedAt\":\"2025-01-01T10:10:00\"}],\"hasNext\":false,\"nextCursor\":null,\"size\":1}"
+                            )
+                    )
             ),
             @ApiResponse(
                     responseCode = "400",
-                    description = "잘못된 파라미터"
-            ),
-            @ApiResponse(
-                    responseCode = "401",
-                    description = "인증 실패"
+                    description = "잘못된 파라미터",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorResponse.class),
+                            examples = @ExampleObject(name = "잘못된 정렬 값", value = "{\"code\": \"INVALID_ENUM_VALUE\", \"message\": \"'INVALID_SORT'은(는) 허용되지 않는 값입니다. 사용 가능한 값: [LATEST, OLDEST]\"}")
+                    )
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "게시글을 찾을 수 없음"
+                    description = "게시글을 찾을 수 없음",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorResponse.class),
+                            examples = @ExampleObject(value = "{\"code\": \"POST_NOT_FOUND\", \"message\": \"게시글을 찾을 수 없습니다.\"}")
+                    )
             )
     })
     @GetMapping
@@ -193,15 +206,46 @@ public class FreeboardCommentController {
                     """
     )
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "수정 성공"),
-            @ApiResponse(responseCode = "400", description = "잘못된 요청"),
-            @ApiResponse(responseCode = "401", description = "인증 실패"),
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "수정 성공",
+                    content = @Content(schema = @Schema(implementation = FreeboardCommentCreateResponse.class))
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "잘못된 요청",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorResponse.class),
+                            examples = {
+                                    @ExampleObject(name = "빈 내용", value = "{\"code\": \"VALIDATION_FAILED\", \"message\": \"[content] 댓글 내용은 필수입니다.\"}"),
+                                    @ExampleObject(name = "댓글 길이 초과", value = "{\"code\": \"COMMENT_CONTENT_TOO_LONG\", \"message\": \"댓글이 너무 깁니다.\"}")
+                            }
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "인증 실패",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorResponse.class),
+                            examples = @ExampleObject(value = "{\"code\": \"AUTHENTICATION_FAILED\", \"message\": \"인증이 필요합니다.\"}")
+                    )
+            ),
             @ApiResponse(
                     responseCode = "403",
                     description = "권한 없음",
-                    content = @Content(examples = @ExampleObject(value = "{\"code\": \"ACCESS_DENIED\", \"message\": \"댓글 수정 권한이 없습니다.\"}"))
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorResponse.class),
+                            examples = @ExampleObject(value = "{\"code\": \"COMMENT_ACCESS_DENIED\", \"message\": \"댓글에 대한 접근 권한이 없습니다.\"}")
+                    )
             ),
-            @ApiResponse(responseCode = "404", description = "댓글을 찾을 수 없음")
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "댓글을 찾을 수 없음",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorResponse.class),
+                            examples = @ExampleObject(value = "{\"code\": \"COMMENT_NOT_FOUND\", \"message\": \"댓글을 찾을 수 없습니다.\"}")
+                    )
+            )
     })
     @PatchMapping("/{commentId}")
     public ResponseEntity<?> updateComment(
@@ -242,9 +286,30 @@ public class FreeboardCommentController {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "삭제 성공"),
-            @ApiResponse(responseCode = "401", description = "인증 실패"),
-            @ApiResponse(responseCode = "403", description = "삭제 권한 없음"),
-            @ApiResponse(responseCode = "404", description = "댓글을 찾을 수 없음")
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "인증 실패",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorResponse.class),
+                            examples = @ExampleObject(value = "{\"code\": \"AUTHENTICATION_FAILED\", \"message\": \"인증이 필요합니다.\"}")
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "삭제 권한 없음",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorResponse.class),
+                            examples = @ExampleObject(value = "{\"code\": \"COMMENT_ACCESS_DENIED\", \"message\": \"댓글에 대한 접근 권한이 없습니다.\"}")
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "댓글을 찾을 수 없음",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorResponse.class),
+                            examples = @ExampleObject(value = "{\"code\": \"COMMENT_NOT_FOUND\", \"message\": \"댓글을 찾을 수 없습니다.\"}")
+                    )
+            )
     })
     @DeleteMapping("/{commentId}")
     public ResponseEntity<?> deleteComment(
@@ -283,9 +348,30 @@ public class FreeboardCommentController {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "영구 삭제 성공"),
-            @ApiResponse(responseCode = "401", description = "인증 실패"),
-            @ApiResponse(responseCode = "403", description = "관리자 권한 필요"),
-            @ApiResponse(responseCode = "404", description = "댓글을 찾을 수 없음")
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "인증 실패",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorResponse.class),
+                            examples = @ExampleObject(value = "{\"code\": \"AUTHENTICATION_FAILED\", \"message\": \"인증이 필요합니다.\"}")
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "관리자 권한 필요",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorResponse.class),
+                            examples = @ExampleObject(value = "{\"code\": \"COMMENT_ACCESS_DENIED\", \"message\": \"댓글에 대한 접근 권한이 없습니다.\"}")
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "댓글을 찾을 수 없음",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorResponse.class),
+                            examples = @ExampleObject(value = "{\"code\": \"COMMENT_NOT_FOUND\", \"message\": \"댓글을 찾을 수 없습니다.\"}")
+                    )
+            )
     })
     @DeleteMapping("/{commentId}/force")
     public ResponseEntity<?> hardDeleteComment(

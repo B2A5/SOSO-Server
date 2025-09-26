@@ -1,12 +1,20 @@
 package com.example.soso.community.freeboard.integration;
 
+import com.example.soso.community.common.comment.domain.dto.*;
+import com.example.soso.community.common.comment.domain.repository.CommentRepository;
+import com.example.soso.community.common.likes.repository.CommentLikeRepository;
+import com.example.soso.community.common.likes.repository.PostLikeRepository;
+import com.example.soso.community.common.post.repository.PostImageRepository;
+import com.example.soso.community.common.post.repository.PostRepository;
+import com.example.soso.community.freeboard.comment.domain.dto.*;
 import com.example.soso.community.freeboard.post.domain.dto.*;
 import com.example.soso.community.freeboard.util.TestUserHelper;
 import com.example.soso.community.freeboard.util.TestUserHelper.TestUser;
-import com.example.soso.community.common.comment.domain.dto.*;
-import com.example.soso.community.freeboard.comment.domain.dto.*;
 import com.example.soso.config.TestS3Config;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.ArrayList;
+import java.util.List;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,11 +28,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -34,7 +38,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureWebMvc
 @ActiveProfiles("test")
-@Transactional
 @Import(TestS3Config.class)
 @DisplayName("⚡ 성능 및 커서 페이징 통합 테스트")
 class PerformancePaginationIntegrationTest {
@@ -48,6 +51,21 @@ class PerformancePaginationIntegrationTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private PostRepository postRepository;
+
+    @Autowired
+    private PostImageRepository postImageRepository;
+
+    @Autowired
+    private PostLikeRepository postLikeRepository;
+
+    @Autowired
+    private CommentRepository commentRepository;
+
+    @Autowired
+    private CommentLikeRepository commentLikeRepository;
+
     private MockMvc mockMvc;
 
     @BeforeEach
@@ -55,6 +73,16 @@ class PerformancePaginationIntegrationTest {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
                 .apply(springSecurity())
                 .build();
+    }
+
+    @AfterEach
+    void cleanUpTestData() {
+        // FK 제약 순서에 맞춰 하위 엔티티부터 정리
+        commentLikeRepository.deleteAllInBatch();
+        commentRepository.deleteAllInBatch();
+        postLikeRepository.deleteAllInBatch();
+        postImageRepository.deleteAllInBatch();
+        postRepository.deleteAllInBatch();
     }
 
     @Test

@@ -5,6 +5,7 @@ import com.example.soso.community.freeboard.post.service.FreeboardService;
 import com.example.soso.community.common.post.domain.entity.Category;
 import com.example.soso.security.domain.CustomUserDetails;
 import com.example.soso.global.exception.domain.ErrorResponse;
+import com.example.soso.global.exception.domain.PostErrorCode;
 import com.example.soso.global.exception.util.PostException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -74,21 +75,29 @@ public class FreeboardController {
                     responseCode = "400",
                     description = "잘못된 요청",
                     content = @Content(
+                            schema = @Schema(implementation = ErrorResponse.class),
                             examples = {
-                                    @ExampleObject(name = "빈 제목", value = "{\"code\": \"INVALID_INPUT\", \"message\": \"제목은 필수입니다.\"}"),
-                                    @ExampleObject(name = "이미지 초과", value = "{\"code\": \"TOO_MANY_IMAGES\", \"message\": \"이미지는 최대 4장까지 업로드 가능합니다.\"}")
+                                    @ExampleObject(name = "빈 제목", value = "{\"code\": \"VALIDATION_FAILED\", \"message\": \"[title] 제목은 필수입니다.\"}"),
+                                    @ExampleObject(name = "빈 내용", value = "{\"code\": \"VALIDATION_FAILED\", \"message\": \"[content] 내용은 필수입니다.\"}"),
+                                    @ExampleObject(name = "잘못된 카테고리", value = "{\"code\": \"INVALID_ENUM_VALUE\", \"message\": \"'INVALID_CATEGORY'은(는) 허용되지 않는 값입니다. 사용 가능한 값: [DAILY_HOBBY, RESTAURANT, LIVING_CONVENIENCE, NEIGHBORHOOD_NEWS, STARTUP, OTHERS]\"}")
                             }
                     )
             ),
             @ApiResponse(
                     responseCode = "401",
                     description = "인증 실패",
-                    content = @Content(examples = @ExampleObject(value = "{\"code\": \"UNAUTHORIZED\", \"message\": \"로그인이 필요합니다.\"}"))
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorResponse.class),
+                            examples = @ExampleObject(value = "{\"code\": \"AUTHENTICATION_FAILED\", \"message\": \"인증이 필요합니다.\"}")
+                    )
             ),
             @ApiResponse(
                     responseCode = "413",
                     description = "파일 크기 초과",
-                    content = @Content(examples = @ExampleObject(value = "{\"code\": \"FILE_TOO_LARGE\", \"message\": \"파일 크기가 너무 큽니다. (최대 5MB)\"}"))
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorResponse.class),
+                            examples = @ExampleObject(value = "{\"code\": \"FILE_TOO_LARGE\", \"message\": \"파일 크기가 너무 큽니다. (최대 5MB)\"}")
+                    )
             )
     })
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -123,16 +132,24 @@ public class FreeboardController {
             @ApiResponse(
                     responseCode = "200",
                     description = "조회 성공",
-                    content = @Content(schema = @Schema(implementation = FreeboardDetailResponse.class))
+                    content = @Content(
+                            schema = @Schema(implementation = FreeboardDetailResponse.class),
+                            examples = {
+                                    @ExampleObject(
+                                            name = "인증 사용자",
+                                            value = "{\"postId\":123,\"author\":{\"userId\":\"author123\",\"nickname\":\"작성자\",\"profileImageUrl\":\"https://cdn.example.com/profile.jpg\",\"userType\":\"INHABITANT\",\"address\":\"서울시 강남구\"},\"category\":\"RESTAURANT\",\"title\":\"맛있는 라면집 추천해요!\",\"content\":\"인증 사용자가 작성한 게시글입니다.\",\"imageUrls\":[\"https://cdn.example.com/image1.jpg\"],\"likeCount\":10,\"commentCount\":3,\"viewCount\":120,\"isLiked\":true,\"createdAt\":\"2025-01-01T10:00:00\",\"updatedAt\":\"2025-01-02T09:30:00\",\"isAuthor\":true,\"canEdit\":true,\"canDelete\":true}"
+                                    ),
+                                    @ExampleObject(
+                                            name = "비인증 사용자",
+                                            value = "{\"postId\":123,\"author\":{\"userId\":\"author123\",\"nickname\":\"작성자\",\"profileImageUrl\":\"https://cdn.example.com/profile.jpg\",\"userType\":\"INHABITANT\",\"address\":\"서울시 강남구\"},\"category\":\"RESTAURANT\",\"title\":\"맛있는 라면집 추천해요!\",\"content\":\"비인증 사용자가 조회한 게시글입니다.\",\"imageUrls\":[],\"likeCount\":10,\"commentCount\":3,\"viewCount\":120,\"isLiked\":false,\"createdAt\":\"2025-01-01T10:00:00\",\"updatedAt\":\"2025-01-02T09:30:00\",\"isAuthor\":false,\"canEdit\":false,\"canDelete\":false}"
+                                    )
+                            }
+                    )
             ),
             @ApiResponse(
                     responseCode = "404",
                     description = "게시글을 찾을 수 없음",
                     content = @Content(examples = @ExampleObject(value = "{\"code\": \"POST_NOT_FOUND\", \"message\": \"게시글을 찾을 수 없습니다.\"}"))
-            ),
-            @ApiResponse(
-                    responseCode = "401",
-                    description = "인증 실패"
             )
     })
     @GetMapping("/{freeboardId}")
@@ -233,12 +250,31 @@ public class FreeboardController {
             }
     )
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "조회 성공"),
-            @ApiResponse(responseCode = "400", description = "잘못된 파라미터"),
-            @ApiResponse(responseCode = "401", description = "인증 실패")
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "조회 성공",
+                    content = @Content(
+                            schema = @Schema(implementation = FreeboardCursorResponse.class),
+                            examples = @ExampleObject(
+                                    value = "{\"posts\":[{\"postId\":101,\"author\":{\"userId\":\"author101\",\"nickname\":\"작성자\",\"profileImageUrl\":\"https://cdn.example.com/profile.jpg\",\"userType\":\"INHABITANT\"},\"category\":\"RESTAURANT\",\"title\":\"테스트 제목\",\"contentPreview\":\"테스트 내용 미리보기...\",\"thumbnailUrl\":null,\"imageCount\":1,\"likeCount\":5,\"commentCount\":2,\"viewCount\":80,\"isLiked\":false,\"createdAt\":\"2025-01-01T10:00:00\",\"updatedAt\":null}],\"hasNext\":true,\"nextCursor\":\"eyJpZCI6MTAxLCJzb3J0VmFsdWUiOiIyMDI1LTAxLTAxVDEwOjAwOjAwIn0=\",\"size\":1,\"totalCount\":20}"
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "잘못된 파라미터",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorResponse.class),
+                            examples = {
+                                    @ExampleObject(name = "잘못된 카테고리", value = "{\"code\": \"INVALID_CATEGORY\", \"message\": \"유효하지 않은 카테고리입니다.\"}"),
+                                    @ExampleObject(name = "잘못된 정렬 값", value = "{\"code\": \"INVALID_ENUM_VALUE\", \"message\": \"'INVALID_SORT'은(는) 허용되지 않는 값입니다. 사용 가능한 값: [LATEST, LIKE, COMMENT, VIEW]\"}"),
+                                    @ExampleObject(name = "잘못된 커서", value = "{\"code\": \"INVALID_CURSOR\", \"message\": \"유효하지 않은 커서 값입니다.\"}")
+                            }
+                    )
+            )
     })
     @GetMapping
-    public ResponseEntity<FreeboardCursorResponse> getPostsByCursor(
+    public ResponseEntity<?> getPostsByCursor(
             @RequestParam(value = "category", required = false) String categoryParam,
             @RequestParam(defaultValue = "LATEST") FreeboardSortType sort,
             @RequestParam(required = false) String cursor,
@@ -261,7 +297,9 @@ public class FreeboardController {
                 category = Category.valueOf(categoryParam.toUpperCase());
             } catch (IllegalArgumentException e) {
                 log.warn("잘못된 카테고리 파라미터: {}", categoryParam);
-                return ResponseEntity.badRequest().build();
+                return ResponseEntity.badRequest().body(
+                        new ErrorResponse(PostErrorCode.INVALID_CATEGORY.name(), PostErrorCode.INVALID_CATEGORY.getMessage())
+                );
             }
         }
 
@@ -300,15 +338,48 @@ public class FreeboardController {
                     """
     )
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "수정 성공"),
-            @ApiResponse(responseCode = "400", description = "잘못된 요청"),
-            @ApiResponse(responseCode = "401", description = "인증 실패"),
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "수정 성공",
+                    content = @Content(schema = @Schema(implementation = FreeboardCreateResponse.class))
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "잘못된 요청",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorResponse.class),
+                            examples = {
+                                    @ExampleObject(name = "빈 제목", value = "{\"code\": \"VALIDATION_FAILED\", \"message\": \"[title] 제목은 필수입니다.\"}"),
+                                    @ExampleObject(name = "빈 내용", value = "{\"code\": \"VALIDATION_FAILED\", \"message\": \"[content] 내용은 필수입니다.\"}"),
+                                    @ExampleObject(name = "이미지 개수 초과", value = "{\"code\": \"ILLEGAL_ARGUMENT\", \"message\": \"총 이미지 개수는 4개를 초과할 수 없습니다.\"}"),
+                                    @ExampleObject(name = "잘못된 카테고리", value = "{\"code\": \"INVALID_ENUM_VALUE\", \"message\": \"'INVALID_CATEGORY'은(는) 허용되지 않는 값입니다. 사용 가능한 값: [DAILY_HOBBY, RESTAURANT, LIVING_CONVENIENCE, NEIGHBORHOOD_NEWS, STARTUP, OTHERS]\"}")
+                            }
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "인증 실패",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorResponse.class),
+                            examples = @ExampleObject(value = "{\"code\": \"AUTHENTICATION_FAILED\", \"message\": \"인증이 필요합니다.\"}")
+                    )
+            ),
             @ApiResponse(
                     responseCode = "403",
                     description = "권한 없음",
-                    content = @Content(examples = @ExampleObject(value = "{\"code\": \"ACCESS_DENIED\", \"message\": \"수정 권한이 없습니다.\"}"))
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorResponse.class),
+                            examples = @ExampleObject(value = "{\"code\": \"POST_ACCESS_DENIED\", \"message\": \"게시글에 대한 접근 권한이 없습니다.\"}")
+                    )
             ),
-            @ApiResponse(responseCode = "404", description = "게시글을 찾을 수 없음")
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "게시글을 찾을 수 없음",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorResponse.class),
+                            examples = @ExampleObject(value = "{\"code\": \"POST_NOT_FOUND\", \"message\": \"게시글을 찾을 수 없습니다.\"}")
+                    )
+            )
     })
     @PatchMapping(value = "/{freeboardId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> updatePost(
@@ -348,9 +419,30 @@ public class FreeboardController {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "삭제 성공"),
-            @ApiResponse(responseCode = "401", description = "인증 실패"),
-            @ApiResponse(responseCode = "403", description = "삭제 권한 없음"),
-            @ApiResponse(responseCode = "404", description = "게시글을 찾을 수 없음")
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "인증 실패",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorResponse.class),
+                            examples = @ExampleObject(value = "{\"code\": \"AUTHENTICATION_FAILED\", \"message\": \"인증이 필요합니다.\"}")
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "삭제 권한 없음",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorResponse.class),
+                            examples = @ExampleObject(value = "{\"code\": \"POST_ACCESS_DENIED\", \"message\": \"게시글에 대한 접근 권한이 없습니다.\"}")
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "게시글을 찾을 수 없음",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorResponse.class),
+                            examples = @ExampleObject(value = "{\"code\": \"POST_NOT_FOUND\", \"message\": \"게시글을 찾을 수 없습니다.\"}")
+                    )
+            )
     })
     @DeleteMapping("/{freeboardId}")
     public ResponseEntity<?> deletePost(
@@ -387,9 +479,30 @@ public class FreeboardController {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "영구 삭제 성공"),
-            @ApiResponse(responseCode = "401", description = "인증 실패"),
-            @ApiResponse(responseCode = "403", description = "관리자 권한 필요"),
-            @ApiResponse(responseCode = "404", description = "게시글을 찾을 수 없음")
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "인증 실패",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorResponse.class),
+                            examples = @ExampleObject(value = "{\"code\": \"AUTHENTICATION_FAILED\", \"message\": \"인증이 필요합니다.\"}")
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "관리자 권한 필요",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorResponse.class),
+                            examples = @ExampleObject(value = "{\"code\": \"POST_ACCESS_DENIED\", \"message\": \"게시글에 대한 접근 권한이 없습니다.\"}")
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "게시글을 찾을 수 없음",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorResponse.class),
+                            examples = @ExampleObject(value = "{\"code\": \"POST_NOT_FOUND\", \"message\": \"게시글을 찾을 수 없습니다.\"}")
+                    )
+            )
     })
     @DeleteMapping("/{freeboardId}/force")
     public ResponseEntity<?> hardDeletePost(

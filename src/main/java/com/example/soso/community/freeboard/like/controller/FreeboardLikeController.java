@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -54,12 +55,18 @@ public class FreeboardLikeController {
             @ApiResponse(
                     responseCode = "401",
                     description = "인증 실패",
-                    content = @Content(examples = @ExampleObject(value = "{\"code\": \"UNAUTHORIZED\", \"message\": \"로그인이 필요합니다.\"}"))
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorResponse.class),
+                            examples = @ExampleObject(value = "{\"code\": \"AUTHENTICATION_FAILED\", \"message\": \"인증이 필요합니다.\"}")
+                    )
             ),
             @ApiResponse(
                     responseCode = "404",
                     description = "게시글을 찾을 수 없음",
-                    content = @Content(examples = @ExampleObject(value = "{\"code\": \"POST_NOT_FOUND\", \"message\": \"게시글을 찾을 수 없습니다.\"}"))
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorResponse.class),
+                            examples = @ExampleObject(value = "{\"code\": \"NOT_FOUND\", \"message\": \"해당 게시글을 찾을 수 없습니다.\"}")
+                    )
             )
     })
     @PostMapping
@@ -103,12 +110,18 @@ public class FreeboardLikeController {
             @ApiResponse(
                     responseCode = "401",
                     description = "인증 실패",
-                    content = @Content(examples = @ExampleObject(value = "{\"code\": \"UNAUTHORIZED\", \"message\": \"로그인이 필요합니다.\"}"))
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorResponse.class),
+                            examples = @ExampleObject(value = "{\"code\": \"AUTHENTICATION_FAILED\", \"message\": \"인증이 필요합니다.\"}")
+                    )
             ),
             @ApiResponse(
                     responseCode = "404",
                     description = "게시글을 찾을 수 없음",
-                    content = @Content(examples = @ExampleObject(value = "{\"code\": \"POST_NOT_FOUND\", \"message\": \"게시글을 찾을 수 없습니다.\"}"))
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorResponse.class),
+                            examples = @ExampleObject(value = "{\"code\": \"NOT_FOUND\", \"message\": \"해당 게시글을 찾을 수 없습니다.\"}")
+                    )
             )
     })
     @GetMapping
