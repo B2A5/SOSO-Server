@@ -119,7 +119,19 @@ public class FreeboardCommentServiceImpl
     @Override
     protected List<Comment> fetchComments(Long postId, LocalDateTime cursorTime,
                                         Pageable pageable, FreeboardCommentSortType sortType) {
-        return commentRepository.findByPostIdAndDeletedFalse(postId, pageable);
+        if (cursorTime == null) {
+            // 첫 페이지인 경우 - 소프트 삭제된 댓글도 포함하여 조회 (댓글 구조 유지)
+            return commentRepository.findByPostId(postId, pageable);
+        } else {
+            // 커서 기반 페이징 - 소프트 삭제된 댓글도 포함하여 조회
+            if (sortType == FreeboardCommentSortType.LATEST) {
+                // 최신순: cursorTime보다 이전 댓글들 조회
+                return commentRepository.findByPostIdAndCreatedDateBefore(postId, cursorTime, pageable);
+            } else {
+                // 오래된순: cursorTime보다 이후 댓글들 조회
+                return commentRepository.findByPostIdAndCreatedDateAfter(postId, cursorTime, pageable);
+            }
+        }
     }
 
     private FreeboardCommentCursorResponse.FreeboardCommentSummary createCommentSummary(Comment comment, String userId) {
@@ -138,7 +150,7 @@ public class FreeboardCommentServiceImpl
                 .content(comment.isDeleted() ? "삭제된 댓글입니다." : comment.getContent())
                 .replyCount(replyCount)
                 .depth(depth)
-                .isDeleted(comment.isDeleted())
+                .deleted(comment.isDeleted())
                 .isAuthor(comment.getUser().getId().equals(userId))
                 .createdAt(comment.getCreatedDate())
                 .updatedAt(comment.getLastModifiedDate())

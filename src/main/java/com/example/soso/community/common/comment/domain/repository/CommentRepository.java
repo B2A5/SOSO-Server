@@ -3,6 +3,7 @@ package com.example.soso.community.common.comment.domain.repository;
 import com.example.soso.community.common.comment.domain.entity.Comment;
 import com.example.soso.community.common.post.domain.entity.Post;
 import com.example.soso.users.domain.entity.Users;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Pageable;
@@ -26,7 +27,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     @Query("select c.id from Comment c where c.post.id = :postId")
     List<Long> findIdsByPostId(@Param("postId") Long postId);
 
-    // 자유게시판 댓글 조회를 위한 추가 메서드들
+    // 자유게시판 댓글 조회를 위한 추가 메서드들 (삭제된 댓글 제외)
     List<Comment> findByPostIdAndDeletedFalse(Long postId, Pageable pageable);
 
     List<Comment> findByParentId(Long parentId);
@@ -37,4 +38,16 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     Optional<Comment> findByIdAndDeletedFalse(Long commentId);
 
     int countByPostIdAndDeletedFalse(Long postId);
+
+    // 커서 기반 페이징을 위한 메서드들 (삭제된 댓글 제외)
+    List<Comment> findByPostIdAndDeletedFalseAndCreatedDateBefore(Long postId, LocalDateTime createdDate, Pageable pageable);
+
+    List<Comment> findByPostIdAndDeletedFalseAndCreatedDateAfter(Long postId, LocalDateTime createdDate, Pageable pageable);
+
+    // 소프트 삭제된 댓글도 포함하여 조회하는 메서드들 (댓글 구조 유지용)
+    List<Comment> findByPostId(Long postId, Pageable pageable);
+
+    List<Comment> findByPostIdAndCreatedDateBefore(Long postId, LocalDateTime createdDate, Pageable pageable);
+
+    List<Comment> findByPostIdAndCreatedDateAfter(Long postId, LocalDateTime createdDate, Pageable pageable);
 }

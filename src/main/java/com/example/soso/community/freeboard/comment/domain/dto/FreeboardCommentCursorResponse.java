@@ -56,7 +56,7 @@ public class FreeboardCommentCursorResponse {
         private int depth;
 
         @Schema(description = "삭제된 댓글 여부", example = "false")
-        private boolean isDeleted;
+        private boolean deleted;
 
         @Schema(description = "현재 사용자가 작성한 댓글인지", example = "true")
         private boolean isAuthor;
