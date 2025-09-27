@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        APP_IMAGE = "localTest/soso-server:latest"
+        APP_IMAGE = "localtest/soso-server:latest"
     }
 
     options {
