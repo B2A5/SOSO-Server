@@ -1,0 +1,4551 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="x-ua-compatible" content="IE=edge"/>
+<title>Test results - &#x1f510; 인증/미인증 권한 시나리오 테스트</title>
+<link href="../css/base-style.css" rel="stylesheet" type="text/css"/>
+<link href="../css/style.css" rel="stylesheet" type="text/css"/>
+<script src="../js/report.js" type="text/javascript"></script>
+</head>
+<body>
+<div id="content">
+<h1>&#x1f510; 인증/미인증 권한 시나리오 테스트</h1>
+<div class="breadcrumbs">
+<a href="../index.html">all</a> &gt; 
+<a href="../packages/com.example.soso.community.freeboard.integration.html">com.example.soso.community.freeboard.integration</a> &gt; AuthenticationPermissionTest</div>
+<div id="summary">
+<table>
+<tr>
+<td>
+<div class="summaryGroup">
+<table>
+<tr>
+<td>
+<div class="infoBox" id="tests">
+<div class="counter">3</div>
+<p>tests</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="failures">
+<div class="counter">0</div>
+<p>failures</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="ignored">
+<div class="counter">0</div>
+<p>ignored</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="duration">
+<div class="counter">0.509s</div>
+<p>duration</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</td>
+<td>
+<div class="infoBox success" id="successRate">
+<div class="percent">100%</div>
+<p>successful</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="tab-container">
+<ul class="tabLinks">
+<li>
+<a href="#">Tests</a>
+</li>
+<li>
+<a href="#">Standard output</a>
+</li>
+</ul>
+<div class="tab">
+<h2>Tests</h2>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>Method name</th>
+<th>Duration</th>
+<th>Result</th>
+</tr>
+</thead>
+<tr>
+<td class="success">&#x1f464; 인증된 사용자의 권한별 상세 테스트</td>
+<td class="success">authenticatedUserPermissionDetails()</td>
+<td class="success">0.161s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">&#x1f513; 미인증 사용자의 접근 권한 매트릭스 테스트</td>
+<td class="success">unauthenticatedUserAccessMatrix()</td>
+<td class="success">0.192s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">&#x1f504; 사용자 유형별 권한 상호작용 테스트</td>
+<td class="success">userTypeInteractionTest()</td>
+<td class="success">0.156s</td>
+<td class="success">passed</td>
+</tr>
+</table>
+</div>
+<div class="tab">
+<h2>Standard output</h2>
+<span class="code">
+<pre>2025-09-27T05:51:31.544Z  INFO 281 --- [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.example.soso.community.freeboard.integration.AuthenticationPermissionTest]: AuthenticationPermissionTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2025-09-27T05:51:31.551Z  INFO 281 --- [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.example.soso.SosoApplication for test class com.example.soso.community.freeboard.integration.AuthenticationPermissionTest
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.3)
+
+2025-09-27T05:51:31.566Z  INFO 281 --- [    Test worker] c.e.s.c.f.i.AuthenticationPermissionTest : Starting AuthenticationPermissionTest using Java 21.0.8 with PID 281 (started by root in /workspace)
+2025-09-27T05:51:31.566Z DEBUG 281 --- [    Test worker] c.e.s.c.f.i.AuthenticationPermissionTest : Running with Spring Boot v3.5.3, Spring v6.2.8
+2025-09-27T05:51:31.566Z  INFO 281 --- [    Test worker] c.e.s.c.f.i.AuthenticationPermissionTest : The following 1 profile is active: &quot;test&quot;
+2025-09-27T05:51:31.567Z DEBUG 281 --- [    Test worker] o.s.w.c.s.GenericWebApplicationContext   : Refreshing org.springframework.web.context.support.GenericWebApplicationContext@5e6c9912
+2025-09-27T05:51:31.640Z  INFO 281 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-09-27T05:51:31.640Z  INFO 281 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2025-09-27T05:51:31.642Z  INFO 281 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 0 ms. Found 0 Redis repository interfaces.
+2025-09-27T05:51:31.660Z  INFO 281 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-09-27T05:51:31.660Z  INFO 281 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-09-27T05:51:31.668Z  INFO 281 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 7 ms. Found 6 JPA repository interfaces.
+2025-09-27T05:51:31.669Z  INFO 281 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-09-27T05:51:31.669Z  INFO 281 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2025-09-27T05:51:31.672Z  INFO 281 --- [    Test worker] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.example.soso.community.common.comment.domain.repository.CommentRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-09-27T05:51:31.672Z  INFO 281 --- [    Test worker] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.example.soso.community.common.likes.repository.CommentLikeRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-09-27T05:51:31.672Z  INFO 281 --- [    Test worker] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.example.soso.community.common.likes.repository.PostLikeRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-09-27T05:51:31.672Z  INFO 281 --- [    Test worker] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.example.soso.community.common.post.repository.PostImageRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-09-27T05:51:31.672Z  INFO 281 --- [    Test worker] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.example.soso.community.common.post.repository.PostRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-09-27T05:51:31.672Z  INFO 281 --- [    Test worker] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.example.soso.users.repository.UsersRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-09-27T05:51:31.672Z  INFO 281 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 2 ms. Found 0 Redis repository interfaces.
+2025-09-27T05:51:31.695Z  INFO 281 --- [    Test worker] o.s.cloud.context.scope.GenericScope     : BeanFactory id=f70bdde0-1195-34c9-8899-c5446bd8b3ba
+2025-09-27T05:51:31.720Z  INFO 281 --- [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-09-27T05:51:31.721Z  INFO 281 --- [    Test worker] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-09-27T05:51:31.724Z  INFO 281 --- [    Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-09-27T05:51:31.725Z  INFO 281 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-5 - Starting...
+2025-09-27T05:51:31.726Z  INFO 281 --- [    Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-5 - Added connection conn40: url=jdbc:h2:mem:authtest user=SA
+2025-09-27T05:51:31.726Z  INFO 281 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-5 - Start completed.
+2025-09-27T05:51:31.727Z  WARN 281 --- [    Test worker] org.hibernate.orm.deprecation            : HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-09-27T05:51:31.727Z  INFO 281 --- [    Test worker] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-5)']
+	Database driver: undefined/unknown
+	Database version: 2.3.232
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-09-27T05:51:31.764Z  INFO 281 --- [    Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-09-27T05:51:31.765Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    drop table if exists comment_likes cascade 
+Hibernate: 
+    drop table if exists comment_likes cascade 
+2025-09-27T05:51:31.765Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    drop table if exists comments cascade 
+Hibernate: 
+    drop table if exists comments cascade 
+2025-09-27T05:51:31.765Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    drop table if exists post cascade 
+Hibernate: 
+    drop table if exists post cascade 
+2025-09-27T05:51:31.765Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    drop table if exists post_image cascade 
+Hibernate: 
+    drop table if exists post_image cascade 
+2025-09-27T05:51:31.765Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    drop table if exists post_like cascade 
+Hibernate: 
+    drop table if exists post_like cascade 
+2025-09-27T05:51:31.765Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    drop table if exists user_interests cascade 
+Hibernate: 
+    drop table if exists user_interests cascade 
+2025-09-27T05:51:31.765Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    drop table if exists users cascade 
+Hibernate: 
+    drop table if exists users cascade 
+2025-09-27T05:51:31.766Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    create table comment_likes (
+        comment_id bigint,
+        id bigint generated by default as identity,
+        user_id varchar(36),
+        primary key (id),
+        unique (comment_id, user_id)
+    )
+Hibernate: 
+    create table comment_likes (
+        comment_id bigint,
+        id bigint generated by default as identity,
+        user_id varchar(36),
+        primary key (id),
+        unique (comment_id, user_id)
+    )
+2025-09-27T05:51:31.767Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    create table comments (
+        deleted boolean not null,
+        like_count integer not null,
+        created_date timestamp(6),
+        id bigint generated by default as identity,
+        last_modified_date timestamp(6),
+        parent_id bigint,
+        post_id bigint,
+        user_id varchar(36),
+        content clob,
+        primary key (id)
+    )
+Hibernate: 
+    create table comments (
+        deleted boolean not null,
+        like_count integer not null,
+        created_date timestamp(6),
+        id bigint generated by default as identity,
+        last_modified_date timestamp(6),
+        parent_id bigint,
+        post_id bigint,
+        user_id varchar(36),
+        content clob,
+        primary key (id)
+    )
+2025-09-27T05:51:31.767Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    create table post (
+        comment_count integer not null,
+        deleted boolean not null,
+        like_count integer not null,
+        view_count integer not null,
+        created_date timestamp(6),
+        id bigint generated by default as identity,
+        last_modified_date timestamp(6),
+        user_id varchar(36),
+        title varchar(255),
+        category enum ('DAILY_HOBBY','LIVING_CONVENIENCE','NEIGHBORHOOD_NEWS','OTHERS','RESTAURANT','STARTUP'),
+        content clob,
+        primary key (id)
+    )
+Hibernate: 
+    create table post (
+        comment_count integer not null,
+        deleted boolean not null,
+        like_count integer not null,
+        view_count integer not null,
+        created_date timestamp(6),
+        id bigint generated by default as identity,
+        last_modified_date timestamp(6),
+        user_id varchar(36),
+        title varchar(255),
+        category enum ('DAILY_HOBBY','LIVING_CONVENIENCE','NEIGHBORHOOD_NEWS','OTHERS','RESTAURANT','STARTUP'),
+        content clob,
+        primary key (id)
+    )
+2025-09-27T05:51:31.768Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    create table post_image (
+        sequence integer not null,
+        id bigint generated by default as identity,
+        post_id bigint,
+        image_url varchar(255),
+        primary key (id)
+    )
+Hibernate: 
+    create table post_image (
+        sequence integer not null,
+        id bigint generated by default as identity,
+        post_id bigint,
+        image_url varchar(255),
+        primary key (id)
+    )
+2025-09-27T05:51:31.769Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    create table post_like (
+        id bigint generated by default as identity,
+        post_id bigint,
+        user_id varchar(36),
+        primary key (id),
+        unique (post_id, user_id)
+    )
+Hibernate: 
+    create table post_like (
+        id bigint generated by default as identity,
+        post_id bigint,
+        user_id varchar(36),
+        primary key (id),
+        unique (post_id, user_id)
+    )
+2025-09-27T05:51:31.769Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    create table user_interests (
+        users_id varchar(36) not null,
+        interest_type enum ('ACCOMMODATION_FOOD','ART_SPORTS','MANUFACTURING','OTHER','TRANSPORT','WELFARE','WHOLESALE_RETAIL')
+    )
+Hibernate: 
+    create table user_interests (
+        users_id varchar(36) not null,
+        interest_type enum ('ACCOMMODATION_FOOD','ART_SPORTS','MANUFACTURING','OTHER','TRANSPORT','WELFARE','WHOLESALE_RETAIL')
+    )
+2025-09-27T05:51:31.770Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    create table users (
+        created_date timestamp(6),
+        last_modified_date timestamp(6),
+        id varchar(36) not null,
+        email varchar(255),
+        latitude varchar(255),
+        location varchar(255),
+        longitude varchar(255),
+        nickname varchar(255),
+        profile_image_url varchar(255),
+        username varchar(255),
+        age_range enum ('FIFTIES','FORTIES','SIXTIES_AND_OVER','TEENS','THIRTIES','TWENTIES'),
+        budget enum ('OVER_1B','THOUSANDS_2000','THOUSANDS_3000_5000','THOUSANDS_5000_7000','THOUSANDS_7000_TO_1B','UNDER_1000'),
+        gender enum ('FEMALE','MALE'),
+        startup_experience enum ('NO','YES'),
+        user_type enum ('FOUNDER','INHABITANT'),
+        primary key (id)
+    )
+Hibernate: 
+    create table users (
+        created_date timestamp(6),
+        last_modified_date timestamp(6),
+        id varchar(36) not null,
+        email varchar(255),
+        latitude varchar(255),
+        location varchar(255),
+        longitude varchar(255),
+        nickname varchar(255),
+        profile_image_url varchar(255),
+        username varchar(255),
+        age_range enum ('FIFTIES','FORTIES','SIXTIES_AND_OVER','TEENS','THIRTIES','TWENTIES'),
+        budget enum ('OVER_1B','THOUSANDS_2000','THOUSANDS_3000_5000','THOUSANDS_5000_7000','THOUSANDS_7000_TO_1B','UNDER_1000'),
+        gender enum ('FEMALE','MALE'),
+        startup_experience enum ('NO','YES'),
+        user_type enum ('FOUNDER','INHABITANT'),
+        primary key (id)
+    )
+2025-09-27T05:51:31.770Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    alter table if exists comment_likes 
+       add constraint FK3wa5u7bs1p1o9hmavtgdgk1go 
+       foreign key (comment_id) 
+       references comments
+Hibernate: 
+    alter table if exists comment_likes 
+       add constraint FK3wa5u7bs1p1o9hmavtgdgk1go 
+       foreign key (comment_id) 
+       references comments
+2025-09-27T05:51:31.771Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    alter table if exists comment_likes 
+       add constraint FK6h3lbneryl5pyb9ykaju7werx 
+       foreign key (user_id) 
+       references users
+Hibernate: 
+    alter table if exists comment_likes 
+       add constraint FK6h3lbneryl5pyb9ykaju7werx 
+       foreign key (user_id) 
+       references users
+2025-09-27T05:51:31.772Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    alter table if exists comments 
+       add constraint FKlri30okf66phtcgbe5pok7cc0 
+       foreign key (parent_id) 
+       references comments
+Hibernate: 
+    alter table if exists comments 
+       add constraint FKlri30okf66phtcgbe5pok7cc0 
+       foreign key (parent_id) 
+       references comments
+2025-09-27T05:51:31.772Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    alter table if exists comments 
+       add constraint FKbqnvawwwv4gtlctsi3o7vs131 
+       foreign key (post_id) 
+       references post
+Hibernate: 
+    alter table if exists comments 
+       add constraint FKbqnvawwwv4gtlctsi3o7vs131 
+       foreign key (post_id) 
+       references post
+2025-09-27T05:51:31.773Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    alter table if exists comments 
+       add constraint FK8omq0tc18jd43bu5tjh6jvraq 
+       foreign key (user_id) 
+       references users
+Hibernate: 
+    alter table if exists comments 
+       add constraint FK8omq0tc18jd43bu5tjh6jvraq 
+       foreign key (user_id) 
+       references users
+2025-09-27T05:51:31.774Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    alter table if exists post 
+       add constraint FK7ky67sgi7k0ayf22652f7763r 
+       foreign key (user_id) 
+       references users
+Hibernate: 
+    alter table if exists post 
+       add constraint FK7ky67sgi7k0ayf22652f7763r 
+       foreign key (user_id) 
+       references users
+2025-09-27T05:51:31.775Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    alter table if exists post_image 
+       add constraint FKsip7qv57jw2fw50g97t16nrjr 
+       foreign key (post_id) 
+       references post
+Hibernate: 
+    alter table if exists post_image 
+       add constraint FKsip7qv57jw2fw50g97t16nrjr 
+       foreign key (post_id) 
+       references post
+2025-09-27T05:51:31.775Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    alter table if exists post_like 
+       add constraint FKj7iy0k7n3d0vkh8o7ibjna884 
+       foreign key (post_id) 
+       references post
+Hibernate: 
+    alter table if exists post_like 
+       add constraint FKj7iy0k7n3d0vkh8o7ibjna884 
+       foreign key (post_id) 
+       references post
+2025-09-27T05:51:31.776Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    alter table if exists post_like 
+       add constraint FKijnjmw0imnatadr3agtk0udip 
+       foreign key (user_id) 
+       references users
+Hibernate: 
+    alter table if exists post_like 
+       add constraint FKijnjmw0imnatadr3agtk0udip 
+       foreign key (user_id) 
+       references users
+2025-09-27T05:51:31.777Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    alter table if exists user_interests 
+       add constraint FKh3yx7krvumpnrwi8t1vu62qkx 
+       foreign key (users_id) 
+       references users
+Hibernate: 
+    alter table if exists user_interests 
+       add constraint FKh3yx7krvumpnrwi8t1vu62qkx 
+       foreign key (users_id) 
+       references users
+2025-09-27T05:51:31.778Z  INFO 281 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-09-27T05:51:31.895Z  INFO 281 --- [    Test worker] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2025-09-27T05:51:31.910Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : 33 mappings in 'requestMappingHandlerMapping'
+2025-09-27T05:51:31.917Z DEBUG 281 --- [    Test worker] o.s.w.s.handler.SimpleUrlHandlerMapping  : Patterns [/webjars/**, /**, /swagger-ui/**, /swagger-ui*/*swagger-initializer.js, /swagger-ui*/**] in 'resourceHandlerMapping'
+2025-09-27T05:51:31.925Z  WARN 281 --- [    Test worker] thorizationManagerRequestMatcherRegistry : One of the patterns in [GET, /community/freeboard/**] is missing a leading slash. This is discouraged; please include the leading slash in all your request matcher patterns. In future versions of Spring Security, leaving out the leading slash will result in an exception.
+2025-09-27T05:51:31.948Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerAdapter : ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+2025-09-27T05:51:31.952Z DEBUG 281 --- [    Test worker] .m.m.a.ExceptionHandlerExceptionResolver : ControllerAdvice beans: 2 @ExceptionHandler, 1 ResponseBodyAdvice
+2025-09-27T05:51:32.015Z  INFO 281 --- [    Test worker] c.e.s.c.f.i.AuthenticationPermissionTest : Started AuthenticationPermissionTest in 0.463 seconds (process running for 9.346)
+2025-09-27T05:51:32.018Z  INFO 281 --- [    Test worker] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2025-09-27T05:51:32.018Z  INFO 281 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2025-09-27T05:51:32.018Z  INFO 281 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 0 ms
+
+&#x1f504; 사용자 유형별 상호작용 테스트...
+2025-09-27T05:51:32.023Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* insert for
+        com.example.soso.users.domain.entity.Users */insert 
+    into
+        users (age_range, budget, created_date, email, gender, last_modified_date, latitude, location, longitude, nickname, profile_image_url, startup_experience, user_type, username, id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert for
+        com.example.soso.users.domain.entity.Users */insert 
+    into
+        users (age_range, budget, created_date, email, gender, last_modified_date, latitude, location, longitude, nickname, profile_image_url, startup_experience, user_type, username, id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+2025-09-27T05:51:32.027Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* insert for
+        com.example.soso.users.domain.entity.Users.interests */insert 
+    into
+        user_interests (users_id, interest_type) 
+    values
+        (?, ?)
+Hibernate: 
+    /* insert for
+        com.example.soso.users.domain.entity.Users.interests */insert 
+    into
+        user_interests (users_id, interest_type) 
+    values
+        (?, ?)
+2025-09-27T05:51:32.027Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* insert for
+        com.example.soso.users.domain.entity.Users.interests */insert 
+    into
+        user_interests (users_id, interest_type) 
+    values
+        (?, ?)
+Hibernate: 
+    /* insert for
+        com.example.soso.users.domain.entity.Users.interests */insert 
+    into
+        user_interests (users_id, interest_type) 
+    values
+        (?, ?)
+2025-09-27T05:51:32.030Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* insert for
+        com.example.soso.users.domain.entity.Users */insert 
+    into
+        users (age_range, budget, created_date, email, gender, last_modified_date, latitude, location, longitude, nickname, profile_image_url, startup_experience, user_type, username, id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert for
+        com.example.soso.users.domain.entity.Users */insert 
+    into
+        users (age_range, budget, created_date, email, gender, last_modified_date, latitude, location, longitude, nickname, profile_image_url, startup_experience, user_type, username, id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+&#x1f465; 사용자 준비:
+  - 창업가: 창업가문어508
+  - 거주민: 거주민문어968
+2025-09-27T05:51:32.034Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    select
+        u1_0.id,
+        u1_0.age_range,
+        u1_0.budget,
+        u1_0.created_date,
+        u1_0.email,
+        u1_0.gender,
+        u1_0.last_modified_date,
+        u1_0.latitude,
+        u1_0.location,
+        u1_0.longitude,
+        u1_0.nickname,
+        u1_0.profile_image_url,
+        u1_0.startup_experience,
+        u1_0.user_type,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.age_range,
+        u1_0.budget,
+        u1_0.created_date,
+        u1_0.email,
+        u1_0.gender,
+        u1_0.last_modified_date,
+        u1_0.latitude,
+        u1_0.location,
+        u1_0.longitude,
+        u1_0.nickname,
+        u1_0.profile_image_url,
+        u1_0.startup_experience,
+        u1_0.user_type,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2025-09-27T05:51:32.035Z DEBUG 281 --- [    Test worker] c.e.s.s.filter.JwtAuthenticationFilter   : JWT 인증 성공: b5c589ca-e21e-4c2a-b4b4-a9c54a3f0dc2
+2025-09-27T05:51:32.035Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.community.freeboard.post.controller.FreeboardController#createPost(FreeboardCreateRequest, CustomUserDetails)
+2025-09-27T05:51:32.044Z  INFO 281 --- [    Test worker] c.e.s.c.f.p.c.FreeboardController        : 자유게시판 글 작성 요청: userId=b5c589ca-e21e-4c2a-b4b4-a9c54a3f0dc2, category=STARTUP, title=창업가의 투자 유치 경험담, imageCount=0
+2025-09-27T05:51:32.044Z  INFO 281 --- [    Test worker] c.e.s.c.f.p.s.FreeboardServiceImpl       : 자유게시판 글 작성 시작: userId=b5c589ca-e21e-4c2a-b4b4-a9c54a3f0dc2, category=STARTUP
+2025-09-27T05:51:32.044Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    select
+        u1_0.id,
+        u1_0.age_range,
+        u1_0.budget,
+        u1_0.created_date,
+        u1_0.email,
+        u1_0.gender,
+        u1_0.last_modified_date,
+        u1_0.latitude,
+        u1_0.location,
+        u1_0.longitude,
+        u1_0.nickname,
+        u1_0.profile_image_url,
+        u1_0.startup_experience,
+        u1_0.user_type,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.age_range,
+        u1_0.budget,
+        u1_0.created_date,
+        u1_0.email,
+        u1_0.gender,
+        u1_0.last_modified_date,
+        u1_0.latitude,
+        u1_0.location,
+        u1_0.longitude,
+        u1_0.nickname,
+        u1_0.profile_image_url,
+        u1_0.startup_experience,
+        u1_0.user_type,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2025-09-27T05:51:32.051Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* insert for
+        com.example.soso.community.common.post.domain.entity.Post */insert 
+    into
+        post (category, comment_count, content, created_date, deleted, last_modified_date, like_count, title, user_id, view_count, id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, default)
+Hibernate: 
+    /* insert for
+        com.example.soso.community.common.post.domain.entity.Post */insert 
+    into
+        post (category, comment_count, content, created_date, deleted, last_modified_date, like_count, title, user_id, view_count, id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, default)
+2025-09-27T05:51:32.052Z  INFO 281 --- [    Test worker] c.e.s.c.f.p.s.FreeboardServiceImpl       : 자유게시판 글 작성 완료: postId=1, imageCount=0
+2025-09-27T05:51:32.053Z  INFO 281 --- [    Test worker] c.e.s.c.f.p.c.FreeboardController        : 자유게시판 글 작성 완료: postId=1
+2025-09-27T05:51:32.054Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:32.054Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.example.soso.community.freeboard.post.domain.dto.FreeboardCreateResponse@6fecd5d4]
+2025-09-27T05:51:32.057Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    select
+        u1_0.id,
+        u1_0.age_range,
+        u1_0.budget,
+        u1_0.created_date,
+        u1_0.email,
+        u1_0.gender,
+        u1_0.last_modified_date,
+        u1_0.latitude,
+        u1_0.location,
+        u1_0.longitude,
+        u1_0.nickname,
+        u1_0.profile_image_url,
+        u1_0.startup_experience,
+        u1_0.user_type,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.age_range,
+        u1_0.budget,
+        u1_0.created_date,
+        u1_0.email,
+        u1_0.gender,
+        u1_0.last_modified_date,
+        u1_0.latitude,
+        u1_0.location,
+        u1_0.longitude,
+        u1_0.nickname,
+        u1_0.profile_image_url,
+        u1_0.startup_experience,
+        u1_0.user_type,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2025-09-27T05:51:32.058Z DEBUG 281 --- [    Test worker] c.e.s.s.filter.JwtAuthenticationFilter   : JWT 인증 성공: fe506377-8370-4635-aca0-6e97fbc6fea8
+2025-09-27T05:51:32.059Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.community.freeboard.post.controller.FreeboardController#createPost(FreeboardCreateRequest, CustomUserDetails)
+2025-09-27T05:51:32.059Z  INFO 281 --- [    Test worker] c.e.s.c.f.p.c.FreeboardController        : 자유게시판 글 작성 요청: userId=fe506377-8370-4635-aca0-6e97fbc6fea8, category=RESTAURANT, title=동네 맛집 리스트 최종판, imageCount=0
+2025-09-27T05:51:32.059Z  INFO 281 --- [    Test worker] c.e.s.c.f.p.s.FreeboardServiceImpl       : 자유게시판 글 작성 시작: userId=fe506377-8370-4635-aca0-6e97fbc6fea8, category=RESTAURANT
+2025-09-27T05:51:32.060Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    select
+        u1_0.id,
+        u1_0.age_range,
+        u1_0.budget,
+        u1_0.created_date,
+        u1_0.email,
+        u1_0.gender,
+        u1_0.last_modified_date,
+        u1_0.latitude,
+        u1_0.location,
+        u1_0.longitude,
+        u1_0.nickname,
+        u1_0.profile_image_url,
+        u1_0.startup_experience,
+        u1_0.user_type,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.age_range,
+        u1_0.budget,
+        u1_0.created_date,
+        u1_0.email,
+        u1_0.gender,
+        u1_0.last_modified_date,
+        u1_0.latitude,
+        u1_0.location,
+        u1_0.longitude,
+        u1_0.nickname,
+        u1_0.profile_image_url,
+        u1_0.startup_experience,
+        u1_0.user_type,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2025-09-27T05:51:32.060Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* insert for
+        com.example.soso.community.common.post.domain.entity.Post */insert 
+    into
+        post (category, comment_count, content, created_date, deleted, last_modified_date, like_count, title, user_id, view_count, id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, default)
+Hibernate: 
+    /* insert for
+        com.example.soso.community.common.post.domain.entity.Post */insert 
+    into
+        post (category, comment_count, content, created_date, deleted, last_modified_date, like_count, title, user_id, view_count, id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, default)
+2025-09-27T05:51:32.061Z  INFO 281 --- [    Test worker] c.e.s.c.f.p.s.FreeboardServiceImpl       : 자유게시판 글 작성 완료: postId=2, imageCount=0
+2025-09-27T05:51:32.061Z  INFO 281 --- [    Test worker] c.e.s.c.f.p.c.FreeboardController        : 자유게시판 글 작성 완료: postId=2
+2025-09-27T05:51:32.062Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:32.062Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.example.soso.community.freeboard.post.domain.dto.FreeboardCreateResponse@17ad4591]
+&#x1f4dd; 게시글 준비:
+  - 창업가 게시글: 1
+  - 거주민 게시글: 2
+
+&#x1f500; 교차 접근 권한 테스트:
+  1. 창업가가 거주민 게시글 조회...
+2025-09-27T05:51:32.064Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    select
+        u1_0.id,
+        u1_0.age_range,
+        u1_0.budget,
+        u1_0.created_date,
+        u1_0.email,
+        u1_0.gender,
+        u1_0.last_modified_date,
+        u1_0.latitude,
+        u1_0.location,
+        u1_0.longitude,
+        u1_0.nickname,
+        u1_0.profile_image_url,
+        u1_0.startup_experience,
+        u1_0.user_type,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.age_range,
+        u1_0.budget,
+        u1_0.created_date,
+        u1_0.email,
+        u1_0.gender,
+        u1_0.last_modified_date,
+        u1_0.latitude,
+        u1_0.location,
+        u1_0.longitude,
+        u1_0.nickname,
+        u1_0.profile_image_url,
+        u1_0.startup_experience,
+        u1_0.user_type,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2025-09-27T05:51:32.064Z DEBUG 281 --- [    Test worker] c.e.s.s.filter.JwtAuthenticationFilter   : JWT 인증 성공: b5c589ca-e21e-4c2a-b4b4-a9c54a3f0dc2
+2025-09-27T05:51:32.065Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.community.freeboard.post.controller.FreeboardController#getPost(Long)
+2025-09-27T05:51:32.065Z  INFO 281 --- [    Test worker] c.e.s.c.f.p.c.FreeboardController        : 자유게시판 글 조회 요청: freeboardId=2, userId=b5c589ca-e21e-4c2a-b4b4-a9c54a3f0dc2
+2025-09-27T05:51:32.065Z DEBUG 281 --- [    Test worker] c.e.s.c.f.p.s.FreeboardServiceImpl       : 자유게시판 글 조회: postId=2, userId=b5c589ca-e21e-4c2a-b4b4-a9c54a3f0dc2
+2025-09-27T05:51:32.103Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* &lt;criteria&gt; */ select
+        p1_0.id,
+        p1_0.category,
+        p1_0.comment_count,
+        p1_0.content,
+        p1_0.created_date,
+        p1_0.deleted,
+        p1_0.last_modified_date,
+        p1_0.like_count,
+        p1_0.title,
+        p1_0.user_id,
+        p1_0.view_count 
+    from
+        post p1_0 
+    where
+        p1_0.id=? 
+        and not(p1_0.deleted)
+Hibernate: 
+    /* &lt;criteria&gt; */ select
+        p1_0.id,
+        p1_0.category,
+        p1_0.comment_count,
+        p1_0.content,
+        p1_0.created_date,
+        p1_0.deleted,
+        p1_0.last_modified_date,
+        p1_0.like_count,
+        p1_0.title,
+        p1_0.user_id,
+        p1_0.view_count 
+    from
+        post p1_0 
+    where
+        p1_0.id=? 
+        and not(p1_0.deleted)
+2025-09-27T05:51:32.120Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* update
+        for com.example.soso.community.common.post.domain.entity.Post */update post 
+    set
+        category=?,
+        comment_count=?,
+        content=?,
+        deleted=?,
+        last_modified_date=?,
+        like_count=?,
+        title=?,
+        user_id=?,
+        view_count=? 
+    where
+        id=?
+Hibernate: 
+    /* update
+        for com.example.soso.community.common.post.domain.entity.Post */update post 
+    set
+        category=?,
+        comment_count=?,
+        content=?,
+        deleted=?,
+        last_modified_date=?,
+        like_count=?,
+        title=?,
+        user_id=?,
+        view_count=? 
+    where
+        id=?
+2025-09-27T05:51:32.122Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* &lt;criteria&gt; */ select
+        pl1_0.id 
+    from
+        post_like pl1_0 
+    left join
+        post p1_0 
+            on p1_0.id=pl1_0.post_id 
+    left join
+        users u1_0 
+            on u1_0.id=pl1_0.user_id 
+    where
+        p1_0.id=? 
+        and u1_0.id=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    /* &lt;criteria&gt; */ select
+        pl1_0.id 
+    from
+        post_like pl1_0 
+    left join
+        post p1_0 
+            on p1_0.id=pl1_0.post_id 
+    left join
+        users u1_0 
+            on u1_0.id=pl1_0.user_id 
+    where
+        p1_0.id=? 
+        and u1_0.id=? 
+    fetch
+        first ? rows only
+2025-09-27T05:51:32.124Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    select
+        i1_0.post_id,
+        i1_0.id,
+        i1_0.image_url,
+        i1_0.sequence 
+    from
+        post_image i1_0 
+    where
+        i1_0.post_id=?
+Hibernate: 
+    select
+        i1_0.post_id,
+        i1_0.id,
+        i1_0.image_url,
+        i1_0.sequence 
+    from
+        post_image i1_0 
+    where
+        i1_0.post_id=?
+2025-09-27T05:51:32.125Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    select
+        u1_0.id,
+        u1_0.age_range,
+        u1_0.budget,
+        u1_0.created_date,
+        u1_0.email,
+        u1_0.gender,
+        u1_0.last_modified_date,
+        u1_0.latitude,
+        u1_0.location,
+        u1_0.longitude,
+        u1_0.nickname,
+        u1_0.profile_image_url,
+        u1_0.startup_experience,
+        u1_0.user_type,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.age_range,
+        u1_0.budget,
+        u1_0.created_date,
+        u1_0.email,
+        u1_0.gender,
+        u1_0.last_modified_date,
+        u1_0.latitude,
+        u1_0.location,
+        u1_0.longitude,
+        u1_0.nickname,
+        u1_0.profile_image_url,
+        u1_0.startup_experience,
+        u1_0.user_type,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2025-09-27T05:51:32.126Z DEBUG 281 --- [    Test worker] c.e.s.c.f.p.c.FreeboardController        : 자유게시판 글 조회 완료: freeboardId=2, viewCount=1
+2025-09-27T05:51:32.130Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:32.130Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.example.soso.community.freeboard.post.domain.dto.FreeboardDetailResponse@1ed7bed0]
+
+MockHttpServletRequest:
+      HTTP Method = GET
+      Request URI = /community/freeboard/2
+       Parameters = {}
+          Headers = [Authorization:&quot;Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJiNWM1ODljYS1lMjFlLTRjMmEtYjRiNC1hOWM1NGEzZjBkYzIiLCJpYXQiOjE3NTg5NTIyOTIsImV4cCI6MTc1ODk1NTg5Mn0.EIH6uv0Z-76ezAqXeSoSZrryAnniqMUyvalpytRV5eveuonYH61g3LGer3DaUqwAzqkTsb0u0GIhOUb3pwRW_g&quot;]
+             Body = &lt;no character encoding set&gt;
+    Session Attrs = {}
+
+Handler:
+             Type = com.example.soso.community.freeboard.post.controller.FreeboardController
+           Method = com.example.soso.community.freeboard.post.controller.FreeboardController#getPost(Long)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 200
+    Error message = null
+          Headers = [Vary:&quot;Origin&quot;, &quot;Access-Control-Request-Method&quot;, &quot;Access-Control-Request-Headers&quot;, Content-Type:&quot;application/json&quot;, X-Content-Type-Options:&quot;nosniff&quot;, X-XSS-Protection:&quot;0&quot;, Cache-Control:&quot;no-cache, no-store, max-age=0, must-revalidate&quot;, Pragma:&quot;no-cache&quot;, Expires:&quot;0&quot;, X-Frame-Options:&quot;DENY&quot;]
+     Content type = application/json
+             Body = {&quot;postId&quot;:2,&quot;author&quot;:{&quot;userId&quot;:&quot;fe506377-8370-4635-aca0-6e97fbc6fea8&quot;,&quot;nickname&quot;:&quot;거주민문어968&quot;,&quot;profileImageUrl&quot;:&quot;https://example.com/inhabitant-profile.jpg&quot;,&quot;userType&quot;:&quot;INHABITANT&quot;,&quot;address&quot;:&quot;11110&quot;},&quot;category&quot;:&quot;RESTAURANT&quot;,&quot;title&quot;:&quot;동네 맛집 리스트 최종판&quot;,&quot;content&quot;:&quot;테스트용 게시글 내용입니다.&quot;,&quot;imageUrls&quot;:[],&quot;likeCount&quot;:0,&quot;commentCount&quot;:0,&quot;viewCount&quot;:1,&quot;createdAt&quot;:&quot;2025-09-27T05:51:32.060682&quot;,&quot;updatedAt&quot;:&quot;2025-09-27T05:51:32.116964878&quot;,&quot;canEdit&quot;:false,&quot;canDelete&quot;:false,&quot;liked&quot;:false,&quot;isLiked&quot;:false}
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+  2. 거주민이 창업가 게시글 조회...
+2025-09-27T05:51:32.133Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    select
+        u1_0.id,
+        u1_0.age_range,
+        u1_0.budget,
+        u1_0.created_date,
+        u1_0.email,
+        u1_0.gender,
+        u1_0.last_modified_date,
+        u1_0.latitude,
+        u1_0.location,
+        u1_0.longitude,
+        u1_0.nickname,
+        u1_0.profile_image_url,
+        u1_0.startup_experience,
+        u1_0.user_type,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.age_range,
+        u1_0.budget,
+        u1_0.created_date,
+        u1_0.email,
+        u1_0.gender,
+        u1_0.last_modified_date,
+        u1_0.latitude,
+        u1_0.location,
+        u1_0.longitude,
+        u1_0.nickname,
+        u1_0.profile_image_url,
+        u1_0.startup_experience,
+        u1_0.user_type,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2025-09-27T05:51:32.134Z DEBUG 281 --- [    Test worker] c.e.s.s.filter.JwtAuthenticationFilter   : JWT 인증 성공: fe506377-8370-4635-aca0-6e97fbc6fea8
+2025-09-27T05:51:32.135Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.community.freeboard.post.controller.FreeboardController#getPost(Long)
+2025-09-27T05:51:32.135Z  INFO 281 --- [    Test worker] c.e.s.c.f.p.c.FreeboardController        : 자유게시판 글 조회 요청: freeboardId=1, userId=fe506377-8370-4635-aca0-6e97fbc6fea8
+2025-09-27T05:51:32.135Z DEBUG 281 --- [    Test worker] c.e.s.c.f.p.s.FreeboardServiceImpl       : 자유게시판 글 조회: postId=1, userId=fe506377-8370-4635-aca0-6e97fbc6fea8
+2025-09-27T05:51:32.136Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* &lt;criteria&gt; */ select
+        p1_0.id,
+        p1_0.category,
+        p1_0.comment_count,
+        p1_0.content,
+        p1_0.created_date,
+        p1_0.deleted,
+        p1_0.last_modified_date,
+        p1_0.like_count,
+        p1_0.title,
+        p1_0.user_id,
+        p1_0.view_count 
+    from
+        post p1_0 
+    where
+        p1_0.id=? 
+        and not(p1_0.deleted)
+Hibernate: 
+    /* &lt;criteria&gt; */ select
+        p1_0.id,
+        p1_0.category,
+        p1_0.comment_count,
+        p1_0.content,
+        p1_0.created_date,
+        p1_0.deleted,
+        p1_0.last_modified_date,
+        p1_0.like_count,
+        p1_0.title,
+        p1_0.user_id,
+        p1_0.view_count 
+    from
+        post p1_0 
+    where
+        p1_0.id=? 
+        and not(p1_0.deleted)
+2025-09-27T05:51:32.138Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* update
+        for com.example.soso.community.common.post.domain.entity.Post */update post 
+    set
+        category=?,
+        comment_count=?,
+        content=?,
+        deleted=?,
+        last_modified_date=?,
+        like_count=?,
+        title=?,
+        user_id=?,
+        view_count=? 
+    where
+        id=?
+Hibernate: 
+    /* update
+        for com.example.soso.community.common.post.domain.entity.Post */update post 
+    set
+        category=?,
+        comment_count=?,
+        content=?,
+        deleted=?,
+        last_modified_date=?,
+        like_count=?,
+        title=?,
+        user_id=?,
+        view_count=? 
+    where
+        id=?
+2025-09-27T05:51:32.138Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* &lt;criteria&gt; */ select
+        pl1_0.id 
+    from
+        post_like pl1_0 
+    left join
+        post p1_0 
+            on p1_0.id=pl1_0.post_id 
+    left join
+        users u1_0 
+            on u1_0.id=pl1_0.user_id 
+    where
+        p1_0.id=? 
+        and u1_0.id=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    /* &lt;criteria&gt; */ select
+        pl1_0.id 
+    from
+        post_like pl1_0 
+    left join
+        post p1_0 
+            on p1_0.id=pl1_0.post_id 
+    left join
+        users u1_0 
+            on u1_0.id=pl1_0.user_id 
+    where
+        p1_0.id=? 
+        and u1_0.id=? 
+    fetch
+        first ? rows only
+2025-09-27T05:51:32.139Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    select
+        i1_0.post_id,
+        i1_0.id,
+        i1_0.image_url,
+        i1_0.sequence 
+    from
+        post_image i1_0 
+    where
+        i1_0.post_id=?
+Hibernate: 
+    select
+        i1_0.post_id,
+        i1_0.id,
+        i1_0.image_url,
+        i1_0.sequence 
+    from
+        post_image i1_0 
+    where
+        i1_0.post_id=?
+2025-09-27T05:51:32.139Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    select
+        u1_0.id,
+        u1_0.age_range,
+        u1_0.budget,
+        u1_0.created_date,
+        u1_0.email,
+        u1_0.gender,
+        u1_0.last_modified_date,
+        u1_0.latitude,
+        u1_0.location,
+        u1_0.longitude,
+        u1_0.nickname,
+        u1_0.profile_image_url,
+        u1_0.startup_experience,
+        u1_0.user_type,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.age_range,
+        u1_0.budget,
+        u1_0.created_date,
+        u1_0.email,
+        u1_0.gender,
+        u1_0.last_modified_date,
+        u1_0.latitude,
+        u1_0.location,
+        u1_0.longitude,
+        u1_0.nickname,
+        u1_0.profile_image_url,
+        u1_0.startup_experience,
+        u1_0.user_type,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2025-09-27T05:51:32.140Z DEBUG 281 --- [    Test worker] c.e.s.c.f.p.c.FreeboardController        : 자유게시판 글 조회 완료: freeboardId=1, viewCount=1
+2025-09-27T05:51:32.140Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:32.140Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.example.soso.community.freeboard.post.domain.dto.FreeboardDetailResponse@27955a53]
+
+MockHttpServletRequest:
+      HTTP Method = GET
+      Request URI = /community/freeboard/1
+       Parameters = {}
+          Headers = [Authorization:&quot;Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJmZTUwNjM3Ny04MzcwLTQ2MzUtYWNhMC02ZTk3ZmJjNmZlYTgiLCJpYXQiOjE3NTg5NTIyOTIsImV4cCI6MTc1ODk1NTg5Mn0.p_OvhB5y4KaVC9J5SrsZyXXLrAFLx_l-E7ddohlOsBbQuGYDYUBTNJYor38WUDd5QShk2vBOkfJ3-CrrvDXZ5Q&quot;]
+             Body = &lt;no character encoding set&gt;
+    Session Attrs = {}
+
+Handler:
+             Type = com.example.soso.community.freeboard.post.controller.FreeboardController
+           Method = com.example.soso.community.freeboard.post.controller.FreeboardController#getPost(Long)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 200
+    Error message = null
+          Headers = [Vary:&quot;Origin&quot;, &quot;Access-Control-Request-Method&quot;, &quot;Access-Control-Request-Headers&quot;, Content-Type:&quot;application/json&quot;, X-Content-Type-Options:&quot;nosniff&quot;, X-XSS-Protection:&quot;0&quot;, Cache-Control:&quot;no-cache, no-store, max-age=0, must-revalidate&quot;, Pragma:&quot;no-cache&quot;, Expires:&quot;0&quot;, X-Frame-Options:&quot;DENY&quot;]
+     Content type = application/json
+             Body = {&quot;postId&quot;:1,&quot;author&quot;:{&quot;userId&quot;:&quot;b5c589ca-e21e-4c2a-b4b4-a9c54a3f0dc2&quot;,&quot;nickname&quot;:&quot;창업가문어508&quot;,&quot;profileImageUrl&quot;:&quot;https://example.com/founder-profile.jpg&quot;,&quot;userType&quot;:&quot;FOUNDER&quot;,&quot;address&quot;:&quot;11680&quot;},&quot;category&quot;:&quot;STARTUP&quot;,&quot;title&quot;:&quot;창업가의 투자 유치 경험담&quot;,&quot;content&quot;:&quot;테스트용 게시글 내용입니다.&quot;,&quot;imageUrls&quot;:[],&quot;likeCount&quot;:0,&quot;commentCount&quot;:0,&quot;viewCount&quot;:1,&quot;createdAt&quot;:&quot;2025-09-27T05:51:32.048342&quot;,&quot;updatedAt&quot;:&quot;2025-09-27T05:51:32.138046045&quot;,&quot;canEdit&quot;:false,&quot;canDelete&quot;:false,&quot;liked&quot;:false,&quot;isLiked&quot;:false}
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+
+✅ 각자 게시글에 대한 소유권 확인:
+2025-09-27T05:51:32.145Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    select
+        u1_0.id,
+        u1_0.age_range,
+        u1_0.budget,
+        u1_0.created_date,
+        u1_0.email,
+        u1_0.gender,
+        u1_0.last_modified_date,
+        u1_0.latitude,
+        u1_0.location,
+        u1_0.longitude,
+        u1_0.nickname,
+        u1_0.profile_image_url,
+        u1_0.startup_experience,
+        u1_0.user_type,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.age_range,
+        u1_0.budget,
+        u1_0.created_date,
+        u1_0.email,
+        u1_0.gender,
+        u1_0.last_modified_date,
+        u1_0.latitude,
+        u1_0.location,
+        u1_0.longitude,
+        u1_0.nickname,
+        u1_0.profile_image_url,
+        u1_0.startup_experience,
+        u1_0.user_type,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2025-09-27T05:51:32.146Z DEBUG 281 --- [    Test worker] c.e.s.s.filter.JwtAuthenticationFilter   : JWT 인증 성공: b5c589ca-e21e-4c2a-b4b4-a9c54a3f0dc2
+2025-09-27T05:51:32.146Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.community.freeboard.post.controller.FreeboardController#getPost(Long)
+2025-09-27T05:51:32.147Z  INFO 281 --- [    Test worker] c.e.s.c.f.p.c.FreeboardController        : 자유게시판 글 조회 요청: freeboardId=1, userId=b5c589ca-e21e-4c2a-b4b4-a9c54a3f0dc2
+2025-09-27T05:51:32.147Z DEBUG 281 --- [    Test worker] c.e.s.c.f.p.s.FreeboardServiceImpl       : 자유게시판 글 조회: postId=1, userId=b5c589ca-e21e-4c2a-b4b4-a9c54a3f0dc2
+2025-09-27T05:51:32.148Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* &lt;criteria&gt; */ select
+        p1_0.id,
+        p1_0.category,
+        p1_0.comment_count,
+        p1_0.content,
+        p1_0.created_date,
+        p1_0.deleted,
+        p1_0.last_modified_date,
+        p1_0.like_count,
+        p1_0.title,
+        p1_0.user_id,
+        p1_0.view_count 
+    from
+        post p1_0 
+    where
+        p1_0.id=? 
+        and not(p1_0.deleted)
+Hibernate: 
+    /* &lt;criteria&gt; */ select
+        p1_0.id,
+        p1_0.category,
+        p1_0.comment_count,
+        p1_0.content,
+        p1_0.created_date,
+        p1_0.deleted,
+        p1_0.last_modified_date,
+        p1_0.like_count,
+        p1_0.title,
+        p1_0.user_id,
+        p1_0.view_count 
+    from
+        post p1_0 
+    where
+        p1_0.id=? 
+        and not(p1_0.deleted)
+2025-09-27T05:51:32.151Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* update
+        for com.example.soso.community.common.post.domain.entity.Post */update post 
+    set
+        category=?,
+        comment_count=?,
+        content=?,
+        deleted=?,
+        last_modified_date=?,
+        like_count=?,
+        title=?,
+        user_id=?,
+        view_count=? 
+    where
+        id=?
+Hibernate: 
+    /* update
+        for com.example.soso.community.common.post.domain.entity.Post */update post 
+    set
+        category=?,
+        comment_count=?,
+        content=?,
+        deleted=?,
+        last_modified_date=?,
+        like_count=?,
+        title=?,
+        user_id=?,
+        view_count=? 
+    where
+        id=?
+2025-09-27T05:51:32.151Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* &lt;criteria&gt; */ select
+        pl1_0.id 
+    from
+        post_like pl1_0 
+    left join
+        post p1_0 
+            on p1_0.id=pl1_0.post_id 
+    left join
+        users u1_0 
+            on u1_0.id=pl1_0.user_id 
+    where
+        p1_0.id=? 
+        and u1_0.id=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    /* &lt;criteria&gt; */ select
+        pl1_0.id 
+    from
+        post_like pl1_0 
+    left join
+        post p1_0 
+            on p1_0.id=pl1_0.post_id 
+    left join
+        users u1_0 
+            on u1_0.id=pl1_0.user_id 
+    where
+        p1_0.id=? 
+        and u1_0.id=? 
+    fetch
+        first ? rows only
+2025-09-27T05:51:32.152Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    select
+        i1_0.post_id,
+        i1_0.id,
+        i1_0.image_url,
+        i1_0.sequence 
+    from
+        post_image i1_0 
+    where
+        i1_0.post_id=?
+Hibernate: 
+    select
+        i1_0.post_id,
+        i1_0.id,
+        i1_0.image_url,
+        i1_0.sequence 
+    from
+        post_image i1_0 
+    where
+        i1_0.post_id=?
+2025-09-27T05:51:32.152Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    select
+        u1_0.id,
+        u1_0.age_range,
+        u1_0.budget,
+        u1_0.created_date,
+        u1_0.email,
+        u1_0.gender,
+        u1_0.last_modified_date,
+        u1_0.latitude,
+        u1_0.location,
+        u1_0.longitude,
+        u1_0.nickname,
+        u1_0.profile_image_url,
+        u1_0.startup_experience,
+        u1_0.user_type,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.age_range,
+        u1_0.budget,
+        u1_0.created_date,
+        u1_0.email,
+        u1_0.gender,
+        u1_0.last_modified_date,
+        u1_0.latitude,
+        u1_0.location,
+        u1_0.longitude,
+        u1_0.nickname,
+        u1_0.profile_image_url,
+        u1_0.startup_experience,
+        u1_0.user_type,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2025-09-27T05:51:32.153Z DEBUG 281 --- [    Test worker] c.e.s.c.f.p.c.FreeboardController        : 자유게시판 글 조회 완료: freeboardId=1, viewCount=2
+2025-09-27T05:51:32.153Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:32.153Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.example.soso.community.freeboard.post.domain.dto.FreeboardDetailResponse@58f05f55]
+
+MockHttpServletRequest:
+      HTTP Method = GET
+      Request URI = /community/freeboard/1
+       Parameters = {}
+          Headers = [Authorization:&quot;Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJiNWM1ODljYS1lMjFlLTRjMmEtYjRiNC1hOWM1NGEzZjBkYzIiLCJpYXQiOjE3NTg5NTIyOTIsImV4cCI6MTc1ODk1NTg5Mn0.EIH6uv0Z-76ezAqXeSoSZrryAnniqMUyvalpytRV5eveuonYH61g3LGer3DaUqwAzqkTsb0u0GIhOUb3pwRW_g&quot;]
+             Body = &lt;no character encoding set&gt;
+    Session Attrs = {}
+
+Handler:
+             Type = com.example.soso.community.freeboard.post.controller.FreeboardController
+           Method = com.example.soso.community.freeboard.post.controller.FreeboardController#getPost(Long)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 200
+    Error message = null
+          Headers = [Vary:&quot;Origin&quot;, &quot;Access-Control-Request-Method&quot;, &quot;Access-Control-Request-Headers&quot;, Content-Type:&quot;application/json&quot;, X-Content-Type-Options:&quot;nosniff&quot;, X-XSS-Protection:&quot;0&quot;, Cache-Control:&quot;no-cache, no-store, max-age=0, must-revalidate&quot;, Pragma:&quot;no-cache&quot;, Expires:&quot;0&quot;, X-Frame-Options:&quot;DENY&quot;]
+     Content type = application/json
+             Body = {&quot;postId&quot;:1,&quot;author&quot;:{&quot;userId&quot;:&quot;b5c589ca-e21e-4c2a-b4b4-a9c54a3f0dc2&quot;,&quot;nickname&quot;:&quot;창업가문어508&quot;,&quot;profileImageUrl&quot;:&quot;https://example.com/founder-profile.jpg&quot;,&quot;userType&quot;:&quot;FOUNDER&quot;,&quot;address&quot;:&quot;11680&quot;},&quot;category&quot;:&quot;STARTUP&quot;,&quot;title&quot;:&quot;창업가의 투자 유치 경험담&quot;,&quot;content&quot;:&quot;테스트용 게시글 내용입니다.&quot;,&quot;imageUrls&quot;:[],&quot;likeCount&quot;:0,&quot;commentCount&quot;:0,&quot;viewCount&quot;:2,&quot;createdAt&quot;:&quot;2025-09-27T05:51:32.048342&quot;,&quot;updatedAt&quot;:&quot;2025-09-27T05:51:32.150639711&quot;,&quot;canEdit&quot;:true,&quot;canDelete&quot;:true,&quot;liked&quot;:false,&quot;isLiked&quot;:false}
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+2025-09-27T05:51:32.156Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    select
+        u1_0.id,
+        u1_0.age_range,
+        u1_0.budget,
+        u1_0.created_date,
+        u1_0.email,
+        u1_0.gender,
+        u1_0.last_modified_date,
+        u1_0.latitude,
+        u1_0.location,
+        u1_0.longitude,
+        u1_0.nickname,
+        u1_0.profile_image_url,
+        u1_0.startup_experience,
+        u1_0.user_type,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.age_range,
+        u1_0.budget,
+        u1_0.created_date,
+        u1_0.email,
+        u1_0.gender,
+        u1_0.last_modified_date,
+        u1_0.latitude,
+        u1_0.location,
+        u1_0.longitude,
+        u1_0.nickname,
+        u1_0.profile_image_url,
+        u1_0.startup_experience,
+        u1_0.user_type,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2025-09-27T05:51:32.161Z DEBUG 281 --- [    Test worker] c.e.s.s.filter.JwtAuthenticationFilter   : JWT 인증 성공: fe506377-8370-4635-aca0-6e97fbc6fea8
+2025-09-27T05:51:32.161Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.community.freeboard.post.controller.FreeboardController#getPost(Long)
+2025-09-27T05:51:32.161Z  INFO 281 --- [    Test worker] c.e.s.c.f.p.c.FreeboardController        : 자유게시판 글 조회 요청: freeboardId=2, userId=fe506377-8370-4635-aca0-6e97fbc6fea8
+2025-09-27T05:51:32.162Z DEBUG 281 --- [    Test worker] c.e.s.c.f.p.s.FreeboardServiceImpl       : 자유게시판 글 조회: postId=2, userId=fe506377-8370-4635-aca0-6e97fbc6fea8
+2025-09-27T05:51:32.163Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* &lt;criteria&gt; */ select
+        p1_0.id,
+        p1_0.category,
+        p1_0.comment_count,
+        p1_0.content,
+        p1_0.created_date,
+        p1_0.deleted,
+        p1_0.last_modified_date,
+        p1_0.like_count,
+        p1_0.title,
+        p1_0.user_id,
+        p1_0.view_count 
+    from
+        post p1_0 
+    where
+        p1_0.id=? 
+        and not(p1_0.deleted)
+Hibernate: 
+    /* &lt;criteria&gt; */ select
+        p1_0.id,
+        p1_0.category,
+        p1_0.comment_count,
+        p1_0.content,
+        p1_0.created_date,
+        p1_0.deleted,
+        p1_0.last_modified_date,
+        p1_0.like_count,
+        p1_0.title,
+        p1_0.user_id,
+        p1_0.view_count 
+    from
+        post p1_0 
+    where
+        p1_0.id=? 
+        and not(p1_0.deleted)
+2025-09-27T05:51:32.166Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* update
+        for com.example.soso.community.common.post.domain.entity.Post */update post 
+    set
+        category=?,
+        comment_count=?,
+        content=?,
+        deleted=?,
+        last_modified_date=?,
+        like_count=?,
+        title=?,
+        user_id=?,
+        view_count=? 
+    where
+        id=?
+Hibernate: 
+    /* update
+        for com.example.soso.community.common.post.domain.entity.Post */update post 
+    set
+        category=?,
+        comment_count=?,
+        content=?,
+        deleted=?,
+        last_modified_date=?,
+        like_count=?,
+        title=?,
+        user_id=?,
+        view_count=? 
+    where
+        id=?
+2025-09-27T05:51:32.167Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* &lt;criteria&gt; */ select
+        pl1_0.id 
+    from
+        post_like pl1_0 
+    left join
+        post p1_0 
+            on p1_0.id=pl1_0.post_id 
+    left join
+        users u1_0 
+            on u1_0.id=pl1_0.user_id 
+    where
+        p1_0.id=? 
+        and u1_0.id=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    /* &lt;criteria&gt; */ select
+        pl1_0.id 
+    from
+        post_like pl1_0 
+    left join
+        post p1_0 
+            on p1_0.id=pl1_0.post_id 
+    left join
+        users u1_0 
+            on u1_0.id=pl1_0.user_id 
+    where
+        p1_0.id=? 
+        and u1_0.id=? 
+    fetch
+        first ? rows only
+2025-09-27T05:51:32.167Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    select
+        i1_0.post_id,
+        i1_0.id,
+        i1_0.image_url,
+        i1_0.sequence 
+    from
+        post_image i1_0 
+    where
+        i1_0.post_id=?
+Hibernate: 
+    select
+        i1_0.post_id,
+        i1_0.id,
+        i1_0.image_url,
+        i1_0.sequence 
+    from
+        post_image i1_0 
+    where
+        i1_0.post_id=?
+2025-09-27T05:51:32.168Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    select
+        u1_0.id,
+        u1_0.age_range,
+        u1_0.budget,
+        u1_0.created_date,
+        u1_0.email,
+        u1_0.gender,
+        u1_0.last_modified_date,
+        u1_0.latitude,
+        u1_0.location,
+        u1_0.longitude,
+        u1_0.nickname,
+        u1_0.profile_image_url,
+        u1_0.startup_experience,
+        u1_0.user_type,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.age_range,
+        u1_0.budget,
+        u1_0.created_date,
+        u1_0.email,
+        u1_0.gender,
+        u1_0.last_modified_date,
+        u1_0.latitude,
+        u1_0.location,
+        u1_0.longitude,
+        u1_0.nickname,
+        u1_0.profile_image_url,
+        u1_0.startup_experience,
+        u1_0.user_type,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2025-09-27T05:51:32.169Z DEBUG 281 --- [    Test worker] c.e.s.c.f.p.c.FreeboardController        : 자유게시판 글 조회 완료: freeboardId=2, viewCount=2
+2025-09-27T05:51:32.169Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:32.169Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.example.soso.community.freeboard.post.domain.dto.FreeboardDetailResponse@331f6726]
+
+MockHttpServletRequest:
+      HTTP Method = GET
+      Request URI = /community/freeboard/2
+       Parameters = {}
+          Headers = [Authorization:&quot;Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJmZTUwNjM3Ny04MzcwLTQ2MzUtYWNhMC02ZTk3ZmJjNmZlYTgiLCJpYXQiOjE3NTg5NTIyOTIsImV4cCI6MTc1ODk1NTg5Mn0.p_OvhB5y4KaVC9J5SrsZyXXLrAFLx_l-E7ddohlOsBbQuGYDYUBTNJYor38WUDd5QShk2vBOkfJ3-CrrvDXZ5Q&quot;]
+             Body = &lt;no character encoding set&gt;
+    Session Attrs = {}
+
+Handler:
+             Type = com.example.soso.community.freeboard.post.controller.FreeboardController
+           Method = com.example.soso.community.freeboard.post.controller.FreeboardController#getPost(Long)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 200
+    Error message = null
+          Headers = [Vary:&quot;Origin&quot;, &quot;Access-Control-Request-Method&quot;, &quot;Access-Control-Request-Headers&quot;, Content-Type:&quot;application/json&quot;, X-Content-Type-Options:&quot;nosniff&quot;, X-XSS-Protection:&quot;0&quot;, Cache-Control:&quot;no-cache, no-store, max-age=0, must-revalidate&quot;, Pragma:&quot;no-cache&quot;, Expires:&quot;0&quot;, X-Frame-Options:&quot;DENY&quot;]
+     Content type = application/json
+             Body = {&quot;postId&quot;:2,&quot;author&quot;:{&quot;userId&quot;:&quot;fe506377-8370-4635-aca0-6e97fbc6fea8&quot;,&quot;nickname&quot;:&quot;거주민문어968&quot;,&quot;profileImageUrl&quot;:&quot;https://example.com/inhabitant-profile.jpg&quot;,&quot;userType&quot;:&quot;INHABITANT&quot;,&quot;address&quot;:&quot;11110&quot;},&quot;category&quot;:&quot;RESTAURANT&quot;,&quot;title&quot;:&quot;동네 맛집 리스트 최종판&quot;,&quot;content&quot;:&quot;테스트용 게시글 내용입니다.&quot;,&quot;imageUrls&quot;:[],&quot;likeCount&quot;:0,&quot;commentCount&quot;:0,&quot;viewCount&quot;:2,&quot;createdAt&quot;:&quot;2025-09-27T05:51:32.060682&quot;,&quot;updatedAt&quot;:&quot;2025-09-27T05:51:32.166221545&quot;,&quot;canEdit&quot;:true,&quot;canDelete&quot;:true,&quot;liked&quot;:false,&quot;isLiked&quot;:false}
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+✅ 사용자 유형별 상호작용 테스트 완료! &#x1f389;
+2025-09-27T05:51:32.174Z  INFO 281 --- [    Test worker] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2025-09-27T05:51:32.174Z  INFO 281 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2025-09-27T05:51:32.175Z  INFO 281 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 1 ms
+
+&#x1f464; 인증된 사용자 권한 상세 테스트 시작...
+2025-09-27T05:51:32.176Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* insert for
+        com.example.soso.users.domain.entity.Users */insert 
+    into
+        users (age_range, budget, created_date, email, gender, last_modified_date, latitude, location, longitude, nickname, profile_image_url, startup_experience, user_type, username, id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert for
+        com.example.soso.users.domain.entity.Users */insert 
+    into
+        users (age_range, budget, created_date, email, gender, last_modified_date, latitude, location, longitude, nickname, profile_image_url, startup_experience, user_type, username, id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+2025-09-27T05:51:32.177Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* insert for
+        com.example.soso.users.domain.entity.Users.interests */insert 
+    into
+        user_interests (users_id, interest_type) 
+    values
+        (?, ?)
+Hibernate: 
+    /* insert for
+        com.example.soso.users.domain.entity.Users.interests */insert 
+    into
+        user_interests (users_id, interest_type) 
+    values
+        (?, ?)
+2025-09-27T05:51:32.177Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* insert for
+        com.example.soso.users.domain.entity.Users.interests */insert 
+    into
+        user_interests (users_id, interest_type) 
+    values
+        (?, ?)
+Hibernate: 
+    /* insert for
+        com.example.soso.users.domain.entity.Users.interests */insert 
+    into
+        user_interests (users_id, interest_type) 
+    values
+        (?, ?)
+2025-09-27T05:51:32.179Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* insert for
+        com.example.soso.users.domain.entity.Users */insert 
+    into
+        users (age_range, budget, created_date, email, gender, last_modified_date, latitude, location, longitude, nickname, profile_image_url, startup_experience, user_type, username, id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert for
+        com.example.soso.users.domain.entity.Users */insert 
+    into
+        users (age_range, budget, created_date, email, gender, last_modified_date, latitude, location, longitude, nickname, profile_image_url, startup_experience, user_type, username, id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+&#x1f465; 테스트 사용자 준비:
+  - 원작성자: 창업가문어218 (FOUNDER)
+  - 다른사용자: 거주민문어782 (INHABITANT)
+2025-09-27T05:51:32.182Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    select
+        u1_0.id,
+        u1_0.age_range,
+        u1_0.budget,
+        u1_0.created_date,
+        u1_0.email,
+        u1_0.gender,
+        u1_0.last_modified_date,
+        u1_0.latitude,
+        u1_0.location,
+        u1_0.longitude,
+        u1_0.nickname,
+        u1_0.profile_image_url,
+        u1_0.startup_experience,
+        u1_0.user_type,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.age_range,
+        u1_0.budget,
+        u1_0.created_date,
+        u1_0.email,
+        u1_0.gender,
+        u1_0.last_modified_date,
+        u1_0.latitude,
+        u1_0.location,
+        u1_0.longitude,
+        u1_0.nickname,
+        u1_0.profile_image_url,
+        u1_0.startup_experience,
+        u1_0.user_type,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2025-09-27T05:51:32.184Z DEBUG 281 --- [    Test worker] c.e.s.s.filter.JwtAuthenticationFilter   : JWT 인증 성공: a48f6db7-9315-46b5-8e44-bb74db6ff7bd
+2025-09-27T05:51:32.184Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.community.freeboard.post.controller.FreeboardController#createPost(FreeboardCreateRequest, CustomUserDetails)
+2025-09-27T05:51:32.185Z  INFO 281 --- [    Test worker] c.e.s.c.f.p.c.FreeboardController        : 자유게시판 글 작성 요청: userId=a48f6db7-9315-46b5-8e44-bb74db6ff7bd, category=STARTUP, title=권한 테스트용 창업 아이템 아이디어, imageCount=0
+2025-09-27T05:51:32.185Z  INFO 281 --- [    Test worker] c.e.s.c.f.p.s.FreeboardServiceImpl       : 자유게시판 글 작성 시작: userId=a48f6db7-9315-46b5-8e44-bb74db6ff7bd, category=STARTUP
+2025-09-27T05:51:32.185Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    select
+        u1_0.id,
+        u1_0.age_range,
+        u1_0.budget,
+        u1_0.created_date,
+        u1_0.email,
+        u1_0.gender,
+        u1_0.last_modified_date,
+        u1_0.latitude,
+        u1_0.location,
+        u1_0.longitude,
+        u1_0.nickname,
+        u1_0.profile_image_url,
+        u1_0.startup_experience,
+        u1_0.user_type,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.age_range,
+        u1_0.budget,
+        u1_0.created_date,
+        u1_0.email,
+        u1_0.gender,
+        u1_0.last_modified_date,
+        u1_0.latitude,
+        u1_0.location,
+        u1_0.longitude,
+        u1_0.nickname,
+        u1_0.profile_image_url,
+        u1_0.startup_experience,
+        u1_0.user_type,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2025-09-27T05:51:32.186Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* insert for
+        com.example.soso.community.common.post.domain.entity.Post */insert 
+    into
+        post (category, comment_count, content, created_date, deleted, last_modified_date, like_count, title, user_id, view_count, id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, default)
+Hibernate: 
+    /* insert for
+        com.example.soso.community.common.post.domain.entity.Post */insert 
+    into
+        post (category, comment_count, content, created_date, deleted, last_modified_date, like_count, title, user_id, view_count, id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, default)
+2025-09-27T05:51:32.187Z  INFO 281 --- [    Test worker] c.e.s.c.f.p.s.FreeboardServiceImpl       : 자유게시판 글 작성 완료: postId=3, imageCount=0
+2025-09-27T05:51:32.188Z  INFO 281 --- [    Test worker] c.e.s.c.f.p.c.FreeboardController        : 자유게시판 글 작성 완료: postId=3
+2025-09-27T05:51:32.189Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:32.189Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.example.soso.community.freeboard.post.domain.dto.FreeboardCreateResponse@25f5eb5f]
+
+✅ [원작성자] 모든 권한이 있는 사용자 테스트:
+  1. 원작성자의 게시글 조회...
+2025-09-27T05:51:32.191Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    select
+        u1_0.id,
+        u1_0.age_range,
+        u1_0.budget,
+        u1_0.created_date,
+        u1_0.email,
+        u1_0.gender,
+        u1_0.last_modified_date,
+        u1_0.latitude,
+        u1_0.location,
+        u1_0.longitude,
+        u1_0.nickname,
+        u1_0.profile_image_url,
+        u1_0.startup_experience,
+        u1_0.user_type,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.age_range,
+        u1_0.budget,
+        u1_0.created_date,
+        u1_0.email,
+        u1_0.gender,
+        u1_0.last_modified_date,
+        u1_0.latitude,
+        u1_0.location,
+        u1_0.longitude,
+        u1_0.nickname,
+        u1_0.profile_image_url,
+        u1_0.startup_experience,
+        u1_0.user_type,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2025-09-27T05:51:32.192Z DEBUG 281 --- [    Test worker] c.e.s.s.filter.JwtAuthenticationFilter   : JWT 인증 성공: a48f6db7-9315-46b5-8e44-bb74db6ff7bd
+2025-09-27T05:51:32.192Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.community.freeboard.post.controller.FreeboardController#getPost(Long)
+2025-09-27T05:51:32.192Z  INFO 281 --- [    Test worker] c.e.s.c.f.p.c.FreeboardController        : 자유게시판 글 조회 요청: freeboardId=3, userId=a48f6db7-9315-46b5-8e44-bb74db6ff7bd
+2025-09-27T05:51:32.193Z DEBUG 281 --- [    Test worker] c.e.s.c.f.p.s.FreeboardServiceImpl       : 자유게시판 글 조회: postId=3, userId=a48f6db7-9315-46b5-8e44-bb74db6ff7bd
+2025-09-27T05:51:32.194Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* &lt;criteria&gt; */ select
+        p1_0.id,
+        p1_0.category,
+        p1_0.comment_count,
+        p1_0.content,
+        p1_0.created_date,
+        p1_0.deleted,
+        p1_0.last_modified_date,
+        p1_0.like_count,
+        p1_0.title,
+        p1_0.user_id,
+        p1_0.view_count 
+    from
+        post p1_0 
+    where
+        p1_0.id=? 
+        and not(p1_0.deleted)
+Hibernate: 
+    /* &lt;criteria&gt; */ select
+        p1_0.id,
+        p1_0.category,
+        p1_0.comment_count,
+        p1_0.content,
+        p1_0.created_date,
+        p1_0.deleted,
+        p1_0.last_modified_date,
+        p1_0.like_count,
+        p1_0.title,
+        p1_0.user_id,
+        p1_0.view_count 
+    from
+        post p1_0 
+    where
+        p1_0.id=? 
+        and not(p1_0.deleted)
+2025-09-27T05:51:32.197Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* update
+        for com.example.soso.community.common.post.domain.entity.Post */update post 
+    set
+        category=?,
+        comment_count=?,
+        content=?,
+        deleted=?,
+        last_modified_date=?,
+        like_count=?,
+        title=?,
+        user_id=?,
+        view_count=? 
+    where
+        id=?
+Hibernate: 
+    /* update
+        for com.example.soso.community.common.post.domain.entity.Post */update post 
+    set
+        category=?,
+        comment_count=?,
+        content=?,
+        deleted=?,
+        last_modified_date=?,
+        like_count=?,
+        title=?,
+        user_id=?,
+        view_count=? 
+    where
+        id=?
+2025-09-27T05:51:32.198Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* &lt;criteria&gt; */ select
+        pl1_0.id 
+    from
+        post_like pl1_0 
+    left join
+        post p1_0 
+            on p1_0.id=pl1_0.post_id 
+    left join
+        users u1_0 
+            on u1_0.id=pl1_0.user_id 
+    where
+        p1_0.id=? 
+        and u1_0.id=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    /* &lt;criteria&gt; */ select
+        pl1_0.id 
+    from
+        post_like pl1_0 
+    left join
+        post p1_0 
+            on p1_0.id=pl1_0.post_id 
+    left join
+        users u1_0 
+            on u1_0.id=pl1_0.user_id 
+    where
+        p1_0.id=? 
+        and u1_0.id=? 
+    fetch
+        first ? rows only
+2025-09-27T05:51:32.198Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    select
+        i1_0.post_id,
+        i1_0.id,
+        i1_0.image_url,
+        i1_0.sequence 
+    from
+        post_image i1_0 
+    where
+        i1_0.post_id=?
+Hibernate: 
+    select
+        i1_0.post_id,
+        i1_0.id,
+        i1_0.image_url,
+        i1_0.sequence 
+    from
+        post_image i1_0 
+    where
+        i1_0.post_id=?
+2025-09-27T05:51:32.199Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    select
+        u1_0.id,
+        u1_0.age_range,
+        u1_0.budget,
+        u1_0.created_date,
+        u1_0.email,
+        u1_0.gender,
+        u1_0.last_modified_date,
+        u1_0.latitude,
+        u1_0.location,
+        u1_0.longitude,
+        u1_0.nickname,
+        u1_0.profile_image_url,
+        u1_0.startup_experience,
+        u1_0.user_type,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.age_range,
+        u1_0.budget,
+        u1_0.created_date,
+        u1_0.email,
+        u1_0.gender,
+        u1_0.last_modified_date,
+        u1_0.latitude,
+        u1_0.location,
+        u1_0.longitude,
+        u1_0.nickname,
+        u1_0.profile_image_url,
+        u1_0.startup_experience,
+        u1_0.user_type,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2025-09-27T05:51:32.199Z DEBUG 281 --- [    Test worker] c.e.s.c.f.p.c.FreeboardController        : 자유게시판 글 조회 완료: freeboardId=3, viewCount=1
+2025-09-27T05:51:32.200Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:32.200Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.example.soso.community.freeboard.post.domain.dto.FreeboardDetailResponse@2ed22c69]
+
+MockHttpServletRequest:
+      HTTP Method = GET
+      Request URI = /community/freeboard/3
+       Parameters = {}
+          Headers = [Authorization:&quot;Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhNDhmNmRiNy05MzE1LTQ2YjUtOGU0NC1iYjc0ZGI2ZmY3YmQiLCJpYXQiOjE3NTg5NTIyOTIsImV4cCI6MTc1ODk1NTg5Mn0.X1GHN41IVHyQUcWr0nvvkKO92yKANEMTX-DugAn3BelM91ep5OnYT96JH9tSMNbG7UB1uJ17jQygRlsK0oc44w&quot;]
+             Body = &lt;no character encoding set&gt;
+    Session Attrs = {}
+
+Handler:
+             Type = com.example.soso.community.freeboard.post.controller.FreeboardController
+           Method = com.example.soso.community.freeboard.post.controller.FreeboardController#getPost(Long)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 200
+    Error message = null
+          Headers = [Vary:&quot;Origin&quot;, &quot;Access-Control-Request-Method&quot;, &quot;Access-Control-Request-Headers&quot;, Content-Type:&quot;application/json&quot;, X-Content-Type-Options:&quot;nosniff&quot;, X-XSS-Protection:&quot;0&quot;, Cache-Control:&quot;no-cache, no-store, max-age=0, must-revalidate&quot;, Pragma:&quot;no-cache&quot;, Expires:&quot;0&quot;, X-Frame-Options:&quot;DENY&quot;]
+     Content type = application/json
+             Body = {&quot;postId&quot;:3,&quot;author&quot;:{&quot;userId&quot;:&quot;a48f6db7-9315-46b5-8e44-bb74db6ff7bd&quot;,&quot;nickname&quot;:&quot;창업가문어218&quot;,&quot;profileImageUrl&quot;:&quot;https://example.com/founder-profile.jpg&quot;,&quot;userType&quot;:&quot;FOUNDER&quot;,&quot;address&quot;:&quot;11680&quot;},&quot;category&quot;:&quot;STARTUP&quot;,&quot;title&quot;:&quot;권한 테스트용 창업 아이템 아이디어&quot;,&quot;content&quot;:&quot;테스트용 게시글 내용입니다.&quot;,&quot;imageUrls&quot;:[],&quot;likeCount&quot;:0,&quot;commentCount&quot;:0,&quot;viewCount&quot;:1,&quot;createdAt&quot;:&quot;2025-09-27T05:51:32.186344&quot;,&quot;updatedAt&quot;:&quot;2025-09-27T05:51:32.196965711&quot;,&quot;canEdit&quot;:true,&quot;canDelete&quot;:true,&quot;liked&quot;:false,&quot;isLiked&quot;:false}
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+  2. 원작성자의 게시글 수정...
+2025-09-27T05:51:32.203Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    select
+        u1_0.id,
+        u1_0.age_range,
+        u1_0.budget,
+        u1_0.created_date,
+        u1_0.email,
+        u1_0.gender,
+        u1_0.last_modified_date,
+        u1_0.latitude,
+        u1_0.location,
+        u1_0.longitude,
+        u1_0.nickname,
+        u1_0.profile_image_url,
+        u1_0.startup_experience,
+        u1_0.user_type,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.age_range,
+        u1_0.budget,
+        u1_0.created_date,
+        u1_0.email,
+        u1_0.gender,
+        u1_0.last_modified_date,
+        u1_0.latitude,
+        u1_0.location,
+        u1_0.longitude,
+        u1_0.nickname,
+        u1_0.profile_image_url,
+        u1_0.startup_experience,
+        u1_0.user_type,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2025-09-27T05:51:32.204Z DEBUG 281 --- [    Test worker] c.e.s.s.filter.JwtAuthenticationFilter   : JWT 인증 성공: a48f6db7-9315-46b5-8e44-bb74db6ff7bd
+2025-09-27T05:51:32.204Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.community.freeboard.post.controller.FreeboardController#updatePost(Long, FreeboardUpdateRequest, CustomUserDetails)
+2025-09-27T05:51:32.208Z  INFO 281 --- [    Test worker] c.e.s.c.f.p.c.FreeboardController        : 자유게시판 글 수정 요청: freeboardId=3, userId=a48f6db7-9315-46b5-8e44-bb74db6ff7bd
+2025-09-27T05:51:32.208Z  INFO 281 --- [    Test worker] c.e.s.c.f.p.s.FreeboardServiceImpl       : 자유게시판 글 수정 시작: postId=3, userId=a48f6db7-9315-46b5-8e44-bb74db6ff7bd
+2025-09-27T05:51:32.209Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* &lt;criteria&gt; */ select
+        p1_0.id,
+        p1_0.category,
+        p1_0.comment_count,
+        p1_0.content,
+        p1_0.created_date,
+        p1_0.deleted,
+        p1_0.last_modified_date,
+        p1_0.like_count,
+        p1_0.title,
+        p1_0.user_id,
+        p1_0.view_count 
+    from
+        post p1_0 
+    where
+        p1_0.id=? 
+        and not(p1_0.deleted)
+Hibernate: 
+    /* &lt;criteria&gt; */ select
+        p1_0.id,
+        p1_0.category,
+        p1_0.comment_count,
+        p1_0.content,
+        p1_0.created_date,
+        p1_0.deleted,
+        p1_0.last_modified_date,
+        p1_0.like_count,
+        p1_0.title,
+        p1_0.user_id,
+        p1_0.view_count 
+    from
+        post p1_0 
+    where
+        p1_0.id=? 
+        and not(p1_0.deleted)
+2025-09-27T05:51:32.211Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    select
+        i1_0.post_id,
+        i1_0.id,
+        i1_0.image_url,
+        i1_0.sequence 
+    from
+        post_image i1_0 
+    where
+        i1_0.post_id=?
+Hibernate: 
+    select
+        i1_0.post_id,
+        i1_0.id,
+        i1_0.image_url,
+        i1_0.sequence 
+    from
+        post_image i1_0 
+    where
+        i1_0.post_id=?
+2025-09-27T05:51:32.211Z  INFO 281 --- [    Test worker] c.e.s.c.f.p.s.FreeboardServiceImpl       : 자유게시판 글 수정 완료: postId=3, newImageCount=0
+2025-09-27T05:51:32.212Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* update
+        for com.example.soso.community.common.post.domain.entity.Post */update post 
+    set
+        category=?,
+        comment_count=?,
+        content=?,
+        deleted=?,
+        last_modified_date=?,
+        like_count=?,
+        title=?,
+        user_id=?,
+        view_count=? 
+    where
+        id=?
+Hibernate: 
+    /* update
+        for com.example.soso.community.common.post.domain.entity.Post */update post 
+    set
+        category=?,
+        comment_count=?,
+        content=?,
+        deleted=?,
+        last_modified_date=?,
+        like_count=?,
+        title=?,
+        user_id=?,
+        view_count=? 
+    where
+        id=?
+2025-09-27T05:51:32.213Z  INFO 281 --- [    Test worker] c.e.s.c.f.p.c.FreeboardController        : 자유게시판 글 수정 완료: freeboardId=3
+2025-09-27T05:51:32.213Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:32.213Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.example.soso.community.freeboard.post.domain.dto.FreeboardCreateResponse@436a22a1]
+
+MockHttpServletRequest:
+      HTTP Method = PATCH
+      Request URI = /community/freeboard/3
+       Parameters = {title=[수정된 창업 아이템 아이디어], content=[원작성자가 내용을 수정했습니다.], category=[STARTUP]}
+          Headers = [Content-Type:&quot;multipart/form-data&quot;, Authorization:&quot;Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhNDhmNmRiNy05MzE1LTQ2YjUtOGU0NC1iYjc0ZGI2ZmY3YmQiLCJpYXQiOjE3NTg5NTIyOTIsImV4cCI6MTc1ODk1NTg5Mn0.X1GHN41IVHyQUcWr0nvvkKO92yKANEMTX-DugAn3BelM91ep5OnYT96JH9tSMNbG7UB1uJ17jQygRlsK0oc44w&quot;]
+             Body = &lt;no character encoding set&gt;
+    Session Attrs = {}
+
+Handler:
+             Type = com.example.soso.community.freeboard.post.controller.FreeboardController
+           Method = com.example.soso.community.freeboard.post.controller.FreeboardController#updatePost(Long, FreeboardUpdateRequest, CustomUserDetails)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 200
+    Error message = null
+          Headers = [Vary:&quot;Origin&quot;, &quot;Access-Control-Request-Method&quot;, &quot;Access-Control-Request-Headers&quot;, Content-Type:&quot;application/json&quot;, X-Content-Type-Options:&quot;nosniff&quot;, X-XSS-Protection:&quot;0&quot;, Cache-Control:&quot;no-cache, no-store, max-age=0, must-revalidate&quot;, Pragma:&quot;no-cache&quot;, Expires:&quot;0&quot;, X-Frame-Options:&quot;DENY&quot;]
+     Content type = application/json
+             Body = {&quot;postId&quot;:3}
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+✅ 원작성자 권한 확인 완료
+
+&#x1f6ab; [다른사용자] 제한된 권한을 가진 사용자 테스트:
+  1. 다른 사용자의 게시글 조회...
+2025-09-27T05:51:32.215Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    select
+        u1_0.id,
+        u1_0.age_range,
+        u1_0.budget,
+        u1_0.created_date,
+        u1_0.email,
+        u1_0.gender,
+        u1_0.last_modified_date,
+        u1_0.latitude,
+        u1_0.location,
+        u1_0.longitude,
+        u1_0.nickname,
+        u1_0.profile_image_url,
+        u1_0.startup_experience,
+        u1_0.user_type,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.age_range,
+        u1_0.budget,
+        u1_0.created_date,
+        u1_0.email,
+        u1_0.gender,
+        u1_0.last_modified_date,
+        u1_0.latitude,
+        u1_0.location,
+        u1_0.longitude,
+        u1_0.nickname,
+        u1_0.profile_image_url,
+        u1_0.startup_experience,
+        u1_0.user_type,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2025-09-27T05:51:32.216Z DEBUG 281 --- [    Test worker] c.e.s.s.filter.JwtAuthenticationFilter   : JWT 인증 성공: faa5c948-dedd-4e3b-8bf2-999e7ec58a73
+2025-09-27T05:51:32.216Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.community.freeboard.post.controller.FreeboardController#getPost(Long)
+2025-09-27T05:51:32.216Z  INFO 281 --- [    Test worker] c.e.s.c.f.p.c.FreeboardController        : 자유게시판 글 조회 요청: freeboardId=3, userId=faa5c948-dedd-4e3b-8bf2-999e7ec58a73
+2025-09-27T05:51:32.217Z DEBUG 281 --- [    Test worker] c.e.s.c.f.p.s.FreeboardServiceImpl       : 자유게시판 글 조회: postId=3, userId=faa5c948-dedd-4e3b-8bf2-999e7ec58a73
+2025-09-27T05:51:32.219Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* &lt;criteria&gt; */ select
+        p1_0.id,
+        p1_0.category,
+        p1_0.comment_count,
+        p1_0.content,
+        p1_0.created_date,
+        p1_0.deleted,
+        p1_0.last_modified_date,
+        p1_0.like_count,
+        p1_0.title,
+        p1_0.user_id,
+        p1_0.view_count 
+    from
+        post p1_0 
+    where
+        p1_0.id=? 
+        and not(p1_0.deleted)
+Hibernate: 
+    /* &lt;criteria&gt; */ select
+        p1_0.id,
+        p1_0.category,
+        p1_0.comment_count,
+        p1_0.content,
+        p1_0.created_date,
+        p1_0.deleted,
+        p1_0.last_modified_date,
+        p1_0.like_count,
+        p1_0.title,
+        p1_0.user_id,
+        p1_0.view_count 
+    from
+        post p1_0 
+    where
+        p1_0.id=? 
+        and not(p1_0.deleted)
+2025-09-27T05:51:32.222Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* update
+        for com.example.soso.community.common.post.domain.entity.Post */update post 
+    set
+        category=?,
+        comment_count=?,
+        content=?,
+        deleted=?,
+        last_modified_date=?,
+        like_count=?,
+        title=?,
+        user_id=?,
+        view_count=? 
+    where
+        id=?
+Hibernate: 
+    /* update
+        for com.example.soso.community.common.post.domain.entity.Post */update post 
+    set
+        category=?,
+        comment_count=?,
+        content=?,
+        deleted=?,
+        last_modified_date=?,
+        like_count=?,
+        title=?,
+        user_id=?,
+        view_count=? 
+    where
+        id=?
+2025-09-27T05:51:32.223Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* &lt;criteria&gt; */ select
+        pl1_0.id 
+    from
+        post_like pl1_0 
+    left join
+        post p1_0 
+            on p1_0.id=pl1_0.post_id 
+    left join
+        users u1_0 
+            on u1_0.id=pl1_0.user_id 
+    where
+        p1_0.id=? 
+        and u1_0.id=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    /* &lt;criteria&gt; */ select
+        pl1_0.id 
+    from
+        post_like pl1_0 
+    left join
+        post p1_0 
+            on p1_0.id=pl1_0.post_id 
+    left join
+        users u1_0 
+            on u1_0.id=pl1_0.user_id 
+    where
+        p1_0.id=? 
+        and u1_0.id=? 
+    fetch
+        first ? rows only
+2025-09-27T05:51:32.223Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    select
+        i1_0.post_id,
+        i1_0.id,
+        i1_0.image_url,
+        i1_0.sequence 
+    from
+        post_image i1_0 
+    where
+        i1_0.post_id=?
+Hibernate: 
+    select
+        i1_0.post_id,
+        i1_0.id,
+        i1_0.image_url,
+        i1_0.sequence 
+    from
+        post_image i1_0 
+    where
+        i1_0.post_id=?
+2025-09-27T05:51:32.223Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    select
+        u1_0.id,
+        u1_0.age_range,
+        u1_0.budget,
+        u1_0.created_date,
+        u1_0.email,
+        u1_0.gender,
+        u1_0.last_modified_date,
+        u1_0.latitude,
+        u1_0.location,
+        u1_0.longitude,
+        u1_0.nickname,
+        u1_0.profile_image_url,
+        u1_0.startup_experience,
+        u1_0.user_type,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.age_range,
+        u1_0.budget,
+        u1_0.created_date,
+        u1_0.email,
+        u1_0.gender,
+        u1_0.last_modified_date,
+        u1_0.latitude,
+        u1_0.location,
+        u1_0.longitude,
+        u1_0.nickname,
+        u1_0.profile_image_url,
+        u1_0.startup_experience,
+        u1_0.user_type,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2025-09-27T05:51:32.224Z DEBUG 281 --- [    Test worker] c.e.s.c.f.p.c.FreeboardController        : 자유게시판 글 조회 완료: freeboardId=3, viewCount=2
+2025-09-27T05:51:32.224Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:32.225Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.example.soso.community.freeboard.post.domain.dto.FreeboardDetailResponse@1c74eacb]
+
+MockHttpServletRequest:
+      HTTP Method = GET
+      Request URI = /community/freeboard/3
+       Parameters = {}
+          Headers = [Authorization:&quot;Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJmYWE1Yzk0OC1kZWRkLTRlM2ItOGJmMi05OTllN2VjNThhNzMiLCJpYXQiOjE3NTg5NTIyOTIsImV4cCI6MTc1ODk1NTg5Mn0.CLRgPvET-C0rX9Uee7OylDoFQ5_wTJQxvMQvgLtyncMGTzVs0TIi_BsOCC-kqTM2waT0mjs8MoiBKeOBxR8Thw&quot;]
+             Body = &lt;no character encoding set&gt;
+    Session Attrs = {}
+
+Handler:
+             Type = com.example.soso.community.freeboard.post.controller.FreeboardController
+           Method = com.example.soso.community.freeboard.post.controller.FreeboardController#getPost(Long)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 200
+    Error message = null
+          Headers = [Vary:&quot;Origin&quot;, &quot;Access-Control-Request-Method&quot;, &quot;Access-Control-Request-Headers&quot;, Content-Type:&quot;application/json&quot;, X-Content-Type-Options:&quot;nosniff&quot;, X-XSS-Protection:&quot;0&quot;, Cache-Control:&quot;no-cache, no-store, max-age=0, must-revalidate&quot;, Pragma:&quot;no-cache&quot;, Expires:&quot;0&quot;, X-Frame-Options:&quot;DENY&quot;]
+     Content type = application/json
+             Body = {&quot;postId&quot;:3,&quot;author&quot;:{&quot;userId&quot;:&quot;a48f6db7-9315-46b5-8e44-bb74db6ff7bd&quot;,&quot;nickname&quot;:&quot;창업가문어218&quot;,&quot;profileImageUrl&quot;:&quot;https://example.com/founder-profile.jpg&quot;,&quot;userType&quot;:&quot;FOUNDER&quot;,&quot;address&quot;:&quot;11680&quot;},&quot;category&quot;:&quot;STARTUP&quot;,&quot;title&quot;:&quot;수정된 창업 아이템 아이디어&quot;,&quot;content&quot;:&quot;원작성자가 내용을 수정했습니다.&quot;,&quot;imageUrls&quot;:[],&quot;likeCount&quot;:0,&quot;commentCount&quot;:0,&quot;viewCount&quot;:2,&quot;createdAt&quot;:&quot;2025-09-27T05:51:32.186344&quot;,&quot;updatedAt&quot;:&quot;2025-09-27T05:51:32.222179086&quot;,&quot;canEdit&quot;:false,&quot;canDelete&quot;:false,&quot;liked&quot;:false,&quot;isLiked&quot;:false}
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+  2. 다른 사용자의 수정 시도 (차단되어야 함)...
+2025-09-27T05:51:32.227Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    select
+        u1_0.id,
+        u1_0.age_range,
+        u1_0.budget,
+        u1_0.created_date,
+        u1_0.email,
+        u1_0.gender,
+        u1_0.last_modified_date,
+        u1_0.latitude,
+        u1_0.location,
+        u1_0.longitude,
+        u1_0.nickname,
+        u1_0.profile_image_url,
+        u1_0.startup_experience,
+        u1_0.user_type,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.age_range,
+        u1_0.budget,
+        u1_0.created_date,
+        u1_0.email,
+        u1_0.gender,
+        u1_0.last_modified_date,
+        u1_0.latitude,
+        u1_0.location,
+        u1_0.longitude,
+        u1_0.nickname,
+        u1_0.profile_image_url,
+        u1_0.startup_experience,
+        u1_0.user_type,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2025-09-27T05:51:32.227Z DEBUG 281 --- [    Test worker] c.e.s.s.filter.JwtAuthenticationFilter   : JWT 인증 성공: faa5c948-dedd-4e3b-8bf2-999e7ec58a73
+2025-09-27T05:51:32.228Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.community.freeboard.post.controller.FreeboardController#updatePost(Long, FreeboardUpdateRequest, CustomUserDetails)
+2025-09-27T05:51:32.228Z  INFO 281 --- [    Test worker] c.e.s.c.f.p.c.FreeboardController        : 자유게시판 글 수정 요청: freeboardId=3, userId=faa5c948-dedd-4e3b-8bf2-999e7ec58a73
+2025-09-27T05:51:32.229Z  INFO 281 --- [    Test worker] c.e.s.c.f.p.s.FreeboardServiceImpl       : 자유게시판 글 수정 시작: postId=3, userId=faa5c948-dedd-4e3b-8bf2-999e7ec58a73
+2025-09-27T05:51:32.230Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* &lt;criteria&gt; */ select
+        p1_0.id,
+        p1_0.category,
+        p1_0.comment_count,
+        p1_0.content,
+        p1_0.created_date,
+        p1_0.deleted,
+        p1_0.last_modified_date,
+        p1_0.like_count,
+        p1_0.title,
+        p1_0.user_id,
+        p1_0.view_count 
+    from
+        post p1_0 
+    where
+        p1_0.id=? 
+        and not(p1_0.deleted)
+Hibernate: 
+    /* &lt;criteria&gt; */ select
+        p1_0.id,
+        p1_0.category,
+        p1_0.comment_count,
+        p1_0.content,
+        p1_0.created_date,
+        p1_0.deleted,
+        p1_0.last_modified_date,
+        p1_0.like_count,
+        p1_0.title,
+        p1_0.user_id,
+        p1_0.view_count 
+    from
+        post p1_0 
+    where
+        p1_0.id=? 
+        and not(p1_0.deleted)
+2025-09-27T05:51:32.231Z DEBUG 281 --- [    Test worker] .m.m.a.ExceptionHandlerExceptionResolver : Using @ExceptionHandler com.example.soso.global.exception.GlobalExceptionHandler#handleBaseException(BaseException)
+2025-09-27T05:51:32.232Z  WARN 281 --- [    Test worker] c.e.s.g.e.GlobalExceptionHandler         : Handled business exception: POST_ACCESS_DENIED - 게시글에 대한 접근 권한이 없습니다.
+2025-09-27T05:51:32.233Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:32.233Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [ErrorResponse[code=POST_ACCESS_DENIED, message=게시글에 대한 접근 권한이 없습니다.]]
+2025-09-27T05:51:32.233Z DEBUG 281 --- [    Test worker] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [com.example.soso.global.exception.util.PostException: 게시글에 대한 접근 권한이 없습니다.]
+
+MockHttpServletRequest:
+      HTTP Method = PATCH
+      Request URI = /community/freeboard/3
+       Parameters = {title=[다른 사용자의 수정 시도], content=[다른 사용자가 수정을 시도합니다.], category=[STARTUP]}
+          Headers = [Content-Type:&quot;multipart/form-data&quot;, Authorization:&quot;Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJmYWE1Yzk0OC1kZWRkLTRlM2ItOGJmMi05OTllN2VjNThhNzMiLCJpYXQiOjE3NTg5NTIyOTIsImV4cCI6MTc1ODk1NTg5Mn0.CLRgPvET-C0rX9Uee7OylDoFQ5_wTJQxvMQvgLtyncMGTzVs0TIi_BsOCC-kqTM2waT0mjs8MoiBKeOBxR8Thw&quot;]
+             Body = &lt;no character encoding set&gt;
+    Session Attrs = {}
+
+Handler:
+             Type = com.example.soso.community.freeboard.post.controller.FreeboardController
+           Method = com.example.soso.community.freeboard.post.controller.FreeboardController#updatePost(Long, FreeboardUpdateRequest, CustomUserDetails)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = com.example.soso.global.exception.util.PostException
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 403
+    Error message = null
+          Headers = [Vary:&quot;Origin&quot;, &quot;Access-Control-Request-Method&quot;, &quot;Access-Control-Request-Headers&quot;, Content-Type:&quot;application/json&quot;, X-Content-Type-Options:&quot;nosniff&quot;, X-XSS-Protection:&quot;0&quot;, Cache-Control:&quot;no-cache, no-store, max-age=0, must-revalidate&quot;, Pragma:&quot;no-cache&quot;, Expires:&quot;0&quot;, X-Frame-Options:&quot;DENY&quot;]
+     Content type = application/json
+             Body = {&quot;code&quot;:&quot;POST_ACCESS_DENIED&quot;,&quot;message&quot;:&quot;게시글에 대한 접근 권한이 없습니다.&quot;}
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+  3. 다른 사용자의 삭제 시도 (차단되어야 함)...
+2025-09-27T05:51:32.235Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    select
+        u1_0.id,
+        u1_0.age_range,
+        u1_0.budget,
+        u1_0.created_date,
+        u1_0.email,
+        u1_0.gender,
+        u1_0.last_modified_date,
+        u1_0.latitude,
+        u1_0.location,
+        u1_0.longitude,
+        u1_0.nickname,
+        u1_0.profile_image_url,
+        u1_0.startup_experience,
+        u1_0.user_type,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.age_range,
+        u1_0.budget,
+        u1_0.created_date,
+        u1_0.email,
+        u1_0.gender,
+        u1_0.last_modified_date,
+        u1_0.latitude,
+        u1_0.location,
+        u1_0.longitude,
+        u1_0.nickname,
+        u1_0.profile_image_url,
+        u1_0.startup_experience,
+        u1_0.user_type,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2025-09-27T05:51:32.236Z DEBUG 281 --- [    Test worker] c.e.s.s.filter.JwtAuthenticationFilter   : JWT 인증 성공: faa5c948-dedd-4e3b-8bf2-999e7ec58a73
+2025-09-27T05:51:32.237Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.community.freeboard.post.controller.FreeboardController#deletePost(Long, CustomUserDetails)
+2025-09-27T05:51:32.237Z  INFO 281 --- [    Test worker] c.e.s.c.f.p.c.FreeboardController        : 자유게시판 글 삭제 요청: freeboardId=3, userId=faa5c948-dedd-4e3b-8bf2-999e7ec58a73
+2025-09-27T05:51:32.238Z  INFO 281 --- [    Test worker] c.e.s.c.f.p.s.FreeboardServiceImpl       : 자유게시판 글 소프트 삭제: postId=3, userId=faa5c948-dedd-4e3b-8bf2-999e7ec58a73
+2025-09-27T05:51:32.239Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* &lt;criteria&gt; */ select
+        p1_0.id,
+        p1_0.category,
+        p1_0.comment_count,
+        p1_0.content,
+        p1_0.created_date,
+        p1_0.deleted,
+        p1_0.last_modified_date,
+        p1_0.like_count,
+        p1_0.title,
+        p1_0.user_id,
+        p1_0.view_count 
+    from
+        post p1_0 
+    where
+        p1_0.id=? 
+        and not(p1_0.deleted)
+Hibernate: 
+    /* &lt;criteria&gt; */ select
+        p1_0.id,
+        p1_0.category,
+        p1_0.comment_count,
+        p1_0.content,
+        p1_0.created_date,
+        p1_0.deleted,
+        p1_0.last_modified_date,
+        p1_0.like_count,
+        p1_0.title,
+        p1_0.user_id,
+        p1_0.view_count 
+    from
+        post p1_0 
+    where
+        p1_0.id=? 
+        and not(p1_0.deleted)
+2025-09-27T05:51:32.240Z DEBUG 281 --- [    Test worker] .m.m.a.ExceptionHandlerExceptionResolver : Using @ExceptionHandler com.example.soso.global.exception.GlobalExceptionHandler#handleBaseException(BaseException)
+2025-09-27T05:51:32.241Z  WARN 281 --- [    Test worker] c.e.s.g.e.GlobalExceptionHandler         : Handled business exception: POST_ACCESS_DENIED - 게시글에 대한 접근 권한이 없습니다.
+2025-09-27T05:51:32.241Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:32.241Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [ErrorResponse[code=POST_ACCESS_DENIED, message=게시글에 대한 접근 권한이 없습니다.]]
+2025-09-27T05:51:32.241Z DEBUG 281 --- [    Test worker] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [com.example.soso.global.exception.util.PostException: 게시글에 대한 접근 권한이 없습니다.]
+
+MockHttpServletRequest:
+      HTTP Method = DELETE
+      Request URI = /community/freeboard/3
+       Parameters = {}
+          Headers = [Authorization:&quot;Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJmYWE1Yzk0OC1kZWRkLTRlM2ItOGJmMi05OTllN2VjNThhNzMiLCJpYXQiOjE3NTg5NTIyOTIsImV4cCI6MTc1ODk1NTg5Mn0.CLRgPvET-C0rX9Uee7OylDoFQ5_wTJQxvMQvgLtyncMGTzVs0TIi_BsOCC-kqTM2waT0mjs8MoiBKeOBxR8Thw&quot;]
+             Body = &lt;no character encoding set&gt;
+    Session Attrs = {}
+
+Handler:
+             Type = com.example.soso.community.freeboard.post.controller.FreeboardController
+           Method = com.example.soso.community.freeboard.post.controller.FreeboardController#deletePost(Long, CustomUserDetails)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = com.example.soso.global.exception.util.PostException
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 403
+    Error message = null
+          Headers = [Vary:&quot;Origin&quot;, &quot;Access-Control-Request-Method&quot;, &quot;Access-Control-Request-Headers&quot;, Content-Type:&quot;application/json&quot;, X-Content-Type-Options:&quot;nosniff&quot;, X-XSS-Protection:&quot;0&quot;, Cache-Control:&quot;no-cache, no-store, max-age=0, must-revalidate&quot;, Pragma:&quot;no-cache&quot;, Expires:&quot;0&quot;, X-Frame-Options:&quot;DENY&quot;]
+     Content type = application/json
+             Body = {&quot;code&quot;:&quot;POST_ACCESS_DENIED&quot;,&quot;message&quot;:&quot;게시글에 대한 접근 권한이 없습니다.&quot;}
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+  4. 다른 사용자의 댓글 작성 (허용되어야 함)...
+2025-09-27T05:51:32.244Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    select
+        u1_0.id,
+        u1_0.age_range,
+        u1_0.budget,
+        u1_0.created_date,
+        u1_0.email,
+        u1_0.gender,
+        u1_0.last_modified_date,
+        u1_0.latitude,
+        u1_0.location,
+        u1_0.longitude,
+        u1_0.nickname,
+        u1_0.profile_image_url,
+        u1_0.startup_experience,
+        u1_0.user_type,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.age_range,
+        u1_0.budget,
+        u1_0.created_date,
+        u1_0.email,
+        u1_0.gender,
+        u1_0.last_modified_date,
+        u1_0.latitude,
+        u1_0.location,
+        u1_0.longitude,
+        u1_0.nickname,
+        u1_0.profile_image_url,
+        u1_0.startup_experience,
+        u1_0.user_type,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2025-09-27T05:51:32.244Z DEBUG 281 --- [    Test worker] c.e.s.s.filter.JwtAuthenticationFilter   : JWT 인증 성공: faa5c948-dedd-4e3b-8bf2-999e7ec58a73
+2025-09-27T05:51:32.245Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.community.freeboard.comment.controller.FreeboardCommentController#createComment(Long, FreeboardCommentCreateRequest, CustomUserDetails)
+2025-09-27T05:51:32.247Z DEBUG 281 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read &quot;application/json&quot; to [com.example.soso.community.freeboard.comment.domain.dto.FreeboardCommentCreateRequest@33f6ce71]
+2025-09-27T05:51:32.248Z  INFO 281 --- [    Test worker] c.e.s.c.f.c.c.FreeboardCommentController : 자유게시판 댓글 작성 요청: freeboardId=3, userId=faa5c948-dedd-4e3b-8bf2-999e7ec58a73, parentCommentId=null
+2025-09-27T05:51:32.249Z  INFO 281 --- [    Test worker] c.e.s.c.c.s.AbstractCommentService       : 댓글 작성 시작: postId=3, userId=faa5c948-dedd-4e3b-8bf2-999e7ec58a73
+2025-09-27T05:51:32.250Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* &lt;criteria&gt; */ select
+        p1_0.id,
+        p1_0.category,
+        p1_0.comment_count,
+        p1_0.content,
+        p1_0.created_date,
+        p1_0.deleted,
+        p1_0.last_modified_date,
+        p1_0.like_count,
+        p1_0.title,
+        p1_0.user_id,
+        p1_0.view_count 
+    from
+        post p1_0 
+    where
+        p1_0.id=? 
+        and not(p1_0.deleted)
+Hibernate: 
+    /* &lt;criteria&gt; */ select
+        p1_0.id,
+        p1_0.category,
+        p1_0.comment_count,
+        p1_0.content,
+        p1_0.created_date,
+        p1_0.deleted,
+        p1_0.last_modified_date,
+        p1_0.like_count,
+        p1_0.title,
+        p1_0.user_id,
+        p1_0.view_count 
+    from
+        post p1_0 
+    where
+        p1_0.id=? 
+        and not(p1_0.deleted)
+2025-09-27T05:51:32.251Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    select
+        u1_0.id,
+        u1_0.age_range,
+        u1_0.budget,
+        u1_0.created_date,
+        u1_0.email,
+        u1_0.gender,
+        u1_0.last_modified_date,
+        u1_0.latitude,
+        u1_0.location,
+        u1_0.longitude,
+        u1_0.nickname,
+        u1_0.profile_image_url,
+        u1_0.startup_experience,
+        u1_0.user_type,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.age_range,
+        u1_0.budget,
+        u1_0.created_date,
+        u1_0.email,
+        u1_0.gender,
+        u1_0.last_modified_date,
+        u1_0.latitude,
+        u1_0.location,
+        u1_0.longitude,
+        u1_0.nickname,
+        u1_0.profile_image_url,
+        u1_0.startup_experience,
+        u1_0.user_type,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2025-09-27T05:51:32.255Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* insert for
+        com.example.soso.community.common.comment.domain.entity.Comment */insert 
+    into
+        comments (content, created_date, deleted, last_modified_date, like_count, parent_id, post_id, user_id, id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, default)
+Hibernate: 
+    /* insert for
+        com.example.soso.community.common.comment.domain.entity.Comment */insert 
+    into
+        comments (content, created_date, deleted, last_modified_date, like_count, parent_id, post_id, user_id, id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, default)
+2025-09-27T05:51:32.259Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* &lt;criteria&gt; */ select
+        count(c1_0.id) 
+    from
+        comments c1_0 
+    left join
+        post p1_0 
+            on p1_0.id=c1_0.post_id 
+    where
+        p1_0.id=? 
+        and not(c1_0.deleted)
+Hibernate: 
+    /* &lt;criteria&gt; */ select
+        count(c1_0.id) 
+    from
+        comments c1_0 
+    left join
+        post p1_0 
+            on p1_0.id=c1_0.post_id 
+    where
+        p1_0.id=? 
+        and not(c1_0.deleted)
+2025-09-27T05:51:32.262Z  INFO 281 --- [    Test worker] c.e.s.c.c.s.AbstractCommentService       : 댓글 작성 완료: commentId=1
+2025-09-27T05:51:32.262Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* update
+        for com.example.soso.community.common.post.domain.entity.Post */update post 
+    set
+        category=?,
+        comment_count=?,
+        content=?,
+        deleted=?,
+        last_modified_date=?,
+        like_count=?,
+        title=?,
+        user_id=?,
+        view_count=? 
+    where
+        id=?
+Hibernate: 
+    /* update
+        for com.example.soso.community.common.post.domain.entity.Post */update post 
+    set
+        category=?,
+        comment_count=?,
+        content=?,
+        deleted=?,
+        last_modified_date=?,
+        like_count=?,
+        title=?,
+        user_id=?,
+        view_count=? 
+    where
+        id=?
+2025-09-27T05:51:32.263Z  INFO 281 --- [    Test worker] c.e.s.c.f.c.c.FreeboardCommentController : 자유게시판 댓글 작성 완료: commentId=1
+2025-09-27T05:51:32.264Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:32.264Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.example.soso.community.freeboard.comment.domain.dto.FreeboardCommentCreateResponse@7da57d3c]
+
+MockHttpServletRequest:
+      HTTP Method = POST
+      Request URI = /community/freeboard/3/comments
+       Parameters = {}
+          Headers = [Content-Type:&quot;application/json&quot;, Authorization:&quot;Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJmYWE1Yzk0OC1kZWRkLTRlM2ItOGJmMi05OTllN2VjNThhNzMiLCJpYXQiOjE3NTg5NTIyOTIsImV4cCI6MTc1ODk1NTg5Mn0.CLRgPvET-C0rX9Uee7OylDoFQ5_wTJQxvMQvgLtyncMGTzVs0TIi_BsOCC-kqTM2waT0mjs8MoiBKeOBxR8Thw&quot;, Content-Length:&quot;96&quot;]
+             Body = &lt;no character encoding set&gt;
+    Session Attrs = {}
+
+Handler:
+             Type = com.example.soso.community.freeboard.comment.controller.FreeboardCommentController
+           Method = com.example.soso.community.freeboard.comment.controller.FreeboardCommentController#createComment(Long, FreeboardCommentCreateRequest, CustomUserDetails)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 201
+    Error message = null
+          Headers = [Vary:&quot;Origin&quot;, &quot;Access-Control-Request-Method&quot;, &quot;Access-Control-Request-Headers&quot;, Content-Type:&quot;application/json&quot;, X-Content-Type-Options:&quot;nosniff&quot;, X-XSS-Protection:&quot;0&quot;, Cache-Control:&quot;no-cache, no-store, max-age=0, must-revalidate&quot;, Pragma:&quot;no-cache&quot;, Expires:&quot;0&quot;, X-Frame-Options:&quot;DENY&quot;]
+     Content type = application/json
+             Body = {&quot;commentId&quot;:1}
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+  5. 다른 사용자의 좋아요 (허용되어야 함)...
+2025-09-27T05:51:32.267Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    select
+        u1_0.id,
+        u1_0.age_range,
+        u1_0.budget,
+        u1_0.created_date,
+        u1_0.email,
+        u1_0.gender,
+        u1_0.last_modified_date,
+        u1_0.latitude,
+        u1_0.location,
+        u1_0.longitude,
+        u1_0.nickname,
+        u1_0.profile_image_url,
+        u1_0.startup_experience,
+        u1_0.user_type,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.age_range,
+        u1_0.budget,
+        u1_0.created_date,
+        u1_0.email,
+        u1_0.gender,
+        u1_0.last_modified_date,
+        u1_0.latitude,
+        u1_0.location,
+        u1_0.longitude,
+        u1_0.nickname,
+        u1_0.profile_image_url,
+        u1_0.startup_experience,
+        u1_0.user_type,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2025-09-27T05:51:32.267Z DEBUG 281 --- [    Test worker] c.e.s.s.filter.JwtAuthenticationFilter   : JWT 인증 성공: faa5c948-dedd-4e3b-8bf2-999e7ec58a73
+2025-09-27T05:51:32.268Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.community.freeboard.like.controller.FreeboardLikeController#toggleLike(Long, CustomUserDetails)
+2025-09-27T05:51:32.268Z  INFO 281 --- [    Test worker] c.e.s.c.f.l.c.FreeboardLikeController    : 자유게시판 게시글 좋아요 토글: freeboardId=3, userId=faa5c948-dedd-4e3b-8bf2-999e7ec58a73
+2025-09-27T05:51:32.269Z  INFO 281 --- [    Test worker] c.e.s.c.c.service.AbstractLikeService    : 좋아요 토글: postId=3, userId=faa5c948-dedd-4e3b-8bf2-999e7ec58a73
+2025-09-27T05:51:32.270Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* &lt;criteria&gt; */ select
+        p1_0.id,
+        p1_0.category,
+        p1_0.comment_count,
+        p1_0.content,
+        p1_0.created_date,
+        p1_0.deleted,
+        p1_0.last_modified_date,
+        p1_0.like_count,
+        p1_0.title,
+        p1_0.user_id,
+        p1_0.view_count 
+    from
+        post p1_0 
+    where
+        p1_0.id=? 
+        and not(p1_0.deleted)
+Hibernate: 
+    /* &lt;criteria&gt; */ select
+        p1_0.id,
+        p1_0.category,
+        p1_0.comment_count,
+        p1_0.content,
+        p1_0.created_date,
+        p1_0.deleted,
+        p1_0.last_modified_date,
+        p1_0.like_count,
+        p1_0.title,
+        p1_0.user_id,
+        p1_0.view_count 
+    from
+        post p1_0 
+    where
+        p1_0.id=? 
+        and not(p1_0.deleted)
+2025-09-27T05:51:32.271Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    select
+        u1_0.id,
+        u1_0.age_range,
+        u1_0.budget,
+        u1_0.created_date,
+        u1_0.email,
+        u1_0.gender,
+        u1_0.last_modified_date,
+        u1_0.latitude,
+        u1_0.location,
+        u1_0.longitude,
+        u1_0.nickname,
+        u1_0.profile_image_url,
+        u1_0.startup_experience,
+        u1_0.user_type,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.age_range,
+        u1_0.budget,
+        u1_0.created_date,
+        u1_0.email,
+        u1_0.gender,
+        u1_0.last_modified_date,
+        u1_0.latitude,
+        u1_0.location,
+        u1_0.longitude,
+        u1_0.nickname,
+        u1_0.profile_image_url,
+        u1_0.startup_experience,
+        u1_0.user_type,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2025-09-27T05:51:32.273Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* &lt;criteria&gt; */ select
+        pl1_0.id 
+    from
+        post_like pl1_0 
+    left join
+        post p1_0 
+            on p1_0.id=pl1_0.post_id 
+    left join
+        users u1_0 
+            on u1_0.id=pl1_0.user_id 
+    where
+        p1_0.id=? 
+        and u1_0.id=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    /* &lt;criteria&gt; */ select
+        pl1_0.id 
+    from
+        post_like pl1_0 
+    left join
+        post p1_0 
+            on p1_0.id=pl1_0.post_id 
+    left join
+        users u1_0 
+            on u1_0.id=pl1_0.user_id 
+    where
+        p1_0.id=? 
+        and u1_0.id=? 
+    fetch
+        first ? rows only
+2025-09-27T05:51:32.274Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* insert for
+        com.example.soso.community.common.likes.domain.PostLike */insert 
+    into
+        post_like (post_id, user_id, id) 
+    values
+        (?, ?, default)
+Hibernate: 
+    /* insert for
+        com.example.soso.community.common.likes.domain.PostLike */insert 
+    into
+        post_like (post_id, user_id, id) 
+    values
+        (?, ?, default)
+2025-09-27T05:51:32.276Z  INFO 281 --- [    Test worker] c.e.s.c.c.service.AbstractLikeService    : 좋아요 추가 완료: postId=3, userId=faa5c948-dedd-4e3b-8bf2-999e7ec58a73
+2025-09-27T05:51:32.278Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* &lt;criteria&gt; */ select
+        count(pl1_0.id) 
+    from
+        post_like pl1_0 
+    left join
+        post p1_0 
+            on p1_0.id=pl1_0.post_id 
+    where
+        p1_0.id=?
+Hibernate: 
+    /* &lt;criteria&gt; */ select
+        count(pl1_0.id) 
+    from
+        post_like pl1_0 
+    left join
+        post p1_0 
+            on p1_0.id=pl1_0.post_id 
+    where
+        p1_0.id=?
+2025-09-27T05:51:32.279Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* update
+        for com.example.soso.community.common.post.domain.entity.Post */update post 
+    set
+        category=?,
+        comment_count=?,
+        content=?,
+        deleted=?,
+        last_modified_date=?,
+        like_count=?,
+        title=?,
+        user_id=?,
+        view_count=? 
+    where
+        id=?
+Hibernate: 
+    /* update
+        for com.example.soso.community.common.post.domain.entity.Post */update post 
+    set
+        category=?,
+        comment_count=?,
+        content=?,
+        deleted=?,
+        last_modified_date=?,
+        like_count=?,
+        title=?,
+        user_id=?,
+        view_count=? 
+    where
+        id=?
+2025-09-27T05:51:32.280Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:32.280Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [true]
+
+MockHttpServletRequest:
+      HTTP Method = POST
+      Request URI = /community/freeboard/3/like
+       Parameters = {}
+          Headers = [Authorization:&quot;Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJmYWE1Yzk0OC1kZWRkLTRlM2ItOGJmMi05OTllN2VjNThhNzMiLCJpYXQiOjE3NTg5NTIyOTIsImV4cCI6MTc1ODk1NTg5Mn0.CLRgPvET-C0rX9Uee7OylDoFQ5_wTJQxvMQvgLtyncMGTzVs0TIi_BsOCC-kqTM2waT0mjs8MoiBKeOBxR8Thw&quot;]
+             Body = &lt;no character encoding set&gt;
+    Session Attrs = {}
+
+Handler:
+             Type = com.example.soso.community.freeboard.like.controller.FreeboardLikeController
+           Method = com.example.soso.community.freeboard.like.controller.FreeboardLikeController#toggleLike(Long, CustomUserDetails)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 200
+    Error message = null
+          Headers = [Vary:&quot;Origin&quot;, &quot;Access-Control-Request-Method&quot;, &quot;Access-Control-Request-Headers&quot;, Content-Type:&quot;application/json&quot;, X-Content-Type-Options:&quot;nosniff&quot;, X-XSS-Protection:&quot;0&quot;, Cache-Control:&quot;no-cache, no-store, max-age=0, must-revalidate&quot;, Pragma:&quot;no-cache&quot;, Expires:&quot;0&quot;, X-Frame-Options:&quot;DENY&quot;]
+     Content type = application/json
+             Body = true
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+✅ 다른 사용자 권한 제한 확인 완료
+
+&#x1f50d; [최종확인] 게시글 현재 상태:
+2025-09-27T05:51:32.282Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    select
+        u1_0.id,
+        u1_0.age_range,
+        u1_0.budget,
+        u1_0.created_date,
+        u1_0.email,
+        u1_0.gender,
+        u1_0.last_modified_date,
+        u1_0.latitude,
+        u1_0.location,
+        u1_0.longitude,
+        u1_0.nickname,
+        u1_0.profile_image_url,
+        u1_0.startup_experience,
+        u1_0.user_type,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.age_range,
+        u1_0.budget,
+        u1_0.created_date,
+        u1_0.email,
+        u1_0.gender,
+        u1_0.last_modified_date,
+        u1_0.latitude,
+        u1_0.location,
+        u1_0.longitude,
+        u1_0.nickname,
+        u1_0.profile_image_url,
+        u1_0.startup_experience,
+        u1_0.user_type,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2025-09-27T05:51:32.283Z DEBUG 281 --- [    Test worker] c.e.s.s.filter.JwtAuthenticationFilter   : JWT 인증 성공: a48f6db7-9315-46b5-8e44-bb74db6ff7bd
+2025-09-27T05:51:32.283Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.community.freeboard.post.controller.FreeboardController#getPost(Long)
+2025-09-27T05:51:32.283Z  INFO 281 --- [    Test worker] c.e.s.c.f.p.c.FreeboardController        : 자유게시판 글 조회 요청: freeboardId=3, userId=a48f6db7-9315-46b5-8e44-bb74db6ff7bd
+2025-09-27T05:51:32.284Z DEBUG 281 --- [    Test worker] c.e.s.c.f.p.s.FreeboardServiceImpl       : 자유게시판 글 조회: postId=3, userId=a48f6db7-9315-46b5-8e44-bb74db6ff7bd
+2025-09-27T05:51:32.285Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* &lt;criteria&gt; */ select
+        p1_0.id,
+        p1_0.category,
+        p1_0.comment_count,
+        p1_0.content,
+        p1_0.created_date,
+        p1_0.deleted,
+        p1_0.last_modified_date,
+        p1_0.like_count,
+        p1_0.title,
+        p1_0.user_id,
+        p1_0.view_count 
+    from
+        post p1_0 
+    where
+        p1_0.id=? 
+        and not(p1_0.deleted)
+Hibernate: 
+    /* &lt;criteria&gt; */ select
+        p1_0.id,
+        p1_0.category,
+        p1_0.comment_count,
+        p1_0.content,
+        p1_0.created_date,
+        p1_0.deleted,
+        p1_0.last_modified_date,
+        p1_0.like_count,
+        p1_0.title,
+        p1_0.user_id,
+        p1_0.view_count 
+    from
+        post p1_0 
+    where
+        p1_0.id=? 
+        and not(p1_0.deleted)
+2025-09-27T05:51:32.287Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* update
+        for com.example.soso.community.common.post.domain.entity.Post */update post 
+    set
+        category=?,
+        comment_count=?,
+        content=?,
+        deleted=?,
+        last_modified_date=?,
+        like_count=?,
+        title=?,
+        user_id=?,
+        view_count=? 
+    where
+        id=?
+Hibernate: 
+    /* update
+        for com.example.soso.community.common.post.domain.entity.Post */update post 
+    set
+        category=?,
+        comment_count=?,
+        content=?,
+        deleted=?,
+        last_modified_date=?,
+        like_count=?,
+        title=?,
+        user_id=?,
+        view_count=? 
+    where
+        id=?
+2025-09-27T05:51:32.287Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* &lt;criteria&gt; */ select
+        pl1_0.id 
+    from
+        post_like pl1_0 
+    left join
+        post p1_0 
+            on p1_0.id=pl1_0.post_id 
+    left join
+        users u1_0 
+            on u1_0.id=pl1_0.user_id 
+    where
+        p1_0.id=? 
+        and u1_0.id=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    /* &lt;criteria&gt; */ select
+        pl1_0.id 
+    from
+        post_like pl1_0 
+    left join
+        post p1_0 
+            on p1_0.id=pl1_0.post_id 
+    left join
+        users u1_0 
+            on u1_0.id=pl1_0.user_id 
+    where
+        p1_0.id=? 
+        and u1_0.id=? 
+    fetch
+        first ? rows only
+2025-09-27T05:51:32.288Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    select
+        i1_0.post_id,
+        i1_0.id,
+        i1_0.image_url,
+        i1_0.sequence 
+    from
+        post_image i1_0 
+    where
+        i1_0.post_id=?
+Hibernate: 
+    select
+        i1_0.post_id,
+        i1_0.id,
+        i1_0.image_url,
+        i1_0.sequence 
+    from
+        post_image i1_0 
+    where
+        i1_0.post_id=?
+2025-09-27T05:51:32.288Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    select
+        u1_0.id,
+        u1_0.age_range,
+        u1_0.budget,
+        u1_0.created_date,
+        u1_0.email,
+        u1_0.gender,
+        u1_0.last_modified_date,
+        u1_0.latitude,
+        u1_0.location,
+        u1_0.longitude,
+        u1_0.nickname,
+        u1_0.profile_image_url,
+        u1_0.startup_experience,
+        u1_0.user_type,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.age_range,
+        u1_0.budget,
+        u1_0.created_date,
+        u1_0.email,
+        u1_0.gender,
+        u1_0.last_modified_date,
+        u1_0.latitude,
+        u1_0.location,
+        u1_0.longitude,
+        u1_0.nickname,
+        u1_0.profile_image_url,
+        u1_0.startup_experience,
+        u1_0.user_type,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2025-09-27T05:51:32.289Z DEBUG 281 --- [    Test worker] c.e.s.c.f.p.c.FreeboardController        : 자유게시판 글 조회 완료: freeboardId=3, viewCount=3
+2025-09-27T05:51:32.289Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:32.289Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.example.soso.community.freeboard.post.domain.dto.FreeboardDetailResponse@5b09788c]
+
+MockHttpServletRequest:
+      HTTP Method = GET
+      Request URI = /community/freeboard/3
+       Parameters = {}
+          Headers = [Authorization:&quot;Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhNDhmNmRiNy05MzE1LTQ2YjUtOGU0NC1iYjc0ZGI2ZmY3YmQiLCJpYXQiOjE3NTg5NTIyOTIsImV4cCI6MTc1ODk1NTg5Mn0.X1GHN41IVHyQUcWr0nvvkKO92yKANEMTX-DugAn3BelM91ep5OnYT96JH9tSMNbG7UB1uJ17jQygRlsK0oc44w&quot;]
+             Body = &lt;no character encoding set&gt;
+    Session Attrs = {}
+
+Handler:
+             Type = com.example.soso.community.freeboard.post.controller.FreeboardController
+           Method = com.example.soso.community.freeboard.post.controller.FreeboardController#getPost(Long)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 200
+    Error message = null
+          Headers = [Vary:&quot;Origin&quot;, &quot;Access-Control-Request-Method&quot;, &quot;Access-Control-Request-Headers&quot;, Content-Type:&quot;application/json&quot;, X-Content-Type-Options:&quot;nosniff&quot;, X-XSS-Protection:&quot;0&quot;, Cache-Control:&quot;no-cache, no-store, max-age=0, must-revalidate&quot;, Pragma:&quot;no-cache&quot;, Expires:&quot;0&quot;, X-Frame-Options:&quot;DENY&quot;]
+     Content type = application/json
+             Body = {&quot;postId&quot;:3,&quot;author&quot;:{&quot;userId&quot;:&quot;a48f6db7-9315-46b5-8e44-bb74db6ff7bd&quot;,&quot;nickname&quot;:&quot;창업가문어218&quot;,&quot;profileImageUrl&quot;:&quot;https://example.com/founder-profile.jpg&quot;,&quot;userType&quot;:&quot;FOUNDER&quot;,&quot;address&quot;:&quot;11680&quot;},&quot;category&quot;:&quot;STARTUP&quot;,&quot;title&quot;:&quot;수정된 창업 아이템 아이디어&quot;,&quot;content&quot;:&quot;원작성자가 내용을 수정했습니다.&quot;,&quot;imageUrls&quot;:[],&quot;likeCount&quot;:1,&quot;commentCount&quot;:1,&quot;viewCount&quot;:3,&quot;createdAt&quot;:&quot;2025-09-27T05:51:32.186344&quot;,&quot;updatedAt&quot;:&quot;2025-09-27T05:51:32.286778795&quot;,&quot;canEdit&quot;:true,&quot;canDelete&quot;:true,&quot;liked&quot;:false,&quot;isLiked&quot;:false}
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+&#x1f4ca; 최종 상태:
+  - 댓글 수: 1
+  - 좋아요 수: 1
+&#x1f3af; 인증된 사용자 권한 상세 테스트 완료! &#x1f389;
+2025-09-27T05:51:32.336Z  INFO 281 --- [    Test worker] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2025-09-27T05:51:32.336Z  INFO 281 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2025-09-27T05:51:32.336Z  INFO 281 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 0 ms
+
+&#x1f513; 미인증 사용자 접근 권한 매트릭스 테스트 시작...
+2025-09-27T05:51:32.337Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* insert for
+        com.example.soso.users.domain.entity.Users */insert 
+    into
+        users (age_range, budget, created_date, email, gender, last_modified_date, latitude, location, longitude, nickname, profile_image_url, startup_experience, user_type, username, id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert for
+        com.example.soso.users.domain.entity.Users */insert 
+    into
+        users (age_range, budget, created_date, email, gender, last_modified_date, latitude, location, longitude, nickname, profile_image_url, startup_experience, user_type, username, id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+2025-09-27T05:51:32.338Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* insert for
+        com.example.soso.users.domain.entity.Users.interests */insert 
+    into
+        user_interests (users_id, interest_type) 
+    values
+        (?, ?)
+Hibernate: 
+    /* insert for
+        com.example.soso.users.domain.entity.Users.interests */insert 
+    into
+        user_interests (users_id, interest_type) 
+    values
+        (?, ?)
+2025-09-27T05:51:32.339Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* insert for
+        com.example.soso.users.domain.entity.Users.interests */insert 
+    into
+        user_interests (users_id, interest_type) 
+    values
+        (?, ?)
+Hibernate: 
+    /* insert for
+        com.example.soso.users.domain.entity.Users.interests */insert 
+    into
+        user_interests (users_id, interest_type) 
+    values
+        (?, ?)
+2025-09-27T05:51:32.340Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    select
+        u1_0.id,
+        u1_0.age_range,
+        u1_0.budget,
+        u1_0.created_date,
+        u1_0.email,
+        u1_0.gender,
+        u1_0.last_modified_date,
+        u1_0.latitude,
+        u1_0.location,
+        u1_0.longitude,
+        u1_0.nickname,
+        u1_0.profile_image_url,
+        u1_0.startup_experience,
+        u1_0.user_type,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.age_range,
+        u1_0.budget,
+        u1_0.created_date,
+        u1_0.email,
+        u1_0.gender,
+        u1_0.last_modified_date,
+        u1_0.latitude,
+        u1_0.location,
+        u1_0.longitude,
+        u1_0.nickname,
+        u1_0.profile_image_url,
+        u1_0.startup_experience,
+        u1_0.user_type,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2025-09-27T05:51:32.341Z DEBUG 281 --- [    Test worker] c.e.s.s.filter.JwtAuthenticationFilter   : JWT 인증 성공: 77d82eb5-0dfb-4dbe-8bba-4d968bcde2bd
+2025-09-27T05:51:32.341Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.community.freeboard.post.controller.FreeboardController#createPost(FreeboardCreateRequest, CustomUserDetails)
+2025-09-27T05:51:32.342Z  INFO 281 --- [    Test worker] c.e.s.c.f.p.c.FreeboardController        : 자유게시판 글 작성 요청: userId=77d82eb5-0dfb-4dbe-8bba-4d968bcde2bd, category=STARTUP, title=미인증 접근 테스트용 게시글, imageCount=0
+2025-09-27T05:51:32.342Z  INFO 281 --- [    Test worker] c.e.s.c.f.p.s.FreeboardServiceImpl       : 자유게시판 글 작성 시작: userId=77d82eb5-0dfb-4dbe-8bba-4d968bcde2bd, category=STARTUP
+2025-09-27T05:51:32.342Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    select
+        u1_0.id,
+        u1_0.age_range,
+        u1_0.budget,
+        u1_0.created_date,
+        u1_0.email,
+        u1_0.gender,
+        u1_0.last_modified_date,
+        u1_0.latitude,
+        u1_0.location,
+        u1_0.longitude,
+        u1_0.nickname,
+        u1_0.profile_image_url,
+        u1_0.startup_experience,
+        u1_0.user_type,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.age_range,
+        u1_0.budget,
+        u1_0.created_date,
+        u1_0.email,
+        u1_0.gender,
+        u1_0.last_modified_date,
+        u1_0.latitude,
+        u1_0.location,
+        u1_0.longitude,
+        u1_0.nickname,
+        u1_0.profile_image_url,
+        u1_0.startup_experience,
+        u1_0.user_type,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2025-09-27T05:51:32.343Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* insert for
+        com.example.soso.community.common.post.domain.entity.Post */insert 
+    into
+        post (category, comment_count, content, created_date, deleted, last_modified_date, like_count, title, user_id, view_count, id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, default)
+Hibernate: 
+    /* insert for
+        com.example.soso.community.common.post.domain.entity.Post */insert 
+    into
+        post (category, comment_count, content, created_date, deleted, last_modified_date, like_count, title, user_id, view_count, id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, default)
+2025-09-27T05:51:32.344Z  INFO 281 --- [    Test worker] c.e.s.c.f.p.s.FreeboardServiceImpl       : 자유게시판 글 작성 완료: postId=4, imageCount=0
+2025-09-27T05:51:32.344Z  INFO 281 --- [    Test worker] c.e.s.c.f.p.c.FreeboardController        : 자유게시판 글 작성 완료: postId=4
+2025-09-27T05:51:32.345Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:32.345Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.example.soso.community.freeboard.post.domain.dto.FreeboardCreateResponse@38f8e674]
+&#x1f4dd; 테스트용 게시글 준비 완료: ID=4
+
+✅ [허용] 미인증 사용자가 접근 가능한 작업들:
+  1. 게시글 목록 조회...
+2025-09-27T05:51:32.345Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.community.freeboard.post.controller.FreeboardController#getPostsByCursor(String, FreeboardSortType, String, int)
+2025-09-27T05:51:32.346Z  INFO 281 --- [    Test worker] c.e.s.c.f.p.c.FreeboardController        : 자유게시판 목록 조회 요청: category=null, sort=LATEST, cursor=null, size=10, userId=anonymous
+2025-09-27T05:51:32.347Z DEBUG 281 --- [    Test worker] c.e.s.c.f.p.s.FreeboardServiceImpl       : 자유게시판 목록 조회: category=null, sort=LATEST, size=10, userId=null
+2025-09-27T05:51:32.483Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* select
+        post.id,
+        post.title,
+        post.content,
+        post.category,
+        post.likeCount,
+        post.commentCount,
+        post.viewCount,
+        post.createdDate,
+        users.id,
+        users.nickname,
+        users.location,
+        users.profileImageUrl,
+        users.userType 
+    from
+        Post post   
+    inner join
+        post.user as users 
+    where
+        post.deleted = ?1 
+    order by
+        post.createdDate desc,
+        post.id desc */ select
+            p1_0.id,
+            p1_0.title,
+            p1_0.content,
+            p1_0.category,
+            p1_0.like_count,
+            p1_0.comment_count,
+            p1_0.view_count,
+            p1_0.created_date,
+            u1_0.id,
+            u1_0.nickname,
+            u1_0.location,
+            u1_0.profile_image_url,
+            u1_0.user_type 
+        from
+            post p1_0 
+        join
+            users u1_0 
+                on u1_0.id=p1_0.user_id 
+        where
+            p1_0.deleted=? 
+        order by
+            p1_0.created_date desc,
+            p1_0.id desc 
+        fetch
+            first ? rows only
+Hibernate: 
+    /* select
+        post.id,
+        post.title,
+        post.content,
+        post.category,
+        post.likeCount,
+        post.commentCount,
+        post.viewCount,
+        post.createdDate,
+        users.id,
+        users.nickname,
+        users.location,
+        users.profileImageUrl,
+        users.userType 
+    from
+        Post post   
+    inner join
+        post.user as users 
+    where
+        post.deleted = ?1 
+    order by
+        post.createdDate desc,
+        post.id desc */ select
+            p1_0.id,
+            p1_0.title,
+            p1_0.content,
+            p1_0.category,
+            p1_0.like_count,
+            p1_0.comment_count,
+            p1_0.view_count,
+            p1_0.created_date,
+            u1_0.id,
+            u1_0.nickname,
+            u1_0.location,
+            u1_0.profile_image_url,
+            u1_0.user_type 
+        from
+            post p1_0 
+        join
+            users u1_0 
+                on u1_0.id=p1_0.user_id 
+        where
+            p1_0.deleted=? 
+        order by
+            p1_0.created_date desc,
+            p1_0.id desc 
+        fetch
+            first ? rows only
+2025-09-27T05:51:32.488Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* &lt;criteria&gt; */ select
+        count(p1_0.id) 
+    from
+        post p1_0 
+    where
+        not(p1_0.deleted)
+Hibernate: 
+    /* &lt;criteria&gt; */ select
+        count(p1_0.id) 
+    from
+        post p1_0 
+    where
+        not(p1_0.deleted)
+2025-09-27T05:51:32.488Z DEBUG 281 --- [    Test worker] c.e.s.c.f.p.c.FreeboardController        : 자유게시판 목록 조회 완료: resultCount=4, hasNext=false
+2025-09-27T05:51:32.490Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:32.490Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.example.soso.community.freeboard.post.domain.dto.FreeboardCursorResponse@2ff9233c]
+
+MockHttpServletRequest:
+      HTTP Method = GET
+      Request URI = /community/freeboard
+       Parameters = {sort=[LATEST], size=[10]}
+          Headers = []
+             Body = &lt;no character encoding set&gt;
+    Session Attrs = {}
+
+Handler:
+             Type = com.example.soso.community.freeboard.post.controller.FreeboardController
+           Method = com.example.soso.community.freeboard.post.controller.FreeboardController#getPostsByCursor(String, FreeboardSortType, String, int)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 200
+    Error message = null
+          Headers = [Vary:&quot;Origin&quot;, &quot;Access-Control-Request-Method&quot;, &quot;Access-Control-Request-Headers&quot;, Content-Type:&quot;application/json&quot;, X-Content-Type-Options:&quot;nosniff&quot;, X-XSS-Protection:&quot;0&quot;, Cache-Control:&quot;no-cache, no-store, max-age=0, must-revalidate&quot;, Pragma:&quot;no-cache&quot;, Expires:&quot;0&quot;, X-Frame-Options:&quot;DENY&quot;]
+     Content type = application/json
+             Body = {&quot;posts&quot;:[{&quot;postId&quot;:4,&quot;author&quot;:{&quot;userId&quot;:&quot;77d82eb5-0dfb-4dbe-8bba-4d968bcde2bd&quot;,&quot;nickname&quot;:&quot;창업가문어885&quot;,&quot;profileImageUrl&quot;:&quot;https://example.com/founder-profile.jpg&quot;,&quot;userType&quot;:&quot;FOUNDER&quot;},&quot;category&quot;:&quot;STARTUP&quot;,&quot;title&quot;:&quot;미인증 접근 테스트용 게시글&quot;,&quot;contentPreview&quot;:&quot;테스트용 게시글 내용입니다.&quot;,&quot;thumbnailUrl&quot;:null,&quot;imageCount&quot;:0,&quot;likeCount&quot;:0,&quot;commentCount&quot;:0,&quot;viewCount&quot;:0,&quot;createdAt&quot;:&quot;2025-09-27T05:51:32.343408&quot;,&quot;updatedAt&quot;:null,&quot;liked&quot;:false},{&quot;postId&quot;:3,&quot;author&quot;:{&quot;userId&quot;:&quot;a48f6db7-9315-46b5-8e44-bb74db6ff7bd&quot;,&quot;nickname&quot;:&quot;창업가문어218&quot;,&quot;profileImageUrl&quot;:&quot;https://example.com/founder-profile.jpg&quot;,&quot;userType&quot;:&quot;FOUNDER&quot;},&quot;category&quot;:&quot;STARTUP&quot;,&quot;title&quot;:&quot;수정된 창업 아이템 아이디어&quot;,&quot;contentPreview&quot;:&quot;원작성자가 내용을 수정했습니다.&quot;,&quot;thumbnailUrl&quot;:null,&quot;imageCount&quot;:0,&quot;likeCount&quot;:1,&quot;commentCount&quot;:1,&quot;viewCount&quot;:3,&quot;createdAt&quot;:&quot;2025-09-27T05:51:32.186344&quot;,&quot;updatedAt&quot;:null,&quot;liked&quot;:false},{&quot;postId&quot;:2,&quot;author&quot;:{&quot;userId&quot;:&quot;fe506377-8370-4635-aca0-6e97fbc6fea8&quot;,&quot;nickname&quot;:&quot;거주민문어968&quot;,&quot;profileImageUrl&quot;:&quot;https://example.com/inhabitant-profile.jpg&quot;,&quot;userType&quot;:&quot;INHABITANT&quot;},&quot;category&quot;:&quot;RESTAURANT&quot;,&quot;title&quot;:&quot;동네 맛집 리스트 최종판&quot;,&quot;contentPreview&quot;:&quot;테스트용 게시글 내용입니다.&quot;,&quot;thumbnailUrl&quot;:null,&quot;imageCount&quot;:0,&quot;likeCount&quot;:0,&quot;commentCount&quot;:0,&quot;viewCount&quot;:2,&quot;createdAt&quot;:&quot;2025-09-27T05:51:32.060682&quot;,&quot;updatedAt&quot;:null,&quot;liked&quot;:false},{&quot;postId&quot;:1,&quot;author&quot;:{&quot;userId&quot;:&quot;b5c589ca-e21e-4c2a-b4b4-a9c54a3f0dc2&quot;,&quot;nickname&quot;:&quot;창업가문어508&quot;,&quot;profileImageUrl&quot;:&quot;https://example.com/founder-profile.jpg&quot;,&quot;userType&quot;:&quot;FOUNDER&quot;},&quot;category&quot;:&quot;STARTUP&quot;,&quot;title&quot;:&quot;창업가의 투자 유치 경험담&quot;,&quot;contentPreview&quot;:&quot;테스트용 게시글 내용입니다.&quot;,&quot;thumbnailUrl&quot;:null,&quot;imageCount&quot;:0,&quot;likeCount&quot;:0,&quot;commentCount&quot;:0,&quot;viewCount&quot;:2,&quot;createdAt&quot;:&quot;2025-09-27T05:51:32.048342&quot;,&quot;updatedAt&quot;:null,&quot;liked&quot;:false}],&quot;hasNext&quot;:false,&quot;nextCursor&quot;:null,&quot;size&quot;:4,&quot;totalCount&quot;:4}
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+  2. 게시글 상세 조회...
+2025-09-27T05:51:32.493Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.community.freeboard.post.controller.FreeboardController#getPost(Long)
+2025-09-27T05:51:32.493Z  INFO 281 --- [    Test worker] c.e.s.c.f.p.c.FreeboardController        : 자유게시판 글 조회 요청: freeboardId=4, userId=anonymous
+2025-09-27T05:51:32.493Z DEBUG 281 --- [    Test worker] c.e.s.c.f.p.s.FreeboardServiceImpl       : 자유게시판 글 조회: postId=4, userId=null
+2025-09-27T05:51:32.494Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* &lt;criteria&gt; */ select
+        p1_0.id,
+        p1_0.category,
+        p1_0.comment_count,
+        p1_0.content,
+        p1_0.created_date,
+        p1_0.deleted,
+        p1_0.last_modified_date,
+        p1_0.like_count,
+        p1_0.title,
+        p1_0.user_id,
+        p1_0.view_count 
+    from
+        post p1_0 
+    where
+        p1_0.id=? 
+        and not(p1_0.deleted)
+Hibernate: 
+    /* &lt;criteria&gt; */ select
+        p1_0.id,
+        p1_0.category,
+        p1_0.comment_count,
+        p1_0.content,
+        p1_0.created_date,
+        p1_0.deleted,
+        p1_0.last_modified_date,
+        p1_0.like_count,
+        p1_0.title,
+        p1_0.user_id,
+        p1_0.view_count 
+    from
+        post p1_0 
+    where
+        p1_0.id=? 
+        and not(p1_0.deleted)
+2025-09-27T05:51:32.495Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    select
+        i1_0.post_id,
+        i1_0.id,
+        i1_0.image_url,
+        i1_0.sequence 
+    from
+        post_image i1_0 
+    where
+        i1_0.post_id=?
+Hibernate: 
+    select
+        i1_0.post_id,
+        i1_0.id,
+        i1_0.image_url,
+        i1_0.sequence 
+    from
+        post_image i1_0 
+    where
+        i1_0.post_id=?
+2025-09-27T05:51:32.495Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    select
+        u1_0.id,
+        u1_0.age_range,
+        u1_0.budget,
+        u1_0.created_date,
+        u1_0.email,
+        u1_0.gender,
+        u1_0.last_modified_date,
+        u1_0.latitude,
+        u1_0.location,
+        u1_0.longitude,
+        u1_0.nickname,
+        u1_0.profile_image_url,
+        u1_0.startup_experience,
+        u1_0.user_type,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.age_range,
+        u1_0.budget,
+        u1_0.created_date,
+        u1_0.email,
+        u1_0.gender,
+        u1_0.last_modified_date,
+        u1_0.latitude,
+        u1_0.location,
+        u1_0.longitude,
+        u1_0.nickname,
+        u1_0.profile_image_url,
+        u1_0.startup_experience,
+        u1_0.user_type,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2025-09-27T05:51:32.496Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* update
+        for com.example.soso.community.common.post.domain.entity.Post */update post 
+    set
+        category=?,
+        comment_count=?,
+        content=?,
+        deleted=?,
+        last_modified_date=?,
+        like_count=?,
+        title=?,
+        user_id=?,
+        view_count=? 
+    where
+        id=?
+Hibernate: 
+    /* update
+        for com.example.soso.community.common.post.domain.entity.Post */update post 
+    set
+        category=?,
+        comment_count=?,
+        content=?,
+        deleted=?,
+        last_modified_date=?,
+        like_count=?,
+        title=?,
+        user_id=?,
+        view_count=? 
+    where
+        id=?
+2025-09-27T05:51:32.497Z DEBUG 281 --- [    Test worker] c.e.s.c.f.p.c.FreeboardController        : 자유게시판 글 조회 완료: freeboardId=4, viewCount=1
+2025-09-27T05:51:32.497Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:32.497Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.example.soso.community.freeboard.post.domain.dto.FreeboardDetailResponse@687e9b56]
+
+MockHttpServletRequest:
+      HTTP Method = GET
+      Request URI = /community/freeboard/4
+       Parameters = {}
+          Headers = []
+             Body = &lt;no character encoding set&gt;
+    Session Attrs = {}
+
+Handler:
+             Type = com.example.soso.community.freeboard.post.controller.FreeboardController
+           Method = com.example.soso.community.freeboard.post.controller.FreeboardController#getPost(Long)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 200
+    Error message = null
+          Headers = [Vary:&quot;Origin&quot;, &quot;Access-Control-Request-Method&quot;, &quot;Access-Control-Request-Headers&quot;, Content-Type:&quot;application/json&quot;, X-Content-Type-Options:&quot;nosniff&quot;, X-XSS-Protection:&quot;0&quot;, Cache-Control:&quot;no-cache, no-store, max-age=0, must-revalidate&quot;, Pragma:&quot;no-cache&quot;, Expires:&quot;0&quot;, X-Frame-Options:&quot;DENY&quot;]
+     Content type = application/json
+             Body = {&quot;postId&quot;:4,&quot;author&quot;:{&quot;userId&quot;:&quot;77d82eb5-0dfb-4dbe-8bba-4d968bcde2bd&quot;,&quot;nickname&quot;:&quot;창업가문어885&quot;,&quot;profileImageUrl&quot;:&quot;https://example.com/founder-profile.jpg&quot;,&quot;userType&quot;:&quot;FOUNDER&quot;,&quot;address&quot;:&quot;11680&quot;},&quot;category&quot;:&quot;STARTUP&quot;,&quot;title&quot;:&quot;미인증 접근 테스트용 게시글&quot;,&quot;content&quot;:&quot;테스트용 게시글 내용입니다.&quot;,&quot;imageUrls&quot;:[],&quot;likeCount&quot;:0,&quot;commentCount&quot;:0,&quot;viewCount&quot;:1,&quot;createdAt&quot;:&quot;2025-09-27T05:51:32.343408&quot;,&quot;updatedAt&quot;:&quot;2025-09-27T05:51:32.343408&quot;,&quot;canEdit&quot;:false,&quot;canDelete&quot;:false,&quot;liked&quot;:false,&quot;isLiked&quot;:false}
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+  3. 카테고리별 게시글 조회...
+2025-09-27T05:51:32.498Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.community.freeboard.post.controller.FreeboardController#getPostsByCursor(String, FreeboardSortType, String, int)
+2025-09-27T05:51:32.499Z  INFO 281 --- [    Test worker] c.e.s.c.f.p.c.FreeboardController        : 자유게시판 목록 조회 요청: category=STARTUP, sort=LATEST, cursor=null, size=10, userId=anonymous
+2025-09-27T05:51:32.499Z DEBUG 281 --- [    Test worker] c.e.s.c.f.p.s.FreeboardServiceImpl       : 자유게시판 목록 조회: category=STARTUP, sort=LATEST, size=10, userId=null
+2025-09-27T05:51:32.502Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* select
+        post.id,
+        post.title,
+        post.content,
+        post.category,
+        post.likeCount,
+        post.commentCount,
+        post.viewCount,
+        post.createdDate,
+        users.id,
+        users.nickname,
+        users.location,
+        users.profileImageUrl,
+        users.userType 
+    from
+        Post post   
+    inner join
+        post.user as users 
+    where
+        post.deleted = ?1 
+        and post.category = ?2 
+    order by
+        post.createdDate desc,
+        post.id desc */ select
+            p1_0.id,
+            p1_0.title,
+            p1_0.content,
+            p1_0.category,
+            p1_0.like_count,
+            p1_0.comment_count,
+            p1_0.view_count,
+            p1_0.created_date,
+            u1_0.id,
+            u1_0.nickname,
+            u1_0.location,
+            u1_0.profile_image_url,
+            u1_0.user_type 
+        from
+            post p1_0 
+        join
+            users u1_0 
+                on u1_0.id=p1_0.user_id 
+        where
+            p1_0.deleted=? 
+            and p1_0.category=? 
+        order by
+            p1_0.created_date desc,
+            p1_0.id desc 
+        fetch
+            first ? rows only
+Hibernate: 
+    /* select
+        post.id,
+        post.title,
+        post.content,
+        post.category,
+        post.likeCount,
+        post.commentCount,
+        post.viewCount,
+        post.createdDate,
+        users.id,
+        users.nickname,
+        users.location,
+        users.profileImageUrl,
+        users.userType 
+    from
+        Post post   
+    inner join
+        post.user as users 
+    where
+        post.deleted = ?1 
+        and post.category = ?2 
+    order by
+        post.createdDate desc,
+        post.id desc */ select
+            p1_0.id,
+            p1_0.title,
+            p1_0.content,
+            p1_0.category,
+            p1_0.like_count,
+            p1_0.comment_count,
+            p1_0.view_count,
+            p1_0.created_date,
+            u1_0.id,
+            u1_0.nickname,
+            u1_0.location,
+            u1_0.profile_image_url,
+            u1_0.user_type 
+        from
+            post p1_0 
+        join
+            users u1_0 
+                on u1_0.id=p1_0.user_id 
+        where
+            p1_0.deleted=? 
+            and p1_0.category=? 
+        order by
+            p1_0.created_date desc,
+            p1_0.id desc 
+        fetch
+            first ? rows only
+2025-09-27T05:51:32.505Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* &lt;criteria&gt; */ select
+        count(p1_0.id) 
+    from
+        post p1_0 
+    where
+        p1_0.category=? 
+        and not(p1_0.deleted)
+Hibernate: 
+    /* &lt;criteria&gt; */ select
+        count(p1_0.id) 
+    from
+        post p1_0 
+    where
+        p1_0.category=? 
+        and not(p1_0.deleted)
+2025-09-27T05:51:32.506Z DEBUG 281 --- [    Test worker] c.e.s.c.f.p.c.FreeboardController        : 자유게시판 목록 조회 완료: resultCount=3, hasNext=false
+2025-09-27T05:51:32.506Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:32.506Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.example.soso.community.freeboard.post.domain.dto.FreeboardCursorResponse@336a7a2f]
+
+MockHttpServletRequest:
+      HTTP Method = GET
+      Request URI = /community/freeboard
+       Parameters = {category=[STARTUP], sort=[LATEST]}
+          Headers = []
+             Body = &lt;no character encoding set&gt;
+    Session Attrs = {}
+
+Handler:
+             Type = com.example.soso.community.freeboard.post.controller.FreeboardController
+           Method = com.example.soso.community.freeboard.post.controller.FreeboardController#getPostsByCursor(String, FreeboardSortType, String, int)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 200
+    Error message = null
+          Headers = [Vary:&quot;Origin&quot;, &quot;Access-Control-Request-Method&quot;, &quot;Access-Control-Request-Headers&quot;, Content-Type:&quot;application/json&quot;, X-Content-Type-Options:&quot;nosniff&quot;, X-XSS-Protection:&quot;0&quot;, Cache-Control:&quot;no-cache, no-store, max-age=0, must-revalidate&quot;, Pragma:&quot;no-cache&quot;, Expires:&quot;0&quot;, X-Frame-Options:&quot;DENY&quot;]
+     Content type = application/json
+             Body = {&quot;posts&quot;:[{&quot;postId&quot;:4,&quot;author&quot;:{&quot;userId&quot;:&quot;77d82eb5-0dfb-4dbe-8bba-4d968bcde2bd&quot;,&quot;nickname&quot;:&quot;창업가문어885&quot;,&quot;profileImageUrl&quot;:&quot;https://example.com/founder-profile.jpg&quot;,&quot;userType&quot;:&quot;FOUNDER&quot;},&quot;category&quot;:&quot;STARTUP&quot;,&quot;title&quot;:&quot;미인증 접근 테스트용 게시글&quot;,&quot;contentPreview&quot;:&quot;테스트용 게시글 내용입니다.&quot;,&quot;thumbnailUrl&quot;:null,&quot;imageCount&quot;:0,&quot;likeCount&quot;:0,&quot;commentCount&quot;:0,&quot;viewCount&quot;:1,&quot;createdAt&quot;:&quot;2025-09-27T05:51:32.343408&quot;,&quot;updatedAt&quot;:null,&quot;liked&quot;:false},{&quot;postId&quot;:3,&quot;author&quot;:{&quot;userId&quot;:&quot;a48f6db7-9315-46b5-8e44-bb74db6ff7bd&quot;,&quot;nickname&quot;:&quot;창업가문어218&quot;,&quot;profileImageUrl&quot;:&quot;https://example.com/founder-profile.jpg&quot;,&quot;userType&quot;:&quot;FOUNDER&quot;},&quot;category&quot;:&quot;STARTUP&quot;,&quot;title&quot;:&quot;수정된 창업 아이템 아이디어&quot;,&quot;contentPreview&quot;:&quot;원작성자가 내용을 수정했습니다.&quot;,&quot;thumbnailUrl&quot;:null,&quot;imageCount&quot;:0,&quot;likeCount&quot;:1,&quot;commentCount&quot;:1,&quot;viewCount&quot;:3,&quot;createdAt&quot;:&quot;2025-09-27T05:51:32.186344&quot;,&quot;updatedAt&quot;:null,&quot;liked&quot;:false},{&quot;postId&quot;:1,&quot;author&quot;:{&quot;userId&quot;:&quot;b5c589ca-e21e-4c2a-b4b4-a9c54a3f0dc2&quot;,&quot;nickname&quot;:&quot;창업가문어508&quot;,&quot;profileImageUrl&quot;:&quot;https://example.com/founder-profile.jpg&quot;,&quot;userType&quot;:&quot;FOUNDER&quot;},&quot;category&quot;:&quot;STARTUP&quot;,&quot;title&quot;:&quot;창업가의 투자 유치 경험담&quot;,&quot;contentPreview&quot;:&quot;테스트용 게시글 내용입니다.&quot;,&quot;thumbnailUrl&quot;:null,&quot;imageCount&quot;:0,&quot;likeCount&quot;:0,&quot;commentCount&quot;:0,&quot;viewCount&quot;:2,&quot;createdAt&quot;:&quot;2025-09-27T05:51:32.048342&quot;,&quot;updatedAt&quot;:null,&quot;liked&quot;:false}],&quot;hasNext&quot;:false,&quot;nextCursor&quot;:null,&quot;size&quot;:3,&quot;totalCount&quot;:3}
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+  4. 댓글 목록 조회...
+2025-09-27T05:51:32.508Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.community.freeboard.comment.controller.FreeboardCommentController#getCommentsByCursor(Long, FreeboardCommentSortType, String, int)
+2025-09-27T05:51:32.508Z  INFO 281 --- [    Test worker] c.e.s.c.f.c.c.FreeboardCommentController : 자유게시판 댓글 목록 조회 요청: freeboardId=4, sort=LATEST, cursor=null, size=20, userId=anonymous
+2025-09-27T05:51:32.509Z  INFO 281 --- [    Test worker] c.e.s.c.c.s.AbstractCommentService       : 댓글 목록 조회: postId=4, sortType=LATEST, size=20, userId=null
+2025-09-27T05:51:32.510Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* &lt;criteria&gt; */ select
+        p1_0.id,
+        p1_0.category,
+        p1_0.comment_count,
+        p1_0.content,
+        p1_0.created_date,
+        p1_0.deleted,
+        p1_0.last_modified_date,
+        p1_0.like_count,
+        p1_0.title,
+        p1_0.user_id,
+        p1_0.view_count 
+    from
+        post p1_0 
+    where
+        p1_0.id=? 
+        and not(p1_0.deleted)
+Hibernate: 
+    /* &lt;criteria&gt; */ select
+        p1_0.id,
+        p1_0.category,
+        p1_0.comment_count,
+        p1_0.content,
+        p1_0.created_date,
+        p1_0.deleted,
+        p1_0.last_modified_date,
+        p1_0.like_count,
+        p1_0.title,
+        p1_0.user_id,
+        p1_0.view_count 
+    from
+        post p1_0 
+    where
+        p1_0.id=? 
+        and not(p1_0.deleted)
+2025-09-27T05:51:32.513Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* &lt;criteria&gt; */ select
+        c1_0.id,
+        c1_0.content,
+        c1_0.created_date,
+        c1_0.deleted,
+        c1_0.last_modified_date,
+        c1_0.like_count,
+        c1_0.parent_id,
+        c1_0.post_id,
+        c1_0.user_id 
+    from
+        comments c1_0 
+    left join
+        post p1_0 
+            on p1_0.id=c1_0.post_id 
+    where
+        p1_0.id=? 
+    order by
+        c1_0.created_date desc 
+    fetch
+        first ? rows only
+Hibernate: 
+    /* &lt;criteria&gt; */ select
+        c1_0.id,
+        c1_0.content,
+        c1_0.created_date,
+        c1_0.deleted,
+        c1_0.last_modified_date,
+        c1_0.like_count,
+        c1_0.parent_id,
+        c1_0.post_id,
+        c1_0.user_id 
+    from
+        comments c1_0 
+    left join
+        post p1_0 
+            on p1_0.id=c1_0.post_id 
+    where
+        p1_0.id=? 
+    order by
+        c1_0.created_date desc 
+    fetch
+        first ? rows only
+2025-09-27T05:51:32.514Z DEBUG 281 --- [    Test worker] c.e.s.c.f.c.c.FreeboardCommentController : 자유게시판 댓글 목록 조회 완료: resultCount=0, hasNext=false
+2025-09-27T05:51:32.515Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:32.516Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.example.soso.community.freeboard.comment.domain.dto.FreeboardCommentCursorResponse@25704ca2]
+
+MockHttpServletRequest:
+      HTTP Method = GET
+      Request URI = /community/freeboard/4/comments
+       Parameters = {sort=[LATEST]}
+          Headers = []
+             Body = &lt;no character encoding set&gt;
+    Session Attrs = {}
+
+Handler:
+             Type = com.example.soso.community.freeboard.comment.controller.FreeboardCommentController
+           Method = com.example.soso.community.freeboard.comment.controller.FreeboardCommentController#getCommentsByCursor(Long, FreeboardCommentSortType, String, int)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 200
+    Error message = null
+          Headers = [Vary:&quot;Origin&quot;, &quot;Access-Control-Request-Method&quot;, &quot;Access-Control-Request-Headers&quot;, Content-Type:&quot;application/json&quot;, X-Content-Type-Options:&quot;nosniff&quot;, X-XSS-Protection:&quot;0&quot;, Cache-Control:&quot;no-cache, no-store, max-age=0, must-revalidate&quot;, Pragma:&quot;no-cache&quot;, Expires:&quot;0&quot;, X-Frame-Options:&quot;DENY&quot;]
+     Content type = application/json
+             Body = {&quot;comments&quot;:[],&quot;hasNext&quot;:false,&quot;nextCursor&quot;:null,&quot;size&quot;:0}
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+✅ 미인증 사용자 허용 작업들 모두 통과!
+
+❌ [차단] 미인증 사용자가 접근 불가능한 작업들:
+  1. 게시글 작성 차단 확인...
+2025-09-27T05:51:32.518Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.community.freeboard.post.controller.FreeboardController#createPost(FreeboardCreateRequest, CustomUserDetails)
+2025-09-27T05:51:32.518Z  WARN 281 --- [    Test worker] c.e.s.c.f.p.c.FreeboardController        : 자유게시판 글 작성 요청 시 인증 정보 없음
+2025-09-27T05:51:32.518Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:32.518Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [ErrorResponse[code=AUTHENTICATION_FAILED, message=인증이 필요합니다.]]
+
+MockHttpServletRequest:
+      HTTP Method = POST
+      Request URI = /community/freeboard
+       Parameters = {title=[미인증 작성 시도], content=[미인증 상태에서 작성 시도], category=[OTHERS]}
+          Headers = [Content-Type:&quot;multipart/form-data&quot;]
+             Body = &lt;no character encoding set&gt;
+    Session Attrs = {}
+
+Handler:
+             Type = com.example.soso.community.freeboard.post.controller.FreeboardController
+           Method = com.example.soso.community.freeboard.post.controller.FreeboardController#createPost(FreeboardCreateRequest, CustomUserDetails)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 401
+    Error message = null
+          Headers = [Vary:&quot;Origin&quot;, &quot;Access-Control-Request-Method&quot;, &quot;Access-Control-Request-Headers&quot;, Content-Type:&quot;application/json&quot;, X-Content-Type-Options:&quot;nosniff&quot;, X-XSS-Protection:&quot;0&quot;, Cache-Control:&quot;no-cache, no-store, max-age=0, must-revalidate&quot;, Pragma:&quot;no-cache&quot;, Expires:&quot;0&quot;, X-Frame-Options:&quot;DENY&quot;]
+     Content type = application/json
+             Body = {&quot;code&quot;:&quot;AUTHENTICATION_FAILED&quot;,&quot;message&quot;:&quot;인증이 필요합니다.&quot;}
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+  2. 게시글 수정 차단 확인...
+2025-09-27T05:51:32.519Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.community.freeboard.post.controller.FreeboardController#updatePost(Long, FreeboardUpdateRequest, CustomUserDetails)
+2025-09-27T05:51:32.520Z  WARN 281 --- [    Test worker] c.e.s.c.f.p.c.FreeboardController        : 자유게시판 글 수정 요청 시 인증 정보 없음: freeboardId=4
+2025-09-27T05:51:32.520Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:32.520Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [ErrorResponse[code=AUTHENTICATION_FAILED, message=인증이 필요합니다.]]
+
+MockHttpServletRequest:
+      HTTP Method = PATCH
+      Request URI = /community/freeboard/4
+       Parameters = {title=[미인증 수정 시도], content=[미인증 상태에서 수정 시도], category=[STARTUP]}
+          Headers = [Content-Type:&quot;multipart/form-data&quot;]
+             Body = &lt;no character encoding set&gt;
+    Session Attrs = {}
+
+Handler:
+             Type = com.example.soso.community.freeboard.post.controller.FreeboardController
+           Method = com.example.soso.community.freeboard.post.controller.FreeboardController#updatePost(Long, FreeboardUpdateRequest, CustomUserDetails)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 401
+    Error message = null
+          Headers = [Vary:&quot;Origin&quot;, &quot;Access-Control-Request-Method&quot;, &quot;Access-Control-Request-Headers&quot;, Content-Type:&quot;application/json&quot;, X-Content-Type-Options:&quot;nosniff&quot;, X-XSS-Protection:&quot;0&quot;, Cache-Control:&quot;no-cache, no-store, max-age=0, must-revalidate&quot;, Pragma:&quot;no-cache&quot;, Expires:&quot;0&quot;, X-Frame-Options:&quot;DENY&quot;]
+     Content type = application/json
+             Body = {&quot;code&quot;:&quot;AUTHENTICATION_FAILED&quot;,&quot;message&quot;:&quot;인증이 필요합니다.&quot;}
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+  3. 게시글 삭제 차단 확인...
+2025-09-27T05:51:32.521Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.community.freeboard.post.controller.FreeboardController#deletePost(Long, CustomUserDetails)
+2025-09-27T05:51:32.521Z  WARN 281 --- [    Test worker] c.e.s.c.f.p.c.FreeboardController        : 자유게시판 글 삭제 요청 시 인증 정보 없음: freeboardId=4
+2025-09-27T05:51:32.521Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:32.521Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [ErrorResponse[code=AUTHENTICATION_FAILED, message=인증이 필요합니다.]]
+
+MockHttpServletRequest:
+      HTTP Method = DELETE
+      Request URI = /community/freeboard/4
+       Parameters = {}
+          Headers = []
+             Body = &lt;no character encoding set&gt;
+    Session Attrs = {}
+
+Handler:
+             Type = com.example.soso.community.freeboard.post.controller.FreeboardController
+           Method = com.example.soso.community.freeboard.post.controller.FreeboardController#deletePost(Long, CustomUserDetails)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 401
+    Error message = null
+          Headers = [Vary:&quot;Origin&quot;, &quot;Access-Control-Request-Method&quot;, &quot;Access-Control-Request-Headers&quot;, Content-Type:&quot;application/json&quot;, X-Content-Type-Options:&quot;nosniff&quot;, X-XSS-Protection:&quot;0&quot;, Cache-Control:&quot;no-cache, no-store, max-age=0, must-revalidate&quot;, Pragma:&quot;no-cache&quot;, Expires:&quot;0&quot;, X-Frame-Options:&quot;DENY&quot;]
+     Content type = application/json
+             Body = {&quot;code&quot;:&quot;AUTHENTICATION_FAILED&quot;,&quot;message&quot;:&quot;인증이 필요합니다.&quot;}
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+  4. 댓글 작성 차단 확인...
+2025-09-27T05:51:32.522Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.community.freeboard.comment.controller.FreeboardCommentController#createComment(Long, FreeboardCommentCreateRequest, CustomUserDetails)
+2025-09-27T05:51:32.523Z DEBUG 281 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read &quot;application/json&quot; to [com.example.soso.community.freeboard.comment.domain.dto.FreeboardCommentCreateRequest@13ef8b07]
+2025-09-27T05:51:32.523Z  WARN 281 --- [    Test worker] c.e.s.c.f.c.c.FreeboardCommentController : 자유게시판 댓글 작성 요청 시 인증 정보 없음: freeboardId=4
+2025-09-27T05:51:32.523Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:32.523Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [ErrorResponse[code=AUTHENTICATION_FAILED, message=인증이 필요합니다.]]
+
+MockHttpServletRequest:
+      HTTP Method = POST
+      Request URI = /community/freeboard/4/comments
+       Parameters = {}
+          Headers = [Content-Type:&quot;application/json&quot;, Content-Length:&quot;45&quot;]
+             Body = &lt;no character encoding set&gt;
+    Session Attrs = {}
+
+Handler:
+             Type = com.example.soso.community.freeboard.comment.controller.FreeboardCommentController
+           Method = com.example.soso.community.freeboard.comment.controller.FreeboardCommentController#createComment(Long, FreeboardCommentCreateRequest, CustomUserDetails)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 401
+    Error message = null
+          Headers = [Vary:&quot;Origin&quot;, &quot;Access-Control-Request-Method&quot;, &quot;Access-Control-Request-Headers&quot;, Content-Type:&quot;application/json&quot;, X-Content-Type-Options:&quot;nosniff&quot;, X-XSS-Protection:&quot;0&quot;, Cache-Control:&quot;no-cache, no-store, max-age=0, must-revalidate&quot;, Pragma:&quot;no-cache&quot;, Expires:&quot;0&quot;, X-Frame-Options:&quot;DENY&quot;]
+     Content type = application/json
+             Body = {&quot;code&quot;:&quot;AUTHENTICATION_FAILED&quot;,&quot;message&quot;:&quot;인증이 필요합니다.&quot;}
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+  5. 좋아요 차단 확인...
+2025-09-27T05:51:32.524Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.community.freeboard.like.controller.FreeboardLikeController#toggleLike(Long, CustomUserDetails)
+2025-09-27T05:51:32.524Z  WARN 281 --- [    Test worker] c.e.s.c.f.l.c.FreeboardLikeController    : toggleLike 요청 시 인증 정보 없음: freeboardId=4
+2025-09-27T05:51:32.524Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:32.524Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [ErrorResponse[code=AUTHENTICATION_FAILED, message=인증이 필요합니다.]]
+
+MockHttpServletRequest:
+      HTTP Method = POST
+      Request URI = /community/freeboard/4/like
+       Parameters = {}
+          Headers = []
+             Body = &lt;no character encoding set&gt;
+    Session Attrs = {}
+
+Handler:
+             Type = com.example.soso.community.freeboard.like.controller.FreeboardLikeController
+           Method = com.example.soso.community.freeboard.like.controller.FreeboardLikeController#toggleLike(Long, CustomUserDetails)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 401
+    Error message = null
+          Headers = [Vary:&quot;Origin&quot;, &quot;Access-Control-Request-Method&quot;, &quot;Access-Control-Request-Headers&quot;, Content-Type:&quot;application/json&quot;, X-Content-Type-Options:&quot;nosniff&quot;, X-XSS-Protection:&quot;0&quot;, Cache-Control:&quot;no-cache, no-store, max-age=0, must-revalidate&quot;, Pragma:&quot;no-cache&quot;, Expires:&quot;0&quot;, X-Frame-Options:&quot;DENY&quot;]
+     Content type = application/json
+             Body = {&quot;code&quot;:&quot;AUTHENTICATION_FAILED&quot;,&quot;message&quot;:&quot;인증이 필요합니다.&quot;}
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+✅ 미인증 사용자 차단 작업들 모두 확인!
+&#x1f3af; 미인증 사용자 접근 권한 매트릭스 테스트 완료! &#x1f389;
+</pre>
+</span>
+</div>
+</div>
+<div id="footer">
+<p>
+<div>
+<label class="hidden" id="label-for-line-wrapping-toggle" for="line-wrapping-toggle">Wrap lines
+<input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
+</label>
+</div>Generated by 
+<a href="https://www.gradle.org">Gradle 8.14.2</a> at Sep 27, 2025, 5:51:42 AM</p>
+</div>
+</div>
+</body>
+</html>

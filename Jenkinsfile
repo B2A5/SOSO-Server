@@ -24,10 +24,17 @@ pipeline {
                 sh '''
                     set -eux
                     export SPRING_PROFILES_ACTIVE=test
+                    export SPRING_DATASOURCE_URL="jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=MySQL;DATABASE_TO_LOWER=TRUE;CASE_INSENSITIVE_IDENTIFIERS=TRUE"
+                    export SPRING_DATASOURCE_DRIVER_CLASS_NAME="org.h2.Driver"
+                    export SPRING_DATASOURCE_USERNAME="sa"
+                    export SPRING_DATASOURCE_PASSWORD=""
+                    export SPRING_JPA_HIBERNATE_DDL_AUTO="create-drop"
+                    export SPRING_JPA_DATABASE_PLATFORM="org.hibernate.dialect.H2Dialect"
+                    export SPRING_SESSION_STORE_TYPE="none"
                     echo "Running tests with profile: $SPRING_PROFILES_ACTIVE"
+                    echo "Using database: $SPRING_DATASOURCE_URL"
                     echo "Java version: $(java -version 2>&1 | head -1)"
-                    echo "Available profiles: test"
-                    ./gradlew clean test -Dspring.profiles.active=test --info --stacktrace -Dspring.config.activate.on-profile=test
+                    ./gradlew clean test -Dspring.profiles.active=test --info --stacktrace
                 '''
             }
             post {

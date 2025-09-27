@@ -1,0 +1,3433 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="x-ua-compatible" content="IE=edge"/>
+<title>Test results - &#x1f6a8; 에러 시나리오 및 예외 상황 통합 테스트</title>
+<link href="../css/base-style.css" rel="stylesheet" type="text/css"/>
+<link href="../css/style.css" rel="stylesheet" type="text/css"/>
+<script src="../js/report.js" type="text/javascript"></script>
+</head>
+<body>
+<div id="content">
+<h1>&#x1f6a8; 에러 시나리오 및 예외 상황 통합 테스트</h1>
+<div class="breadcrumbs">
+<a href="../index.html">all</a> &gt; 
+<a href="../packages/com.example.soso.community.freeboard.integration.html">com.example.soso.community.freeboard.integration</a> &gt; ErrorScenarioIntegrationTest</div>
+<div id="summary">
+<table>
+<tr>
+<td>
+<div class="summaryGroup">
+<table>
+<tr>
+<td>
+<div class="infoBox" id="tests">
+<div class="counter">6</div>
+<p>tests</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="failures">
+<div class="counter">0</div>
+<p>failures</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="ignored">
+<div class="counter">0</div>
+<p>ignored</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="duration">
+<div class="counter">0.213s</div>
+<p>duration</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</td>
+<td>
+<div class="infoBox success" id="successRate">
+<div class="percent">100%</div>
+<p>successful</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="tab-container">
+<ul class="tabLinks">
+<li>
+<a href="#">Tests</a>
+</li>
+<li>
+<a href="#">Standard output</a>
+</li>
+</ul>
+<div class="tab">
+<h2>Tests</h2>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>Method name</th>
+<th>Duration</th>
+<th>Result</th>
+</tr>
+</thead>
+<tr>
+<td class="success">&#x1f6ab; 인증 관련 에러 시나리오: 토큰 없음, 잘못된 토큰, 만료된 토큰</td>
+<td class="success">authenticationErrorScenarios()</td>
+<td class="success">0.012s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">&#x1f510; 권한 관련 에러 시나리오: 다른 사용자 게시글/댓글 수정/삭제 시도</td>
+<td class="success">authorizationErrorScenarios()</td>
+<td class="success">0.042s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">⚠️ 비즈니스 로직 에러 시나리오: 중복 좋아요, 삭제된 리소스 접근 등</td>
+<td class="success">businessLogicErrorScenarios()</td>
+<td class="success">0.071s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">&#x1f4dd; 데이터 검증 에러 시나리오: 필수 필드 누락, 길이 제한 초과, 잘못된 형식</td>
+<td class="success">dataValidationErrorScenarios()</td>
+<td class="success">0.020s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">&#x1f4c4; 페이징 및 파라미터 에러 시나리오: 잘못된 파라미터, 범위 초과 등</td>
+<td class="success">paginationAndParameterErrorScenarios()</td>
+<td class="success">0.016s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">&#x1f50d; 리소스 존재하지 않음 에러 시나리오: 404 Not Found 케이스들</td>
+<td class="success">resourceNotFoundErrorScenarios()</td>
+<td class="success">0.052s</td>
+<td class="success">passed</td>
+</tr>
+</table>
+</div>
+<div class="tab">
+<h2>Standard output</h2>
+<span class="code">
+<pre>2025-09-27T05:51:33.826Z  INFO 281 --- [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.example.soso.community.freeboard.integration.ErrorScenarioIntegrationTest]: ErrorScenarioIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2025-09-27T05:51:33.828Z  INFO 281 --- [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.example.soso.SosoApplication for test class com.example.soso.community.freeboard.integration.ErrorScenarioIntegrationTest
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.3)
+
+2025-09-27T05:51:33.845Z  INFO 281 --- [    Test worker] c.e.s.c.f.i.ErrorScenarioIntegrationTest : Starting ErrorScenarioIntegrationTest using Java 21.0.8 with PID 281 (started by root in /workspace)
+2025-09-27T05:51:33.845Z DEBUG 281 --- [    Test worker] c.e.s.c.f.i.ErrorScenarioIntegrationTest : Running with Spring Boot v3.5.3, Spring v6.2.8
+2025-09-27T05:51:33.845Z  INFO 281 --- [    Test worker] c.e.s.c.f.i.ErrorScenarioIntegrationTest : The following 1 profile is active: &quot;test&quot;
+2025-09-27T05:51:33.933Z  INFO 281 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-09-27T05:51:33.933Z  INFO 281 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2025-09-27T05:51:33.934Z  INFO 281 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 0 ms. Found 0 Redis repository interfaces.
+2025-09-27T05:51:33.951Z  INFO 281 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-09-27T05:51:33.951Z  INFO 281 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-09-27T05:51:33.958Z  INFO 281 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 6 ms. Found 6 JPA repository interfaces.
+2025-09-27T05:51:33.958Z  INFO 281 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-09-27T05:51:33.958Z  INFO 281 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2025-09-27T05:51:33.961Z  INFO 281 --- [    Test worker] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.example.soso.community.common.comment.domain.repository.CommentRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-09-27T05:51:33.961Z  INFO 281 --- [    Test worker] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.example.soso.community.common.likes.repository.CommentLikeRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-09-27T05:51:33.961Z  INFO 281 --- [    Test worker] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.example.soso.community.common.likes.repository.PostLikeRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-09-27T05:51:33.961Z  INFO 281 --- [    Test worker] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.example.soso.community.common.post.repository.PostImageRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-09-27T05:51:33.961Z  INFO 281 --- [    Test worker] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.example.soso.community.common.post.repository.PostRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-09-27T05:51:33.961Z  INFO 281 --- [    Test worker] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.example.soso.users.repository.UsersRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-09-27T05:51:33.961Z  INFO 281 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 1 ms. Found 0 Redis repository interfaces.
+2025-09-27T05:51:33.984Z  INFO 281 --- [    Test worker] o.s.cloud.context.scope.GenericScope     : BeanFactory id=36932a80-4229-3af0-b584-690d3d9dd1eb
+2025-09-27T05:51:34.127Z  INFO 281 --- [    Test worker] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 0 (http)
+2025-09-27T05:51:34.134Z  INFO 281 --- [    Test worker] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-09-27T05:51:34.134Z  INFO 281 --- [    Test worker] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.42]
+2025-09-27T05:51:34.194Z  INFO 281 --- [    Test worker] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-09-27T05:51:34.194Z  INFO 281 --- [    Test worker] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 348 ms
+2025-09-27T05:51:34.213Z  INFO 281 --- [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-09-27T05:51:34.215Z  INFO 281 --- [    Test worker] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-09-27T05:51:34.218Z  INFO 281 --- [    Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-09-27T05:51:34.219Z  INFO 281 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-7 - Starting...
+2025-09-27T05:51:34.219Z  INFO 281 --- [    Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-7 - Added connection conn60: url=jdbc:h2:mem:testdb user=SA
+2025-09-27T05:51:34.219Z  INFO 281 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-7 - Start completed.
+2025-09-27T05:51:34.220Z  WARN 281 --- [    Test worker] org.hibernate.orm.deprecation            : HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-09-27T05:51:34.220Z  INFO 281 --- [    Test worker] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-7)']
+	Database driver: undefined/unknown
+	Database version: 2.3.232
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-09-27T05:51:34.265Z  INFO 281 --- [    Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-09-27T05:51:34.266Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    drop table if exists comment_likes cascade 
+Hibernate: 
+    drop table if exists comment_likes cascade 
+2025-09-27T05:51:34.266Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    drop table if exists comments cascade 
+Hibernate: 
+    drop table if exists comments cascade 
+2025-09-27T05:51:34.267Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    drop table if exists post cascade 
+Hibernate: 
+    drop table if exists post cascade 
+2025-09-27T05:51:34.267Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    drop table if exists post_image cascade 
+Hibernate: 
+    drop table if exists post_image cascade 
+2025-09-27T05:51:34.267Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    drop table if exists post_like cascade 
+Hibernate: 
+    drop table if exists post_like cascade 
+2025-09-27T05:51:34.267Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    drop table if exists user_interests cascade 
+Hibernate: 
+    drop table if exists user_interests cascade 
+2025-09-27T05:51:34.268Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    drop table if exists users cascade 
+Hibernate: 
+    drop table if exists users cascade 
+2025-09-27T05:51:34.269Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    create table comment_likes (
+        comment_id bigint,
+        id bigint generated by default as identity,
+        user_id varchar(36),
+        primary key (id),
+        unique (comment_id, user_id)
+    )
+Hibernate: 
+    create table comment_likes (
+        comment_id bigint,
+        id bigint generated by default as identity,
+        user_id varchar(36),
+        primary key (id),
+        unique (comment_id, user_id)
+    )
+2025-09-27T05:51:34.270Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    create table comments (
+        deleted boolean not null,
+        like_count integer not null,
+        created_date timestamp(6),
+        id bigint generated by default as identity,
+        last_modified_date timestamp(6),
+        parent_id bigint,
+        post_id bigint,
+        user_id varchar(36),
+        content clob,
+        primary key (id)
+    )
+Hibernate: 
+    create table comments (
+        deleted boolean not null,
+        like_count integer not null,
+        created_date timestamp(6),
+        id bigint generated by default as identity,
+        last_modified_date timestamp(6),
+        parent_id bigint,
+        post_id bigint,
+        user_id varchar(36),
+        content clob,
+        primary key (id)
+    )
+2025-09-27T05:51:34.270Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    create table post (
+        comment_count integer not null,
+        deleted boolean not null,
+        like_count integer not null,
+        view_count integer not null,
+        created_date timestamp(6),
+        id bigint generated by default as identity,
+        last_modified_date timestamp(6),
+        user_id varchar(36),
+        title varchar(255),
+        category enum ('DAILY_HOBBY','LIVING_CONVENIENCE','NEIGHBORHOOD_NEWS','OTHERS','RESTAURANT','STARTUP'),
+        content clob,
+        primary key (id)
+    )
+Hibernate: 
+    create table post (
+        comment_count integer not null,
+        deleted boolean not null,
+        like_count integer not null,
+        view_count integer not null,
+        created_date timestamp(6),
+        id bigint generated by default as identity,
+        last_modified_date timestamp(6),
+        user_id varchar(36),
+        title varchar(255),
+        category enum ('DAILY_HOBBY','LIVING_CONVENIENCE','NEIGHBORHOOD_NEWS','OTHERS','RESTAURANT','STARTUP'),
+        content clob,
+        primary key (id)
+    )
+2025-09-27T05:51:34.270Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    create table post_image (
+        sequence integer not null,
+        id bigint generated by default as identity,
+        post_id bigint,
+        image_url varchar(255),
+        primary key (id)
+    )
+Hibernate: 
+    create table post_image (
+        sequence integer not null,
+        id bigint generated by default as identity,
+        post_id bigint,
+        image_url varchar(255),
+        primary key (id)
+    )
+2025-09-27T05:51:34.271Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    create table post_like (
+        id bigint generated by default as identity,
+        post_id bigint,
+        user_id varchar(36),
+        primary key (id),
+        unique (post_id, user_id)
+    )
+Hibernate: 
+    create table post_like (
+        id bigint generated by default as identity,
+        post_id bigint,
+        user_id varchar(36),
+        primary key (id),
+        unique (post_id, user_id)
+    )
+2025-09-27T05:51:34.271Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    create table user_interests (
+        users_id varchar(36) not null,
+        interest_type enum ('ACCOMMODATION_FOOD','ART_SPORTS','MANUFACTURING','OTHER','TRANSPORT','WELFARE','WHOLESALE_RETAIL')
+    )
+Hibernate: 
+    create table user_interests (
+        users_id varchar(36) not null,
+        interest_type enum ('ACCOMMODATION_FOOD','ART_SPORTS','MANUFACTURING','OTHER','TRANSPORT','WELFARE','WHOLESALE_RETAIL')
+    )
+2025-09-27T05:51:34.272Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    create table users (
+        created_date timestamp(6),
+        last_modified_date timestamp(6),
+        id varchar(36) not null,
+        email varchar(255),
+        latitude varchar(255),
+        location varchar(255),
+        longitude varchar(255),
+        nickname varchar(255),
+        profile_image_url varchar(255),
+        username varchar(255),
+        age_range enum ('FIFTIES','FORTIES','SIXTIES_AND_OVER','TEENS','THIRTIES','TWENTIES'),
+        budget enum ('OVER_1B','THOUSANDS_2000','THOUSANDS_3000_5000','THOUSANDS_5000_7000','THOUSANDS_7000_TO_1B','UNDER_1000'),
+        gender enum ('FEMALE','MALE'),
+        startup_experience enum ('NO','YES'),
+        user_type enum ('FOUNDER','INHABITANT'),
+        primary key (id)
+    )
+Hibernate: 
+    create table users (
+        created_date timestamp(6),
+        last_modified_date timestamp(6),
+        id varchar(36) not null,
+        email varchar(255),
+        latitude varchar(255),
+        location varchar(255),
+        longitude varchar(255),
+        nickname varchar(255),
+        profile_image_url varchar(255),
+        username varchar(255),
+        age_range enum ('FIFTIES','FORTIES','SIXTIES_AND_OVER','TEENS','THIRTIES','TWENTIES'),
+        budget enum ('OVER_1B','THOUSANDS_2000','THOUSANDS_3000_5000','THOUSANDS_5000_7000','THOUSANDS_7000_TO_1B','UNDER_1000'),
+        gender enum ('FEMALE','MALE'),
+        startup_experience enum ('NO','YES'),
+        user_type enum ('FOUNDER','INHABITANT'),
+        primary key (id)
+    )
+2025-09-27T05:51:34.273Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    alter table if exists comment_likes 
+       add constraint FK3wa5u7bs1p1o9hmavtgdgk1go 
+       foreign key (comment_id) 
+       references comments
+Hibernate: 
+    alter table if exists comment_likes 
+       add constraint FK3wa5u7bs1p1o9hmavtgdgk1go 
+       foreign key (comment_id) 
+       references comments
+2025-09-27T05:51:34.274Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    alter table if exists comment_likes 
+       add constraint FK6h3lbneryl5pyb9ykaju7werx 
+       foreign key (user_id) 
+       references users
+Hibernate: 
+    alter table if exists comment_likes 
+       add constraint FK6h3lbneryl5pyb9ykaju7werx 
+       foreign key (user_id) 
+       references users
+2025-09-27T05:51:34.274Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    alter table if exists comments 
+       add constraint FKlri30okf66phtcgbe5pok7cc0 
+       foreign key (parent_id) 
+       references comments
+Hibernate: 
+    alter table if exists comments 
+       add constraint FKlri30okf66phtcgbe5pok7cc0 
+       foreign key (parent_id) 
+       references comments
+2025-09-27T05:51:34.274Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    alter table if exists comments 
+       add constraint FKbqnvawwwv4gtlctsi3o7vs131 
+       foreign key (post_id) 
+       references post
+Hibernate: 
+    alter table if exists comments 
+       add constraint FKbqnvawwwv4gtlctsi3o7vs131 
+       foreign key (post_id) 
+       references post
+2025-09-27T05:51:34.275Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    alter table if exists comments 
+       add constraint FK8omq0tc18jd43bu5tjh6jvraq 
+       foreign key (user_id) 
+       references users
+Hibernate: 
+    alter table if exists comments 
+       add constraint FK8omq0tc18jd43bu5tjh6jvraq 
+       foreign key (user_id) 
+       references users
+2025-09-27T05:51:34.275Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    alter table if exists post 
+       add constraint FK7ky67sgi7k0ayf22652f7763r 
+       foreign key (user_id) 
+       references users
+Hibernate: 
+    alter table if exists post 
+       add constraint FK7ky67sgi7k0ayf22652f7763r 
+       foreign key (user_id) 
+       references users
+2025-09-27T05:51:34.276Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    alter table if exists post_image 
+       add constraint FKsip7qv57jw2fw50g97t16nrjr 
+       foreign key (post_id) 
+       references post
+Hibernate: 
+    alter table if exists post_image 
+       add constraint FKsip7qv57jw2fw50g97t16nrjr 
+       foreign key (post_id) 
+       references post
+2025-09-27T05:51:34.276Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    alter table if exists post_like 
+       add constraint FKj7iy0k7n3d0vkh8o7ibjna884 
+       foreign key (post_id) 
+       references post
+Hibernate: 
+    alter table if exists post_like 
+       add constraint FKj7iy0k7n3d0vkh8o7ibjna884 
+       foreign key (post_id) 
+       references post
+2025-09-27T05:51:34.276Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    alter table if exists post_like 
+       add constraint FKijnjmw0imnatadr3agtk0udip 
+       foreign key (user_id) 
+       references users
+Hibernate: 
+    alter table if exists post_like 
+       add constraint FKijnjmw0imnatadr3agtk0udip 
+       foreign key (user_id) 
+       references users
+2025-09-27T05:51:34.277Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    alter table if exists user_interests 
+       add constraint FKh3yx7krvumpnrwi8t1vu62qkx 
+       foreign key (users_id) 
+       references users
+Hibernate: 
+    alter table if exists user_interests 
+       add constraint FKh3yx7krvumpnrwi8t1vu62qkx 
+       foreign key (users_id) 
+       references users
+2025-09-27T05:51:34.277Z  INFO 281 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-09-27T05:51:34.310Z DEBUG 281 --- [    Test worker] c.e.s.s.filter.JwtAuthenticationFilter   : Filter 'jwtAuthenticationFilter' configured for use
+2025-09-27T05:51:34.310Z DEBUG 281 --- [    Test worker] o.s.web.filter.ForwardedHeaderFilter     : Filter 'forwardedHeaderFilter' configured for use
+2025-09-27T05:51:34.310Z DEBUG 281 --- [    Test worker] c.e.s.s.filter.ExceptionHandlerFilter    : Filter 'exceptionHandlerFilter' configured for use
+2025-09-27T05:51:34.553Z  INFO 281 --- [    Test worker] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2025-09-27T05:51:34.564Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : 33 mappings in 'requestMappingHandlerMapping'
+2025-09-27T05:51:34.573Z DEBUG 281 --- [    Test worker] o.s.w.s.handler.SimpleUrlHandlerMapping  : Patterns [/webjars/**, /**, /swagger-ui/**, /swagger-ui*/*swagger-initializer.js, /swagger-ui*/**] in 'resourceHandlerMapping'
+2025-09-27T05:51:34.575Z  WARN 281 --- [    Test worker] thorizationManagerRequestMatcherRegistry : One of the patterns in [GET, /community/freeboard/**] is missing a leading slash. This is discouraged; please include the leading slash in all your request matcher patterns. In future versions of Spring Security, leaving out the leading slash will result in an exception.
+2025-09-27T05:51:34.584Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerAdapter : ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+2025-09-27T05:51:34.587Z DEBUG 281 --- [    Test worker] .m.m.a.ExceptionHandlerExceptionResolver : ControllerAdvice beans: 2 @ExceptionHandler, 1 ResponseBodyAdvice
+2025-09-27T05:51:34.674Z  INFO 281 --- [    Test worker] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 42355 (http) with context path '/'
+2025-09-27T05:51:34.678Z  INFO 281 --- [    Test worker] c.e.s.c.f.i.ErrorScenarioIntegrationTest : Started ErrorScenarioIntegrationTest in 0.848 seconds (process running for 12.009)
+2025-09-27T05:51:34.681Z  INFO 281 --- [    Test worker] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring TestDispatcherServlet ''
+2025-09-27T05:51:34.681Z  INFO 281 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2025-09-27T05:51:34.681Z  INFO 281 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 0 ms
+
+&#x1f3ac; === 리소스 존재하지 않음 에러 시나리오 ===
+2025-09-27T05:51:34.684Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* insert for
+        com.example.soso.users.domain.entity.Users */insert 
+    into
+        users (age_range, budget, created_date, email, gender, last_modified_date, latitude, location, longitude, nickname, profile_image_url, startup_experience, user_type, username, id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert for
+        com.example.soso.users.domain.entity.Users */insert 
+    into
+        users (age_range, budget, created_date, email, gender, last_modified_date, latitude, location, longitude, nickname, profile_image_url, startup_experience, user_type, username, id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+2025-09-27T05:51:34.685Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* insert for
+        com.example.soso.users.domain.entity.Users.interests */insert 
+    into
+        user_interests (users_id, interest_type) 
+    values
+        (?, ?)
+Hibernate: 
+    /* insert for
+        com.example.soso.users.domain.entity.Users.interests */insert 
+    into
+        user_interests (users_id, interest_type) 
+    values
+        (?, ?)
+2025-09-27T05:51:34.685Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* insert for
+        com.example.soso.users.domain.entity.Users.interests */insert 
+    into
+        user_interests (users_id, interest_type) 
+    values
+        (?, ?)
+Hibernate: 
+    /* insert for
+        com.example.soso.users.domain.entity.Users.interests */insert 
+    into
+        user_interests (users_id, interest_type) 
+    values
+        (?, ?)
+
+[테스트 1] 존재하지 않는 게시글 조회 시도...
+2025-09-27T05:51:34.688Z DEBUG 281 --- [    Test worker] c.e.s.s.filter.JwtAuthenticationFilter   : JWT 인증 성공: 5d72e297-8303-4cbd-ac55-bbc8857c8e6d
+2025-09-27T05:51:34.689Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.community.freeboard.post.controller.FreeboardController#getPost(Long)
+2025-09-27T05:51:34.690Z  INFO 281 --- [    Test worker] c.e.s.c.f.p.c.FreeboardController        : 자유게시판 글 조회 요청: freeboardId=99999, userId=5d72e297-8303-4cbd-ac55-bbc8857c8e6d
+2025-09-27T05:51:34.690Z DEBUG 281 --- [    Test worker] c.e.s.c.f.p.s.FreeboardServiceImpl       : 자유게시판 글 조회: postId=99999, userId=5d72e297-8303-4cbd-ac55-bbc8857c8e6d
+2025-09-27T05:51:34.691Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* &lt;criteria&gt; */ select
+        p1_0.id,
+        p1_0.category,
+        p1_0.comment_count,
+        p1_0.content,
+        p1_0.created_date,
+        p1_0.deleted,
+        p1_0.last_modified_date,
+        p1_0.like_count,
+        p1_0.title,
+        p1_0.user_id,
+        p1_0.view_count 
+    from
+        post p1_0 
+    where
+        p1_0.id=? 
+        and not(p1_0.deleted)
+Hibernate: 
+    /* &lt;criteria&gt; */ select
+        p1_0.id,
+        p1_0.category,
+        p1_0.comment_count,
+        p1_0.content,
+        p1_0.created_date,
+        p1_0.deleted,
+        p1_0.last_modified_date,
+        p1_0.like_count,
+        p1_0.title,
+        p1_0.user_id,
+        p1_0.view_count 
+    from
+        post p1_0 
+    where
+        p1_0.id=? 
+        and not(p1_0.deleted)
+2025-09-27T05:51:34.692Z DEBUG 281 --- [    Test worker] .m.m.a.ExceptionHandlerExceptionResolver : Using @ExceptionHandler com.example.soso.global.exception.GlobalExceptionHandler#handleBaseException(BaseException)
+2025-09-27T05:51:34.692Z  WARN 281 --- [    Test worker] c.e.s.g.e.GlobalExceptionHandler         : Handled business exception: POST_NOT_FOUND - 해당 게시글을 찾을 수 없습니다.
+2025-09-27T05:51:34.693Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:34.693Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [ErrorResponse[code=POST_NOT_FOUND, message=해당 게시글을 찾을 수 없습니다.]]
+2025-09-27T05:51:34.693Z DEBUG 281 --- [    Test worker] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [com.example.soso.global.exception.util.PostException: 해당 게시글을 찾을 수 없습니다.]
+
+MockHttpServletRequest:
+      HTTP Method = GET
+      Request URI = /community/freeboard/99999
+       Parameters = {}
+          Headers = [Authorization:&quot;Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI1ZDcyZTI5Ny04MzAzLTRjYmQtYWM1NS1iYmM4ODU3YzhlNmQiLCJpYXQiOjE3NTg5NTIyOTQsImV4cCI6MTc1ODk1NDA5NH0.2omQS0417UeZ6kouk539CA69AX1WssYgDtWt9pUO-NiqVt9OnQQFetvQV3GtaJyjAhADatdMTxZui_cvJO2-7w&quot;]
+             Body = &lt;no character encoding set&gt;
+    Session Attrs = {}
+
+Handler:
+             Type = com.example.soso.community.freeboard.post.controller.FreeboardController
+           Method = com.example.soso.community.freeboard.post.controller.FreeboardController#getPost(Long)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = com.example.soso.global.exception.util.PostException
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 404
+    Error message = null
+          Headers = [Vary:&quot;Origin&quot;, &quot;Access-Control-Request-Method&quot;, &quot;Access-Control-Request-Headers&quot;, Content-Type:&quot;application/json&quot;, X-Content-Type-Options:&quot;nosniff&quot;, X-XSS-Protection:&quot;0&quot;, Cache-Control:&quot;no-cache, no-store, max-age=0, must-revalidate&quot;, Pragma:&quot;no-cache&quot;, Expires:&quot;0&quot;, X-Frame-Options:&quot;DENY&quot;]
+     Content type = application/json
+             Body = {&quot;code&quot;:&quot;POST_NOT_FOUND&quot;,&quot;message&quot;:&quot;해당 게시글을 찾을 수 없습니다.&quot;}
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+✅ 존재하지 않는 게시글 조회 에러 처리 성공!
+
+[테스트 2] 존재하지 않는 게시글 수정 시도...
+2025-09-27T05:51:34.695Z DEBUG 281 --- [    Test worker] c.e.s.s.filter.JwtAuthenticationFilter   : JWT 인증 성공: 5d72e297-8303-4cbd-ac55-bbc8857c8e6d
+2025-09-27T05:51:34.695Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.community.freeboard.post.controller.FreeboardController#updatePost(Long, FreeboardUpdateRequest, CustomUserDetails)
+2025-09-27T05:51:34.697Z  INFO 281 --- [    Test worker] c.e.s.c.f.p.c.FreeboardController        : 자유게시판 글 수정 요청: freeboardId=99999, userId=5d72e297-8303-4cbd-ac55-bbc8857c8e6d
+2025-09-27T05:51:34.698Z  INFO 281 --- [    Test worker] c.e.s.c.f.p.s.FreeboardServiceImpl       : 자유게시판 글 수정 시작: postId=99999, userId=5d72e297-8303-4cbd-ac55-bbc8857c8e6d
+2025-09-27T05:51:34.698Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* &lt;criteria&gt; */ select
+        p1_0.id,
+        p1_0.category,
+        p1_0.comment_count,
+        p1_0.content,
+        p1_0.created_date,
+        p1_0.deleted,
+        p1_0.last_modified_date,
+        p1_0.like_count,
+        p1_0.title,
+        p1_0.user_id,
+        p1_0.view_count 
+    from
+        post p1_0 
+    where
+        p1_0.id=? 
+        and not(p1_0.deleted)
+Hibernate: 
+    /* &lt;criteria&gt; */ select
+        p1_0.id,
+        p1_0.category,
+        p1_0.comment_count,
+        p1_0.content,
+        p1_0.created_date,
+        p1_0.deleted,
+        p1_0.last_modified_date,
+        p1_0.like_count,
+        p1_0.title,
+        p1_0.user_id,
+        p1_0.view_count 
+    from
+        post p1_0 
+    where
+        p1_0.id=? 
+        and not(p1_0.deleted)
+2025-09-27T05:51:34.699Z DEBUG 281 --- [    Test worker] .m.m.a.ExceptionHandlerExceptionResolver : Using @ExceptionHandler com.example.soso.global.exception.GlobalExceptionHandler#handleBaseException(BaseException)
+2025-09-27T05:51:34.699Z  WARN 281 --- [    Test worker] c.e.s.g.e.GlobalExceptionHandler         : Handled business exception: POST_NOT_FOUND - 해당 게시글을 찾을 수 없습니다.
+2025-09-27T05:51:34.699Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:34.699Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [ErrorResponse[code=POST_NOT_FOUND, message=해당 게시글을 찾을 수 없습니다.]]
+2025-09-27T05:51:34.699Z DEBUG 281 --- [    Test worker] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [com.example.soso.global.exception.util.PostException: 해당 게시글을 찾을 수 없습니다.]
+
+MockHttpServletRequest:
+      HTTP Method = PATCH
+      Request URI = /community/freeboard/99999
+       Parameters = {title=[존재하지 않는 게시글 수정], content=[수정 내용], category=[OTHERS]}
+          Headers = [Content-Type:&quot;multipart/form-data&quot;, Authorization:&quot;Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI1ZDcyZTI5Ny04MzAzLTRjYmQtYWM1NS1iYmM4ODU3YzhlNmQiLCJpYXQiOjE3NTg5NTIyOTQsImV4cCI6MTc1ODk1NDA5NH0.2omQS0417UeZ6kouk539CA69AX1WssYgDtWt9pUO-NiqVt9OnQQFetvQV3GtaJyjAhADatdMTxZui_cvJO2-7w&quot;]
+             Body = &lt;no character encoding set&gt;
+    Session Attrs = {}
+
+Handler:
+             Type = com.example.soso.community.freeboard.post.controller.FreeboardController
+           Method = com.example.soso.community.freeboard.post.controller.FreeboardController#updatePost(Long, FreeboardUpdateRequest, CustomUserDetails)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = com.example.soso.global.exception.util.PostException
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 404
+    Error message = null
+          Headers = [Vary:&quot;Origin&quot;, &quot;Access-Control-Request-Method&quot;, &quot;Access-Control-Request-Headers&quot;, Content-Type:&quot;application/json&quot;, X-Content-Type-Options:&quot;nosniff&quot;, X-XSS-Protection:&quot;0&quot;, Cache-Control:&quot;no-cache, no-store, max-age=0, must-revalidate&quot;, Pragma:&quot;no-cache&quot;, Expires:&quot;0&quot;, X-Frame-Options:&quot;DENY&quot;]
+     Content type = application/json
+             Body = {&quot;code&quot;:&quot;POST_NOT_FOUND&quot;,&quot;message&quot;:&quot;해당 게시글을 찾을 수 없습니다.&quot;}
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+✅ 존재하지 않는 게시글 수정 에러 처리 성공!
+
+[테스트 3] 존재하지 않는 게시글에 댓글 작성 시도...
+2025-09-27T05:51:34.701Z DEBUG 281 --- [    Test worker] c.e.s.s.filter.JwtAuthenticationFilter   : JWT 인증 성공: 5d72e297-8303-4cbd-ac55-bbc8857c8e6d
+2025-09-27T05:51:34.701Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.community.freeboard.comment.controller.FreeboardCommentController#createComment(Long, FreeboardCommentCreateRequest, CustomUserDetails)
+2025-09-27T05:51:34.702Z DEBUG 281 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read &quot;application/json&quot; to [com.example.soso.community.freeboard.comment.domain.dto.FreeboardCommentCreateRequest@5fd7e75d]
+2025-09-27T05:51:34.703Z  INFO 281 --- [    Test worker] c.e.s.c.f.c.c.FreeboardCommentController : 자유게시판 댓글 작성 요청: freeboardId=99999, userId=5d72e297-8303-4cbd-ac55-bbc8857c8e6d, parentCommentId=null
+2025-09-27T05:51:34.703Z  INFO 281 --- [    Test worker] c.e.s.c.c.s.AbstractCommentService       : 댓글 작성 시작: postId=99999, userId=5d72e297-8303-4cbd-ac55-bbc8857c8e6d
+2025-09-27T05:51:34.703Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* &lt;criteria&gt; */ select
+        p1_0.id,
+        p1_0.category,
+        p1_0.comment_count,
+        p1_0.content,
+        p1_0.created_date,
+        p1_0.deleted,
+        p1_0.last_modified_date,
+        p1_0.like_count,
+        p1_0.title,
+        p1_0.user_id,
+        p1_0.view_count 
+    from
+        post p1_0 
+    where
+        p1_0.id=? 
+        and not(p1_0.deleted)
+Hibernate: 
+    /* &lt;criteria&gt; */ select
+        p1_0.id,
+        p1_0.category,
+        p1_0.comment_count,
+        p1_0.content,
+        p1_0.created_date,
+        p1_0.deleted,
+        p1_0.last_modified_date,
+        p1_0.like_count,
+        p1_0.title,
+        p1_0.user_id,
+        p1_0.view_count 
+    from
+        post p1_0 
+    where
+        p1_0.id=? 
+        and not(p1_0.deleted)
+2025-09-27T05:51:34.704Z DEBUG 281 --- [    Test worker] .m.m.a.ExceptionHandlerExceptionResolver : Using @ExceptionHandler com.example.soso.global.exception.GlobalExceptionHandler#handleBaseException(BaseException)
+2025-09-27T05:51:34.704Z  WARN 281 --- [    Test worker] c.e.s.g.e.GlobalExceptionHandler         : Handled business exception: POST_NOT_FOUND - 해당 게시글을 찾을 수 없습니다.
+2025-09-27T05:51:34.704Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:34.704Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [ErrorResponse[code=POST_NOT_FOUND, message=해당 게시글을 찾을 수 없습니다.]]
+2025-09-27T05:51:34.704Z DEBUG 281 --- [    Test worker] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [com.example.soso.global.exception.util.PostException: 해당 게시글을 찾을 수 없습니다.]
+
+MockHttpServletRequest:
+      HTTP Method = POST
+      Request URI = /community/freeboard/99999/comments
+       Parameters = {}
+          Headers = [Content-Type:&quot;application/json&quot;, Authorization:&quot;Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI1ZDcyZTI5Ny04MzAzLTRjYmQtYWM1NS1iYmM4ODU3YzhlNmQiLCJpYXQiOjE3NTg5NTIyOTQsImV4cCI6MTc1ODk1NDA5NH0.2omQS0417UeZ6kouk539CA69AX1WssYgDtWt9pUO-NiqVt9OnQQFetvQV3GtaJyjAhADatdMTxZui_cvJO2-7w&quot;, Content-Length:&quot;54&quot;]
+             Body = &lt;no character encoding set&gt;
+    Session Attrs = {}
+
+Handler:
+             Type = com.example.soso.community.freeboard.comment.controller.FreeboardCommentController
+           Method = com.example.soso.community.freeboard.comment.controller.FreeboardCommentController#createComment(Long, FreeboardCommentCreateRequest, CustomUserDetails)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = com.example.soso.global.exception.util.PostException
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 404
+    Error message = null
+          Headers = [Vary:&quot;Origin&quot;, &quot;Access-Control-Request-Method&quot;, &quot;Access-Control-Request-Headers&quot;, Content-Type:&quot;application/json&quot;, X-Content-Type-Options:&quot;nosniff&quot;, X-XSS-Protection:&quot;0&quot;, Cache-Control:&quot;no-cache, no-store, max-age=0, must-revalidate&quot;, Pragma:&quot;no-cache&quot;, Expires:&quot;0&quot;, X-Frame-Options:&quot;DENY&quot;]
+     Content type = application/json
+             Body = {&quot;code&quot;:&quot;POST_NOT_FOUND&quot;,&quot;message&quot;:&quot;해당 게시글을 찾을 수 없습니다.&quot;}
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+✅ 존재하지 않는 게시글 댓글 작성 에러 처리 성공!
+
+[테스트 4] 존재하지 않는 댓글 수정 시도...
+2025-09-27T05:51:34.705Z DEBUG 281 --- [    Test worker] c.e.s.s.filter.JwtAuthenticationFilter   : JWT 인증 성공: 5d72e297-8303-4cbd-ac55-bbc8857c8e6d
+2025-09-27T05:51:34.706Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.community.freeboard.post.controller.FreeboardController#createPost(FreeboardCreateRequest, CustomUserDetails)
+2025-09-27T05:51:34.709Z  INFO 281 --- [    Test worker] c.e.s.c.f.p.c.FreeboardController        : 자유게시판 글 작성 요청: userId=5d72e297-8303-4cbd-ac55-bbc8857c8e6d, category=OTHERS, title=댓글 테스트용 게시글, imageCount=1
+2025-09-27T05:51:34.709Z  INFO 281 --- [    Test worker] c.e.s.c.f.p.s.FreeboardServiceImpl       : 자유게시판 글 작성 시작: userId=5d72e297-8303-4cbd-ac55-bbc8857c8e6d, category=OTHERS
+2025-09-27T05:51:34.711Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* insert for
+        com.example.soso.community.common.post.domain.entity.Post */insert 
+    into
+        post (category, comment_count, content, created_date, deleted, last_modified_date, like_count, title, user_id, view_count, id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, default)
+Hibernate: 
+    /* insert for
+        com.example.soso.community.common.post.domain.entity.Post */insert 
+    into
+        post (category, comment_count, content, created_date, deleted, last_modified_date, like_count, title, user_id, view_count, id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, default)
+2025-09-27T05:51:34.712Z  INFO 281 --- [    Test worker] c.e.s.g.i.service.ImageUploadService     : 이미지 업로드 시작: count=1, directory=freeboard
+2025-09-27T05:51:34.720Z DEBUG 281 --- [ool-15-thread-1] c.e.s.g.i.service.ImageUploadService     : 이미지 업로드 성공: key=freeboard/d6946cc6-6cb6-46da-820e-b0cc3e2cc1b4_1758952294713.jpg, url=http://localhost:9000/test-bucket/freeboard/d6946cc6-6cb6-46da-820e-b0cc3e2cc1b4_1758952294713.jpg
+2025-09-27T05:51:34.720Z  INFO 281 --- [    Test worker] c.e.s.g.i.service.ImageUploadService     : 이미지 업로드 완료: count=1, urls=[http://localhost:9000/test-bucket/freeboard/d6946cc6-6cb6-46da-820e-b0cc3e2cc1b4_1758952294713.jpg]
+2025-09-27T05:51:34.720Z  INFO 281 --- [    Test worker] c.e.s.c.f.p.s.FreeboardServiceImpl       : 자유게시판 글 작성 완료: postId=1, imageCount=1
+2025-09-27T05:51:34.720Z  INFO 281 --- [    Test worker] c.e.s.c.f.p.c.FreeboardController        : 자유게시판 글 작성 완료: postId=1
+2025-09-27T05:51:34.721Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:34.721Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.example.soso.community.freeboard.post.domain.dto.FreeboardCreateResponse@6cf77bff]
+
+MockHttpServletRequest:
+      HTTP Method = POST
+      Request URI = /community/freeboard
+       Parameters = {title=[댓글 테스트용 게시글], content=[댓글 테스트를 위한 게시글], category=[OTHERS]}
+          Headers = [Content-Type:&quot;multipart/form-data&quot;, Authorization:&quot;Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI1ZDcyZTI5Ny04MzAzLTRjYmQtYWM1NS1iYmM4ODU3YzhlNmQiLCJpYXQiOjE3NTg5NTIyOTQsImV4cCI6MTc1ODk1NDA5NH0.2omQS0417UeZ6kouk539CA69AX1WssYgDtWt9pUO-NiqVt9OnQQFetvQV3GtaJyjAhADatdMTxZui_cvJO2-7w&quot;]
+             Body = &lt;no character encoding set&gt;
+    Session Attrs = {}
+
+Handler:
+             Type = com.example.soso.community.freeboard.post.controller.FreeboardController
+           Method = com.example.soso.community.freeboard.post.controller.FreeboardController#createPost(FreeboardCreateRequest, CustomUserDetails)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 200
+    Error message = null
+          Headers = [Vary:&quot;Origin&quot;, &quot;Access-Control-Request-Method&quot;, &quot;Access-Control-Request-Headers&quot;, Content-Type:&quot;application/json&quot;, X-Content-Type-Options:&quot;nosniff&quot;, X-XSS-Protection:&quot;0&quot;, Cache-Control:&quot;no-cache, no-store, max-age=0, must-revalidate&quot;, Pragma:&quot;no-cache&quot;, Expires:&quot;0&quot;, X-Frame-Options:&quot;DENY&quot;]
+     Content type = application/json
+             Body = {&quot;postId&quot;:1}
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+2025-09-27T05:51:34.723Z DEBUG 281 --- [    Test worker] c.e.s.s.filter.JwtAuthenticationFilter   : JWT 인증 성공: 5d72e297-8303-4cbd-ac55-bbc8857c8e6d
+2025-09-27T05:51:34.724Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.community.freeboard.comment.controller.FreeboardCommentController#updateComment(Long, Long, FreeboardCommentUpdateRequest, CustomUserDetails)
+2025-09-27T05:51:34.724Z DEBUG 281 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read &quot;application/json&quot; to [com.example.soso.community.freeboard.comment.domain.dto.FreeboardCommentUpdateRequest@50531109]
+2025-09-27T05:51:34.725Z  INFO 281 --- [    Test worker] c.e.s.c.f.c.c.FreeboardCommentController : 자유게시판 댓글 수정 요청: freeboardId=1, commentId=99999, userId=5d72e297-8303-4cbd-ac55-bbc8857c8e6d
+2025-09-27T05:51:34.725Z  INFO 281 --- [    Test worker] c.e.s.c.c.s.AbstractCommentService       : 댓글 수정 시작: commentId=99999, userId=5d72e297-8303-4cbd-ac55-bbc8857c8e6d
+2025-09-27T05:51:34.726Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* insert for
+        com.example.soso.community.common.post.domain.entity.PostImage */insert 
+    into
+        post_image (image_url, post_id, sequence, id) 
+    values
+        (?, ?, ?, default)
+Hibernate: 
+    /* insert for
+        com.example.soso.community.common.post.domain.entity.PostImage */insert 
+    into
+        post_image (image_url, post_id, sequence, id) 
+    values
+        (?, ?, ?, default)
+2025-09-27T05:51:34.728Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* &lt;criteria&gt; */ select
+        c1_0.id,
+        c1_0.content,
+        c1_0.created_date,
+        c1_0.deleted,
+        c1_0.last_modified_date,
+        c1_0.like_count,
+        c1_0.parent_id,
+        c1_0.post_id,
+        c1_0.user_id 
+    from
+        comments c1_0 
+    where
+        c1_0.id=? 
+        and not(c1_0.deleted)
+Hibernate: 
+    /* &lt;criteria&gt; */ select
+        c1_0.id,
+        c1_0.content,
+        c1_0.created_date,
+        c1_0.deleted,
+        c1_0.last_modified_date,
+        c1_0.like_count,
+        c1_0.parent_id,
+        c1_0.post_id,
+        c1_0.user_id 
+    from
+        comments c1_0 
+    where
+        c1_0.id=? 
+        and not(c1_0.deleted)
+2025-09-27T05:51:34.728Z DEBUG 281 --- [    Test worker] .m.m.a.ExceptionHandlerExceptionResolver : Using @ExceptionHandler com.example.soso.global.exception.GlobalExceptionHandler#handleBaseException(BaseException)
+2025-09-27T05:51:34.728Z  WARN 281 --- [    Test worker] c.e.s.g.e.GlobalExceptionHandler         : Handled business exception: COMMENT_NOT_FOUND - 댓글을 찾을 수 없습니다.
+2025-09-27T05:51:34.728Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:34.728Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [ErrorResponse[code=COMMENT_NOT_FOUND, message=댓글을 찾을 수 없습니다.]]
+2025-09-27T05:51:34.729Z DEBUG 281 --- [    Test worker] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [com.example.soso.global.exception.util.CommentException: 댓글을 찾을 수 없습니다.]
+
+MockHttpServletRequest:
+      HTTP Method = PATCH
+      Request URI = /community/freeboard/1/comments/99999
+       Parameters = {}
+          Headers = [Content-Type:&quot;application/json&quot;, Authorization:&quot;Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI1ZDcyZTI5Ny04MzAzLTRjYmQtYWM1NS1iYmM4ODU3YzhlNmQiLCJpYXQiOjE3NTg5NTIyOTQsImV4cCI6MTc1ODk1NDA5NH0.2omQS0417UeZ6kouk539CA69AX1WssYgDtWt9pUO-NiqVt9OnQQFetvQV3GtaJyjAhADatdMTxZui_cvJO2-7w&quot;, Content-Length:&quot;48&quot;]
+             Body = &lt;no character encoding set&gt;
+    Session Attrs = {}
+
+Handler:
+             Type = com.example.soso.community.freeboard.comment.controller.FreeboardCommentController
+           Method = com.example.soso.community.freeboard.comment.controller.FreeboardCommentController#updateComment(Long, Long, FreeboardCommentUpdateRequest, CustomUserDetails)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = com.example.soso.global.exception.util.CommentException
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 404
+    Error message = null
+          Headers = [Vary:&quot;Origin&quot;, &quot;Access-Control-Request-Method&quot;, &quot;Access-Control-Request-Headers&quot;, Content-Type:&quot;application/json&quot;, X-Content-Type-Options:&quot;nosniff&quot;, X-XSS-Protection:&quot;0&quot;, Cache-Control:&quot;no-cache, no-store, max-age=0, must-revalidate&quot;, Pragma:&quot;no-cache&quot;, Expires:&quot;0&quot;, X-Frame-Options:&quot;DENY&quot;]
+     Content type = application/json
+             Body = {&quot;code&quot;:&quot;COMMENT_NOT_FOUND&quot;,&quot;message&quot;:&quot;댓글을 찾을 수 없습니다.&quot;}
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+✅ 존재하지 않는 댓글 수정 에러 처리 성공!
+
+&#x1f389; === 리소스 존재하지 않음 에러 시나리오 완료 ===
+2025-09-27T05:51:34.733Z  INFO 281 --- [    Test worker] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring TestDispatcherServlet ''
+2025-09-27T05:51:34.733Z  INFO 281 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2025-09-27T05:51:34.733Z  INFO 281 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 0 ms
+
+&#x1f3ac; === 권한 관련 에러 시나리오 ===
+2025-09-27T05:51:34.734Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* insert for
+        com.example.soso.users.domain.entity.Users */insert 
+    into
+        users (age_range, budget, created_date, email, gender, last_modified_date, latitude, location, longitude, nickname, profile_image_url, startup_experience, user_type, username, id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert for
+        com.example.soso.users.domain.entity.Users */insert 
+    into
+        users (age_range, budget, created_date, email, gender, last_modified_date, latitude, location, longitude, nickname, profile_image_url, startup_experience, user_type, username, id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+2025-09-27T05:51:34.734Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* insert for
+        com.example.soso.users.domain.entity.Users.interests */insert 
+    into
+        user_interests (users_id, interest_type) 
+    values
+        (?, ?)
+Hibernate: 
+    /* insert for
+        com.example.soso.users.domain.entity.Users.interests */insert 
+    into
+        user_interests (users_id, interest_type) 
+    values
+        (?, ?)
+2025-09-27T05:51:34.734Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* insert for
+        com.example.soso.users.domain.entity.Users.interests */insert 
+    into
+        user_interests (users_id, interest_type) 
+    values
+        (?, ?)
+Hibernate: 
+    /* insert for
+        com.example.soso.users.domain.entity.Users.interests */insert 
+    into
+        user_interests (users_id, interest_type) 
+    values
+        (?, ?)
+2025-09-27T05:51:34.735Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* insert for
+        com.example.soso.users.domain.entity.Users */insert 
+    into
+        users (age_range, budget, created_date, email, gender, last_modified_date, latitude, location, longitude, nickname, profile_image_url, startup_experience, user_type, username, id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert for
+        com.example.soso.users.domain.entity.Users */insert 
+    into
+        users (age_range, budget, created_date, email, gender, last_modified_date, latitude, location, longitude, nickname, profile_image_url, startup_experience, user_type, username, id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+게시글 작성자: 창업가문어207
+다른 사용자: 거주민문어337
+2025-09-27T05:51:34.736Z DEBUG 281 --- [    Test worker] c.e.s.s.filter.JwtAuthenticationFilter   : JWT 인증 성공: 78f7383a-20c3-4e0f-80ba-3d316707af04
+2025-09-27T05:51:34.736Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.community.freeboard.post.controller.FreeboardController#createPost(FreeboardCreateRequest, CustomUserDetails)
+2025-09-27T05:51:34.737Z  INFO 281 --- [    Test worker] c.e.s.c.f.p.c.FreeboardController        : 자유게시판 글 작성 요청: userId=78f7383a-20c3-4e0f-80ba-3d316707af04, category=OTHERS, title=권한 테스트용 게시글, imageCount=1
+2025-09-27T05:51:34.737Z  INFO 281 --- [    Test worker] c.e.s.c.f.p.s.FreeboardServiceImpl       : 자유게시판 글 작성 시작: userId=78f7383a-20c3-4e0f-80ba-3d316707af04, category=OTHERS
+2025-09-27T05:51:34.737Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* insert for
+        com.example.soso.community.common.post.domain.entity.Post */insert 
+    into
+        post (category, comment_count, content, created_date, deleted, last_modified_date, like_count, title, user_id, view_count, id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, default)
+Hibernate: 
+    /* insert for
+        com.example.soso.community.common.post.domain.entity.Post */insert 
+    into
+        post (category, comment_count, content, created_date, deleted, last_modified_date, like_count, title, user_id, view_count, id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, default)
+2025-09-27T05:51:34.737Z  INFO 281 --- [    Test worker] c.e.s.g.i.service.ImageUploadService     : 이미지 업로드 시작: count=1, directory=freeboard
+2025-09-27T05:51:34.739Z DEBUG 281 --- [ool-15-thread-2] c.e.s.g.i.service.ImageUploadService     : 이미지 업로드 성공: key=freeboard/d3c9b022-9250-4cd1-bba6-272636d8841c_1758952294738.jpg, url=http://localhost:9000/test-bucket/freeboard/d3c9b022-9250-4cd1-bba6-272636d8841c_1758952294738.jpg
+2025-09-27T05:51:34.739Z  INFO 281 --- [    Test worker] c.e.s.g.i.service.ImageUploadService     : 이미지 업로드 완료: count=1, urls=[http://localhost:9000/test-bucket/freeboard/d3c9b022-9250-4cd1-bba6-272636d8841c_1758952294738.jpg]
+2025-09-27T05:51:34.739Z  INFO 281 --- [    Test worker] c.e.s.c.f.p.s.FreeboardServiceImpl       : 자유게시판 글 작성 완료: postId=2, imageCount=1
+2025-09-27T05:51:34.739Z  INFO 281 --- [    Test worker] c.e.s.c.f.p.c.FreeboardController        : 자유게시판 글 작성 완료: postId=2
+2025-09-27T05:51:34.739Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:34.739Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.example.soso.community.freeboard.post.domain.dto.FreeboardCreateResponse@5f28f1e1]
+
+MockHttpServletRequest:
+      HTTP Method = POST
+      Request URI = /community/freeboard
+       Parameters = {title=[권한 테스트용 게시글], content=[이 게시글은 권한 테스트용입니다.], category=[OTHERS]}
+          Headers = [Content-Type:&quot;multipart/form-data&quot;, Authorization:&quot;Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI3OGY3MzgzYS0yMGMzLTRlMGYtODBiYS0zZDMxNjcwN2FmMDQiLCJpYXQiOjE3NTg5NTIyOTQsImV4cCI6MTc1ODk1NDA5NH0.nQZMeeEX_H6v_XOWwTHAfuh2PATnZudrHYs6n01p1c5vVwJwpJhfzQKrdKe2lLCLtsM8dHa8uz_qaEdqn58L1Q&quot;]
+             Body = &lt;no character encoding set&gt;
+    Session Attrs = {}
+
+Handler:
+             Type = com.example.soso.community.freeboard.post.controller.FreeboardController
+           Method = com.example.soso.community.freeboard.post.controller.FreeboardController#createPost(FreeboardCreateRequest, CustomUserDetails)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 200
+    Error message = null
+          Headers = [Vary:&quot;Origin&quot;, &quot;Access-Control-Request-Method&quot;, &quot;Access-Control-Request-Headers&quot;, Content-Type:&quot;application/json&quot;, X-Content-Type-Options:&quot;nosniff&quot;, X-XSS-Protection:&quot;0&quot;, Cache-Control:&quot;no-cache, no-store, max-age=0, must-revalidate&quot;, Pragma:&quot;no-cache&quot;, Expires:&quot;0&quot;, X-Frame-Options:&quot;DENY&quot;]
+     Content type = application/json
+             Body = {&quot;postId&quot;:2}
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+2025-09-27T05:51:34.740Z DEBUG 281 --- [    Test worker] c.e.s.s.filter.JwtAuthenticationFilter   : JWT 인증 성공: 78f7383a-20c3-4e0f-80ba-3d316707af04
+2025-09-27T05:51:34.741Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.community.freeboard.comment.controller.FreeboardCommentController#createComment(Long, FreeboardCommentCreateRequest, CustomUserDetails)
+2025-09-27T05:51:34.741Z DEBUG 281 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read &quot;application/json&quot; to [com.example.soso.community.freeboard.comment.domain.dto.FreeboardCommentCreateRequest@16f4711b]
+2025-09-27T05:51:34.741Z  INFO 281 --- [    Test worker] c.e.s.c.f.c.c.FreeboardCommentController : 자유게시판 댓글 작성 요청: freeboardId=2, userId=78f7383a-20c3-4e0f-80ba-3d316707af04, parentCommentId=null
+2025-09-27T05:51:34.741Z  INFO 281 --- [    Test worker] c.e.s.c.c.s.AbstractCommentService       : 댓글 작성 시작: postId=2, userId=78f7383a-20c3-4e0f-80ba-3d316707af04
+2025-09-27T05:51:34.742Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* insert for
+        com.example.soso.community.common.post.domain.entity.PostImage */insert 
+    into
+        post_image (image_url, post_id, sequence, id) 
+    values
+        (?, ?, ?, default)
+Hibernate: 
+    /* insert for
+        com.example.soso.community.common.post.domain.entity.PostImage */insert 
+    into
+        post_image (image_url, post_id, sequence, id) 
+    values
+        (?, ?, ?, default)
+2025-09-27T05:51:34.743Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* &lt;criteria&gt; */ select
+        p1_0.id,
+        p1_0.category,
+        p1_0.comment_count,
+        p1_0.content,
+        p1_0.created_date,
+        p1_0.deleted,
+        p1_0.last_modified_date,
+        p1_0.like_count,
+        p1_0.title,
+        p1_0.user_id,
+        p1_0.view_count 
+    from
+        post p1_0 
+    where
+        p1_0.id=? 
+        and not(p1_0.deleted)
+Hibernate: 
+    /* &lt;criteria&gt; */ select
+        p1_0.id,
+        p1_0.category,
+        p1_0.comment_count,
+        p1_0.content,
+        p1_0.created_date,
+        p1_0.deleted,
+        p1_0.last_modified_date,
+        p1_0.like_count,
+        p1_0.title,
+        p1_0.user_id,
+        p1_0.view_count 
+    from
+        post p1_0 
+    where
+        p1_0.id=? 
+        and not(p1_0.deleted)
+2025-09-27T05:51:34.746Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* insert for
+        com.example.soso.community.common.comment.domain.entity.Comment */insert 
+    into
+        comments (content, created_date, deleted, last_modified_date, like_count, parent_id, post_id, user_id, id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, default)
+Hibernate: 
+    /* insert for
+        com.example.soso.community.common.comment.domain.entity.Comment */insert 
+    into
+        comments (content, created_date, deleted, last_modified_date, like_count, parent_id, post_id, user_id, id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, default)
+2025-09-27T05:51:34.747Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* &lt;criteria&gt; */ select
+        count(c1_0.id) 
+    from
+        comments c1_0 
+    left join
+        post p1_0 
+            on p1_0.id=c1_0.post_id 
+    where
+        p1_0.id=? 
+        and not(c1_0.deleted)
+Hibernate: 
+    /* &lt;criteria&gt; */ select
+        count(c1_0.id) 
+    from
+        comments c1_0 
+    left join
+        post p1_0 
+            on p1_0.id=c1_0.post_id 
+    where
+        p1_0.id=? 
+        and not(c1_0.deleted)
+2025-09-27T05:51:34.748Z  INFO 281 --- [    Test worker] c.e.s.c.c.s.AbstractCommentService       : 댓글 작성 완료: commentId=1
+2025-09-27T05:51:34.748Z  INFO 281 --- [    Test worker] c.e.s.c.f.c.c.FreeboardCommentController : 자유게시판 댓글 작성 완료: commentId=1
+2025-09-27T05:51:34.749Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:34.749Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.example.soso.community.freeboard.comment.domain.dto.FreeboardCommentCreateResponse@176ae1d8]
+
+MockHttpServletRequest:
+      HTTP Method = POST
+      Request URI = /community/freeboard/2/comments
+       Parameters = {}
+          Headers = [Content-Type:&quot;application/json&quot;, Authorization:&quot;Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI3OGY3MzgzYS0yMGMzLTRlMGYtODBiYS0zZDMxNjcwN2FmMDQiLCJpYXQiOjE3NTg5NTIyOTQsImV4cCI6MTc1ODk1NDA5NH0.nQZMeeEX_H6v_XOWwTHAfuh2PATnZudrHYs6n01p1c5vVwJwpJhfzQKrdKe2lLCLtsM8dHa8uz_qaEdqn58L1Q&quot;, Content-Length:&quot;51&quot;]
+             Body = &lt;no character encoding set&gt;
+    Session Attrs = {}
+
+Handler:
+             Type = com.example.soso.community.freeboard.comment.controller.FreeboardCommentController
+           Method = com.example.soso.community.freeboard.comment.controller.FreeboardCommentController#createComment(Long, FreeboardCommentCreateRequest, CustomUserDetails)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 201
+    Error message = null
+          Headers = [Vary:&quot;Origin&quot;, &quot;Access-Control-Request-Method&quot;, &quot;Access-Control-Request-Headers&quot;, Content-Type:&quot;application/json&quot;, X-Content-Type-Options:&quot;nosniff&quot;, X-XSS-Protection:&quot;0&quot;, Cache-Control:&quot;no-cache, no-store, max-age=0, must-revalidate&quot;, Pragma:&quot;no-cache&quot;, Expires:&quot;0&quot;, X-Frame-Options:&quot;DENY&quot;]
+     Content type = application/json
+             Body = {&quot;commentId&quot;:1}
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+✅ 테스트 데이터 준비 완료: 게시글 ID=2, 댓글 ID=1
+
+[테스트 1] 다른 사용자의 게시글 수정 시도...
+2025-09-27T05:51:34.751Z DEBUG 281 --- [    Test worker] c.e.s.s.filter.JwtAuthenticationFilter   : JWT 인증 성공: 21095774-e60d-46bb-aaaf-82a9bef7d943
+2025-09-27T05:51:34.751Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.community.freeboard.post.controller.FreeboardController#updatePost(Long, FreeboardUpdateRequest, CustomUserDetails)
+2025-09-27T05:51:34.752Z  INFO 281 --- [    Test worker] c.e.s.c.f.p.c.FreeboardController        : 자유게시판 글 수정 요청: freeboardId=2, userId=21095774-e60d-46bb-aaaf-82a9bef7d943
+2025-09-27T05:51:34.752Z  INFO 281 --- [    Test worker] c.e.s.c.f.p.s.FreeboardServiceImpl       : 자유게시판 글 수정 시작: postId=2, userId=21095774-e60d-46bb-aaaf-82a9bef7d943
+2025-09-27T05:51:34.753Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* update
+        for com.example.soso.community.common.post.domain.entity.Post */update post 
+    set
+        category=?,
+        comment_count=?,
+        content=?,
+        deleted=?,
+        last_modified_date=?,
+        like_count=?,
+        title=?,
+        user_id=?,
+        view_count=? 
+    where
+        id=?
+Hibernate: 
+    /* update
+        for com.example.soso.community.common.post.domain.entity.Post */update post 
+    set
+        category=?,
+        comment_count=?,
+        content=?,
+        deleted=?,
+        last_modified_date=?,
+        like_count=?,
+        title=?,
+        user_id=?,
+        view_count=? 
+    where
+        id=?
+2025-09-27T05:51:34.754Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* &lt;criteria&gt; */ select
+        p1_0.id,
+        p1_0.category,
+        p1_0.comment_count,
+        p1_0.content,
+        p1_0.created_date,
+        p1_0.deleted,
+        p1_0.last_modified_date,
+        p1_0.like_count,
+        p1_0.title,
+        p1_0.user_id,
+        p1_0.view_count 
+    from
+        post p1_0 
+    where
+        p1_0.id=? 
+        and not(p1_0.deleted)
+Hibernate: 
+    /* &lt;criteria&gt; */ select
+        p1_0.id,
+        p1_0.category,
+        p1_0.comment_count,
+        p1_0.content,
+        p1_0.created_date,
+        p1_0.deleted,
+        p1_0.last_modified_date,
+        p1_0.like_count,
+        p1_0.title,
+        p1_0.user_id,
+        p1_0.view_count 
+    from
+        post p1_0 
+    where
+        p1_0.id=? 
+        and not(p1_0.deleted)
+2025-09-27T05:51:34.754Z DEBUG 281 --- [    Test worker] .m.m.a.ExceptionHandlerExceptionResolver : Using @ExceptionHandler com.example.soso.global.exception.GlobalExceptionHandler#handleBaseException(BaseException)
+2025-09-27T05:51:34.754Z  WARN 281 --- [    Test worker] c.e.s.g.e.GlobalExceptionHandler         : Handled business exception: POST_ACCESS_DENIED - 게시글에 대한 접근 권한이 없습니다.
+2025-09-27T05:51:34.755Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:34.755Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [ErrorResponse[code=POST_ACCESS_DENIED, message=게시글에 대한 접근 권한이 없습니다.]]
+2025-09-27T05:51:34.755Z DEBUG 281 --- [    Test worker] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [com.example.soso.global.exception.util.PostException: 게시글에 대한 접근 권한이 없습니다.]
+
+MockHttpServletRequest:
+      HTTP Method = PATCH
+      Request URI = /community/freeboard/2
+       Parameters = {title=[해킹 시도 제목], content=[다른 사용자가 수정하려는 내용], category=[OTHERS]}
+          Headers = [Content-Type:&quot;multipart/form-data&quot;, Authorization:&quot;Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyMTA5NTc3NC1lNjBkLTQ2YmItYWFhZi04MmE5YmVmN2Q5NDMiLCJpYXQiOjE3NTg5NTIyOTQsImV4cCI6MTc1ODk1NDA5NH0.jGHjUr4Gx2LWy6MEv_gYYniYj5j1sfYhprUfmqiBmGM4D3QB3eoW2pT_Zqd0X9laXDR9LMP4Bb4tulB5Q4MgXg&quot;]
+             Body = &lt;no character encoding set&gt;
+    Session Attrs = {}
+
+Handler:
+             Type = com.example.soso.community.freeboard.post.controller.FreeboardController
+           Method = com.example.soso.community.freeboard.post.controller.FreeboardController#updatePost(Long, FreeboardUpdateRequest, CustomUserDetails)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = com.example.soso.global.exception.util.PostException
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 403
+    Error message = null
+          Headers = [Vary:&quot;Origin&quot;, &quot;Access-Control-Request-Method&quot;, &quot;Access-Control-Request-Headers&quot;, Content-Type:&quot;application/json&quot;, X-Content-Type-Options:&quot;nosniff&quot;, X-XSS-Protection:&quot;0&quot;, Cache-Control:&quot;no-cache, no-store, max-age=0, must-revalidate&quot;, Pragma:&quot;no-cache&quot;, Expires:&quot;0&quot;, X-Frame-Options:&quot;DENY&quot;]
+     Content type = application/json
+             Body = {&quot;code&quot;:&quot;POST_ACCESS_DENIED&quot;,&quot;message&quot;:&quot;게시글에 대한 접근 권한이 없습니다.&quot;}
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+✅ 게시글 수정 권한 차단 성공!
+
+[테스트 2] 다른 사용자의 게시글 삭제 시도...
+2025-09-27T05:51:34.756Z DEBUG 281 --- [    Test worker] c.e.s.s.filter.JwtAuthenticationFilter   : JWT 인증 성공: 21095774-e60d-46bb-aaaf-82a9bef7d943
+2025-09-27T05:51:34.756Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.community.freeboard.post.controller.FreeboardController#deletePost(Long, CustomUserDetails)
+2025-09-27T05:51:34.757Z  INFO 281 --- [    Test worker] c.e.s.c.f.p.c.FreeboardController        : 자유게시판 글 삭제 요청: freeboardId=2, userId=21095774-e60d-46bb-aaaf-82a9bef7d943
+2025-09-27T05:51:34.757Z  INFO 281 --- [    Test worker] c.e.s.c.f.p.s.FreeboardServiceImpl       : 자유게시판 글 소프트 삭제: postId=2, userId=21095774-e60d-46bb-aaaf-82a9bef7d943
+2025-09-27T05:51:34.758Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* &lt;criteria&gt; */ select
+        p1_0.id,
+        p1_0.category,
+        p1_0.comment_count,
+        p1_0.content,
+        p1_0.created_date,
+        p1_0.deleted,
+        p1_0.last_modified_date,
+        p1_0.like_count,
+        p1_0.title,
+        p1_0.user_id,
+        p1_0.view_count 
+    from
+        post p1_0 
+    where
+        p1_0.id=? 
+        and not(p1_0.deleted)
+Hibernate: 
+    /* &lt;criteria&gt; */ select
+        p1_0.id,
+        p1_0.category,
+        p1_0.comment_count,
+        p1_0.content,
+        p1_0.created_date,
+        p1_0.deleted,
+        p1_0.last_modified_date,
+        p1_0.like_count,
+        p1_0.title,
+        p1_0.user_id,
+        p1_0.view_count 
+    from
+        post p1_0 
+    where
+        p1_0.id=? 
+        and not(p1_0.deleted)
+2025-09-27T05:51:34.759Z DEBUG 281 --- [    Test worker] .m.m.a.ExceptionHandlerExceptionResolver : Using @ExceptionHandler com.example.soso.global.exception.GlobalExceptionHandler#handleBaseException(BaseException)
+2025-09-27T05:51:34.759Z  WARN 281 --- [    Test worker] c.e.s.g.e.GlobalExceptionHandler         : Handled business exception: POST_ACCESS_DENIED - 게시글에 대한 접근 권한이 없습니다.
+2025-09-27T05:51:34.759Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:34.759Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [ErrorResponse[code=POST_ACCESS_DENIED, message=게시글에 대한 접근 권한이 없습니다.]]
+2025-09-27T05:51:34.759Z DEBUG 281 --- [    Test worker] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [com.example.soso.global.exception.util.PostException: 게시글에 대한 접근 권한이 없습니다.]
+
+MockHttpServletRequest:
+      HTTP Method = DELETE
+      Request URI = /community/freeboard/2
+       Parameters = {}
+          Headers = [Authorization:&quot;Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyMTA5NTc3NC1lNjBkLTQ2YmItYWFhZi04MmE5YmVmN2Q5NDMiLCJpYXQiOjE3NTg5NTIyOTQsImV4cCI6MTc1ODk1NDA5NH0.jGHjUr4Gx2LWy6MEv_gYYniYj5j1sfYhprUfmqiBmGM4D3QB3eoW2pT_Zqd0X9laXDR9LMP4Bb4tulB5Q4MgXg&quot;]
+             Body = &lt;no character encoding set&gt;
+    Session Attrs = {}
+
+Handler:
+             Type = com.example.soso.community.freeboard.post.controller.FreeboardController
+           Method = com.example.soso.community.freeboard.post.controller.FreeboardController#deletePost(Long, CustomUserDetails)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = com.example.soso.global.exception.util.PostException
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 403
+    Error message = null
+          Headers = [Vary:&quot;Origin&quot;, &quot;Access-Control-Request-Method&quot;, &quot;Access-Control-Request-Headers&quot;, Content-Type:&quot;application/json&quot;, X-Content-Type-Options:&quot;nosniff&quot;, X-XSS-Protection:&quot;0&quot;, Cache-Control:&quot;no-cache, no-store, max-age=0, must-revalidate&quot;, Pragma:&quot;no-cache&quot;, Expires:&quot;0&quot;, X-Frame-Options:&quot;DENY&quot;]
+     Content type = application/json
+             Body = {&quot;code&quot;:&quot;POST_ACCESS_DENIED&quot;,&quot;message&quot;:&quot;게시글에 대한 접근 권한이 없습니다.&quot;}
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+✅ 게시글 삭제 권한 차단 성공!
+
+[테스트 3] 다른 사용자의 댓글 수정 시도...
+2025-09-27T05:51:34.761Z DEBUG 281 --- [    Test worker] c.e.s.s.filter.JwtAuthenticationFilter   : JWT 인증 성공: 21095774-e60d-46bb-aaaf-82a9bef7d943
+2025-09-27T05:51:34.761Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.community.freeboard.comment.controller.FreeboardCommentController#updateComment(Long, Long, FreeboardCommentUpdateRequest, CustomUserDetails)
+2025-09-27T05:51:34.761Z DEBUG 281 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read &quot;application/json&quot; to [com.example.soso.community.freeboard.comment.domain.dto.FreeboardCommentUpdateRequest@4f94f80d]
+2025-09-27T05:51:34.762Z  INFO 281 --- [    Test worker] c.e.s.c.f.c.c.FreeboardCommentController : 자유게시판 댓글 수정 요청: freeboardId=2, commentId=1, userId=21095774-e60d-46bb-aaaf-82a9bef7d943
+2025-09-27T05:51:34.762Z  INFO 281 --- [    Test worker] c.e.s.c.c.s.AbstractCommentService       : 댓글 수정 시작: commentId=1, userId=21095774-e60d-46bb-aaaf-82a9bef7d943
+2025-09-27T05:51:34.763Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* &lt;criteria&gt; */ select
+        c1_0.id,
+        c1_0.content,
+        c1_0.created_date,
+        c1_0.deleted,
+        c1_0.last_modified_date,
+        c1_0.like_count,
+        c1_0.parent_id,
+        c1_0.post_id,
+        c1_0.user_id 
+    from
+        comments c1_0 
+    where
+        c1_0.id=? 
+        and not(c1_0.deleted)
+Hibernate: 
+    /* &lt;criteria&gt; */ select
+        c1_0.id,
+        c1_0.content,
+        c1_0.created_date,
+        c1_0.deleted,
+        c1_0.last_modified_date,
+        c1_0.like_count,
+        c1_0.parent_id,
+        c1_0.post_id,
+        c1_0.user_id 
+    from
+        comments c1_0 
+    where
+        c1_0.id=? 
+        and not(c1_0.deleted)
+2025-09-27T05:51:34.764Z DEBUG 281 --- [    Test worker] .m.m.a.ExceptionHandlerExceptionResolver : Using @ExceptionHandler com.example.soso.global.exception.GlobalExceptionHandler#handleBaseException(BaseException)
+2025-09-27T05:51:34.764Z  WARN 281 --- [    Test worker] c.e.s.g.e.GlobalExceptionHandler         : Handled business exception: COMMENT_ACCESS_DENIED - 댓글에 대한 접근 권한이 없습니다.
+2025-09-27T05:51:34.764Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:34.764Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [ErrorResponse[code=COMMENT_ACCESS_DENIED, message=댓글에 대한 접근 권한이 없습니다.]]
+2025-09-27T05:51:34.764Z DEBUG 281 --- [    Test worker] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [com.example.soso.global.exception.util.CommentException: 댓글에 대한 접근 권한이 없습니다.]
+
+MockHttpServletRequest:
+      HTTP Method = PATCH
+      Request URI = /community/freeboard/2/comments/1
+       Parameters = {}
+          Headers = [Content-Type:&quot;application/json&quot;, Authorization:&quot;Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyMTA5NTc3NC1lNjBkLTQ2YmItYWFhZi04MmE5YmVmN2Q5NDMiLCJpYXQiOjE3NTg5NTIyOTQsImV4cCI6MTc1ODk1NDA5NH0.jGHjUr4Gx2LWy6MEv_gYYniYj5j1sfYhprUfmqiBmGM4D3QB3eoW2pT_Zqd0X9laXDR9LMP4Bb4tulB5Q4MgXg&quot;, Content-Length:&quot;38&quot;]
+             Body = &lt;no character encoding set&gt;
+    Session Attrs = {}
+
+Handler:
+             Type = com.example.soso.community.freeboard.comment.controller.FreeboardCommentController
+           Method = com.example.soso.community.freeboard.comment.controller.FreeboardCommentController#updateComment(Long, Long, FreeboardCommentUpdateRequest, CustomUserDetails)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = com.example.soso.global.exception.util.CommentException
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 403
+    Error message = null
+          Headers = [Vary:&quot;Origin&quot;, &quot;Access-Control-Request-Method&quot;, &quot;Access-Control-Request-Headers&quot;, Content-Type:&quot;application/json&quot;, X-Content-Type-Options:&quot;nosniff&quot;, X-XSS-Protection:&quot;0&quot;, Cache-Control:&quot;no-cache, no-store, max-age=0, must-revalidate&quot;, Pragma:&quot;no-cache&quot;, Expires:&quot;0&quot;, X-Frame-Options:&quot;DENY&quot;]
+     Content type = application/json
+             Body = {&quot;code&quot;:&quot;COMMENT_ACCESS_DENIED&quot;,&quot;message&quot;:&quot;댓글에 대한 접근 권한이 없습니다.&quot;}
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+✅ 댓글 수정 권한 차단 성공!
+
+[테스트 4] 다른 사용자의 댓글 삭제 시도...
+2025-09-27T05:51:34.766Z DEBUG 281 --- [    Test worker] c.e.s.s.filter.JwtAuthenticationFilter   : JWT 인증 성공: 21095774-e60d-46bb-aaaf-82a9bef7d943
+2025-09-27T05:51:34.766Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.community.freeboard.comment.controller.FreeboardCommentController#deleteComment(Long, Long, CustomUserDetails)
+2025-09-27T05:51:34.766Z  INFO 281 --- [    Test worker] c.e.s.c.f.c.c.FreeboardCommentController : 자유게시판 댓글 삭제 요청: freeboardId=2, commentId=1, userId=21095774-e60d-46bb-aaaf-82a9bef7d943
+2025-09-27T05:51:34.766Z  INFO 281 --- [    Test worker] c.e.s.c.c.s.AbstractCommentService       : 댓글 삭제 시작: commentId=1, userId=21095774-e60d-46bb-aaaf-82a9bef7d943
+2025-09-27T05:51:34.767Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* &lt;criteria&gt; */ select
+        c1_0.id,
+        c1_0.content,
+        c1_0.created_date,
+        c1_0.deleted,
+        c1_0.last_modified_date,
+        c1_0.like_count,
+        c1_0.parent_id,
+        c1_0.post_id,
+        c1_0.user_id 
+    from
+        comments c1_0 
+    where
+        c1_0.id=? 
+        and not(c1_0.deleted)
+Hibernate: 
+    /* &lt;criteria&gt; */ select
+        c1_0.id,
+        c1_0.content,
+        c1_0.created_date,
+        c1_0.deleted,
+        c1_0.last_modified_date,
+        c1_0.like_count,
+        c1_0.parent_id,
+        c1_0.post_id,
+        c1_0.user_id 
+    from
+        comments c1_0 
+    where
+        c1_0.id=? 
+        and not(c1_0.deleted)
+2025-09-27T05:51:34.768Z DEBUG 281 --- [    Test worker] .m.m.a.ExceptionHandlerExceptionResolver : Using @ExceptionHandler com.example.soso.global.exception.GlobalExceptionHandler#handleBaseException(BaseException)
+2025-09-27T05:51:34.768Z  WARN 281 --- [    Test worker] c.e.s.g.e.GlobalExceptionHandler         : Handled business exception: COMMENT_ACCESS_DENIED - 댓글에 대한 접근 권한이 없습니다.
+2025-09-27T05:51:34.768Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:34.768Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [ErrorResponse[code=COMMENT_ACCESS_DENIED, message=댓글에 대한 접근 권한이 없습니다.]]
+2025-09-27T05:51:34.768Z DEBUG 281 --- [    Test worker] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [com.example.soso.global.exception.util.CommentException: 댓글에 대한 접근 권한이 없습니다.]
+
+MockHttpServletRequest:
+      HTTP Method = DELETE
+      Request URI = /community/freeboard/2/comments/1
+       Parameters = {}
+          Headers = [Authorization:&quot;Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyMTA5NTc3NC1lNjBkLTQ2YmItYWFhZi04MmE5YmVmN2Q5NDMiLCJpYXQiOjE3NTg5NTIyOTQsImV4cCI6MTc1ODk1NDA5NH0.jGHjUr4Gx2LWy6MEv_gYYniYj5j1sfYhprUfmqiBmGM4D3QB3eoW2pT_Zqd0X9laXDR9LMP4Bb4tulB5Q4MgXg&quot;]
+             Body = &lt;no character encoding set&gt;
+    Session Attrs = {}
+
+Handler:
+             Type = com.example.soso.community.freeboard.comment.controller.FreeboardCommentController
+           Method = com.example.soso.community.freeboard.comment.controller.FreeboardCommentController#deleteComment(Long, Long, CustomUserDetails)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = com.example.soso.global.exception.util.CommentException
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 403
+    Error message = null
+          Headers = [Vary:&quot;Origin&quot;, &quot;Access-Control-Request-Method&quot;, &quot;Access-Control-Request-Headers&quot;, Content-Type:&quot;application/json&quot;, X-Content-Type-Options:&quot;nosniff&quot;, X-XSS-Protection:&quot;0&quot;, Cache-Control:&quot;no-cache, no-store, max-age=0, must-revalidate&quot;, Pragma:&quot;no-cache&quot;, Expires:&quot;0&quot;, X-Frame-Options:&quot;DENY&quot;]
+     Content type = application/json
+             Body = {&quot;code&quot;:&quot;COMMENT_ACCESS_DENIED&quot;,&quot;message&quot;:&quot;댓글에 대한 접근 권한이 없습니다.&quot;}
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+✅ 댓글 삭제 권한 차단 성공!
+
+[테스트 5] 정당한 소유자의 수정/삭제는 정상 작동 확인...
+2025-09-27T05:51:34.769Z DEBUG 281 --- [    Test worker] c.e.s.s.filter.JwtAuthenticationFilter   : JWT 인증 성공: 78f7383a-20c3-4e0f-80ba-3d316707af04
+2025-09-27T05:51:34.769Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.community.freeboard.comment.controller.FreeboardCommentController#updateComment(Long, Long, FreeboardCommentUpdateRequest, CustomUserDetails)
+2025-09-27T05:51:34.770Z DEBUG 281 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read &quot;application/json&quot; to [com.example.soso.community.freeboard.comment.domain.dto.FreeboardCommentUpdateRequest@3a4af7ed]
+2025-09-27T05:51:34.770Z  INFO 281 --- [    Test worker] c.e.s.c.f.c.c.FreeboardCommentController : 자유게시판 댓글 수정 요청: freeboardId=2, commentId=1, userId=78f7383a-20c3-4e0f-80ba-3d316707af04
+2025-09-27T05:51:34.770Z  INFO 281 --- [    Test worker] c.e.s.c.c.s.AbstractCommentService       : 댓글 수정 시작: commentId=1, userId=78f7383a-20c3-4e0f-80ba-3d316707af04
+2025-09-27T05:51:34.771Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* &lt;criteria&gt; */ select
+        c1_0.id,
+        c1_0.content,
+        c1_0.created_date,
+        c1_0.deleted,
+        c1_0.last_modified_date,
+        c1_0.like_count,
+        c1_0.parent_id,
+        c1_0.post_id,
+        c1_0.user_id 
+    from
+        comments c1_0 
+    where
+        c1_0.id=? 
+        and not(c1_0.deleted)
+Hibernate: 
+    /* &lt;criteria&gt; */ select
+        c1_0.id,
+        c1_0.content,
+        c1_0.created_date,
+        c1_0.deleted,
+        c1_0.last_modified_date,
+        c1_0.like_count,
+        c1_0.parent_id,
+        c1_0.post_id,
+        c1_0.user_id 
+    from
+        comments c1_0 
+    where
+        c1_0.id=? 
+        and not(c1_0.deleted)
+2025-09-27T05:51:34.771Z  INFO 281 --- [    Test worker] c.e.s.c.c.s.AbstractCommentService       : 댓글 수정 완료: commentId=1
+2025-09-27T05:51:34.771Z  INFO 281 --- [    Test worker] c.e.s.c.f.c.c.FreeboardCommentController : 자유게시판 댓글 수정 완료: commentId=1
+2025-09-27T05:51:34.772Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:34.772Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.example.soso.community.freeboard.comment.domain.dto.FreeboardCommentCreateResponse@70ab6787]
+
+MockHttpServletRequest:
+      HTTP Method = PATCH
+      Request URI = /community/freeboard/2/comments/1
+       Parameters = {}
+          Headers = [Content-Type:&quot;application/json&quot;, Authorization:&quot;Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI3OGY3MzgzYS0yMGMzLTRlMGYtODBiYS0zZDMxNjcwN2FmMDQiLCJpYXQiOjE3NTg5NTIyOTQsImV4cCI6MTc1ODk1NDA5NH0.nQZMeeEX_H6v_XOWwTHAfuh2PATnZudrHYs6n01p1c5vVwJwpJhfzQKrdKe2lLCLtsM8dHa8uz_qaEdqn58L1Q&quot;, Content-Length:&quot;54&quot;]
+             Body = &lt;no character encoding set&gt;
+    Session Attrs = {}
+
+Handler:
+             Type = com.example.soso.community.freeboard.comment.controller.FreeboardCommentController
+           Method = com.example.soso.community.freeboard.comment.controller.FreeboardCommentController#updateComment(Long, Long, FreeboardCommentUpdateRequest, CustomUserDetails)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 200
+    Error message = null
+          Headers = [Vary:&quot;Origin&quot;, &quot;Access-Control-Request-Method&quot;, &quot;Access-Control-Request-Headers&quot;, Content-Type:&quot;application/json&quot;, X-Content-Type-Options:&quot;nosniff&quot;, X-XSS-Protection:&quot;0&quot;, Cache-Control:&quot;no-cache, no-store, max-age=0, must-revalidate&quot;, Pragma:&quot;no-cache&quot;, Expires:&quot;0&quot;, X-Frame-Options:&quot;DENY&quot;]
+     Content type = application/json
+             Body = {&quot;commentId&quot;:1}
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+✅ 정당한 소유자 권한 확인 성공!
+
+&#x1f389; === 권한 관련 에러 시나리오 완료 ===
+2025-09-27T05:51:34.775Z  INFO 281 --- [    Test worker] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring TestDispatcherServlet ''
+2025-09-27T05:51:34.775Z  INFO 281 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2025-09-27T05:51:34.775Z  INFO 281 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 0 ms
+
+&#x1f3ac; === 비즈니스 로직 에러 시나리오 ===
+2025-09-27T05:51:34.776Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* insert for
+        com.example.soso.users.domain.entity.Users */insert 
+    into
+        users (age_range, budget, created_date, email, gender, last_modified_date, latitude, location, longitude, nickname, profile_image_url, startup_experience, user_type, username, id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert for
+        com.example.soso.users.domain.entity.Users */insert 
+    into
+        users (age_range, budget, created_date, email, gender, last_modified_date, latitude, location, longitude, nickname, profile_image_url, startup_experience, user_type, username, id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+2025-09-27T05:51:34.776Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* insert for
+        com.example.soso.users.domain.entity.Users.interests */insert 
+    into
+        user_interests (users_id, interest_type) 
+    values
+        (?, ?)
+Hibernate: 
+    /* insert for
+        com.example.soso.users.domain.entity.Users.interests */insert 
+    into
+        user_interests (users_id, interest_type) 
+    values
+        (?, ?)
+2025-09-27T05:51:34.776Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* insert for
+        com.example.soso.users.domain.entity.Users.interests */insert 
+    into
+        user_interests (users_id, interest_type) 
+    values
+        (?, ?)
+Hibernate: 
+    /* insert for
+        com.example.soso.users.domain.entity.Users.interests */insert 
+    into
+        user_interests (users_id, interest_type) 
+    values
+        (?, ?)
+2025-09-27T05:51:34.777Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* insert for
+        com.example.soso.users.domain.entity.Users */insert 
+    into
+        users (age_range, budget, created_date, email, gender, last_modified_date, latitude, location, longitude, nickname, profile_image_url, startup_experience, user_type, username, id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert for
+        com.example.soso.users.domain.entity.Users */insert 
+    into
+        users (age_range, budget, created_date, email, gender, last_modified_date, latitude, location, longitude, nickname, profile_image_url, startup_experience, user_type, username, id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+2025-09-27T05:51:34.778Z DEBUG 281 --- [    Test worker] c.e.s.s.filter.JwtAuthenticationFilter   : JWT 인증 성공: 72133eb4-678d-4098-9832-f724f969ecfb
+2025-09-27T05:51:34.778Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.community.freeboard.post.controller.FreeboardController#createPost(FreeboardCreateRequest, CustomUserDetails)
+2025-09-27T05:51:34.779Z  INFO 281 --- [    Test worker] c.e.s.c.f.p.c.FreeboardController        : 자유게시판 글 작성 요청: userId=72133eb4-678d-4098-9832-f724f969ecfb, category=OTHERS, title=비즈니스 로직 테스트 게시글, imageCount=1
+2025-09-27T05:51:34.779Z  INFO 281 --- [    Test worker] c.e.s.c.f.p.s.FreeboardServiceImpl       : 자유게시판 글 작성 시작: userId=72133eb4-678d-4098-9832-f724f969ecfb, category=OTHERS
+2025-09-27T05:51:34.779Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* insert for
+        com.example.soso.community.common.post.domain.entity.Post */insert 
+    into
+        post (category, comment_count, content, created_date, deleted, last_modified_date, like_count, title, user_id, view_count, id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, default)
+Hibernate: 
+    /* insert for
+        com.example.soso.community.common.post.domain.entity.Post */insert 
+    into
+        post (category, comment_count, content, created_date, deleted, last_modified_date, like_count, title, user_id, view_count, id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, default)
+2025-09-27T05:51:34.780Z  INFO 281 --- [    Test worker] c.e.s.g.i.service.ImageUploadService     : 이미지 업로드 시작: count=1, directory=freeboard
+2025-09-27T05:51:34.781Z DEBUG 281 --- [ool-15-thread-3] c.e.s.g.i.service.ImageUploadService     : 이미지 업로드 성공: key=freeboard/7c56d509-50c4-4495-b8c8-3d4e2ea82d54_1758952294780.jpg, url=http://localhost:9000/test-bucket/freeboard/7c56d509-50c4-4495-b8c8-3d4e2ea82d54_1758952294780.jpg
+2025-09-27T05:51:34.781Z  INFO 281 --- [    Test worker] c.e.s.g.i.service.ImageUploadService     : 이미지 업로드 완료: count=1, urls=[http://localhost:9000/test-bucket/freeboard/7c56d509-50c4-4495-b8c8-3d4e2ea82d54_1758952294780.jpg]
+2025-09-27T05:51:34.781Z  INFO 281 --- [    Test worker] c.e.s.c.f.p.s.FreeboardServiceImpl       : 자유게시판 글 작성 완료: postId=3, imageCount=1
+2025-09-27T05:51:34.781Z  INFO 281 --- [    Test worker] c.e.s.c.f.p.c.FreeboardController        : 자유게시판 글 작성 완료: postId=3
+2025-09-27T05:51:34.781Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:34.781Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.example.soso.community.freeboard.post.domain.dto.FreeboardCreateResponse@443f9a14]
+
+MockHttpServletRequest:
+      HTTP Method = POST
+      Request URI = /community/freeboard
+       Parameters = {title=[비즈니스 로직 테스트 게시글], content=[비즈니스 로직 테스트를 위한 게시글], category=[OTHERS]}
+          Headers = [Content-Type:&quot;multipart/form-data&quot;, Authorization:&quot;Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI3MjEzM2ViNC02NzhkLTQwOTgtOTgzMi1mNzI0Zjk2OWVjZmIiLCJpYXQiOjE3NTg5NTIyOTQsImV4cCI6MTc1ODk1NDA5NH0.KBTUyeQTegBld7relVBysILQwdTIYLUwMpOGxK_rFyzLjTdNmci6wHllUYHTPgWt0WCFup5cg_8HPBpkKDjbVg&quot;]
+             Body = &lt;no character encoding set&gt;
+    Session Attrs = {}
+
+Handler:
+             Type = com.example.soso.community.freeboard.post.controller.FreeboardController
+           Method = com.example.soso.community.freeboard.post.controller.FreeboardController#createPost(FreeboardCreateRequest, CustomUserDetails)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 200
+    Error message = null
+          Headers = [Vary:&quot;Origin&quot;, &quot;Access-Control-Request-Method&quot;, &quot;Access-Control-Request-Headers&quot;, Content-Type:&quot;application/json&quot;, X-Content-Type-Options:&quot;nosniff&quot;, X-XSS-Protection:&quot;0&quot;, Cache-Control:&quot;no-cache, no-store, max-age=0, must-revalidate&quot;, Pragma:&quot;no-cache&quot;, Expires:&quot;0&quot;, X-Frame-Options:&quot;DENY&quot;]
+     Content type = application/json
+             Body = {&quot;postId&quot;:3}
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+
+[테스트 1] 중복 좋아요 시도...
+2025-09-27T05:51:34.783Z DEBUG 281 --- [    Test worker] c.e.s.s.filter.JwtAuthenticationFilter   : JWT 인증 성공: 57593408-6d0a-4b79-a7ba-bcfecfb9aa99
+2025-09-27T05:51:34.783Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.community.freeboard.like.controller.FreeboardLikeController#toggleLike(Long, CustomUserDetails)
+2025-09-27T05:51:34.783Z  INFO 281 --- [    Test worker] c.e.s.c.f.l.c.FreeboardLikeController    : 자유게시판 게시글 좋아요 토글: freeboardId=3, userId=57593408-6d0a-4b79-a7ba-bcfecfb9aa99
+2025-09-27T05:51:34.783Z  INFO 281 --- [    Test worker] c.e.s.c.c.service.AbstractLikeService    : 좋아요 토글: postId=3, userId=57593408-6d0a-4b79-a7ba-bcfecfb9aa99
+2025-09-27T05:51:34.784Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* insert for
+        com.example.soso.community.common.post.domain.entity.PostImage */insert 
+    into
+        post_image (image_url, post_id, sequence, id) 
+    values
+        (?, ?, ?, default)
+Hibernate: 
+    /* insert for
+        com.example.soso.community.common.post.domain.entity.PostImage */insert 
+    into
+        post_image (image_url, post_id, sequence, id) 
+    values
+        (?, ?, ?, default)
+2025-09-27T05:51:34.785Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* &lt;criteria&gt; */ select
+        p1_0.id,
+        p1_0.category,
+        p1_0.comment_count,
+        p1_0.content,
+        p1_0.created_date,
+        p1_0.deleted,
+        p1_0.last_modified_date,
+        p1_0.like_count,
+        p1_0.title,
+        p1_0.user_id,
+        p1_0.view_count 
+    from
+        post p1_0 
+    where
+        p1_0.id=? 
+        and not(p1_0.deleted)
+Hibernate: 
+    /* &lt;criteria&gt; */ select
+        p1_0.id,
+        p1_0.category,
+        p1_0.comment_count,
+        p1_0.content,
+        p1_0.created_date,
+        p1_0.deleted,
+        p1_0.last_modified_date,
+        p1_0.like_count,
+        p1_0.title,
+        p1_0.user_id,
+        p1_0.view_count 
+    from
+        post p1_0 
+    where
+        p1_0.id=? 
+        and not(p1_0.deleted)
+2025-09-27T05:51:34.787Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* &lt;criteria&gt; */ select
+        pl1_0.id 
+    from
+        post_like pl1_0 
+    left join
+        post p1_0 
+            on p1_0.id=pl1_0.post_id 
+    left join
+        users u1_0 
+            on u1_0.id=pl1_0.user_id 
+    where
+        p1_0.id=? 
+        and u1_0.id=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    /* &lt;criteria&gt; */ select
+        pl1_0.id 
+    from
+        post_like pl1_0 
+    left join
+        post p1_0 
+            on p1_0.id=pl1_0.post_id 
+    left join
+        users u1_0 
+            on u1_0.id=pl1_0.user_id 
+    where
+        p1_0.id=? 
+        and u1_0.id=? 
+    fetch
+        first ? rows only
+2025-09-27T05:51:34.788Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* insert for
+        com.example.soso.community.common.likes.domain.PostLike */insert 
+    into
+        post_like (post_id, user_id, id) 
+    values
+        (?, ?, default)
+Hibernate: 
+    /* insert for
+        com.example.soso.community.common.likes.domain.PostLike */insert 
+    into
+        post_like (post_id, user_id, id) 
+    values
+        (?, ?, default)
+2025-09-27T05:51:34.788Z  INFO 281 --- [    Test worker] c.e.s.c.c.service.AbstractLikeService    : 좋아요 추가 완료: postId=3, userId=57593408-6d0a-4b79-a7ba-bcfecfb9aa99
+2025-09-27T05:51:34.789Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* &lt;criteria&gt; */ select
+        count(pl1_0.id) 
+    from
+        post_like pl1_0 
+    left join
+        post p1_0 
+            on p1_0.id=pl1_0.post_id 
+    where
+        p1_0.id=?
+Hibernate: 
+    /* &lt;criteria&gt; */ select
+        count(pl1_0.id) 
+    from
+        post_like pl1_0 
+    left join
+        post p1_0 
+            on p1_0.id=pl1_0.post_id 
+    where
+        p1_0.id=?
+2025-09-27T05:51:34.790Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:34.790Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [true]
+
+MockHttpServletRequest:
+      HTTP Method = POST
+      Request URI = /community/freeboard/3/like
+       Parameters = {}
+          Headers = [Authorization:&quot;Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI1NzU5MzQwOC02ZDBhLTRiNzktYTdiYS1iY2ZlY2ZiOWFhOTkiLCJpYXQiOjE3NTg5NTIyOTQsImV4cCI6MTc1ODk1NDA5NH0.1eHC0a1VPl-ULmiazqHDs-SO1YJmmLU8X9uO9vatU-qUhWV-pvlKL6fOfARaq35mCq4GP_Pl6k9d8T8TWEP0Aw&quot;]
+             Body = &lt;no character encoding set&gt;
+    Session Attrs = {}
+
+Handler:
+             Type = com.example.soso.community.freeboard.like.controller.FreeboardLikeController
+           Method = com.example.soso.community.freeboard.like.controller.FreeboardLikeController#toggleLike(Long, CustomUserDetails)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 200
+    Error message = null
+          Headers = [Vary:&quot;Origin&quot;, &quot;Access-Control-Request-Method&quot;, &quot;Access-Control-Request-Headers&quot;, Content-Type:&quot;application/json&quot;, X-Content-Type-Options:&quot;nosniff&quot;, X-XSS-Protection:&quot;0&quot;, Cache-Control:&quot;no-cache, no-store, max-age=0, must-revalidate&quot;, Pragma:&quot;no-cache&quot;, Expires:&quot;0&quot;, X-Frame-Options:&quot;DENY&quot;]
+     Content type = application/json
+             Body = true
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+2025-09-27T05:51:34.798Z DEBUG 281 --- [    Test worker] c.e.s.s.filter.JwtAuthenticationFilter   : JWT 인증 성공: 57593408-6d0a-4b79-a7ba-bcfecfb9aa99
+2025-09-27T05:51:34.798Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.community.freeboard.like.controller.FreeboardLikeController#toggleLike(Long, CustomUserDetails)
+2025-09-27T05:51:34.798Z  INFO 281 --- [    Test worker] c.e.s.c.f.l.c.FreeboardLikeController    : 자유게시판 게시글 좋아요 토글: freeboardId=3, userId=57593408-6d0a-4b79-a7ba-bcfecfb9aa99
+2025-09-27T05:51:34.799Z  INFO 281 --- [    Test worker] c.e.s.c.c.service.AbstractLikeService    : 좋아요 토글: postId=3, userId=57593408-6d0a-4b79-a7ba-bcfecfb9aa99
+2025-09-27T05:51:34.800Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* update
+        for com.example.soso.community.common.post.domain.entity.Post */update post 
+    set
+        category=?,
+        comment_count=?,
+        content=?,
+        deleted=?,
+        last_modified_date=?,
+        like_count=?,
+        title=?,
+        user_id=?,
+        view_count=? 
+    where
+        id=?
+Hibernate: 
+    /* update
+        for com.example.soso.community.common.post.domain.entity.Post */update post 
+    set
+        category=?,
+        comment_count=?,
+        content=?,
+        deleted=?,
+        last_modified_date=?,
+        like_count=?,
+        title=?,
+        user_id=?,
+        view_count=? 
+    where
+        id=?
+2025-09-27T05:51:34.801Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* &lt;criteria&gt; */ select
+        p1_0.id,
+        p1_0.category,
+        p1_0.comment_count,
+        p1_0.content,
+        p1_0.created_date,
+        p1_0.deleted,
+        p1_0.last_modified_date,
+        p1_0.like_count,
+        p1_0.title,
+        p1_0.user_id,
+        p1_0.view_count 
+    from
+        post p1_0 
+    where
+        p1_0.id=? 
+        and not(p1_0.deleted)
+Hibernate: 
+    /* &lt;criteria&gt; */ select
+        p1_0.id,
+        p1_0.category,
+        p1_0.comment_count,
+        p1_0.content,
+        p1_0.created_date,
+        p1_0.deleted,
+        p1_0.last_modified_date,
+        p1_0.like_count,
+        p1_0.title,
+        p1_0.user_id,
+        p1_0.view_count 
+    from
+        post p1_0 
+    where
+        p1_0.id=? 
+        and not(p1_0.deleted)
+2025-09-27T05:51:34.802Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* &lt;criteria&gt; */ select
+        pl1_0.id 
+    from
+        post_like pl1_0 
+    left join
+        post p1_0 
+            on p1_0.id=pl1_0.post_id 
+    left join
+        users u1_0 
+            on u1_0.id=pl1_0.user_id 
+    where
+        p1_0.id=? 
+        and u1_0.id=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    /* &lt;criteria&gt; */ select
+        pl1_0.id 
+    from
+        post_like pl1_0 
+    left join
+        post p1_0 
+            on p1_0.id=pl1_0.post_id 
+    left join
+        users u1_0 
+            on u1_0.id=pl1_0.user_id 
+    where
+        p1_0.id=? 
+        and u1_0.id=? 
+    fetch
+        first ? rows only
+2025-09-27T05:51:34.810Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* DELETE 
+    FROM
+        PostLike pl 
+    WHERE
+        pl.post.id = :postId 
+        AND pl.user.id = :userId */ delete 
+    from
+        post_like pl1_0 
+    where
+        pl1_0.post_id=? 
+        and pl1_0.user_id=?
+Hibernate: 
+    /* DELETE 
+    FROM
+        PostLike pl 
+    WHERE
+        pl.post.id = :postId 
+        AND pl.user.id = :userId */ delete 
+    from
+        post_like pl1_0 
+    where
+        pl1_0.post_id=? 
+        and pl1_0.user_id=?
+2025-09-27T05:51:34.811Z  INFO 281 --- [    Test worker] c.e.s.c.c.service.AbstractLikeService    : 좋아요 취소 완료: postId=3, userId=57593408-6d0a-4b79-a7ba-bcfecfb9aa99
+2025-09-27T05:51:34.812Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* &lt;criteria&gt; */ select
+        count(pl1_0.id) 
+    from
+        post_like pl1_0 
+    left join
+        post p1_0 
+            on p1_0.id=pl1_0.post_id 
+    where
+        p1_0.id=?
+Hibernate: 
+    /* &lt;criteria&gt; */ select
+        count(pl1_0.id) 
+    from
+        post_like pl1_0 
+    left join
+        post p1_0 
+            on p1_0.id=pl1_0.post_id 
+    where
+        p1_0.id=?
+2025-09-27T05:51:34.813Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:34.813Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [false]
+
+MockHttpServletRequest:
+      HTTP Method = POST
+      Request URI = /community/freeboard/3/like
+       Parameters = {}
+          Headers = [Authorization:&quot;Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI1NzU5MzQwOC02ZDBhLTRiNzktYTdiYS1iY2ZlY2ZiOWFhOTkiLCJpYXQiOjE3NTg5NTIyOTQsImV4cCI6MTc1ODk1NDA5NH0.1eHC0a1VPl-ULmiazqHDs-SO1YJmmLU8X9uO9vatU-qUhWV-pvlKL6fOfARaq35mCq4GP_Pl6k9d8T8TWEP0Aw&quot;]
+             Body = &lt;no character encoding set&gt;
+    Session Attrs = {}
+
+Handler:
+             Type = com.example.soso.community.freeboard.like.controller.FreeboardLikeController
+           Method = com.example.soso.community.freeboard.like.controller.FreeboardLikeController#toggleLike(Long, CustomUserDetails)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 200
+    Error message = null
+          Headers = [Vary:&quot;Origin&quot;, &quot;Access-Control-Request-Method&quot;, &quot;Access-Control-Request-Headers&quot;, Content-Type:&quot;application/json&quot;, X-Content-Type-Options:&quot;nosniff&quot;, X-XSS-Protection:&quot;0&quot;, Cache-Control:&quot;no-cache, no-store, max-age=0, must-revalidate&quot;, Pragma:&quot;no-cache&quot;, Expires:&quot;0&quot;, X-Frame-Options:&quot;DENY&quot;]
+     Content type = application/json
+             Body = false
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+✅ 좋아요 토글 동작 확인 성공!
+
+[테스트 2] user1이 좋아요 추가 후 토글로 취소 테스트...
+2025-09-27T05:51:34.814Z DEBUG 281 --- [    Test worker] c.e.s.s.filter.JwtAuthenticationFilter   : JWT 인증 성공: 72133eb4-678d-4098-9832-f724f969ecfb
+2025-09-27T05:51:34.814Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.community.freeboard.like.controller.FreeboardLikeController#toggleLike(Long, CustomUserDetails)
+2025-09-27T05:51:34.815Z  INFO 281 --- [    Test worker] c.e.s.c.f.l.c.FreeboardLikeController    : 자유게시판 게시글 좋아요 토글: freeboardId=3, userId=72133eb4-678d-4098-9832-f724f969ecfb
+2025-09-27T05:51:34.815Z  INFO 281 --- [    Test worker] c.e.s.c.c.service.AbstractLikeService    : 좋아요 토글: postId=3, userId=72133eb4-678d-4098-9832-f724f969ecfb
+2025-09-27T05:51:34.816Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* update
+        for com.example.soso.community.common.post.domain.entity.Post */update post 
+    set
+        category=?,
+        comment_count=?,
+        content=?,
+        deleted=?,
+        last_modified_date=?,
+        like_count=?,
+        title=?,
+        user_id=?,
+        view_count=? 
+    where
+        id=?
+Hibernate: 
+    /* update
+        for com.example.soso.community.common.post.domain.entity.Post */update post 
+    set
+        category=?,
+        comment_count=?,
+        content=?,
+        deleted=?,
+        last_modified_date=?,
+        like_count=?,
+        title=?,
+        user_id=?,
+        view_count=? 
+    where
+        id=?
+2025-09-27T05:51:34.818Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* &lt;criteria&gt; */ select
+        p1_0.id,
+        p1_0.category,
+        p1_0.comment_count,
+        p1_0.content,
+        p1_0.created_date,
+        p1_0.deleted,
+        p1_0.last_modified_date,
+        p1_0.like_count,
+        p1_0.title,
+        p1_0.user_id,
+        p1_0.view_count 
+    from
+        post p1_0 
+    where
+        p1_0.id=? 
+        and not(p1_0.deleted)
+Hibernate: 
+    /* &lt;criteria&gt; */ select
+        p1_0.id,
+        p1_0.category,
+        p1_0.comment_count,
+        p1_0.content,
+        p1_0.created_date,
+        p1_0.deleted,
+        p1_0.last_modified_date,
+        p1_0.like_count,
+        p1_0.title,
+        p1_0.user_id,
+        p1_0.view_count 
+    from
+        post p1_0 
+    where
+        p1_0.id=? 
+        and not(p1_0.deleted)
+2025-09-27T05:51:34.820Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* &lt;criteria&gt; */ select
+        pl1_0.id 
+    from
+        post_like pl1_0 
+    left join
+        post p1_0 
+            on p1_0.id=pl1_0.post_id 
+    left join
+        users u1_0 
+            on u1_0.id=pl1_0.user_id 
+    where
+        p1_0.id=? 
+        and u1_0.id=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    /* &lt;criteria&gt; */ select
+        pl1_0.id 
+    from
+        post_like pl1_0 
+    left join
+        post p1_0 
+            on p1_0.id=pl1_0.post_id 
+    left join
+        users u1_0 
+            on u1_0.id=pl1_0.user_id 
+    where
+        p1_0.id=? 
+        and u1_0.id=? 
+    fetch
+        first ? rows only
+2025-09-27T05:51:34.820Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* insert for
+        com.example.soso.community.common.likes.domain.PostLike */insert 
+    into
+        post_like (post_id, user_id, id) 
+    values
+        (?, ?, default)
+Hibernate: 
+    /* insert for
+        com.example.soso.community.common.likes.domain.PostLike */insert 
+    into
+        post_like (post_id, user_id, id) 
+    values
+        (?, ?, default)
+2025-09-27T05:51:34.820Z  INFO 281 --- [    Test worker] c.e.s.c.c.service.AbstractLikeService    : 좋아요 추가 완료: postId=3, userId=72133eb4-678d-4098-9832-f724f969ecfb
+2025-09-27T05:51:34.821Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* &lt;criteria&gt; */ select
+        count(pl1_0.id) 
+    from
+        post_like pl1_0 
+    left join
+        post p1_0 
+            on p1_0.id=pl1_0.post_id 
+    where
+        p1_0.id=?
+Hibernate: 
+    /* &lt;criteria&gt; */ select
+        count(pl1_0.id) 
+    from
+        post_like pl1_0 
+    left join
+        post p1_0 
+            on p1_0.id=pl1_0.post_id 
+    where
+        p1_0.id=?
+2025-09-27T05:51:34.822Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:34.822Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [true]
+
+MockHttpServletRequest:
+      HTTP Method = POST
+      Request URI = /community/freeboard/3/like
+       Parameters = {}
+          Headers = [Authorization:&quot;Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI3MjEzM2ViNC02NzhkLTQwOTgtOTgzMi1mNzI0Zjk2OWVjZmIiLCJpYXQiOjE3NTg5NTIyOTQsImV4cCI6MTc1ODk1NDA5NH0.KBTUyeQTegBld7relVBysILQwdTIYLUwMpOGxK_rFyzLjTdNmci6wHllUYHTPgWt0WCFup5cg_8HPBpkKDjbVg&quot;]
+             Body = &lt;no character encoding set&gt;
+    Session Attrs = {}
+
+Handler:
+             Type = com.example.soso.community.freeboard.like.controller.FreeboardLikeController
+           Method = com.example.soso.community.freeboard.like.controller.FreeboardLikeController#toggleLike(Long, CustomUserDetails)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 200
+    Error message = null
+          Headers = [Vary:&quot;Origin&quot;, &quot;Access-Control-Request-Method&quot;, &quot;Access-Control-Request-Headers&quot;, Content-Type:&quot;application/json&quot;, X-Content-Type-Options:&quot;nosniff&quot;, X-XSS-Protection:&quot;0&quot;, Cache-Control:&quot;no-cache, no-store, max-age=0, must-revalidate&quot;, Pragma:&quot;no-cache&quot;, Expires:&quot;0&quot;, X-Frame-Options:&quot;DENY&quot;]
+     Content type = application/json
+             Body = true
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+2025-09-27T05:51:34.823Z DEBUG 281 --- [    Test worker] c.e.s.s.filter.JwtAuthenticationFilter   : JWT 인증 성공: 72133eb4-678d-4098-9832-f724f969ecfb
+2025-09-27T05:51:34.824Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.community.freeboard.like.controller.FreeboardLikeController#toggleLike(Long, CustomUserDetails)
+2025-09-27T05:51:34.824Z  INFO 281 --- [    Test worker] c.e.s.c.f.l.c.FreeboardLikeController    : 자유게시판 게시글 좋아요 토글: freeboardId=3, userId=72133eb4-678d-4098-9832-f724f969ecfb
+2025-09-27T05:51:34.824Z  INFO 281 --- [    Test worker] c.e.s.c.c.service.AbstractLikeService    : 좋아요 토글: postId=3, userId=72133eb4-678d-4098-9832-f724f969ecfb
+2025-09-27T05:51:34.825Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* update
+        for com.example.soso.community.common.post.domain.entity.Post */update post 
+    set
+        category=?,
+        comment_count=?,
+        content=?,
+        deleted=?,
+        last_modified_date=?,
+        like_count=?,
+        title=?,
+        user_id=?,
+        view_count=? 
+    where
+        id=?
+Hibernate: 
+    /* update
+        for com.example.soso.community.common.post.domain.entity.Post */update post 
+    set
+        category=?,
+        comment_count=?,
+        content=?,
+        deleted=?,
+        last_modified_date=?,
+        like_count=?,
+        title=?,
+        user_id=?,
+        view_count=? 
+    where
+        id=?
+2025-09-27T05:51:34.826Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* &lt;criteria&gt; */ select
+        p1_0.id,
+        p1_0.category,
+        p1_0.comment_count,
+        p1_0.content,
+        p1_0.created_date,
+        p1_0.deleted,
+        p1_0.last_modified_date,
+        p1_0.like_count,
+        p1_0.title,
+        p1_0.user_id,
+        p1_0.view_count 
+    from
+        post p1_0 
+    where
+        p1_0.id=? 
+        and not(p1_0.deleted)
+Hibernate: 
+    /* &lt;criteria&gt; */ select
+        p1_0.id,
+        p1_0.category,
+        p1_0.comment_count,
+        p1_0.content,
+        p1_0.created_date,
+        p1_0.deleted,
+        p1_0.last_modified_date,
+        p1_0.like_count,
+        p1_0.title,
+        p1_0.user_id,
+        p1_0.view_count 
+    from
+        post p1_0 
+    where
+        p1_0.id=? 
+        and not(p1_0.deleted)
+2025-09-27T05:51:34.827Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* &lt;criteria&gt; */ select
+        pl1_0.id 
+    from
+        post_like pl1_0 
+    left join
+        post p1_0 
+            on p1_0.id=pl1_0.post_id 
+    left join
+        users u1_0 
+            on u1_0.id=pl1_0.user_id 
+    where
+        p1_0.id=? 
+        and u1_0.id=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    /* &lt;criteria&gt; */ select
+        pl1_0.id 
+    from
+        post_like pl1_0 
+    left join
+        post p1_0 
+            on p1_0.id=pl1_0.post_id 
+    left join
+        users u1_0 
+            on u1_0.id=pl1_0.user_id 
+    where
+        p1_0.id=? 
+        and u1_0.id=? 
+    fetch
+        first ? rows only
+2025-09-27T05:51:34.827Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* DELETE 
+    FROM
+        PostLike pl 
+    WHERE
+        pl.post.id = :postId 
+        AND pl.user.id = :userId */ delete 
+    from
+        post_like pl1_0 
+    where
+        pl1_0.post_id=? 
+        and pl1_0.user_id=?
+Hibernate: 
+    /* DELETE 
+    FROM
+        PostLike pl 
+    WHERE
+        pl.post.id = :postId 
+        AND pl.user.id = :userId */ delete 
+    from
+        post_like pl1_0 
+    where
+        pl1_0.post_id=? 
+        and pl1_0.user_id=?
+2025-09-27T05:51:34.828Z  INFO 281 --- [    Test worker] c.e.s.c.c.service.AbstractLikeService    : 좋아요 취소 완료: postId=3, userId=72133eb4-678d-4098-9832-f724f969ecfb
+2025-09-27T05:51:34.828Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* &lt;criteria&gt; */ select
+        count(pl1_0.id) 
+    from
+        post_like pl1_0 
+    left join
+        post p1_0 
+            on p1_0.id=pl1_0.post_id 
+    where
+        p1_0.id=?
+Hibernate: 
+    /* &lt;criteria&gt; */ select
+        count(pl1_0.id) 
+    from
+        post_like pl1_0 
+    left join
+        post p1_0 
+            on p1_0.id=pl1_0.post_id 
+    where
+        p1_0.id=?
+2025-09-27T05:51:34.829Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:34.829Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [false]
+
+MockHttpServletRequest:
+      HTTP Method = POST
+      Request URI = /community/freeboard/3/like
+       Parameters = {}
+          Headers = [Authorization:&quot;Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI3MjEzM2ViNC02NzhkLTQwOTgtOTgzMi1mNzI0Zjk2OWVjZmIiLCJpYXQiOjE3NTg5NTIyOTQsImV4cCI6MTc1ODk1NDA5NH0.KBTUyeQTegBld7relVBysILQwdTIYLUwMpOGxK_rFyzLjTdNmci6wHllUYHTPgWt0WCFup5cg_8HPBpkKDjbVg&quot;]
+             Body = &lt;no character encoding set&gt;
+    Session Attrs = {}
+
+Handler:
+             Type = com.example.soso.community.freeboard.like.controller.FreeboardLikeController
+           Method = com.example.soso.community.freeboard.like.controller.FreeboardLikeController#toggleLike(Long, CustomUserDetails)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 200
+    Error message = null
+          Headers = [Vary:&quot;Origin&quot;, &quot;Access-Control-Request-Method&quot;, &quot;Access-Control-Request-Headers&quot;, Content-Type:&quot;application/json&quot;, X-Content-Type-Options:&quot;nosniff&quot;, X-XSS-Protection:&quot;0&quot;, Cache-Control:&quot;no-cache, no-store, max-age=0, must-revalidate&quot;, Pragma:&quot;no-cache&quot;, Expires:&quot;0&quot;, X-Frame-Options:&quot;DENY&quot;]
+     Content type = application/json
+             Body = false
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+✅ 토글 방식 좋아요 추가/취소 동작 확인 성공!
+
+[테스트 3] 삭제된 게시글 접근 시도...
+2025-09-27T05:51:34.830Z DEBUG 281 --- [    Test worker] c.e.s.s.filter.JwtAuthenticationFilter   : JWT 인증 성공: 72133eb4-678d-4098-9832-f724f969ecfb
+2025-09-27T05:51:34.830Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.community.freeboard.post.controller.FreeboardController#deletePost(Long, CustomUserDetails)
+2025-09-27T05:51:34.831Z  INFO 281 --- [    Test worker] c.e.s.c.f.p.c.FreeboardController        : 자유게시판 글 삭제 요청: freeboardId=3, userId=72133eb4-678d-4098-9832-f724f969ecfb
+2025-09-27T05:51:34.831Z  INFO 281 --- [    Test worker] c.e.s.c.f.p.s.FreeboardServiceImpl       : 자유게시판 글 소프트 삭제: postId=3, userId=72133eb4-678d-4098-9832-f724f969ecfb
+2025-09-27T05:51:34.832Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* update
+        for com.example.soso.community.common.post.domain.entity.Post */update post 
+    set
+        category=?,
+        comment_count=?,
+        content=?,
+        deleted=?,
+        last_modified_date=?,
+        like_count=?,
+        title=?,
+        user_id=?,
+        view_count=? 
+    where
+        id=?
+Hibernate: 
+    /* update
+        for com.example.soso.community.common.post.domain.entity.Post */update post 
+    set
+        category=?,
+        comment_count=?,
+        content=?,
+        deleted=?,
+        last_modified_date=?,
+        like_count=?,
+        title=?,
+        user_id=?,
+        view_count=? 
+    where
+        id=?
+2025-09-27T05:51:34.832Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* &lt;criteria&gt; */ select
+        p1_0.id,
+        p1_0.category,
+        p1_0.comment_count,
+        p1_0.content,
+        p1_0.created_date,
+        p1_0.deleted,
+        p1_0.last_modified_date,
+        p1_0.like_count,
+        p1_0.title,
+        p1_0.user_id,
+        p1_0.view_count 
+    from
+        post p1_0 
+    where
+        p1_0.id=? 
+        and not(p1_0.deleted)
+Hibernate: 
+    /* &lt;criteria&gt; */ select
+        p1_0.id,
+        p1_0.category,
+        p1_0.comment_count,
+        p1_0.content,
+        p1_0.created_date,
+        p1_0.deleted,
+        p1_0.last_modified_date,
+        p1_0.like_count,
+        p1_0.title,
+        p1_0.user_id,
+        p1_0.view_count 
+    from
+        post p1_0 
+    where
+        p1_0.id=? 
+        and not(p1_0.deleted)
+2025-09-27T05:51:34.832Z  INFO 281 --- [    Test worker] c.e.s.c.f.p.s.FreeboardServiceImpl       : 자유게시판 글 소프트 삭제 완료: postId=3
+2025-09-27T05:51:34.832Z  INFO 281 --- [    Test worker] c.e.s.c.f.p.c.FreeboardController        : 자유게시판 글 삭제 완료: freeboardId=3
+2025-09-27T05:51:34.833Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/octet-stream', given [*/*] and supported [*/*]
+
+MockHttpServletRequest:
+      HTTP Method = DELETE
+      Request URI = /community/freeboard/3
+       Parameters = {}
+          Headers = [Authorization:&quot;Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI3MjEzM2ViNC02NzhkLTQwOTgtOTgzMi1mNzI0Zjk2OWVjZmIiLCJpYXQiOjE3NTg5NTIyOTQsImV4cCI6MTc1ODk1NDA5NH0.KBTUyeQTegBld7relVBysILQwdTIYLUwMpOGxK_rFyzLjTdNmci6wHllUYHTPgWt0WCFup5cg_8HPBpkKDjbVg&quot;]
+             Body = &lt;no character encoding set&gt;
+    Session Attrs = {}
+
+Handler:
+             Type = com.example.soso.community.freeboard.post.controller.FreeboardController
+           Method = com.example.soso.community.freeboard.post.controller.FreeboardController#deletePost(Long, CustomUserDetails)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 204
+    Error message = null
+          Headers = [Vary:&quot;Origin&quot;, &quot;Access-Control-Request-Method&quot;, &quot;Access-Control-Request-Headers&quot;, X-Content-Type-Options:&quot;nosniff&quot;, X-XSS-Protection:&quot;0&quot;, Cache-Control:&quot;no-cache, no-store, max-age=0, must-revalidate&quot;, Pragma:&quot;no-cache&quot;, Expires:&quot;0&quot;, X-Frame-Options:&quot;DENY&quot;]
+     Content type = null
+             Body = 
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+2025-09-27T05:51:34.834Z DEBUG 281 --- [    Test worker] c.e.s.s.filter.JwtAuthenticationFilter   : JWT 인증 성공: 57593408-6d0a-4b79-a7ba-bcfecfb9aa99
+2025-09-27T05:51:34.835Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.community.freeboard.post.controller.FreeboardController#getPost(Long)
+2025-09-27T05:51:34.835Z  INFO 281 --- [    Test worker] c.e.s.c.f.p.c.FreeboardController        : 자유게시판 글 조회 요청: freeboardId=3, userId=57593408-6d0a-4b79-a7ba-bcfecfb9aa99
+2025-09-27T05:51:34.835Z DEBUG 281 --- [    Test worker] c.e.s.c.f.p.s.FreeboardServiceImpl       : 자유게시판 글 조회: postId=3, userId=57593408-6d0a-4b79-a7ba-bcfecfb9aa99
+2025-09-27T05:51:34.836Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* update
+        for com.example.soso.community.common.post.domain.entity.Post */update post 
+    set
+        category=?,
+        comment_count=?,
+        content=?,
+        deleted=?,
+        last_modified_date=?,
+        like_count=?,
+        title=?,
+        user_id=?,
+        view_count=? 
+    where
+        id=?
+Hibernate: 
+    /* update
+        for com.example.soso.community.common.post.domain.entity.Post */update post 
+    set
+        category=?,
+        comment_count=?,
+        content=?,
+        deleted=?,
+        last_modified_date=?,
+        like_count=?,
+        title=?,
+        user_id=?,
+        view_count=? 
+    where
+        id=?
+2025-09-27T05:51:34.836Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* &lt;criteria&gt; */ select
+        p1_0.id,
+        p1_0.category,
+        p1_0.comment_count,
+        p1_0.content,
+        p1_0.created_date,
+        p1_0.deleted,
+        p1_0.last_modified_date,
+        p1_0.like_count,
+        p1_0.title,
+        p1_0.user_id,
+        p1_0.view_count 
+    from
+        post p1_0 
+    where
+        p1_0.id=? 
+        and not(p1_0.deleted)
+Hibernate: 
+    /* &lt;criteria&gt; */ select
+        p1_0.id,
+        p1_0.category,
+        p1_0.comment_count,
+        p1_0.content,
+        p1_0.created_date,
+        p1_0.deleted,
+        p1_0.last_modified_date,
+        p1_0.like_count,
+        p1_0.title,
+        p1_0.user_id,
+        p1_0.view_count 
+    from
+        post p1_0 
+    where
+        p1_0.id=? 
+        and not(p1_0.deleted)
+2025-09-27T05:51:34.837Z DEBUG 281 --- [    Test worker] .m.m.a.ExceptionHandlerExceptionResolver : Using @ExceptionHandler com.example.soso.global.exception.GlobalExceptionHandler#handleBaseException(BaseException)
+2025-09-27T05:51:34.837Z  WARN 281 --- [    Test worker] c.e.s.g.e.GlobalExceptionHandler         : Handled business exception: POST_NOT_FOUND - 해당 게시글을 찾을 수 없습니다.
+2025-09-27T05:51:34.837Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:34.837Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [ErrorResponse[code=POST_NOT_FOUND, message=해당 게시글을 찾을 수 없습니다.]]
+2025-09-27T05:51:34.837Z DEBUG 281 --- [    Test worker] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [com.example.soso.global.exception.util.PostException: 해당 게시글을 찾을 수 없습니다.]
+
+MockHttpServletRequest:
+      HTTP Method = GET
+      Request URI = /community/freeboard/3
+       Parameters = {}
+          Headers = [Authorization:&quot;Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI1NzU5MzQwOC02ZDBhLTRiNzktYTdiYS1iY2ZlY2ZiOWFhOTkiLCJpYXQiOjE3NTg5NTIyOTQsImV4cCI6MTc1ODk1NDA5NH0.1eHC0a1VPl-ULmiazqHDs-SO1YJmmLU8X9uO9vatU-qUhWV-pvlKL6fOfARaq35mCq4GP_Pl6k9d8T8TWEP0Aw&quot;]
+             Body = &lt;no character encoding set&gt;
+    Session Attrs = {}
+
+Handler:
+             Type = com.example.soso.community.freeboard.post.controller.FreeboardController
+           Method = com.example.soso.community.freeboard.post.controller.FreeboardController#getPost(Long)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = com.example.soso.global.exception.util.PostException
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 404
+    Error message = null
+          Headers = [Vary:&quot;Origin&quot;, &quot;Access-Control-Request-Method&quot;, &quot;Access-Control-Request-Headers&quot;, Content-Type:&quot;application/json&quot;, X-Content-Type-Options:&quot;nosniff&quot;, X-XSS-Protection:&quot;0&quot;, Cache-Control:&quot;no-cache, no-store, max-age=0, must-revalidate&quot;, Pragma:&quot;no-cache&quot;, Expires:&quot;0&quot;, X-Frame-Options:&quot;DENY&quot;]
+     Content type = application/json
+             Body = {&quot;code&quot;:&quot;POST_NOT_FOUND&quot;,&quot;message&quot;:&quot;해당 게시글을 찾을 수 없습니다.&quot;}
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+✅ 삭제된 게시글 접근 에러 처리 성공!
+
+[테스트 4] 삭제된 게시글에 댓글 작성 시도...
+2025-09-27T05:51:34.840Z DEBUG 281 --- [    Test worker] c.e.s.s.filter.JwtAuthenticationFilter   : JWT 인증 성공: 57593408-6d0a-4b79-a7ba-bcfecfb9aa99
+2025-09-27T05:51:34.840Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.community.freeboard.comment.controller.FreeboardCommentController#createComment(Long, FreeboardCommentCreateRequest, CustomUserDetails)
+2025-09-27T05:51:34.840Z DEBUG 281 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read &quot;application/json&quot; to [com.example.soso.community.freeboard.comment.domain.dto.FreeboardCommentCreateRequest@17aa498e]
+2025-09-27T05:51:34.841Z  INFO 281 --- [    Test worker] c.e.s.c.f.c.c.FreeboardCommentController : 자유게시판 댓글 작성 요청: freeboardId=3, userId=57593408-6d0a-4b79-a7ba-bcfecfb9aa99, parentCommentId=null
+2025-09-27T05:51:34.841Z  INFO 281 --- [    Test worker] c.e.s.c.c.s.AbstractCommentService       : 댓글 작성 시작: postId=3, userId=57593408-6d0a-4b79-a7ba-bcfecfb9aa99
+2025-09-27T05:51:34.842Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* &lt;criteria&gt; */ select
+        p1_0.id,
+        p1_0.category,
+        p1_0.comment_count,
+        p1_0.content,
+        p1_0.created_date,
+        p1_0.deleted,
+        p1_0.last_modified_date,
+        p1_0.like_count,
+        p1_0.title,
+        p1_0.user_id,
+        p1_0.view_count 
+    from
+        post p1_0 
+    where
+        p1_0.id=? 
+        and not(p1_0.deleted)
+Hibernate: 
+    /* &lt;criteria&gt; */ select
+        p1_0.id,
+        p1_0.category,
+        p1_0.comment_count,
+        p1_0.content,
+        p1_0.created_date,
+        p1_0.deleted,
+        p1_0.last_modified_date,
+        p1_0.like_count,
+        p1_0.title,
+        p1_0.user_id,
+        p1_0.view_count 
+    from
+        post p1_0 
+    where
+        p1_0.id=? 
+        and not(p1_0.deleted)
+2025-09-27T05:51:34.842Z DEBUG 281 --- [    Test worker] .m.m.a.ExceptionHandlerExceptionResolver : Using @ExceptionHandler com.example.soso.global.exception.GlobalExceptionHandler#handleBaseException(BaseException)
+2025-09-27T05:51:34.842Z  WARN 281 --- [    Test worker] c.e.s.g.e.GlobalExceptionHandler         : Handled business exception: POST_NOT_FOUND - 해당 게시글을 찾을 수 없습니다.
+2025-09-27T05:51:34.842Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:34.843Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [ErrorResponse[code=POST_NOT_FOUND, message=해당 게시글을 찾을 수 없습니다.]]
+2025-09-27T05:51:34.843Z DEBUG 281 --- [    Test worker] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [com.example.soso.global.exception.util.PostException: 해당 게시글을 찾을 수 없습니다.]
+
+MockHttpServletRequest:
+      HTTP Method = POST
+      Request URI = /community/freeboard/3/comments
+       Parameters = {}
+          Headers = [Content-Type:&quot;application/json&quot;, Authorization:&quot;Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI1NzU5MzQwOC02ZDBhLTRiNzktYTdiYS1iY2ZlY2ZiOWFhOTkiLCJpYXQiOjE3NTg5NTIyOTQsImV4cCI6MTc1ODk1NDA5NH0.1eHC0a1VPl-ULmiazqHDs-SO1YJmmLU8X9uO9vatU-qUhWV-pvlKL6fOfARaq35mCq4GP_Pl6k9d8T8TWEP0Aw&quot;, Content-Length:&quot;51&quot;]
+             Body = &lt;no character encoding set&gt;
+    Session Attrs = {}
+
+Handler:
+             Type = com.example.soso.community.freeboard.comment.controller.FreeboardCommentController
+           Method = com.example.soso.community.freeboard.comment.controller.FreeboardCommentController#createComment(Long, FreeboardCommentCreateRequest, CustomUserDetails)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = com.example.soso.global.exception.util.PostException
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 404
+    Error message = null
+          Headers = [Vary:&quot;Origin&quot;, &quot;Access-Control-Request-Method&quot;, &quot;Access-Control-Request-Headers&quot;, Content-Type:&quot;application/json&quot;, X-Content-Type-Options:&quot;nosniff&quot;, X-XSS-Protection:&quot;0&quot;, Cache-Control:&quot;no-cache, no-store, max-age=0, must-revalidate&quot;, Pragma:&quot;no-cache&quot;, Expires:&quot;0&quot;, X-Frame-Options:&quot;DENY&quot;]
+     Content type = application/json
+             Body = {&quot;code&quot;:&quot;POST_NOT_FOUND&quot;,&quot;message&quot;:&quot;해당 게시글을 찾을 수 없습니다.&quot;}
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+✅ 삭제된 게시글 댓글 작성 에러 처리 성공!
+
+&#x1f389; === 비즈니스 로직 에러 시나리오 완료 ===
+2025-09-27T05:51:34.846Z  INFO 281 --- [    Test worker] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring TestDispatcherServlet ''
+2025-09-27T05:51:34.847Z  INFO 281 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2025-09-27T05:51:34.847Z  INFO 281 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 0 ms
+
+&#x1f3ac; === 데이터 검증 에러 시나리오 ===
+2025-09-27T05:51:34.848Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* insert for
+        com.example.soso.users.domain.entity.Users */insert 
+    into
+        users (age_range, budget, created_date, email, gender, last_modified_date, latitude, location, longitude, nickname, profile_image_url, startup_experience, user_type, username, id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert for
+        com.example.soso.users.domain.entity.Users */insert 
+    into
+        users (age_range, budget, created_date, email, gender, last_modified_date, latitude, location, longitude, nickname, profile_image_url, startup_experience, user_type, username, id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+2025-09-27T05:51:34.848Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* insert for
+        com.example.soso.users.domain.entity.Users.interests */insert 
+    into
+        user_interests (users_id, interest_type) 
+    values
+        (?, ?)
+Hibernate: 
+    /* insert for
+        com.example.soso.users.domain.entity.Users.interests */insert 
+    into
+        user_interests (users_id, interest_type) 
+    values
+        (?, ?)
+2025-09-27T05:51:34.848Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* insert for
+        com.example.soso.users.domain.entity.Users.interests */insert 
+    into
+        user_interests (users_id, interest_type) 
+    values
+        (?, ?)
+Hibernate: 
+    /* insert for
+        com.example.soso.users.domain.entity.Users.interests */insert 
+    into
+        user_interests (users_id, interest_type) 
+    values
+        (?, ?)
+
+[테스트 1] 제목 없이 게시글 작성 시도...
+2025-09-27T05:51:34.850Z DEBUG 281 --- [    Test worker] c.e.s.s.filter.JwtAuthenticationFilter   : JWT 인증 성공: b948c428-a6b1-4d90-a9c5-b51389e14ebe
+2025-09-27T05:51:34.850Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.community.freeboard.post.controller.FreeboardController#createPost(FreeboardCreateRequest, CustomUserDetails)
+2025-09-27T05:51:34.851Z DEBUG 281 --- [    Test worker] .m.m.a.ExceptionHandlerExceptionResolver : Using @ExceptionHandler com.example.soso.global.exception.GlobalExceptionHandler#handleValidationException(MethodArgumentNotValidException)
+2025-09-27T05:51:34.851Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:34.851Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [ErrorResponse[code=VALIDATION_FAILED, message=[title] 제목은 필수입니다.]]
+2025-09-27T05:51:34.851Z DEBUG 281 --- [    Test worker] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [org.springframework.web.bind.MethodArgumentNotValidException: Validation failed for argument [0] in public org.springframework.http.ResponseEntity&lt;?&gt; com.example.soso.community.freeboard.post.controller.FreeboardController.createPost(com.example.soso.community.freeboard.post.domain.dto.FreeboardCreateRequest,com.example.soso.security.domain.CustomUserDetails): [Field error in object 'freeboardCreateRequest' on field 'title': rejected value []; codes [NotBlank.freeboardCreateRequest.title,NotBlank.title,NotBlank.java.lang.String,NotBlank]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [freeboardCreateRequest.title,title]; arguments []; default message [title]]; default message [제목은 필수입니다.]] ]
+
+MockHttpServletRequest:
+      HTTP Method = POST
+      Request URI = /community/freeboard
+       Parameters = {title=[], content=[내용은 있지만 제목이 없는 게시글], category=[OTHERS]}
+          Headers = [Content-Type:&quot;multipart/form-data&quot;, Authorization:&quot;Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJiOTQ4YzQyOC1hNmIxLTRkOTAtYTljNS1iNTEzODllMTRlYmUiLCJpYXQiOjE3NTg5NTIyOTQsImV4cCI6MTc1ODk1NDA5NH0.qETensyciFS79pX4Ox2LugScFvGIfabl6edIonVuKlcG_mnz8ad-grsnzI14oHnjOszw3UeDxiTT3K38oLIzKQ&quot;]
+             Body = &lt;no character encoding set&gt;
+    Session Attrs = {}
+
+Handler:
+             Type = com.example.soso.community.freeboard.post.controller.FreeboardController
+           Method = com.example.soso.community.freeboard.post.controller.FreeboardController#createPost(FreeboardCreateRequest, CustomUserDetails)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = org.springframework.web.bind.MethodArgumentNotValidException
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 400
+    Error message = null
+          Headers = [Vary:&quot;Origin&quot;, &quot;Access-Control-Request-Method&quot;, &quot;Access-Control-Request-Headers&quot;, Content-Type:&quot;application/json&quot;, X-Content-Type-Options:&quot;nosniff&quot;, X-XSS-Protection:&quot;0&quot;, Cache-Control:&quot;no-cache, no-store, max-age=0, must-revalidate&quot;, Pragma:&quot;no-cache&quot;, Expires:&quot;0&quot;, X-Frame-Options:&quot;DENY&quot;]
+     Content type = application/json
+             Body = {&quot;code&quot;:&quot;VALIDATION_FAILED&quot;,&quot;message&quot;:&quot;[title] 제목은 필수입니다.&quot;}
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+
+[테스트 2] 내용 없이 게시글 작성 시도...
+2025-09-27T05:51:34.853Z DEBUG 281 --- [    Test worker] c.e.s.s.filter.JwtAuthenticationFilter   : JWT 인증 성공: b948c428-a6b1-4d90-a9c5-b51389e14ebe
+2025-09-27T05:51:34.853Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.community.freeboard.post.controller.FreeboardController#createPost(FreeboardCreateRequest, CustomUserDetails)
+2025-09-27T05:51:34.854Z DEBUG 281 --- [    Test worker] .m.m.a.ExceptionHandlerExceptionResolver : Using @ExceptionHandler com.example.soso.global.exception.GlobalExceptionHandler#handleValidationException(MethodArgumentNotValidException)
+2025-09-27T05:51:34.854Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:34.854Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [ErrorResponse[code=VALIDATION_FAILED, message=[content] 내용은 필수입니다.]]
+2025-09-27T05:51:34.854Z DEBUG 281 --- [    Test worker] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [org.springframework.web.bind.MethodArgumentNotValidException: Validation failed for argument [0] in public org.springframework.http.ResponseEntity&lt;?&gt; com.example.soso.community.freeboard.post.controller.FreeboardController.createPost(com.example.soso.community.freeboard.post.domain.dto.FreeboardCreateRequest,com.example.soso.security.domain.CustomUserDetails): [Field error in object 'freeboardCreateRequest' on field 'content': rejected value []; codes [NotBlank.freeboardCreateRequest.content,NotBlank.content,NotBlank.java.lang.String,NotBlank]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [freeboardCreateRequest.content,content]; arguments []; default message [content]]; default message [내용은 필수입니다.]] ]
+
+MockHttpServletRequest:
+      HTTP Method = POST
+      Request URI = /community/freeboard
+       Parameters = {title=[제목은 있는 게시글], content=[], category=[OTHERS]}
+          Headers = [Content-Type:&quot;multipart/form-data&quot;, Authorization:&quot;Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJiOTQ4YzQyOC1hNmIxLTRkOTAtYTljNS1iNTEzODllMTRlYmUiLCJpYXQiOjE3NTg5NTIyOTQsImV4cCI6MTc1ODk1NDA5NH0.qETensyciFS79pX4Ox2LugScFvGIfabl6edIonVuKlcG_mnz8ad-grsnzI14oHnjOszw3UeDxiTT3K38oLIzKQ&quot;]
+             Body = &lt;no character encoding set&gt;
+    Session Attrs = {}
+
+Handler:
+             Type = com.example.soso.community.freeboard.post.controller.FreeboardController
+           Method = com.example.soso.community.freeboard.post.controller.FreeboardController#createPost(FreeboardCreateRequest, CustomUserDetails)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = org.springframework.web.bind.MethodArgumentNotValidException
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 400
+    Error message = null
+          Headers = [Vary:&quot;Origin&quot;, &quot;Access-Control-Request-Method&quot;, &quot;Access-Control-Request-Headers&quot;, Content-Type:&quot;application/json&quot;, X-Content-Type-Options:&quot;nosniff&quot;, X-XSS-Protection:&quot;0&quot;, Cache-Control:&quot;no-cache, no-store, max-age=0, must-revalidate&quot;, Pragma:&quot;no-cache&quot;, Expires:&quot;0&quot;, X-Frame-Options:&quot;DENY&quot;]
+     Content type = application/json
+             Body = {&quot;code&quot;:&quot;VALIDATION_FAILED&quot;,&quot;message&quot;:&quot;[content] 내용은 필수입니다.&quot;}
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+
+[테스트 3] 잘못된 카테고리로 게시글 작성 시도...
+2025-09-27T05:51:34.856Z DEBUG 281 --- [    Test worker] c.e.s.s.filter.JwtAuthenticationFilter   : JWT 인증 성공: b948c428-a6b1-4d90-a9c5-b51389e14ebe
+2025-09-27T05:51:34.856Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.community.freeboard.post.controller.FreeboardController#createPost(FreeboardCreateRequest, CustomUserDetails)
+2025-09-27T05:51:34.860Z DEBUG 281 --- [    Test worker] .m.m.a.ExceptionHandlerExceptionResolver : Using @ExceptionHandler com.example.soso.global.exception.GlobalExceptionHandler#handleValidationException(MethodArgumentNotValidException)
+2025-09-27T05:51:34.860Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:34.860Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [ErrorResponse[code=VALIDATION_FAILED, message=[category] Failed to convert property value of type 'j (truncated)...]
+2025-09-27T05:51:34.861Z DEBUG 281 --- [    Test worker] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [org.springframework.web.bind.MethodArgumentNotValidException: Validation failed for argument [0] in public org.springframework.http.ResponseEntity&lt;?&gt; com.example.soso.community.freeboard.post.controller.FreeboardController.createPost(com.example.soso.community.freeboard.post.domain.dto.FreeboardCreateRequest,com.example.soso.security.domain.CustomUserDetails): [Field error in object 'freeboardCreateRequest' on field 'category': rejected value [INVALID_CATEGORY]; codes [typeMismatch.freeboardCreateRequest.category,typeMismatch.category,typeMismatch.com.example.soso.community.common.post.domain.entity.Category,typeMismatch]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [freeboardCreateRequest.category,category]; arguments []; default message [category]]; default message [Failed to convert property value of type 'java.lang.String' to required type 'com.example.soso.community.common.post.domain.entity.Category' for property 'category'; Failed to convert from type [java.lang.String] to type [@io.swagger.v3.oas.annotations.media.Schema @jakarta.validation.constraints.NotNull com.example.soso.community.common.post.domain.entity.Category] for value [INVALID_CATEGORY]]] ]
+
+MockHttpServletRequest:
+      HTTP Method = POST
+      Request URI = /community/freeboard
+       Parameters = {title=[정상 제목], content=[정상 내용], category=[INVALID_CATEGORY]}
+          Headers = [Content-Type:&quot;multipart/form-data&quot;, Authorization:&quot;Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJiOTQ4YzQyOC1hNmIxLTRkOTAtYTljNS1iNTEzODllMTRlYmUiLCJpYXQiOjE3NTg5NTIyOTQsImV4cCI6MTc1ODk1NDA5NH0.qETensyciFS79pX4Ox2LugScFvGIfabl6edIonVuKlcG_mnz8ad-grsnzI14oHnjOszw3UeDxiTT3K38oLIzKQ&quot;]
+             Body = &lt;no character encoding set&gt;
+    Session Attrs = {}
+
+Handler:
+             Type = com.example.soso.community.freeboard.post.controller.FreeboardController
+           Method = com.example.soso.community.freeboard.post.controller.FreeboardController#createPost(FreeboardCreateRequest, CustomUserDetails)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = org.springframework.web.bind.MethodArgumentNotValidException
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 400
+    Error message = null
+          Headers = [Vary:&quot;Origin&quot;, &quot;Access-Control-Request-Method&quot;, &quot;Access-Control-Request-Headers&quot;, Content-Type:&quot;application/json&quot;, X-Content-Type-Options:&quot;nosniff&quot;, X-XSS-Protection:&quot;0&quot;, Cache-Control:&quot;no-cache, no-store, max-age=0, must-revalidate&quot;, Pragma:&quot;no-cache&quot;, Expires:&quot;0&quot;, X-Frame-Options:&quot;DENY&quot;]
+     Content type = application/json
+             Body = {&quot;code&quot;:&quot;VALIDATION_FAILED&quot;,&quot;message&quot;:&quot;[category] Failed to convert property value of type 'java.lang.String' to required type 'com.example.soso.community.common.post.domain.entity.Category' for property 'category'; Failed to convert from type [java.lang.String] to type [@io.swagger.v3.oas.annotations.media.Schema @jakarta.validation.constraints.NotNull com.example.soso.community.common.post.domain.entity.Category] for value [INVALID_CATEGORY]&quot;}
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+
+[테스트 4] 너무 긴 제목으로 게시글 작성 시도...
+2025-09-27T05:51:34.862Z DEBUG 281 --- [    Test worker] c.e.s.s.filter.JwtAuthenticationFilter   : JWT 인증 성공: b948c428-a6b1-4d90-a9c5-b51389e14ebe
+2025-09-27T05:51:34.862Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.community.freeboard.post.controller.FreeboardController#createPost(FreeboardCreateRequest, CustomUserDetails)
+2025-09-27T05:51:34.863Z DEBUG 281 --- [    Test worker] .m.m.a.ExceptionHandlerExceptionResolver : Using @ExceptionHandler com.example.soso.global.exception.GlobalExceptionHandler#handleValidationException(MethodArgumentNotValidException)
+2025-09-27T05:51:34.863Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:34.863Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [ErrorResponse[code=VALIDATION_FAILED, message=[title] 제목은 100자 이하로 입력해주세요.]]
+2025-09-27T05:51:34.863Z DEBUG 281 --- [    Test worker] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [org.springframework.web.bind.MethodArgumentNotValidException: Validation failed for argument [0] in public org.springframework.http.ResponseEntity&lt;?&gt; com.example.soso.community.freeboard.post.controller.FreeboardController.createPost(com.example.soso.community.freeboard.post.domain.dto.FreeboardCreateRequest,com.example.soso.security.domain.CustomUserDetails): [Field error in object 'freeboardCreateRequest' on field 'title': rejected value [글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글]; codes [Size.freeboardCreateRequest.title,Size.title,Size.java.lang.String,Size]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [freeboardCreateRequest.title,title]; arguments []; default message [title],100,0]; default message [제목은 100자 이하로 입력해주세요.]] ]
+
+MockHttpServletRequest:
+      HTTP Method = POST
+      Request URI = /community/freeboard
+       Parameters = {title=[글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글글], content=[정상 내용], category=[OTHERS]}
+          Headers = [Content-Type:&quot;multipart/form-data&quot;, Authorization:&quot;Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJiOTQ4YzQyOC1hNmIxLTRkOTAtYTljNS1iNTEzODllMTRlYmUiLCJpYXQiOjE3NTg5NTIyOTQsImV4cCI6MTc1ODk1NDA5NH0.qETensyciFS79pX4Ox2LugScFvGIfabl6edIonVuKlcG_mnz8ad-grsnzI14oHnjOszw3UeDxiTT3K38oLIzKQ&quot;]
+             Body = &lt;no character encoding set&gt;
+    Session Attrs = {}
+
+Handler:
+             Type = com.example.soso.community.freeboard.post.controller.FreeboardController
+           Method = com.example.soso.community.freeboard.post.controller.FreeboardController#createPost(FreeboardCreateRequest, CustomUserDetails)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = org.springframework.web.bind.MethodArgumentNotValidException
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 400
+    Error message = null
+          Headers = [Vary:&quot;Origin&quot;, &quot;Access-Control-Request-Method&quot;, &quot;Access-Control-Request-Headers&quot;, Content-Type:&quot;application/json&quot;, X-Content-Type-Options:&quot;nosniff&quot;, X-XSS-Protection:&quot;0&quot;, Cache-Control:&quot;no-cache, no-store, max-age=0, must-revalidate&quot;, Pragma:&quot;no-cache&quot;, Expires:&quot;0&quot;, X-Frame-Options:&quot;DENY&quot;]
+     Content type = application/json
+             Body = {&quot;code&quot;:&quot;VALIDATION_FAILED&quot;,&quot;message&quot;:&quot;[title] 제목은 100자 이하로 입력해주세요.&quot;}
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+
+&#x1f389; === 데이터 검증 에러 시나리오 완료 ===
+2025-09-27T05:51:34.867Z  INFO 281 --- [    Test worker] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring TestDispatcherServlet ''
+2025-09-27T05:51:34.867Z  INFO 281 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2025-09-27T05:51:34.867Z  INFO 281 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 0 ms
+
+&#x1f3ac; === 인증 관련 에러 시나리오 ===
+
+[테스트 1] 토큰 없이 게시글 작성 시도...
+2025-09-27T05:51:34.868Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.community.freeboard.post.controller.FreeboardController#createPost(FreeboardCreateRequest, CustomUserDetails)
+2025-09-27T05:51:34.868Z  WARN 281 --- [    Test worker] c.e.s.c.f.p.c.FreeboardController        : 자유게시판 글 작성 요청 시 인증 정보 없음
+2025-09-27T05:51:34.868Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:34.868Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [ErrorResponse[code=AUTHENTICATION_FAILED, message=인증이 필요합니다.]]
+
+MockHttpServletRequest:
+      HTTP Method = POST
+      Request URI = /community/freeboard
+       Parameters = {title=[무인증 게시글], content=[인증 없이 작성하는 게시글], category=[OTHERS]}
+          Headers = [Content-Type:&quot;multipart/form-data&quot;]
+             Body = &lt;no character encoding set&gt;
+    Session Attrs = {}
+
+Handler:
+             Type = com.example.soso.community.freeboard.post.controller.FreeboardController
+           Method = com.example.soso.community.freeboard.post.controller.FreeboardController#createPost(FreeboardCreateRequest, CustomUserDetails)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 401
+    Error message = null
+          Headers = [Vary:&quot;Origin&quot;, &quot;Access-Control-Request-Method&quot;, &quot;Access-Control-Request-Headers&quot;, Content-Type:&quot;application/json&quot;, X-Content-Type-Options:&quot;nosniff&quot;, X-XSS-Protection:&quot;0&quot;, Cache-Control:&quot;no-cache, no-store, max-age=0, must-revalidate&quot;, Pragma:&quot;no-cache&quot;, Expires:&quot;0&quot;, X-Frame-Options:&quot;DENY&quot;]
+     Content type = application/json
+             Body = {&quot;code&quot;:&quot;AUTHENTICATION_FAILED&quot;,&quot;message&quot;:&quot;인증이 필요합니다.&quot;}
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+
+[테스트 2] 잘못된 토큰으로 게시글 작성 시도...
+2025-09-27T05:51:34.869Z  WARN 281 --- [    Test worker] c.e.s.s.filter.JwtAuthenticationFilter   : 유효하지 않은 JWT 토큰: /community/freeboard
+2025-09-27T05:51:34.869Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.community.freeboard.post.controller.FreeboardController#createPost(FreeboardCreateRequest, CustomUserDetails)
+2025-09-27T05:51:34.869Z  WARN 281 --- [    Test worker] c.e.s.c.f.p.c.FreeboardController        : 자유게시판 글 작성 요청 시 인증 정보 없음
+2025-09-27T05:51:34.869Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:34.869Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [ErrorResponse[code=AUTHENTICATION_FAILED, message=인증이 필요합니다.]]
+
+MockHttpServletRequest:
+      HTTP Method = POST
+      Request URI = /community/freeboard
+       Parameters = {title=[잘못된 토큰 게시글], content=[잘못된 토큰으로 작성하는 게시글], category=[OTHERS]}
+          Headers = [Content-Type:&quot;multipart/form-data&quot;, Authorization:&quot;Bearer invalid-token-here&quot;]
+             Body = &lt;no character encoding set&gt;
+    Session Attrs = {}
+
+Handler:
+             Type = com.example.soso.community.freeboard.post.controller.FreeboardController
+           Method = com.example.soso.community.freeboard.post.controller.FreeboardController#createPost(FreeboardCreateRequest, CustomUserDetails)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 401
+    Error message = null
+          Headers = [Vary:&quot;Origin&quot;, &quot;Access-Control-Request-Method&quot;, &quot;Access-Control-Request-Headers&quot;, Content-Type:&quot;application/json&quot;, X-Content-Type-Options:&quot;nosniff&quot;, X-XSS-Protection:&quot;0&quot;, Cache-Control:&quot;no-cache, no-store, max-age=0, must-revalidate&quot;, Pragma:&quot;no-cache&quot;, Expires:&quot;0&quot;, X-Frame-Options:&quot;DENY&quot;]
+     Content type = application/json
+             Body = {&quot;code&quot;:&quot;AUTHENTICATION_FAILED&quot;,&quot;message&quot;:&quot;인증이 필요합니다.&quot;}
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+
+[테스트 3] 미인증 상태에서 게시글 목록 조회...
+2025-09-27T05:51:34.870Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.community.freeboard.post.controller.FreeboardController#getPostsByCursor(String, FreeboardSortType, String, int)
+2025-09-27T05:51:34.871Z  INFO 281 --- [    Test worker] c.e.s.c.f.p.c.FreeboardController        : 자유게시판 목록 조회 요청: category=OTHERS, sort=LATEST, cursor=null, size=10, userId=anonymous
+2025-09-27T05:51:34.871Z DEBUG 281 --- [    Test worker] c.e.s.c.f.p.s.FreeboardServiceImpl       : 자유게시판 목록 조회: category=OTHERS, sort=LATEST, size=10, userId=null
+2025-09-27T05:51:34.873Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* select
+        post.id,
+        post.title,
+        post.content,
+        post.category,
+        post.likeCount,
+        post.commentCount,
+        post.viewCount,
+        post.createdDate,
+        users.id,
+        users.nickname,
+        users.location,
+        users.profileImageUrl,
+        users.userType 
+    from
+        Post post   
+    inner join
+        post.user as users 
+    where
+        post.deleted = ?1 
+        and post.category = ?2 
+    order by
+        post.createdDate desc,
+        post.id desc */ select
+            p1_0.id,
+            p1_0.title,
+            p1_0.content,
+            p1_0.category,
+            p1_0.like_count,
+            p1_0.comment_count,
+            p1_0.view_count,
+            p1_0.created_date,
+            u1_0.id,
+            u1_0.nickname,
+            u1_0.location,
+            u1_0.profile_image_url,
+            u1_0.user_type 
+        from
+            post p1_0 
+        join
+            users u1_0 
+                on u1_0.id=p1_0.user_id 
+        where
+            p1_0.deleted=? 
+            and p1_0.category=? 
+        order by
+            p1_0.created_date desc,
+            p1_0.id desc 
+        fetch
+            first ? rows only
+Hibernate: 
+    /* select
+        post.id,
+        post.title,
+        post.content,
+        post.category,
+        post.likeCount,
+        post.commentCount,
+        post.viewCount,
+        post.createdDate,
+        users.id,
+        users.nickname,
+        users.location,
+        users.profileImageUrl,
+        users.userType 
+    from
+        Post post   
+    inner join
+        post.user as users 
+    where
+        post.deleted = ?1 
+        and post.category = ?2 
+    order by
+        post.createdDate desc,
+        post.id desc */ select
+            p1_0.id,
+            p1_0.title,
+            p1_0.content,
+            p1_0.category,
+            p1_0.like_count,
+            p1_0.comment_count,
+            p1_0.view_count,
+            p1_0.created_date,
+            u1_0.id,
+            u1_0.nickname,
+            u1_0.location,
+            u1_0.profile_image_url,
+            u1_0.user_type 
+        from
+            post p1_0 
+        join
+            users u1_0 
+                on u1_0.id=p1_0.user_id 
+        where
+            p1_0.deleted=? 
+            and p1_0.category=? 
+        order by
+            p1_0.created_date desc,
+            p1_0.id desc 
+        fetch
+            first ? rows only
+2025-09-27T05:51:34.875Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* &lt;criteria&gt; */ select
+        count(p1_0.id) 
+    from
+        post p1_0 
+    where
+        p1_0.category=? 
+        and not(p1_0.deleted)
+Hibernate: 
+    /* &lt;criteria&gt; */ select
+        count(p1_0.id) 
+    from
+        post p1_0 
+    where
+        p1_0.category=? 
+        and not(p1_0.deleted)
+2025-09-27T05:51:34.875Z DEBUG 281 --- [    Test worker] c.e.s.c.f.p.c.FreeboardController        : 자유게시판 목록 조회 완료: resultCount=0, hasNext=false
+2025-09-27T05:51:34.876Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:34.876Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.example.soso.community.freeboard.post.domain.dto.FreeboardCursorResponse@19522212]
+
+MockHttpServletRequest:
+      HTTP Method = GET
+      Request URI = /community/freeboard
+       Parameters = {category=[OTHERS], sort=[LATEST], size=[10]}
+          Headers = []
+             Body = &lt;no character encoding set&gt;
+    Session Attrs = {}
+
+Handler:
+             Type = com.example.soso.community.freeboard.post.controller.FreeboardController
+           Method = com.example.soso.community.freeboard.post.controller.FreeboardController#getPostsByCursor(String, FreeboardSortType, String, int)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 200
+    Error message = null
+          Headers = [Vary:&quot;Origin&quot;, &quot;Access-Control-Request-Method&quot;, &quot;Access-Control-Request-Headers&quot;, Content-Type:&quot;application/json&quot;, X-Content-Type-Options:&quot;nosniff&quot;, X-XSS-Protection:&quot;0&quot;, Cache-Control:&quot;no-cache, no-store, max-age=0, must-revalidate&quot;, Pragma:&quot;no-cache&quot;, Expires:&quot;0&quot;, X-Frame-Options:&quot;DENY&quot;]
+     Content type = application/json
+             Body = {&quot;posts&quot;:[],&quot;hasNext&quot;:false,&quot;nextCursor&quot;:null,&quot;size&quot;:0,&quot;totalCount&quot;:0}
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+✅ 미인증 상태 게시글 목록 조회 성공!
+
+&#x1f389; === 인증 관련 에러 시나리오 완료 ===
+2025-09-27T05:51:34.881Z  INFO 281 --- [    Test worker] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring TestDispatcherServlet ''
+2025-09-27T05:51:34.881Z  INFO 281 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2025-09-27T05:51:34.881Z  INFO 281 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 0 ms
+
+&#x1f3ac; === 페이징 및 파라미터 에러 시나리오 ===
+2025-09-27T05:51:34.882Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* insert for
+        com.example.soso.users.domain.entity.Users */insert 
+    into
+        users (age_range, budget, created_date, email, gender, last_modified_date, latitude, location, longitude, nickname, profile_image_url, startup_experience, user_type, username, id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert for
+        com.example.soso.users.domain.entity.Users */insert 
+    into
+        users (age_range, budget, created_date, email, gender, last_modified_date, latitude, location, longitude, nickname, profile_image_url, startup_experience, user_type, username, id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+2025-09-27T05:51:34.882Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* insert for
+        com.example.soso.users.domain.entity.Users.interests */insert 
+    into
+        user_interests (users_id, interest_type) 
+    values
+        (?, ?)
+Hibernate: 
+    /* insert for
+        com.example.soso.users.domain.entity.Users.interests */insert 
+    into
+        user_interests (users_id, interest_type) 
+    values
+        (?, ?)
+2025-09-27T05:51:34.882Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    /* insert for
+        com.example.soso.users.domain.entity.Users.interests */insert 
+    into
+        user_interests (users_id, interest_type) 
+    values
+        (?, ?)
+Hibernate: 
+    /* insert for
+        com.example.soso.users.domain.entity.Users.interests */insert 
+    into
+        user_interests (users_id, interest_type) 
+    values
+        (?, ?)
+
+[테스트 1] 잘못된 정렬 옵션으로 게시글 목록 조회...
+2025-09-27T05:51:34.884Z DEBUG 281 --- [    Test worker] c.e.s.s.filter.JwtAuthenticationFilter   : JWT 인증 성공: c40c8922-77b0-4868-b768-ea4f5f947e57
+2025-09-27T05:51:34.884Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.community.freeboard.post.controller.FreeboardController#getPostsByCursor(String, FreeboardSortType, String, int)
+2025-09-27T05:51:34.888Z DEBUG 281 --- [    Test worker] o.s.web.method.HandlerMethod             : Could not resolve parameter [1] in public org.springframework.http.ResponseEntity&lt;?&gt; com.example.soso.community.freeboard.post.controller.FreeboardController.getPostsByCursor(java.lang.String,com.example.soso.community.freeboard.post.domain.dto.FreeboardSortType,java.lang.String,int): Method parameter 'sort': Failed to convert value of type 'java.lang.String' to required type 'com.example.soso.community.freeboard.post.domain.dto.FreeboardSortType'; Failed to convert from type [java.lang.String] to type [@org.springframework.web.bind.annotation.RequestParam com.example.soso.community.freeboard.post.domain.dto.FreeboardSortType] for value [INVALID_SORT]
+2025-09-27T05:51:34.888Z DEBUG 281 --- [    Test worker] .m.m.a.ExceptionHandlerExceptionResolver : Using @ExceptionHandler com.example.soso.global.exception.GlobalExceptionHandler#handleMethodArgumentTypeMismatch(MethodArgumentTypeMismatchException)
+2025-09-27T05:51:34.889Z  WARN 281 --- [    Test worker] c.e.s.g.e.GlobalExceptionHandler         : Invalid enum parameter: parameterName=sort, enumType=FreeboardSortType, invalidValue=INVALID_SORT
+2025-09-27T05:51:34.889Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:34.889Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [ErrorResponse[code=INVALID_ENUM_VALUE, message='INVALID_SORT'은(는) 허용되지 않는 값입니다. 사용 가능한 값: [LATEST, L (truncated)...]
+2025-09-27T05:51:34.889Z DEBUG 281 --- [    Test worker] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [org.springframework.web.method.annotation.MethodArgumentTypeMismatchException: Method parameter 'sort': Failed to convert value of type 'java.lang.String' to required type 'com.example.soso.community.freeboard.post.domain.dto.FreeboardSortType'; Failed to convert from type [java.lang.String] to type [@org.springframework.web.bind.annotation.RequestParam com.example.soso.community.freeboard.post.domain.dto.FreeboardSortType] for value [INVALID_SORT]]
+
+MockHttpServletRequest:
+      HTTP Method = GET
+      Request URI = /community/freeboard
+       Parameters = {sort=[INVALID_SORT], size=[10]}
+          Headers = [Authorization:&quot;Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjNDBjODkyMi03N2IwLTQ4NjgtYjc2OC1lYTRmNWY5NDdlNTciLCJpYXQiOjE3NTg5NTIyOTQsImV4cCI6MTc1ODk1NDA5NH0.Diylt7d7gESsoByufmvra_-F-9n2DhFyOjsVlhOt0KeAp_DZbRnk6ub1Idj0C48POWxVs8eUPVH1fr8ASpEXDg&quot;]
+             Body = &lt;no character encoding set&gt;
+    Session Attrs = {}
+
+Handler:
+             Type = com.example.soso.community.freeboard.post.controller.FreeboardController
+           Method = com.example.soso.community.freeboard.post.controller.FreeboardController#getPostsByCursor(String, FreeboardSortType, String, int)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = org.springframework.web.method.annotation.MethodArgumentTypeMismatchException
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 400
+    Error message = null
+          Headers = [Vary:&quot;Origin&quot;, &quot;Access-Control-Request-Method&quot;, &quot;Access-Control-Request-Headers&quot;, Content-Type:&quot;application/json&quot;, X-Content-Type-Options:&quot;nosniff&quot;, X-XSS-Protection:&quot;0&quot;, Cache-Control:&quot;no-cache, no-store, max-age=0, must-revalidate&quot;, Pragma:&quot;no-cache&quot;, Expires:&quot;0&quot;, X-Frame-Options:&quot;DENY&quot;]
+     Content type = application/json
+             Body = {&quot;code&quot;:&quot;INVALID_ENUM_VALUE&quot;,&quot;message&quot;:&quot;'INVALID_SORT'은(는) 허용되지 않는 값입니다. 사용 가능한 값: [LATEST, LIKE, COMMENT, VIEW]&quot;}
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+✅ 잘못된 정렬 옵션 에러 처리 성공!
+
+[테스트 4] 잘못된 커서 값으로 조회...
+2025-09-27T05:51:34.891Z DEBUG 281 --- [    Test worker] c.e.s.s.filter.JwtAuthenticationFilter   : JWT 인증 성공: c40c8922-77b0-4868-b768-ea4f5f947e57
+2025-09-27T05:51:34.891Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.community.freeboard.post.controller.FreeboardController#getPostsByCursor(String, FreeboardSortType, String, int)
+2025-09-27T05:51:34.892Z  INFO 281 --- [    Test worker] c.e.s.c.f.p.c.FreeboardController        : 자유게시판 목록 조회 요청: category=null, sort=LATEST, cursor=present, size=10, userId=c40c8922-77b0-4868-b768-ea4f5f947e57
+2025-09-27T05:51:34.892Z DEBUG 281 --- [    Test worker] c.e.s.c.f.p.s.FreeboardServiceImpl       : 자유게시판 목록 조회: category=null, sort=LATEST, size=10, userId=c40c8922-77b0-4868-b768-ea4f5f947e57
+2025-09-27T05:51:34.892Z  WARN 281 --- [    Test worker] c.e.s.c.f.p.s.FreeboardServiceImpl       : 커서 Base64 디코딩 실패: cursor=invalid-cursor-format, error=Illegal base64 character 2d
+2025-09-27T05:51:34.892Z  WARN 281 --- [    Test worker] c.e.s.c.f.p.c.FreeboardController        : 자유게시판 목록 조회 중 비즈니스 예외: category=null, sort=LATEST, cursor=invalid-cursor-format, size=10, userId=c40c8922-77b0-4868-b768-ea4f5f947e57, error=유효하지 않은 커서 값입니다.
+2025-09-27T05:51:34.892Z DEBUG 281 --- [    Test worker] .m.m.a.ExceptionHandlerExceptionResolver : Using @ExceptionHandler com.example.soso.global.exception.GlobalExceptionHandler#handleBaseException(BaseException)
+2025-09-27T05:51:34.892Z  WARN 281 --- [    Test worker] c.e.s.g.e.GlobalExceptionHandler         : Handled business exception: INVALID_CURSOR - 유효하지 않은 커서 값입니다.
+2025-09-27T05:51:34.892Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:34.892Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [ErrorResponse[code=INVALID_CURSOR, message=유효하지 않은 커서 값입니다.]]
+2025-09-27T05:51:34.892Z DEBUG 281 --- [    Test worker] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [com.example.soso.global.exception.util.PostException: 유효하지 않은 커서 값입니다.]
+
+MockHttpServletRequest:
+      HTTP Method = GET
+      Request URI = /community/freeboard
+       Parameters = {sort=[LATEST], size=[10], cursor=[invalid-cursor-format]}
+          Headers = [Authorization:&quot;Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjNDBjODkyMi03N2IwLTQ4NjgtYjc2OC1lYTRmNWY5NDdlNTciLCJpYXQiOjE3NTg5NTIyOTQsImV4cCI6MTc1ODk1NDA5NH0.Diylt7d7gESsoByufmvra_-F-9n2DhFyOjsVlhOt0KeAp_DZbRnk6ub1Idj0C48POWxVs8eUPVH1fr8ASpEXDg&quot;]
+             Body = &lt;no character encoding set&gt;
+    Session Attrs = {}
+
+Handler:
+             Type = com.example.soso.community.freeboard.post.controller.FreeboardController
+           Method = com.example.soso.community.freeboard.post.controller.FreeboardController#getPostsByCursor(String, FreeboardSortType, String, int)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = com.example.soso.global.exception.util.PostException
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 400
+    Error message = null
+          Headers = [Vary:&quot;Origin&quot;, &quot;Access-Control-Request-Method&quot;, &quot;Access-Control-Request-Headers&quot;, Content-Type:&quot;application/json&quot;, X-Content-Type-Options:&quot;nosniff&quot;, X-XSS-Protection:&quot;0&quot;, Cache-Control:&quot;no-cache, no-store, max-age=0, must-revalidate&quot;, Pragma:&quot;no-cache&quot;, Expires:&quot;0&quot;, X-Frame-Options:&quot;DENY&quot;]
+     Content type = application/json
+             Body = {&quot;code&quot;:&quot;INVALID_CURSOR&quot;,&quot;message&quot;:&quot;유효하지 않은 커서 값입니다.&quot;}
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+✅ 잘못된 커서 값 에러 처리 성공!
+
+&#x1f389; === 페이징 및 파라미터 에러 시나리오 완료 ===
+</pre>
+</span>
+</div>
+</div>
+<div id="footer">
+<p>
+<div>
+<label class="hidden" id="label-for-line-wrapping-toggle" for="line-wrapping-toggle">Wrap lines
+<input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
+</label>
+</div>Generated by 
+<a href="https://www.gradle.org">Gradle 8.14.2</a> at Sep 27, 2025, 5:51:42 AM</p>
+</div>
+</div>
+</body>
+</html>

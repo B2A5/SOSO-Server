@@ -18,6 +18,11 @@ public class RefreshTokenRedisRepository {
         redisTemplate.opsForValue().set(PREFIX + refreshToken, userId, Duration.ofMillis(ttlMs));
     }
 
+    // SignupService에서 호출하는 메서드 (userId, refreshToken 순서)
+    public void saveByUserId(String userId, String refreshToken, long ttlMs) {
+        redisTemplate.opsForValue().set(PREFIX + refreshToken, userId, Duration.ofMillis(ttlMs));
+    }
+
     // 조회: refreshToken으로 userId 가져오기
     public String getUserIdByRefreshToken(String refreshToken) {
         return redisTemplate.opsForValue().get(PREFIX + refreshToken);

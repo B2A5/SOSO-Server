@@ -15,7 +15,6 @@ import software.amazon.awssdk.services.s3.model.PutObjectResponse;
  * 실제 S3 연결 대신 Mock을 사용
  */
 @TestConfiguration
-@Profile("test")
 public class TestS3Config {
 
     @Bean

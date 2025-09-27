@@ -5,6 +5,7 @@ import com.example.soso.community.freeboard.util.TestUserHelper;
 import com.example.soso.community.freeboard.util.TestUserHelper.TestUser;
 import com.example.soso.community.freeboard.comment.domain.dto.*;
 import com.example.soso.config.TestS3Config;
+import com.example.soso.config.TestRedisConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -36,10 +37,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         "spring.datasource.password=",
         "spring.jpa.hibernate.ddl-auto=create-drop",
         "spring.jpa.database-platform=org.hibernate.dialect.H2Dialect",
-        "spring.session.store-type=none"
+        "spring.session.store-type=none",
+        "jwt.secret-key=test-jwt-secret-key-that-is-sufficiently-long-and-secure-for-testing-purposes-minimum-256-bits-required-by-jwt-library",
+        "jwt.access-token-validity-in-ms=1800000",
+        "jwt.refresh-token-validity-in-ms=1209600000",
+        "spring.cloud.aws.credentials.access-key=test-access-key",
+        "spring.cloud.aws.credentials.secret-key=test-secret-key",
+        "spring.cloud.aws.s3.bucket=test-bucket",
+        "spring.cloud.aws.region=ap-northeast-2"
 })
 @Transactional
-@Import(TestS3Config.class)
+@Import({TestS3Config.class, TestRedisConfig.class})
 @DisplayName("💖 좋아요 시스템 통합 테스트")
 class LikeSystemIntegrationTest {
 

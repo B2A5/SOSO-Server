@@ -1,0 +1,1535 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="x-ua-compatible" content="IE=edge"/>
+<title>Test results - 전체 회원가입 엔드포인트 단위 테스트</title>
+<link href="../css/base-style.css" rel="stylesheet" type="text/css"/>
+<link href="../css/style.css" rel="stylesheet" type="text/css"/>
+<script src="../js/report.js" type="text/javascript"></script>
+</head>
+<body>
+<div id="content">
+<h1>전체 회원가입 엔드포인트 단위 테스트</h1>
+<div class="breadcrumbs">
+<a href="../index.html">all</a> &gt; 
+<a href="../packages/com.example.soso.users.controller.html">com.example.soso.users.controller</a> &gt; AllEndpointsTest</div>
+<div id="summary">
+<table>
+<tr>
+<td>
+<div class="summaryGroup">
+<table>
+<tr>
+<td>
+<div class="infoBox" id="tests">
+<div class="counter">11</div>
+<p>tests</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="failures">
+<div class="counter">0</div>
+<p>failures</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="ignored">
+<div class="counter">0</div>
+<p>ignored</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="duration">
+<div class="counter">0.071s</div>
+<p>duration</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</td>
+<td>
+<div class="infoBox success" id="successRate">
+<div class="percent">100%</div>
+<p>successful</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="tab-container">
+<ul class="tabLinks">
+<li>
+<a href="#">Tests</a>
+</li>
+<li>
+<a href="#">Standard output</a>
+</li>
+</ul>
+<div class="tab">
+<h2>Tests</h2>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>Method name</th>
+<th>Duration</th>
+<th>Result</th>
+</tr>
+</thead>
+<tr>
+<td class="success">[3단계] 연령대 엔드포인트 - 모든 연령대</td>
+<td class="success">testAgeRangeEndpoint()</td>
+<td class="success">0.006s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">[공통] 모든 단계별 엔드포인트 테스트</td>
+<td class="success">testAllCommonEndpoints()</td>
+<td class="success">0.009s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">[6단계] 예산 엔드포인트 - 영어 enum 이름 테스트</td>
+<td class="success">testBudgetEndpoint()</td>
+<td class="success">0.009s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">[4단계] 성별 엔드포인트 - FOUNDER</td>
+<td class="success">testGenderEndpointFounder()</td>
+<td class="success">0.004s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">[4단계] 성별 엔드포인트 - INHABITANT</td>
+<td class="success">testGenderEndpointInhabitant()</td>
+<td class="success">0.005s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">InterestType enum JSON 직렬화/역직렬화 테스트</td>
+<td class="success">testInterestTypeEnumSerialization()</td>
+<td class="success">0.002s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">[5단계] 관심업종 엔드포인트 - 영어 enum 이름 테스트</td>
+<td class="success">testInterestsEndpoint()</td>
+<td class="success">0.005s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">잘못된 데이터 입력 테스트</td>
+<td class="success">testInvalidInputs()</td>
+<td class="success">0.010s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">[2단계] 지역 엔드포인트</td>
+<td class="success">testRegionEndpoint()</td>
+<td class="success">0.013s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">[1단계] 유저타입 엔드포인트 - FOUNDER</td>
+<td class="success">testUserTypeFounder()</td>
+<td class="success">0.003s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">[1단계] 유저타입 엔드포인트 - INHABITANT</td>
+<td class="success">testUserTypeInhabitant()</td>
+<td class="success">0.005s</td>
+<td class="success">passed</td>
+</tr>
+</table>
+</div>
+<div class="tab">
+<h2>Standard output</h2>
+<span class="code">
+<pre>2025-09-27T05:51:38.144Z  INFO 281 --- [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.example.soso.users.controller.AllEndpointsTest]: AllEndpointsTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2025-09-27T05:51:38.155Z  INFO 281 --- [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.example.soso.SosoApplication for test class com.example.soso.users.controller.AllEndpointsTest
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.3)
+
+2025-09-27T05:51:38.170Z  INFO 281 --- [    Test worker] c.e.s.users.controller.AllEndpointsTest  : Starting AllEndpointsTest using Java 21.0.8 with PID 281 (started by root in /workspace)
+2025-09-27T05:51:38.170Z DEBUG 281 --- [    Test worker] c.e.s.users.controller.AllEndpointsTest  : Running with Spring Boot v3.5.3, Spring v6.2.8
+2025-09-27T05:51:38.170Z  INFO 281 --- [    Test worker] c.e.s.users.controller.AllEndpointsTest  : The following 1 profile is active: &quot;test&quot;
+2025-09-27T05:51:38.171Z DEBUG 281 --- [    Test worker] o.s.w.c.s.GenericWebApplicationContext   : Refreshing org.springframework.web.context.support.GenericWebApplicationContext@3542dad7
+2025-09-27T05:51:38.237Z  INFO 281 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-09-27T05:51:38.237Z  INFO 281 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2025-09-27T05:51:38.238Z  INFO 281 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 0 ms. Found 0 Redis repository interfaces.
+2025-09-27T05:51:38.268Z  INFO 281 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-09-27T05:51:38.268Z  INFO 281 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-09-27T05:51:38.278Z  INFO 281 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 8 ms. Found 6 JPA repository interfaces.
+2025-09-27T05:51:38.279Z  INFO 281 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-09-27T05:51:38.280Z  INFO 281 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2025-09-27T05:51:38.283Z  INFO 281 --- [    Test worker] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.example.soso.community.common.comment.domain.repository.CommentRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-09-27T05:51:38.283Z  INFO 281 --- [    Test worker] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.example.soso.community.common.likes.repository.CommentLikeRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-09-27T05:51:38.283Z  INFO 281 --- [    Test worker] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.example.soso.community.common.likes.repository.PostLikeRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-09-27T05:51:38.283Z  INFO 281 --- [    Test worker] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.example.soso.community.common.post.repository.PostImageRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-09-27T05:51:38.283Z  INFO 281 --- [    Test worker] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.example.soso.community.common.post.repository.PostRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-09-27T05:51:38.283Z  INFO 281 --- [    Test worker] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.example.soso.users.repository.UsersRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-09-27T05:51:38.283Z  INFO 281 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 2 ms. Found 0 Redis repository interfaces.
+2025-09-27T05:51:38.309Z  INFO 281 --- [    Test worker] o.s.cloud.context.scope.GenericScope     : BeanFactory id=f70bdde0-1195-34c9-8899-c5446bd8b3ba
+2025-09-27T05:51:38.399Z  INFO 281 --- [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-09-27T05:51:38.401Z  INFO 281 --- [    Test worker] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-09-27T05:51:38.404Z  INFO 281 --- [    Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-09-27T05:51:38.404Z  INFO 281 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-11 - Starting...
+2025-09-27T05:51:38.406Z  INFO 281 --- [    Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-11 - Added connection conn100: url=jdbc:h2:mem:testdb user=SA
+2025-09-27T05:51:38.406Z  INFO 281 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-11 - Start completed.
+2025-09-27T05:51:38.406Z  WARN 281 --- [    Test worker] org.hibernate.orm.deprecation            : HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-09-27T05:51:38.406Z  INFO 281 --- [    Test worker] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-11)']
+	Database driver: undefined/unknown
+	Database version: 2.3.232
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-09-27T05:51:38.436Z  INFO 281 --- [    Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-09-27T05:51:38.436Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    drop table if exists comment_likes cascade 
+Hibernate: 
+    drop table if exists comment_likes cascade 
+2025-09-27T05:51:38.437Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    drop table if exists comments cascade 
+Hibernate: 
+    drop table if exists comments cascade 
+2025-09-27T05:51:38.437Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    drop table if exists post cascade 
+Hibernate: 
+    drop table if exists post cascade 
+2025-09-27T05:51:38.443Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    drop table if exists post_image cascade 
+Hibernate: 
+    drop table if exists post_image cascade 
+2025-09-27T05:51:38.443Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    drop table if exists post_like cascade 
+Hibernate: 
+    drop table if exists post_like cascade 
+2025-09-27T05:51:38.443Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    drop table if exists user_interests cascade 
+Hibernate: 
+    drop table if exists user_interests cascade 
+2025-09-27T05:51:38.443Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    drop table if exists users cascade 
+Hibernate: 
+    drop table if exists users cascade 
+2025-09-27T05:51:38.443Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    create table comment_likes (
+        comment_id bigint,
+        id bigint generated by default as identity,
+        user_id varchar(36),
+        primary key (id),
+        unique (comment_id, user_id)
+    )
+Hibernate: 
+    create table comment_likes (
+        comment_id bigint,
+        id bigint generated by default as identity,
+        user_id varchar(36),
+        primary key (id),
+        unique (comment_id, user_id)
+    )
+2025-09-27T05:51:38.444Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    create table comments (
+        deleted boolean not null,
+        like_count integer not null,
+        created_date timestamp(6),
+        id bigint generated by default as identity,
+        last_modified_date timestamp(6),
+        parent_id bigint,
+        post_id bigint,
+        user_id varchar(36),
+        content clob,
+        primary key (id)
+    )
+Hibernate: 
+    create table comments (
+        deleted boolean not null,
+        like_count integer not null,
+        created_date timestamp(6),
+        id bigint generated by default as identity,
+        last_modified_date timestamp(6),
+        parent_id bigint,
+        post_id bigint,
+        user_id varchar(36),
+        content clob,
+        primary key (id)
+    )
+2025-09-27T05:51:38.444Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    create table post (
+        comment_count integer not null,
+        deleted boolean not null,
+        like_count integer not null,
+        view_count integer not null,
+        created_date timestamp(6),
+        id bigint generated by default as identity,
+        last_modified_date timestamp(6),
+        user_id varchar(36),
+        title varchar(255),
+        category enum ('DAILY_HOBBY','LIVING_CONVENIENCE','NEIGHBORHOOD_NEWS','OTHERS','RESTAURANT','STARTUP'),
+        content clob,
+        primary key (id)
+    )
+Hibernate: 
+    create table post (
+        comment_count integer not null,
+        deleted boolean not null,
+        like_count integer not null,
+        view_count integer not null,
+        created_date timestamp(6),
+        id bigint generated by default as identity,
+        last_modified_date timestamp(6),
+        user_id varchar(36),
+        title varchar(255),
+        category enum ('DAILY_HOBBY','LIVING_CONVENIENCE','NEIGHBORHOOD_NEWS','OTHERS','RESTAURANT','STARTUP'),
+        content clob,
+        primary key (id)
+    )
+2025-09-27T05:51:38.445Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    create table post_image (
+        sequence integer not null,
+        id bigint generated by default as identity,
+        post_id bigint,
+        image_url varchar(255),
+        primary key (id)
+    )
+Hibernate: 
+    create table post_image (
+        sequence integer not null,
+        id bigint generated by default as identity,
+        post_id bigint,
+        image_url varchar(255),
+        primary key (id)
+    )
+2025-09-27T05:51:38.445Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    create table post_like (
+        id bigint generated by default as identity,
+        post_id bigint,
+        user_id varchar(36),
+        primary key (id),
+        unique (post_id, user_id)
+    )
+Hibernate: 
+    create table post_like (
+        id bigint generated by default as identity,
+        post_id bigint,
+        user_id varchar(36),
+        primary key (id),
+        unique (post_id, user_id)
+    )
+2025-09-27T05:51:38.445Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    create table user_interests (
+        users_id varchar(36) not null,
+        interest_type enum ('ACCOMMODATION_FOOD','ART_SPORTS','MANUFACTURING','OTHER','TRANSPORT','WELFARE','WHOLESALE_RETAIL')
+    )
+Hibernate: 
+    create table user_interests (
+        users_id varchar(36) not null,
+        interest_type enum ('ACCOMMODATION_FOOD','ART_SPORTS','MANUFACTURING','OTHER','TRANSPORT','WELFARE','WHOLESALE_RETAIL')
+    )
+2025-09-27T05:51:38.446Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    create table users (
+        created_date timestamp(6),
+        last_modified_date timestamp(6),
+        id varchar(36) not null,
+        email varchar(255),
+        latitude varchar(255),
+        location varchar(255),
+        longitude varchar(255),
+        nickname varchar(255),
+        profile_image_url varchar(255),
+        username varchar(255),
+        age_range enum ('FIFTIES','FORTIES','SIXTIES_AND_OVER','TEENS','THIRTIES','TWENTIES'),
+        budget enum ('OVER_1B','THOUSANDS_2000','THOUSANDS_3000_5000','THOUSANDS_5000_7000','THOUSANDS_7000_TO_1B','UNDER_1000'),
+        gender enum ('FEMALE','MALE'),
+        startup_experience enum ('NO','YES'),
+        user_type enum ('FOUNDER','INHABITANT'),
+        primary key (id)
+    )
+Hibernate: 
+    create table users (
+        created_date timestamp(6),
+        last_modified_date timestamp(6),
+        id varchar(36) not null,
+        email varchar(255),
+        latitude varchar(255),
+        location varchar(255),
+        longitude varchar(255),
+        nickname varchar(255),
+        profile_image_url varchar(255),
+        username varchar(255),
+        age_range enum ('FIFTIES','FORTIES','SIXTIES_AND_OVER','TEENS','THIRTIES','TWENTIES'),
+        budget enum ('OVER_1B','THOUSANDS_2000','THOUSANDS_3000_5000','THOUSANDS_5000_7000','THOUSANDS_7000_TO_1B','UNDER_1000'),
+        gender enum ('FEMALE','MALE'),
+        startup_experience enum ('NO','YES'),
+        user_type enum ('FOUNDER','INHABITANT'),
+        primary key (id)
+    )
+2025-09-27T05:51:38.446Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    alter table if exists comment_likes 
+       add constraint FK3wa5u7bs1p1o9hmavtgdgk1go 
+       foreign key (comment_id) 
+       references comments
+Hibernate: 
+    alter table if exists comment_likes 
+       add constraint FK3wa5u7bs1p1o9hmavtgdgk1go 
+       foreign key (comment_id) 
+       references comments
+2025-09-27T05:51:38.447Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    alter table if exists comment_likes 
+       add constraint FK6h3lbneryl5pyb9ykaju7werx 
+       foreign key (user_id) 
+       references users
+Hibernate: 
+    alter table if exists comment_likes 
+       add constraint FK6h3lbneryl5pyb9ykaju7werx 
+       foreign key (user_id) 
+       references users
+2025-09-27T05:51:38.447Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    alter table if exists comments 
+       add constraint FKlri30okf66phtcgbe5pok7cc0 
+       foreign key (parent_id) 
+       references comments
+Hibernate: 
+    alter table if exists comments 
+       add constraint FKlri30okf66phtcgbe5pok7cc0 
+       foreign key (parent_id) 
+       references comments
+2025-09-27T05:51:38.448Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    alter table if exists comments 
+       add constraint FKbqnvawwwv4gtlctsi3o7vs131 
+       foreign key (post_id) 
+       references post
+Hibernate: 
+    alter table if exists comments 
+       add constraint FKbqnvawwwv4gtlctsi3o7vs131 
+       foreign key (post_id) 
+       references post
+2025-09-27T05:51:38.448Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    alter table if exists comments 
+       add constraint FK8omq0tc18jd43bu5tjh6jvraq 
+       foreign key (user_id) 
+       references users
+Hibernate: 
+    alter table if exists comments 
+       add constraint FK8omq0tc18jd43bu5tjh6jvraq 
+       foreign key (user_id) 
+       references users
+2025-09-27T05:51:38.448Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    alter table if exists post 
+       add constraint FK7ky67sgi7k0ayf22652f7763r 
+       foreign key (user_id) 
+       references users
+Hibernate: 
+    alter table if exists post 
+       add constraint FK7ky67sgi7k0ayf22652f7763r 
+       foreign key (user_id) 
+       references users
+2025-09-27T05:51:38.448Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    alter table if exists post_image 
+       add constraint FKsip7qv57jw2fw50g97t16nrjr 
+       foreign key (post_id) 
+       references post
+Hibernate: 
+    alter table if exists post_image 
+       add constraint FKsip7qv57jw2fw50g97t16nrjr 
+       foreign key (post_id) 
+       references post
+2025-09-27T05:51:38.449Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    alter table if exists post_like 
+       add constraint FKj7iy0k7n3d0vkh8o7ibjna884 
+       foreign key (post_id) 
+       references post
+Hibernate: 
+    alter table if exists post_like 
+       add constraint FKj7iy0k7n3d0vkh8o7ibjna884 
+       foreign key (post_id) 
+       references post
+2025-09-27T05:51:38.449Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    alter table if exists post_like 
+       add constraint FKijnjmw0imnatadr3agtk0udip 
+       foreign key (user_id) 
+       references users
+Hibernate: 
+    alter table if exists post_like 
+       add constraint FKijnjmw0imnatadr3agtk0udip 
+       foreign key (user_id) 
+       references users
+2025-09-27T05:51:38.449Z DEBUG 281 --- [    Test worker] org.hibernate.SQL                        : 
+    alter table if exists user_interests 
+       add constraint FKh3yx7krvumpnrwi8t1vu62qkx 
+       foreign key (users_id) 
+       references users
+Hibernate: 
+    alter table if exists user_interests 
+       add constraint FKh3yx7krvumpnrwi8t1vu62qkx 
+       foreign key (users_id) 
+       references users
+2025-09-27T05:51:38.450Z  INFO 281 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-09-27T05:51:38.541Z  INFO 281 --- [    Test worker] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2025-09-27T05:51:38.551Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : 33 mappings in 'requestMappingHandlerMapping'
+2025-09-27T05:51:38.556Z DEBUG 281 --- [    Test worker] o.s.w.s.handler.SimpleUrlHandlerMapping  : Patterns [/webjars/**, /**, /swagger-ui/**, /swagger-ui*/*swagger-initializer.js, /swagger-ui*/**] in 'resourceHandlerMapping'
+2025-09-27T05:51:38.558Z  WARN 281 --- [    Test worker] thorizationManagerRequestMatcherRegistry : One of the patterns in [GET, /community/freeboard/**] is missing a leading slash. This is discouraged; please include the leading slash in all your request matcher patterns. In future versions of Spring Security, leaving out the leading slash will result in an exception.
+2025-09-27T05:51:38.574Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerAdapter : ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+2025-09-27T05:51:38.577Z DEBUG 281 --- [    Test worker] .m.m.a.ExceptionHandlerExceptionResolver : ControllerAdvice beans: 2 @ExceptionHandler, 1 ResponseBodyAdvice
+2025-09-27T05:51:38.615Z  INFO 281 --- [    Test worker] c.e.s.users.controller.AllEndpointsTest  : Started AllEndpointsTest in 0.458 seconds (process running for 15.946)
+2025-09-27T05:51:38.618Z  INFO 281 --- [    Test worker] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2025-09-27T05:51:38.618Z  INFO 281 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2025-09-27T05:51:38.618Z  INFO 281 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 0 ms
+2025-09-27T05:51:38.619Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.users.controller.SignupController#setRegion(RegionRequest, HttpSession)
+2025-09-27T05:51:38.621Z DEBUG 281 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read &quot;application/json&quot; to [RegionRequest[regionId=SEOUL]]
+2025-09-27T05:51:38.627Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:38.627Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [AGE]
+
+MockHttpServletRequest:
+      HTTP Method = POST
+      Request URI = /signup/region
+       Parameters = {}
+          Headers = [Content-Type:&quot;application/json&quot;, Content-Length:&quot;28&quot;]
+             Body = &lt;no character encoding set&gt;
+    Session Attrs = {}
+
+Handler:
+             Type = com.example.soso.users.controller.SignupController
+           Method = com.example.soso.users.controller.SignupController#setRegion(RegionRequest, HttpSession)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 200
+    Error message = null
+          Headers = [Content-Type:&quot;application/json&quot;]
+     Content type = application/json
+             Body = &quot;AGE&quot;
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+2025-09-27T05:51:38.631Z  INFO 281 --- [    Test worker] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2025-09-27T05:51:38.631Z  INFO 281 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2025-09-27T05:51:38.632Z  INFO 281 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 1 ms
+2025-09-27T05:51:38.632Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.users.controller.SignupController#setUserType(UserTypeRequest, HttpSession)
+2025-09-27T05:51:38.633Z DEBUG 281 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read &quot;application/json&quot; to [UserTypeRequest[userType=INHABITANT]]
+2025-09-27T05:51:38.635Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:38.635Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [REGION]
+
+MockHttpServletRequest:
+      HTTP Method = POST
+      Request URI = /signup/user-type
+       Parameters = {}
+          Headers = [Content-Type:&quot;application/json&quot;, Content-Length:&quot;33&quot;]
+             Body = &lt;no character encoding set&gt;
+    Session Attrs = {}
+
+Handler:
+             Type = com.example.soso.users.controller.SignupController
+           Method = com.example.soso.users.controller.SignupController#setUserType(UserTypeRequest, HttpSession)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 200
+    Error message = null
+          Headers = [Content-Type:&quot;application/json&quot;]
+     Content type = application/json
+             Body = &quot;REGION&quot;
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+2025-09-27T05:51:38.637Z  INFO 281 --- [    Test worker] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2025-09-27T05:51:38.637Z  INFO 281 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2025-09-27T05:51:38.637Z  INFO 281 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 0 ms
+2025-09-27T05:51:38.638Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.users.controller.SignupController#setAgeRange(AgeRangeRequest, HttpSession)
+2025-09-27T05:51:38.639Z DEBUG 281 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read &quot;application/json&quot; to [AgeRangeRequest[ageRange=TWENTIES]]
+2025-09-27T05:51:38.640Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:38.640Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [GENDER]
+
+MockHttpServletRequest:
+      HTTP Method = POST
+      Request URI = /signup/age-range
+       Parameters = {}
+          Headers = [Content-Type:&quot;application/json&quot;, Content-Length:&quot;31&quot;]
+             Body = &lt;no character encoding set&gt;
+    Session Attrs = {}
+
+Handler:
+             Type = com.example.soso.users.controller.SignupController
+           Method = com.example.soso.users.controller.SignupController#setAgeRange(AgeRangeRequest, HttpSession)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 200
+    Error message = null
+          Headers = [Content-Type:&quot;application/json&quot;]
+     Content type = application/json
+             Body = &quot;GENDER&quot;
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+2025-09-27T05:51:38.641Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.users.controller.SignupController#setAgeRange(AgeRangeRequest, HttpSession)
+2025-09-27T05:51:38.641Z DEBUG 281 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read &quot;application/json&quot; to [AgeRangeRequest[ageRange=THIRTIES]]
+2025-09-27T05:51:38.641Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:38.641Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [GENDER]
+
+MockHttpServletRequest:
+      HTTP Method = POST
+      Request URI = /signup/age-range
+       Parameters = {}
+          Headers = [Content-Type:&quot;application/json&quot;, Content-Length:&quot;31&quot;]
+             Body = &lt;no character encoding set&gt;
+    Session Attrs = {}
+
+Handler:
+             Type = com.example.soso.users.controller.SignupController
+           Method = com.example.soso.users.controller.SignupController#setAgeRange(AgeRangeRequest, HttpSession)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 200
+    Error message = null
+          Headers = [Content-Type:&quot;application/json&quot;]
+     Content type = application/json
+             Body = &quot;GENDER&quot;
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+2025-09-27T05:51:38.644Z  INFO 281 --- [    Test worker] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2025-09-27T05:51:38.644Z  INFO 281 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2025-09-27T05:51:38.644Z  INFO 281 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 0 ms
+2025-09-27T05:51:38.645Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.users.controller.SignupController#setBudget(BudgetRequest, HttpSession)
+2025-09-27T05:51:38.647Z DEBUG 281 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read &quot;application/json&quot; to [BudgetRequest[budget=UNDER_1000]]
+2025-09-27T05:51:38.648Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:38.648Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [STARTUP]
+
+MockHttpServletRequest:
+      HTTP Method = POST
+      Request URI = /signup/budget
+       Parameters = {}
+          Headers = [Content-Type:&quot;application/json&quot;, Content-Length:&quot;31&quot;]
+             Body = &lt;no character encoding set&gt;
+    Session Attrs = {}
+
+Handler:
+             Type = com.example.soso.users.controller.SignupController
+           Method = com.example.soso.users.controller.SignupController#setBudget(BudgetRequest, HttpSession)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 200
+    Error message = null
+          Headers = [Content-Type:&quot;application/json&quot;]
+     Content type = application/json
+             Body = &quot;STARTUP&quot;
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+2025-09-27T05:51:38.649Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.users.controller.SignupController#setBudget(BudgetRequest, HttpSession)
+2025-09-27T05:51:38.649Z DEBUG 281 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read &quot;application/json&quot; to [BudgetRequest[budget=THOUSANDS_2000]]
+2025-09-27T05:51:38.649Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:38.649Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [STARTUP]
+
+MockHttpServletRequest:
+      HTTP Method = POST
+      Request URI = /signup/budget
+       Parameters = {}
+          Headers = [Content-Type:&quot;application/json&quot;, Content-Length:&quot;35&quot;]
+             Body = &lt;no character encoding set&gt;
+    Session Attrs = {}
+
+Handler:
+             Type = com.example.soso.users.controller.SignupController
+           Method = com.example.soso.users.controller.SignupController#setBudget(BudgetRequest, HttpSession)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 200
+    Error message = null
+          Headers = [Content-Type:&quot;application/json&quot;]
+     Content type = application/json
+             Body = &quot;STARTUP&quot;
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+2025-09-27T05:51:38.650Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.users.controller.SignupController#setBudget(BudgetRequest, HttpSession)
+2025-09-27T05:51:38.650Z DEBUG 281 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read &quot;application/json&quot; to [BudgetRequest[budget=UNDER_1000]]
+2025-09-27T05:51:38.650Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:38.650Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [STARTUP]
+
+MockHttpServletRequest:
+      HTTP Method = POST
+      Request URI = /signup/budget
+       Parameters = {}
+          Headers = [Content-Type:&quot;application/json&quot;, Content-Length:&quot;32&quot;]
+             Body = &lt;no character encoding set&gt;
+    Session Attrs = {}
+
+Handler:
+             Type = com.example.soso.users.controller.SignupController
+           Method = com.example.soso.users.controller.SignupController#setBudget(BudgetRequest, HttpSession)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 200
+    Error message = null
+          Headers = [Content-Type:&quot;application/json&quot;]
+     Content type = application/json
+             Body = &quot;STARTUP&quot;
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+2025-09-27T05:51:38.651Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.users.controller.SignupController#setBudget(BudgetRequest, HttpSession)
+2025-09-27T05:51:38.651Z DEBUG 281 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read &quot;application/json&quot; to [BudgetRequest[budget=OVER_1B]]
+2025-09-27T05:51:38.651Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:38.651Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [STARTUP]
+
+MockHttpServletRequest:
+      HTTP Method = POST
+      Request URI = /signup/budget
+       Parameters = {}
+          Headers = [Content-Type:&quot;application/json&quot;, Content-Length:&quot;28&quot;]
+             Body = &lt;no character encoding set&gt;
+    Session Attrs = {}
+
+Handler:
+             Type = com.example.soso.users.controller.SignupController
+           Method = com.example.soso.users.controller.SignupController#setBudget(BudgetRequest, HttpSession)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 200
+    Error message = null
+          Headers = [Content-Type:&quot;application/json&quot;]
+     Content type = application/json
+             Body = &quot;STARTUP&quot;
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+2025-09-27T05:51:38.653Z  INFO 281 --- [    Test worker] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2025-09-27T05:51:38.653Z  INFO 281 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2025-09-27T05:51:38.653Z  INFO 281 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 0 ms
+2025-09-27T05:51:38.653Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.users.controller.SignupController#setUserType(UserTypeRequest, HttpSession)
+2025-09-27T05:51:38.655Z DEBUG 281 --- [    Test worker] o.s.web.method.HandlerMethod             : Could not resolve parameter [0] in public org.springframework.http.ResponseEntity&lt;com.example.soso.users.domain.entity.SignupStep&gt; com.example.soso.users.controller.SignupController.setUserType(com.example.soso.users.domain.dto.UserTypeRequest,jakarta.servlet.http.HttpSession): JSON parse error: Cannot deserialize value of type `com.example.soso.users.domain.entity.UserType` from String &quot;INVALID_TYPE&quot;: not one of the values accepted for Enum class: [INHABITANT, FOUNDER]
+2025-09-27T05:51:38.655Z DEBUG 281 --- [    Test worker] .m.m.a.ExceptionHandlerExceptionResolver : Using @ExceptionHandler com.example.soso.global.exception.GlobalExceptionHandler#handleHttpMessageNotReadable(HttpMessageNotReadableException)
+2025-09-27T05:51:38.655Z  WARN 281 --- [    Test worker] c.e.s.g.e.GlobalExceptionHandler         : Invalid enum value received: enumType=UserType, invalidValue=INVALID_TYPE
+2025-09-27T05:51:38.656Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:38.657Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [ErrorResponse[code=INVALID_ENUM_VALUE, message='INVALID_TYPE'은(는) 허용되지 않는 값입니다. 사용 가능한 값: [FOUNDER,  (truncated)...]
+2025-09-27T05:51:38.657Z DEBUG 281 --- [    Test worker] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Cannot deserialize value of type `com.example.soso.users.domain.entity.UserType` from String &quot;INVALID_TYPE&quot;: not one of the values accepted for Enum class: [INHABITANT, FOUNDER]]
+
+MockHttpServletRequest:
+      HTTP Method = POST
+      Request URI = /signup/user-type
+       Parameters = {}
+          Headers = [Content-Type:&quot;application/json&quot;, Content-Length:&quot;35&quot;]
+             Body = &lt;no character encoding set&gt;
+    Session Attrs = {}
+
+Handler:
+             Type = com.example.soso.users.controller.SignupController
+           Method = com.example.soso.users.controller.SignupController#setUserType(UserTypeRequest, HttpSession)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = org.springframework.http.converter.HttpMessageNotReadableException
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 400
+    Error message = null
+          Headers = [Content-Type:&quot;application/json&quot;]
+     Content type = application/json
+             Body = {&quot;code&quot;:&quot;INVALID_ENUM_VALUE&quot;,&quot;message&quot;:&quot;'INVALID_TYPE'은(는) 허용되지 않는 값입니다. 사용 가능한 값: [FOUNDER, INHABITANT]&quot;}
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+2025-09-27T05:51:38.657Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.users.controller.SignupController#setAgeRange(AgeRangeRequest, HttpSession)
+2025-09-27T05:51:38.658Z DEBUG 281 --- [    Test worker] o.s.web.method.HandlerMethod             : Could not resolve parameter [0] in public org.springframework.http.ResponseEntity&lt;com.example.soso.users.domain.entity.SignupStep&gt; com.example.soso.users.controller.SignupController.setAgeRange(com.example.soso.users.domain.dto.AgeRangeRequest,jakarta.servlet.http.HttpSession): JSON parse error: Cannot deserialize value of type `com.example.soso.users.domain.entity.AgeRange` from String &quot;INVALID_AGE&quot;: not one of the values accepted for Enum class: [THIRTIES, FIFTIES, TEENS, FORTIES, TWENTIES, SIXTIES_AND_OVER]
+2025-09-27T05:51:38.658Z DEBUG 281 --- [    Test worker] .m.m.a.ExceptionHandlerExceptionResolver : Using @ExceptionHandler com.example.soso.global.exception.GlobalExceptionHandler#handleHttpMessageNotReadable(HttpMessageNotReadableException)
+2025-09-27T05:51:38.658Z  WARN 281 --- [    Test worker] c.e.s.g.e.GlobalExceptionHandler         : Invalid enum value received: enumType=AgeRange, invalidValue=INVALID_AGE
+2025-09-27T05:51:38.658Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:38.658Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [ErrorResponse[code=INVALID_ENUM_VALUE, message='INVALID_AGE'은(는) 허용되지 않는 값입니다. 사용 가능한 값: [TEENS, TWE (truncated)...]
+2025-09-27T05:51:38.658Z DEBUG 281 --- [    Test worker] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Cannot deserialize value of type `com.example.soso.users.domain.entity.AgeRange` from String &quot;INVALID_AGE&quot;: not one of the values accepted for Enum class: [THIRTIES, FIFTIES, TEENS, FORTIES, TWENTIES, SIXTIES_AND_OVER]]
+
+MockHttpServletRequest:
+      HTTP Method = POST
+      Request URI = /signup/age-range
+       Parameters = {}
+          Headers = [Content-Type:&quot;application/json&quot;, Content-Length:&quot;34&quot;]
+             Body = &lt;no character encoding set&gt;
+    Session Attrs = {}
+
+Handler:
+             Type = com.example.soso.users.controller.SignupController
+           Method = com.example.soso.users.controller.SignupController#setAgeRange(AgeRangeRequest, HttpSession)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = org.springframework.http.converter.HttpMessageNotReadableException
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 400
+    Error message = null
+          Headers = [Content-Type:&quot;application/json&quot;]
+     Content type = application/json
+             Body = {&quot;code&quot;:&quot;INVALID_ENUM_VALUE&quot;,&quot;message&quot;:&quot;'INVALID_AGE'은(는) 허용되지 않는 값입니다. 사용 가능한 값: [TEENS, TWENTIES, THIRTIES, FORTIES, FIFTIES, SIXTIES_AND_OVER]&quot;}
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+2025-09-27T05:51:38.658Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.users.controller.SignupController#setInterests(InterestRequest, HttpSession)
+2025-09-27T05:51:38.659Z DEBUG 281 --- [    Test worker] o.s.web.method.HandlerMethod             : Could not resolve parameter [0] in public org.springframework.http.ResponseEntity&lt;com.example.soso.users.domain.entity.SignupStep&gt; com.example.soso.users.controller.SignupController.setInterests(com.example.soso.users.domain.entity.InterestRequest,jakarta.servlet.http.HttpSession): JSON parse error: Cannot construct instance of `com.example.soso.users.domain.entity.InterestType`, problem: Unknown InterestType: INVALID_INTEREST
+2025-09-27T05:51:38.659Z DEBUG 281 --- [    Test worker] .m.m.a.ExceptionHandlerExceptionResolver : Using @ExceptionHandler com.example.soso.global.exception.GlobalExceptionHandler#handleHttpMessageNotReadable(HttpMessageNotReadableException)
+2025-09-27T05:51:38.659Z  WARN 281 --- [    Test worker] c.e.s.g.e.GlobalExceptionHandler         : Failed to read HTTP message: Unknown InterestType: INVALID_INTEREST
+2025-09-27T05:51:38.659Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:38.659Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [ErrorResponse[code=INVALID_REQUEST_BODY, message=요청 본문을 해석할 수 없습니다.]]
+2025-09-27T05:51:38.660Z DEBUG 281 --- [    Test worker] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Cannot construct instance of `com.example.soso.users.domain.entity.InterestType`, problem: Unknown InterestType: INVALID_INTEREST]
+
+MockHttpServletRequest:
+      HTTP Method = POST
+      Request URI = /signup/interests
+       Parameters = {}
+          Headers = [Content-Type:&quot;application/json&quot;, Content-Length:&quot;42&quot;]
+             Body = &lt;no character encoding set&gt;
+    Session Attrs = {}
+
+Handler:
+             Type = com.example.soso.users.controller.SignupController
+           Method = com.example.soso.users.controller.SignupController#setInterests(InterestRequest, HttpSession)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = org.springframework.http.converter.HttpMessageNotReadableException
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 400
+    Error message = null
+          Headers = [Content-Type:&quot;application/json&quot;]
+     Content type = application/json
+             Body = {&quot;code&quot;:&quot;INVALID_REQUEST_BODY&quot;,&quot;message&quot;:&quot;요청 본문을 해석할 수 없습니다.&quot;}
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+2025-09-27T05:51:38.660Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.users.controller.SignupController#setUserType(UserTypeRequest, HttpSession)
+2025-09-27T05:51:38.660Z DEBUG 281 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read &quot;application/json&quot; to [UserTypeRequest[userType=null]]
+2025-09-27T05:51:38.661Z DEBUG 281 --- [    Test worker] .m.m.a.ExceptionHandlerExceptionResolver : Using @ExceptionHandler com.example.soso.global.exception.GlobalExceptionHandler#handleValidationException(MethodArgumentNotValidException)
+2025-09-27T05:51:38.661Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:38.661Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [ErrorResponse[code=VALIDATION_FAILED, message=[userType] 창업자 또는 거주민 선택해주세요]]
+2025-09-27T05:51:38.661Z DEBUG 281 --- [    Test worker] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [org.springframework.web.bind.MethodArgumentNotValidException: Validation failed for argument [0] in public org.springframework.http.ResponseEntity&lt;com.example.soso.users.domain.entity.SignupStep&gt; com.example.soso.users.controller.SignupController.setUserType(com.example.soso.users.domain.dto.UserTypeRequest,jakarta.servlet.http.HttpSession): [Field error in object 'userTypeRequest' on field 'userType': rejected value [null]; codes [NotNull.userTypeRequest.userType,NotNull.userType,NotNull.com.example.soso.users.domain.entity.UserType,NotNull]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [userTypeRequest.userType,userType]; arguments []; default message [userType]]; default message [창업자 또는 거주민 선택해주세요]] ]
+
+MockHttpServletRequest:
+      HTTP Method = POST
+      Request URI = /signup/user-type
+       Parameters = {}
+          Headers = [Content-Type:&quot;application/json&quot;, Content-Length:&quot;2&quot;]
+             Body = &lt;no character encoding set&gt;
+    Session Attrs = {}
+
+Handler:
+             Type = com.example.soso.users.controller.SignupController
+           Method = com.example.soso.users.controller.SignupController#setUserType(UserTypeRequest, HttpSession)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = org.springframework.web.bind.MethodArgumentNotValidException
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 400
+    Error message = null
+          Headers = [Content-Type:&quot;application/json&quot;]
+     Content type = application/json
+             Body = {&quot;code&quot;:&quot;VALIDATION_FAILED&quot;,&quot;message&quot;:&quot;[userType] 창업자 또는 거주민 선택해주세요&quot;}
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+2025-09-27T05:51:38.663Z  INFO 281 --- [    Test worker] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2025-09-27T05:51:38.663Z  INFO 281 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2025-09-27T05:51:38.664Z  INFO 281 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 1 ms
+2025-09-27T05:51:38.664Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.users.controller.SignupController#setUserType(UserTypeRequest, HttpSession)
+2025-09-27T05:51:38.664Z DEBUG 281 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read &quot;application/json&quot; to [UserTypeRequest[userType=FOUNDER]]
+2025-09-27T05:51:38.664Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:38.664Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [REGION]
+2025-09-27T05:51:38.665Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.users.controller.SignupController#setRegion(RegionRequest, HttpSession)
+2025-09-27T05:51:38.665Z DEBUG 281 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read &quot;application/json&quot; to [RegionRequest[regionId=SEOUL]]
+2025-09-27T05:51:38.665Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:38.665Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [AGE]
+
+MockHttpServletRequest:
+      HTTP Method = POST
+      Request URI = /signup/region
+       Parameters = {}
+          Headers = [Content-Type:&quot;application/json&quot;, Content-Length:&quot;28&quot;]
+             Body = &lt;no character encoding set&gt;
+    Session Attrs = {}
+
+Handler:
+             Type = com.example.soso.users.controller.SignupController
+           Method = com.example.soso.users.controller.SignupController#setRegion(RegionRequest, HttpSession)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 200
+    Error message = null
+          Headers = [Content-Type:&quot;application/json&quot;]
+     Content type = application/json
+             Body = &quot;AGE&quot;
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+2025-09-27T05:51:38.666Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.users.controller.SignupController#setAgeRange(AgeRangeRequest, HttpSession)
+2025-09-27T05:51:38.666Z DEBUG 281 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read &quot;application/json&quot; to [AgeRangeRequest[ageRange=TWENTIES]]
+2025-09-27T05:51:38.666Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:38.666Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [GENDER]
+
+MockHttpServletRequest:
+      HTTP Method = POST
+      Request URI = /signup/age-range
+       Parameters = {}
+          Headers = [Content-Type:&quot;application/json&quot;, Content-Length:&quot;31&quot;]
+             Body = &lt;no character encoding set&gt;
+    Session Attrs = {}
+
+Handler:
+             Type = com.example.soso.users.controller.SignupController
+           Method = com.example.soso.users.controller.SignupController#setAgeRange(AgeRangeRequest, HttpSession)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 200
+    Error message = null
+          Headers = [Content-Type:&quot;application/json&quot;]
+     Content type = application/json
+             Body = &quot;GENDER&quot;
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+2025-09-27T05:51:38.667Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.users.controller.SignupController#setAgeRange(AgeRangeRequest, HttpSession)
+2025-09-27T05:51:38.667Z DEBUG 281 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read &quot;application/json&quot; to [AgeRangeRequest[ageRange=THIRTIES]]
+2025-09-27T05:51:38.667Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:38.667Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [GENDER]
+
+MockHttpServletRequest:
+      HTTP Method = POST
+      Request URI = /signup/age-range
+       Parameters = {}
+          Headers = [Content-Type:&quot;application/json&quot;, Content-Length:&quot;31&quot;]
+             Body = &lt;no character encoding set&gt;
+    Session Attrs = {}
+
+Handler:
+             Type = com.example.soso.users.controller.SignupController
+           Method = com.example.soso.users.controller.SignupController#setAgeRange(AgeRangeRequest, HttpSession)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 200
+    Error message = null
+          Headers = [Content-Type:&quot;application/json&quot;]
+     Content type = application/json
+             Body = &quot;GENDER&quot;
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+2025-09-27T05:51:38.668Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.users.controller.SignupController#setInterests(InterestRequest, HttpSession)
+2025-09-27T05:51:38.668Z DEBUG 281 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read &quot;application/json&quot; to [InterestRequest[interests=[MANUFACTURING, WHOLESALE_RETAIL]]]
+2025-09-27T05:51:38.669Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:38.669Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [BUDGET]
+
+MockHttpServletRequest:
+      HTTP Method = POST
+      Request URI = /signup/interests
+       Parameters = {}
+          Headers = [Content-Type:&quot;application/json&quot;, Content-Length:&quot;59&quot;]
+             Body = &lt;no character encoding set&gt;
+    Session Attrs = {}
+
+Handler:
+             Type = com.example.soso.users.controller.SignupController
+           Method = com.example.soso.users.controller.SignupController#setInterests(InterestRequest, HttpSession)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 200
+    Error message = null
+          Headers = [Content-Type:&quot;application/json&quot;]
+     Content type = application/json
+             Body = &quot;BUDGET&quot;
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+2025-09-27T05:51:38.669Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.users.controller.SignupController#setInterests(InterestRequest, HttpSession)
+2025-09-27T05:51:38.669Z DEBUG 281 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read &quot;application/json&quot; to [InterestRequest[interests=[OTHER]]]
+2025-09-27T05:51:38.669Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:38.669Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [BUDGET]
+
+MockHttpServletRequest:
+      HTTP Method = POST
+      Request URI = /signup/interests
+       Parameters = {}
+          Headers = [Content-Type:&quot;application/json&quot;, Content-Length:&quot;31&quot;]
+             Body = &lt;no character encoding set&gt;
+    Session Attrs = {}
+
+Handler:
+             Type = com.example.soso.users.controller.SignupController
+           Method = com.example.soso.users.controller.SignupController#setInterests(InterestRequest, HttpSession)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 200
+    Error message = null
+          Headers = [Content-Type:&quot;application/json&quot;]
+     Content type = application/json
+             Body = &quot;BUDGET&quot;
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+2025-09-27T05:51:38.670Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.users.controller.SignupController#setInterests(InterestRequest, HttpSession)
+2025-09-27T05:51:38.670Z DEBUG 281 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read &quot;application/json&quot; to [InterestRequest[interests=[MANUFACTURING, WHOLESALE_RETAIL, TRANSPORT, ACCOMMODATION_FOOD, WELFARE,  (truncated)...]
+2025-09-27T05:51:38.670Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:38.670Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [BUDGET]
+
+MockHttpServletRequest:
+      HTTP Method = POST
+      Request URI = /signup/interests
+       Parameters = {}
+          Headers = [Content-Type:&quot;application/json&quot;, Content-Length:&quot;128&quot;]
+             Body = &lt;no character encoding set&gt;
+    Session Attrs = {}
+
+Handler:
+             Type = com.example.soso.users.controller.SignupController
+           Method = com.example.soso.users.controller.SignupController#setInterests(InterestRequest, HttpSession)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 200
+    Error message = null
+          Headers = [Content-Type:&quot;application/json&quot;]
+     Content type = application/json
+             Body = &quot;BUDGET&quot;
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+2025-09-27T05:51:38.672Z  INFO 281 --- [    Test worker] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2025-09-27T05:51:38.672Z  INFO 281 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2025-09-27T05:51:38.673Z  INFO 281 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 1 ms
+2025-09-27T05:51:38.673Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.users.controller.SignupController#setInterests(InterestRequest, HttpSession)
+2025-09-27T05:51:38.673Z DEBUG 281 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read &quot;application/json&quot; to [InterestRequest[interests=[MANUFACTURING, WHOLESALE_RETAIL]]]
+2025-09-27T05:51:38.674Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:38.674Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [BUDGET]
+
+MockHttpServletRequest:
+      HTTP Method = POST
+      Request URI = /signup/interests
+       Parameters = {}
+          Headers = [Content-Type:&quot;application/json&quot;, Content-Length:&quot;59&quot;]
+             Body = &lt;no character encoding set&gt;
+    Session Attrs = {}
+
+Handler:
+             Type = com.example.soso.users.controller.SignupController
+           Method = com.example.soso.users.controller.SignupController#setInterests(InterestRequest, HttpSession)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 200
+    Error message = null
+          Headers = [Content-Type:&quot;application/json&quot;]
+     Content type = application/json
+             Body = &quot;BUDGET&quot;
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+2025-09-27T05:51:38.674Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.users.controller.SignupController#setInterests(InterestRequest, HttpSession)
+2025-09-27T05:51:38.674Z DEBUG 281 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read &quot;application/json&quot; to [InterestRequest[interests=[OTHER]]]
+2025-09-27T05:51:38.675Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:38.675Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [BUDGET]
+
+MockHttpServletRequest:
+      HTTP Method = POST
+      Request URI = /signup/interests
+       Parameters = {}
+          Headers = [Content-Type:&quot;application/json&quot;, Content-Length:&quot;31&quot;]
+             Body = &lt;no character encoding set&gt;
+    Session Attrs = {}
+
+Handler:
+             Type = com.example.soso.users.controller.SignupController
+           Method = com.example.soso.users.controller.SignupController#setInterests(InterestRequest, HttpSession)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 200
+    Error message = null
+          Headers = [Content-Type:&quot;application/json&quot;]
+     Content type = application/json
+             Body = &quot;BUDGET&quot;
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+2025-09-27T05:51:38.675Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.users.controller.SignupController#setInterests(InterestRequest, HttpSession)
+2025-09-27T05:51:38.675Z DEBUG 281 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read &quot;application/json&quot; to [InterestRequest[interests=[MANUFACTURING, WHOLESALE_RETAIL, TRANSPORT, ACCOMMODATION_FOOD, WELFARE,  (truncated)...]
+2025-09-27T05:51:38.675Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:38.675Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [BUDGET]
+
+MockHttpServletRequest:
+      HTTP Method = POST
+      Request URI = /signup/interests
+       Parameters = {}
+          Headers = [Content-Type:&quot;application/json&quot;, Content-Length:&quot;128&quot;]
+             Body = &lt;no character encoding set&gt;
+    Session Attrs = {}
+
+Handler:
+             Type = com.example.soso.users.controller.SignupController
+           Method = com.example.soso.users.controller.SignupController#setInterests(InterestRequest, HttpSession)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 200
+    Error message = null
+          Headers = [Content-Type:&quot;application/json&quot;]
+     Content type = application/json
+             Body = &quot;BUDGET&quot;
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+2025-09-27T05:51:38.678Z  INFO 281 --- [    Test worker] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2025-09-27T05:51:38.678Z  INFO 281 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2025-09-27T05:51:38.678Z  INFO 281 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 0 ms
+2025-09-27T05:51:38.678Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.users.controller.SignupController#setGender(GenderRequest, HttpSession)
+2025-09-27T05:51:38.680Z DEBUG 281 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read &quot;application/json&quot; to [GenderRequest[gender=MALE]]
+2025-09-27T05:51:38.681Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:38.681Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [NICKNAME]
+
+MockHttpServletRequest:
+      HTTP Method = POST
+      Request URI = /signup/gender
+       Parameters = {}
+          Headers = [Content-Type:&quot;application/json&quot;, Content-Length:&quot;25&quot;]
+             Body = &lt;no character encoding set&gt;
+    Session Attrs = {}
+
+Handler:
+             Type = com.example.soso.users.controller.SignupController
+           Method = com.example.soso.users.controller.SignupController#setGender(GenderRequest, HttpSession)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 200
+    Error message = null
+          Headers = [Content-Type:&quot;application/json&quot;]
+     Content type = application/json
+             Body = &quot;NICKNAME&quot;
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+2025-09-27T05:51:38.683Z  INFO 281 --- [    Test worker] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2025-09-27T05:51:38.683Z  INFO 281 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2025-09-27T05:51:38.683Z  INFO 281 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 0 ms
+2025-09-27T05:51:38.684Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.users.controller.SignupController#setUserType(UserTypeRequest, HttpSession)
+2025-09-27T05:51:38.684Z DEBUG 281 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read &quot;application/json&quot; to [UserTypeRequest[userType=FOUNDER]]
+2025-09-27T05:51:38.684Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:38.684Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [REGION]
+
+MockHttpServletRequest:
+      HTTP Method = POST
+      Request URI = /signup/user-type
+       Parameters = {}
+          Headers = [Content-Type:&quot;application/json&quot;, Content-Length:&quot;30&quot;]
+             Body = &lt;no character encoding set&gt;
+    Session Attrs = {}
+
+Handler:
+             Type = com.example.soso.users.controller.SignupController
+           Method = com.example.soso.users.controller.SignupController#setUserType(UserTypeRequest, HttpSession)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 200
+    Error message = null
+          Headers = [Content-Type:&quot;application/json&quot;]
+     Content type = application/json
+             Body = &quot;REGION&quot;
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+2025-09-27T05:51:38.686Z  INFO 281 --- [    Test worker] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2025-09-27T05:51:38.687Z  INFO 281 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2025-09-27T05:51:38.687Z  INFO 281 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 0 ms
+2025-09-27T05:51:38.689Z  INFO 281 --- [    Test worker] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2025-09-27T05:51:38.689Z  INFO 281 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2025-09-27T05:51:38.689Z  INFO 281 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 0 ms
+2025-09-27T05:51:38.690Z DEBUG 281 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.example.soso.users.controller.SignupController#setGender(GenderRequest, HttpSession)
+2025-09-27T05:51:38.690Z DEBUG 281 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read &quot;application/json&quot; to [GenderRequest[gender=FEMALE]]
+2025-09-27T05:51:38.690Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-09-27T05:51:38.690Z DEBUG 281 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [INTERESTS]
+
+MockHttpServletRequest:
+      HTTP Method = POST
+      Request URI = /signup/gender
+       Parameters = {}
+          Headers = [Content-Type:&quot;application/json&quot;, Content-Length:&quot;27&quot;]
+             Body = &lt;no character encoding set&gt;
+    Session Attrs = {}
+
+Handler:
+             Type = com.example.soso.users.controller.SignupController
+           Method = com.example.soso.users.controller.SignupController#setGender(GenderRequest, HttpSession)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 200
+    Error message = null
+          Headers = [Content-Type:&quot;application/json&quot;]
+     Content type = application/json
+             Body = &quot;INTERESTS&quot;
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+</pre>
+</span>
+</div>
+</div>
+<div id="footer">
+<p>
+<div>
+<label class="hidden" id="label-for-line-wrapping-toggle" for="line-wrapping-toggle">Wrap lines
+<input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
+</label>
+</div>Generated by 
+<a href="https://www.gradle.org">Gradle 8.14.2</a> at Sep 27, 2025, 5:51:42 AM</p>
+</div>
+</div>
+</body>
+</html>

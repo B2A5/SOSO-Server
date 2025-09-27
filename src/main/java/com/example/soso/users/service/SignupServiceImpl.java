@@ -201,7 +201,7 @@ public class SignupServiceImpl implements SignupService {
         TokenPair tokenPair = generateTokens(user.getId());
 
         // 레디스 와 httpOnly 쿠기 저장
-        redisService.save(user.getId(), tokenPair.refreshToken(), jwtProperties.getRefreshTokenValidityInMs());
+        redisService.saveByUserId(user.getId(), tokenPair.refreshToken(), jwtProperties.getRefreshTokenValidityInMs());
         addRefreshTokenCookie(response, tokenPair.refreshToken(), jwtProperties.getRefreshTokenValidityInMs());
 
         // 세션 삭제
