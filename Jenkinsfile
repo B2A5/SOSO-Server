@@ -67,13 +67,71 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
+                    // 기존 컨테이너 정리
+                    sh '''
+                        set -eux
+                        echo "=== Cleaning up existing containers ==="
+                        docker stop soso-server || true
+                        docker rm soso-server || true
+
+                        echo "=== Cleaning up unused images ==="
+                        docker image prune -f || true
+
+                        echo "=== Current Docker images ==="
+                        docker images | grep soso-server || echo "No soso-server images found"
+                    '''
+
+                    // 환경 변수 파일로 새 컨테이너 시작
                     withCredentials([file(credentialsId: 'soso-env', variable: 'ENV_FILE')]) {
                         sh '''
                             set -eux
-                            cp "$ENV_FILE" .env
-                            docker compose -f compose.yml --env-file .env down || true
-                            docker compose -f compose.yml --env-file .env up -d --force-recreate --remove-orphans
-                            rm -f .env
+                            echo "=== Starting new container with environment file ==="
+
+                            # 환경 변수 파일을 Docker run에서 직접 사용
+                            docker run -d \
+                                --name soso-server \
+                                --restart unless-stopped \
+                                -p 8080:8080 \
+                                --env-file "$ENV_FILE" \
+                                "${APP_IMAGE}"
+
+                            echo "=== Container started successfully ==="
+                            docker ps | grep soso-server
+
+                            echo "=== Container logs (first 20 lines) ==="
+                            docker logs soso-server --tail 20 || true
+
+                            echo "=== Waiting for application to start ==="
+                            sleep 10
+
+                            echo "=== Health check ==="
+                            for i in {1..30}; do
+                                if curl -f http://localhost:8080/actuator/health > /dev/null 2>&1; then
+                                    echo "✅ Application is healthy!"
+                                    break
+                                elif [ $i -eq 30 ]; then
+                                    echo "❌ Health check failed after 30 attempts"
+                                    echo "Container logs:"
+                                    docker logs soso-server --tail 50
+                                    exit 1
+                                else
+                                    echo "Attempt $i: Application not ready yet, waiting..."
+                                    sleep 2
+                                fi
+                            done
+                        '''
+                    }
+                }
+            }
+            post {
+                failure {
+                    script {
+                        sh '''
+                            echo "=== Deployment failed, showing container logs ==="
+                            docker logs soso-server --tail 100 || true
+                            echo "=== Stopping failed container ==="
+                            docker stop soso-server || true
+                            docker rm soso-server || true
                         '''
                     }
                 }

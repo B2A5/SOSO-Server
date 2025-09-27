@@ -1,0 +1,58 @@
+#!/usr/bin/expect -f
+
+set timeout 30
+
+# 서버 IP 입력 받기
+if {$argc == 0} {
+    puts "사용법: ./jenkins_check.exp [서버IP]"
+    exit 1
+}
+
+set server_ip [lindex $argv 0]
+
+# SSH 연결
+spawn ssh dreampaste@$server_ip
+expect {
+    "password:" {
+        send "byby1004\r"
+        exp_continue
+    }
+    "$ " {
+        # 연결 성공
+    }
+    timeout {
+        puts "연결 타임아웃"
+        exit 1
+    }
+}
+
+# Jenkins 빌드 #16 확인
+send "echo '=== Jenkins 빌드 #16 상태 확인 ==='\r"
+expect "$ "
+
+send "docker ps -a | grep soso\r"
+expect "$ "
+
+send "docker images | grep soso\r"
+expect "$ "
+
+send "docker logs soso-server --tail 20 2>/dev/null || echo 'soso-server 컨테이너 없음'\r"
+expect "$ "
+
+send "netstat -tlnp | grep 8080 || echo '포트 8080 사용 안함'\r"
+expect "$ "
+
+send "curl -s http://localhost:8080/actuator/health || echo '헬스체크 실패'\r"
+expect "$ "
+
+send "ls -la /var/lib/jenkins/workspace/SOSO-server/ 2>/dev/null || echo 'Jenkins 작업공간 없음'\r"
+expect "$ "
+
+send "systemctl is-active jenkins 2>/dev/null || echo 'Jenkins 서비스 상태 확인 불가'\r"
+expect "$ "
+
+send "echo '=== 확인 완료 ==='\r"
+expect "$ "
+
+send "exit\r"
+expect eof
