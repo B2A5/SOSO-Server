@@ -1,0 +1,61 @@
+#!/usr/bin/expect -f
+
+set timeout 30
+
+spawn ssh dreampaste
+expect "password:"
+send "byby1004\r"
+expect "$ "
+
+send "echo '=== Jenkins Docker 컨테이너 확인 ==='\r"
+expect "$ "
+
+# Jenkins 컨테이너 찾기
+send "echo '1. Jenkins 컨테이너 확인:'\r"
+expect "$ "
+send "docker ps -a | grep jenkins\r"
+expect "$ "
+
+# 모든 컨테이너 확인
+send "echo '2. 모든 컨테이너 상태:'\r"
+expect "$ "
+send "docker ps -a\r"
+expect "$ "
+
+# Jenkins 관련 이미지 확인
+send "echo '3. Jenkins 관련 이미지:'\r"
+expect "$ "
+send "docker images | grep jenkins\r"
+expect "$ "
+
+# 최신 컨테이너 로그 확인 (Jenkins가 있다면)
+send "echo '4. 최신 컨테이너 로그 확인:'\r"
+expect "$ "
+send "JENKINS_CONTAINER=$(docker ps -q --filter 'name=jenkins' 2>/dev/null | head -1)\r"
+expect "$ "
+send "if [ ! -z \"$JENKINS_CONTAINER\" ]; then echo 'Jenkins 컨테이너 로그:'; docker logs $JENKINS_CONTAINER --tail 50; else echo 'Jenkins 컨테이너 없음'; fi\r"
+expect "$ "
+
+# soso 관련 컨테이너 로그 상세 확인
+send "echo '5. SOSO 관련 컨테이너 로그:'\r"
+expect "$ "
+send "docker logs soso-api --tail 50 2>/dev/null || echo 'soso-api 로그 없음'\r"
+expect "$ "
+
+# Docker Compose 파일 확인
+send "echo '6. Docker Compose 설정:'\r"
+expect "$ "
+send "ls -la docker-compose* 2>/dev/null || echo 'Docker Compose 파일 없음'\r"
+expect "$ "
+
+# 포트 사용 상황 확인 (ss 명령어 사용)
+send "echo '7. 포트 사용 상황:'\r"
+expect "$ "
+send "ss -tlnp | grep -E ':(8080|8081|9000)' || echo '해당 포트 사용 안함'\r"
+expect "$ "
+
+send "echo '=== 확인 완료 ==='\r"
+expect "$ "
+
+send "exit\r"
+expect eof

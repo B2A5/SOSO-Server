@@ -68,3 +68,6 @@ replay_pid*
 
 # docker test
 Dockerfile.test
+
+# server ssh connect
+connect.exp

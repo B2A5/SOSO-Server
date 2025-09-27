@@ -67,56 +67,68 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    // 기존 컨테이너 정리
-                    sh '''
-                        set -eux
-                        echo "=== Cleaning up existing containers ==="
-                        docker stop soso-server || true
-                        docker rm soso-server || true
-
-                        echo "=== Cleaning up unused images ==="
-                        docker image prune -f || true
-
-                        echo "=== Current Docker images ==="
-                        docker images | grep soso-server || echo "No soso-server images found"
-                    '''
-
                     // 환경 변수 파일로 새 컨테이너 시작
                     withCredentials([file(credentialsId: 'soso-env', variable: 'ENV_FILE')]) {
                         sh '''
                             set -eux
+                            echo "=== Cleaning up existing containers ==="
+                            docker stop soso-server || true
+                            docker rm soso-server || true
+
+                            echo "=== Cleaning up unused images ==="
+                            docker image prune -f || true
+
                             echo "=== Starting new container with environment file ==="
+                            # 기존 컨테이너들과 같은 네트워크에 연결
+                            NETWORK_NAME=$(docker ps --format "table {{.Names}}\t{{.Networks}}" | grep soso-mysql | awk '{print $2}' | head -1)
+
+                            if [ -n "$NETWORK_NAME" ] && [ "$NETWORK_NAME" != "bridge" ]; then
+                                echo "Connecting to existing network: $NETWORK_NAME"
+                                NETWORK_OPTION="--network $NETWORK_NAME"
+                            else
+                                echo "Using default bridge network"
+                                NETWORK_OPTION=""
+                            fi
 
                             # 환경 변수 파일을 Docker run에서 직접 사용
                             docker run -d \
                                 --name soso-server \
                                 --restart unless-stopped \
                                 -p 8080:8080 \
+                                $NETWORK_OPTION \
                                 --env-file "$ENV_FILE" \
                                 "${APP_IMAGE}"
 
                             echo "=== Container started successfully ==="
                             docker ps | grep soso-server
 
-                            echo "=== Container logs (first 20 lines) ==="
-                            docker logs soso-server --tail 20 || true
-
                             echo "=== Waiting for application to start ==="
-                            sleep 10
+                            sleep 15
+
+                            echo "=== Container logs (first 30 lines) ==="
+                            docker logs soso-server --tail 30 || true
 
                             echo "=== Health check ==="
-                            for i in {1..30}; do
+                            for i in {1..20}; do
+                                # 다양한 헬스체크 시도
                                 if curl -f http://localhost:8080/actuator/health > /dev/null 2>&1; then
-                                    echo "✅ Application is healthy!"
+                                    echo "✅ Application is healthy (actuator)!"
                                     break
-                                elif [ $i -eq 30 ]; then
-                                    echo "❌ Health check failed after 30 attempts"
+                                elif curl -f http://localhost:8080/ > /dev/null 2>&1; then
+                                    echo "✅ Application is responding (root)!"
+                                    break
+                                elif [ $i -eq 20 ]; then
+                                    echo "❌ Health check failed after 20 attempts"
+                                    echo "Container status:"
+                                    docker ps | grep soso-server || echo "Container not running"
                                     echo "Container logs:"
                                     docker logs soso-server --tail 50
+                                    echo "Port status:"
+                                    ss -tlnp | grep 8080 || echo "Port 8080 not listening"
                                     exit 1
                                 else
                                     echo "Attempt $i: Application not ready yet, waiting..."
-                                    sleep 2
+                                    sleep 3
                                 fi
                             done
                         '''
