@@ -72,8 +72,8 @@ pipeline {
                         sh '''
                             set -eux
                             echo "=== Cleaning up existing containers ==="
-                            docker stop soso-server || true
-                            docker rm soso-server || true
+                            docker stop soso-api || true
+                            docker rm soso-api || true
 
                             echo "=== Cleaning up unused images ==="
                             docker image prune -f || true
@@ -91,40 +91,40 @@ pipeline {
                             fi
 
                             # 환경 변수 파일을 Docker run에서 직접 사용
+                            # 기존 soso-api 컨테이너와 호환성을 위해 동일한 이름 사용
                             docker run -d \
-                                --name soso-server \
+                                --name soso-api \
                                 --restart unless-stopped \
-                                -p 8080:8080 \
                                 $NETWORK_OPTION \
                                 --env-file "$ENV_FILE" \
                                 "${APP_IMAGE}"
 
                             echo "=== Container started successfully ==="
-                            docker ps | grep soso-server
+                            docker ps | grep soso-api
 
                             echo "=== Waiting for application to start ==="
                             sleep 15
 
                             echo "=== Container logs (first 30 lines) ==="
-                            docker logs soso-server --tail 30 || true
+                            docker logs soso-api --tail 30 || true
 
                             echo "=== Health check ==="
                             for i in {1..20}; do
-                                # 다양한 헬스체크 시도
-                                if curl -f http://localhost:8080/actuator/health > /dev/null 2>&1; then
+                                # soso-api 컨테이너 내부 포트 8080으로 헬스체크
+                                if docker exec soso-api curl -f http://localhost:8080/actuator/health > /dev/null 2>&1; then
                                     echo "✅ Application is healthy (actuator)!"
                                     break
-                                elif curl -f http://localhost:8080/ > /dev/null 2>&1; then
+                                elif docker exec soso-api curl -f http://localhost:8080/ > /dev/null 2>&1; then
                                     echo "✅ Application is responding (root)!"
                                     break
                                 elif [ $i -eq 20 ]; then
                                     echo "❌ Health check failed after 20 attempts"
                                     echo "Container status:"
-                                    docker ps | grep soso-server || echo "Container not running"
+                                    docker ps | grep soso-api || echo "Container not running"
                                     echo "Container logs:"
-                                    docker logs soso-server --tail 50
-                                    echo "Port status:"
-                                    ss -tlnp | grep 8080 || echo "Port 8080 not listening"
+                                    docker logs soso-api --tail 50
+                                    echo "Container internal health:"
+                                    docker exec soso-api ss -tlnp | grep 8080 || echo "Port 8080 not listening inside container"
                                     exit 1
                                 else
                                     echo "Attempt $i: Application not ready yet, waiting..."
@@ -140,10 +140,10 @@ pipeline {
                     script {
                         sh '''
                             echo "=== Deployment failed, showing container logs ==="
-                            docker logs soso-server --tail 100 || true
+                            docker logs soso-api --tail 100 || true
                             echo "=== Stopping failed container ==="
-                            docker stop soso-server || true
-                            docker rm soso-server || true
+                            docker stop soso-api || true
+                            docker rm soso-api || true
                         '''
                     }
                 }
