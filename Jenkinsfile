@@ -56,9 +56,11 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                script {
-                    docker.build(APP_IMAGE, '.')
-                }
+                sh '''
+                    set -eux
+                    echo "Building Docker image: ${APP_IMAGE}"
+                    docker build -t "${APP_IMAGE}" .
+                '''
             }
         }
 
