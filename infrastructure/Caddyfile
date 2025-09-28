@@ -1,188 +1,58 @@
-# SOSO Server - Modern Reverse Proxy Configuration
+# SOSO Server - Simplified Reverse Proxy Configuration
 
-# Git Repository로 관리
-
-{ # Global Configuration
-auto_https on
-log {
-output stdout
-level INFO
-format console
-}
-
-    # Security Headers (Global)
-    header {
-    	# Remove server information
-    	-Server
-    	# Security headers
-    	X-Content-Type-Options "nosniff"
-    	X-Frame-Options "SAMEORIGIN"
-    	X-XSS-Protection "1; mode=block"
-    	Referrer-Policy "strict-origin-when-cross-origin"
-    	# Content Security Policy
-    	Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' wss:; font-src 'self'; object-src 'none'; media-src 'self'; frame-src 'self';"
-    }
-
-}
-
-# =============================================================================
-
-# Main Domain - SOSO API & Services
-
-# =============================================================================
-
-soso.dreampaste.com { # Logging
-log {
-output stdout
-format console
-}
-
-    # Compression
+soso.dreampaste.com {
+    # Global compression
     encode gzip
 
-    # =============================================================================
+    # Basic security headers
+    header {
+        -Server
+        X-Content-Type-Options "nosniff"
+        X-Frame-Options "SAMEORIGIN"
+    }
+
     # Jenkins CI/CD Admin Panel
-    # =============================================================================
     redir /jenkins /jenkins/ permanent
     reverse_proxy /jenkins/* jenkins:8080 {
-    	# Jenkins specific headers
-    	header_up X-Forwarded-Proto {scheme}
-    	header_up X-Forwarded-Port {server_port}
-    	header_up X-Forwarded-For {remote_host}
-    	header_up Host {host}
-
-    	# Jenkins CSRF protection
-    	header_up X-Jenkins-CLI-Port "50000"
-
-    	# Health check
-    	health_uri /jenkins/login
-    	health_interval 30s
-    	health_timeout 10s
+        header_up X-Forwarded-Proto {scheme}
     }
 
-    # =============================================================================
     # SOSO API Endpoints
-    # =============================================================================
     reverse_proxy /api/* api:8080 {
-    	# API specific headers
-    	header_up X-Real-IP {remote_host}
-    	header_up X-Forwarded-For {remote_host}
-    	header_up X-Forwarded-Proto {scheme}
-
-    	# Load balancing (future ready)
-    	health_uri /api/actuator/health
-    	health_interval 10s
-    	health_timeout 5s
-
-    	# Fail timeout
-    	fail_duration 30s
-    	max_fails 3
+        header_up X-Forwarded-Proto {scheme}
+        health_uri /api/actuator/health
+        health_interval 30s
+        health_timeout 10s
     }
 
-    # =============================================================================
     # API Documentation (Swagger UI)
-    # =============================================================================
     redir /swagger /swagger-ui/index.html permanent
     redir /swagger/ /swagger-ui/index.html permanent
+    reverse_proxy /swagger-ui/* api:8080
+    reverse_proxy /v3/api-docs* api:8080
 
-    reverse_proxy /swagger-ui/* api:8080 {
-    	header_up X-Forwarded-Proto {scheme}
-    	header_up X-Forwarded-For {remote_host}
-    }
-
-    reverse_proxy /v3/api-docs* api:8080 {
-    	header_up X-Forwarded-Proto {scheme}
-    	header_up X-Forwarded-For {remote_host}
-    }
-
-    # =============================================================================
-    # Documentation & Health Endpoints
-    # =============================================================================
-    reverse_proxy /docs/* api:8080
+    # Health & Documentation endpoints
     reverse_proxy /actuator/* api:8080
-    reverse_proxy /health api:8080
+    reverse_proxy /docs/* api:8080
 
-    # =============================================================================
-    # Static Assets & Caching
-    # =============================================================================
+    # Static file caching
     @static {
-    	path *.css *.js *.png *.jpg *.jpeg *.gif *.ico *.svg *.woff *.woff2 *.ttf *.eot *.webp *.avif
+        path *.css *.js *.png *.jpg *.jpeg *.gif *.ico *.svg *.woff *.woff2 *.ttf *.eot
     }
     header @static {
-    	Cache-Control "public, max-age=31536000, immutable"
-    	Vary "Accept-Encoding"
+        Cache-Control "public, max-age=86400"
     }
 
-    # =============================================================================
-    # Default Route (Root)
-    # =============================================================================
-    redir / /swagger-ui/index.html temporary
+    # Default route - redirect to Swagger when API is ready, Jenkins for now
+    redir / /jenkins/ temporary
 
-    # =============================================================================
-    # Security & Rate Limiting
-    # =============================================================================
-    @api_routes {
-    	path /api/*
-    }
-
-    # Rate limiting for API routes (100 requests per minute per IP)
-    rate_limit @api_routes {
-    	zone api_zone
-    	key {remote_host}
-    	events 100
-    	window 1m
-    }
-
-    # =============================================================================
-    # Error Pages
-    # =============================================================================
+    # Simple error handling
     handle_errors {
-    	@502 {
-    		expression {http.error.status_code} == 502
-    	}
-    	@503 {
-    		expression {http.error.status_code} == 503
-    	}
-    	@504 {
-    		expression {http.error.status_code} == 504
-    	}
-
-    	respond @502 "Service temporarily unavailable. Please try again later." 502
-    	respond @503 "Service under maintenance. Please try again later." 503
-    	respond @504 "Service timeout. Please try again later." 504
-    	respond "An error occurred. Please contact support." {http.error.status_code}
+        respond "Service temporarily unavailable" {http.error.status_code}
     }
-
 }
 
-# =============================================================================
-
-# HTTP to HTTPS Redirect
-
-# =============================================================================
-
+# HTTP to HTTPS redirect
 http://soso.dreampaste.com {
-redir https://soso.dreampaste.com{uri} permanent
+    redir https://soso.dreampaste.com{uri} permanent
 }
-
-# =============================================================================
-
-# Development/Staging Subdomain (Optional)
-
-# =============================================================================
-
-# dev.soso.dreampaste.com {
-
-# reverse_proxy api:8080
-
-#
-
-# # Development specific settings
-
-# header {
-
-# X-Environment "development"
-
-# }
-
-# }
