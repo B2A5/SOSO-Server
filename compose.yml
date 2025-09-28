@@ -1,69 +1,197 @@
+# SOSO Server - Production Infrastructure
+# 모든 서비스를 통합 관리하는 현대화된 Docker Compose
+
 services:
-  db:
-    image: mysql:8.4
-    container_name: soso-mysql
-    command: ["mysqld", "--mysql-native-password=ON"]
+  # =============================================================================
+  # Jenkins CI/CD Server
+  # =============================================================================
+  jenkins:
+    image: jenkins/jenkins:lts
+    container_name: jenkins
     environment:
-      MYSQL_ROOT_PASSWORD: rootpw
-      MYSQL_DATABASE: ${DB_NAME:-soso}
-      MYSQL_USER: ${DB_USER:-soso_user}
-      MYSQL_PASSWORD: ${DB_PASS:-12341234}
+      TZ: Asia/Seoul
+      JAVA_OPTS: "-Djenkins.install.runSetupWizard=false"
     ports:
-      - "3307:3306"
+      - "8080:8080"    # Jenkins Web UI
+      - "50000:50000"  # Jenkins Agent Port
     volumes:
-      - dbdata:/var/lib/mysql
+      - jenkins_data:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock  # Docker-in-Docker
+    networks: [soso_net]
+    restart: unless-stopped
     healthcheck:
-      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p$${MYSQL_ROOT_PASSWORD} || exit 1"]
-      interval: 10s
-      timeout: 5s
-      retries: 10
+      test: ["CMD-SHELL", "curl -f http://localhost:8080/login || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
 
-  redis:
-    image: redis:7
-    container_name: soso-redis
-    ports:
-      - "6379:6379"
-    command: ["redis-server", "--appendonly", "yes"]
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 10s
-      timeout: 5s
-      retries: 10
-    volumes:
-      - redisdata:/data
-
-  app:
-    image: localTest/soso-server:latest
-    container_name: soso-app
+  # =============================================================================
+  # SOSO API Application
+  # =============================================================================
+  api:
+    image: ${API_IMAGE:-localtest/soso-server:latest}
+    container_name: soso-api
+    environment:
+      TZ: Asia/Seoul
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-prod}
+      # Database Configuration (Override for container network)
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_NAME: ${DB_NAME:-soso}
+      DB_USER: ${DB_USER:-soso_user}
+      DB_PASS: ${DB_PASS:-12341234}
+      # JPA Configuration for Production
+      JPA_DDL: ${JPA_DDL:-validate}
+      # Redis Configuration (Override for container network)
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      # Application Configuration
+      FRONTEND_ORIGIN: ${FRONTEND_ORIGIN}
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_AT_VALIDITY: ${JWT_AT_VALIDITY:-1800000}
+      JWT_RT_VALIDITY: ${JWT_RT_VALIDITY:-1209600000}
+      # External Services
+      KAKAO_CLIENT_ID: ${KAKAO_CLIENT_ID}
+      KAKAO_REDIRECT_URIS: ${KAKAO_REDIRECT_URIS}
+      AWS_REGION: ${AWS_REGION}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AWS_S3_BUCKET: ${AWS_S3_BUCKET}
+      S3_BASE_URL: ${S3_BASE_URL}
+      KAFKA_BOOTSTRAP: ${KAFKA_BOOTSTRAP}
     depends_on:
       db:
         condition: service_healthy
       redis:
         condition: service_healthy
-    ports:
-      - "8080:8080"
-    env_file:
-      - ./.env
-    environment:
-      # Compose 네트워크에서 서비스명으로 접근 (db/redis)
-      DB_HOST: db
-      REDIS_HOST: redis
-      # 필요시 프로필 사용 예: SPRING_PROFILES_ACTIVE: docker
+    expose: ["8080"]  # 내부 네트워크만, 프록시를 통해서만 접근
+    networks: [soso_net]
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8080/actuator/health || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 40s
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
 
+  # =============================================================================
+  # Reverse Proxy (Caddy)
+  # =============================================================================
+  proxy:
+    image: caddy:2
+    container_name: soso-proxy
+    environment:
+      TZ: Asia/Seoul
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./infrastructure/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      api:
+        condition: service_healthy
+      jenkins:
+        condition: service_healthy
+    networks: [soso_net]
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "caddy", "validate", "--config", "/etc/caddy/Caddyfile"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # =============================================================================
+  # Database (MySQL)
+  # =============================================================================
+  db:
+    image: mysql:8.4
+    container_name: soso-mysql
+    environment:
+      TZ: Asia/Seoul
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpassword}
+      MYSQL_DATABASE: ${DB_NAME:-soso}
+      MYSQL_USER: ${DB_USER:-soso_user}
+      MYSQL_PASSWORD: ${DB_PASS:-12341234}
+    command: [
+      "--character-set-server=utf8mb4",
+      "--collation-server=utf8mb4_0900_ai_ci",
+      "--mysql-native-password=ON",
+      "--sql-mode=STRICT_TRANS_TABLES,NO_ZERO_DATE,NO_ZERO_IN_DATE,ERROR_FOR_DIVISION_BY_ZERO"
+    ]
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./infrastructure/mysql-init:/docker-entrypoint-initdb.d:ro
+    networks: [soso_net]
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u${DB_USER} -p${DB_PASS} --silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  # =============================================================================
+  # Cache (Redis)
+  # =============================================================================
+  redis:
+    image: redis:7-alpine
+    container_name: soso-redis
+    environment:
+      TZ: Asia/Seoul
+    command: ["redis-server", "--appendonly", "yes", "--maxmemory", "256mb", "--maxmemory-policy", "allkeys-lru"]
+    volumes:
+      - redis_data:/data
+    networks: [soso_net]
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  # =============================================================================
+  # Auto-updater (Watchtower)
+  # =============================================================================
   watchtower:
     image: containrrr/watchtower
     container_name: watchtower
+    environment:
+      TZ: Asia/Seoul
+      WATCHTOWER_CLEANUP: "true"
+      WATCHTOWER_INCLUDE_RESTARTING: "true"
+      WATCHTOWER_POLL_INTERVAL: 300  # 5분마다 체크
+      WATCHTOWER_LABEL_ENABLE: "true"  # 라벨 기반 업데이트만
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-    environment:
-      - WATCHTOWER_POLL_INTERVAL=30
-      - WATCHTOWER_CLEANUP=true
-      - WATCHTOWER_INCLUDE_RESTARTING=true
-    command: --interval 30 --cleanup
     restart: unless-stopped
 
+# =============================================================================
+# Networks
+# =============================================================================
+networks:
+  soso_net:
+    name: soso_net
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.18.0.0/16
+
+# =============================================================================
+# Volumes
+# =============================================================================
 volumes:
-  dbdata:
-  redisdata:
+  jenkins_data:
+    name: jenkins_data
+  mysql_data:
+    name: mysql_data
+  redis_data:
+    name: redis_data
+  caddy_data:
+    name: caddy_data
+  caddy_config:
+    name: caddy_config

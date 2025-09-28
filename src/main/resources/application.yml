@@ -77,13 +77,13 @@ kafka:
 
 oauth:
   kakao:
-    client-id: ${KAKAO_CLIENT_ID:80b3d24a8187a50d03658b082d700cce}
+    client-id: ${KAKAO_CLIENT_ID:}
     # 콤마로 여러 개(로컬 & Vercel). 백엔드에서 선택/검증해서 사용.
     redirect-uris: ${KAKAO_REDIRECT_URIS:http://localhost:3000/auth,https://soso-front-end-web.vercel.app/auth}
     redirect-uri: ${KAKAO_REDIRECT_URI:http://localhost:3000/auth}
 
 jwt:
-  secret-key: ${JWT_SECRET:change-me}
+  secret-key: ${JWT_SECRET:}
   access-token-validity-in-ms: ${JWT_AT_VALIDITY:1800000}
   refresh-token-validity-in-ms: ${JWT_RT_VALIDITY:1209600000}
 
