@@ -1,5 +1,5 @@
 # SOSO Server - Production Infrastructure
-# 모든 서비스를 통합 관리하는 현대화된 Docker Compose
+# 모든 서비스를 통합 관리
 
 services:
   # =============================================================================
@@ -12,11 +12,11 @@ services:
       TZ: Asia/Seoul
       JAVA_OPTS: "-Djenkins.install.runSetupWizard=false"
     ports:
-      - "8080:8080"    # Jenkins Web UI
-      - "50000:50000"  # Jenkins Agent Port
+      - "8080:8080" # Jenkins Web UI
+      - "50000:50000" # Jenkins Agent Port
     volumes:
       - jenkins_data:/var/jenkins_home
-      - /var/run/docker.sock:/var/run/docker.sock  # Docker-in-Docker
+      - /var/run/docker.sock:/var/run/docker.sock # Docker-in-Docker
     networks: [soso_net]
     restart: unless-stopped
     healthcheck:
@@ -65,11 +65,12 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
-    expose: ["8080"]  # 내부 네트워크만, 프록시를 통해서만 접근
+    expose: ["8080"] # 내부 네트워크만, 프록시를 통해서만 접근
     networks: [soso_net]
     restart: unless-stopped
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:8080/actuator/health || exit 1"]
+      test:
+        ["CMD-SHELL", "curl -f http://localhost:8080/actuator/health || exit 1"]
       interval: 15s
       timeout: 5s
       retries: 10
@@ -117,19 +118,24 @@ services:
       MYSQL_DATABASE: ${DB_NAME:-soso}
       MYSQL_USER: ${DB_USER:-soso_user}
       MYSQL_PASSWORD: ${DB_PASS:-12341234}
-    command: [
-      "--character-set-server=utf8mb4",
-      "--collation-server=utf8mb4_0900_ai_ci",
-      "--mysql-native-password=ON",
-      "--sql-mode=STRICT_TRANS_TABLES,NO_ZERO_DATE,NO_ZERO_IN_DATE,ERROR_FOR_DIVISION_BY_ZERO"
-    ]
+    command:
+      [
+        "--character-set-server=utf8mb4",
+        "--collation-server=utf8mb4_0900_ai_ci",
+        "--mysql-native-password=ON",
+        "--sql-mode=STRICT_TRANS_TABLES,NO_ZERO_DATE,NO_ZERO_IN_DATE,ERROR_FOR_DIVISION_BY_ZERO",
+      ]
     volumes:
       - mysql_data:/var/lib/mysql
       - ./infrastructure/mysql-init:/docker-entrypoint-initdb.d:ro
     networks: [soso_net]
     restart: unless-stopped
     healthcheck:
-      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u${DB_USER} -p${DB_PASS} --silent"]
+      test:
+        [
+          "CMD-SHELL",
+          "mysqladmin ping -h localhost -u${DB_USER} -p${DB_PASS} --silent",
+        ]
       interval: 10s
       timeout: 5s
       retries: 10
@@ -143,7 +149,16 @@ services:
     container_name: soso-redis
     environment:
       TZ: Asia/Seoul
-    command: ["redis-server", "--appendonly", "yes", "--maxmemory", "256mb", "--maxmemory-policy", "allkeys-lru"]
+    command:
+      [
+        "redis-server",
+        "--appendonly",
+        "yes",
+        "--maxmemory",
+        "256mb",
+        "--maxmemory-policy",
+        "allkeys-lru",
+      ]
     volumes:
       - redis_data:/data
     networks: [soso_net]
@@ -164,8 +179,8 @@ services:
       TZ: Asia/Seoul
       WATCHTOWER_CLEANUP: "true"
       WATCHTOWER_INCLUDE_RESTARTING: "true"
-      WATCHTOWER_POLL_INTERVAL: 300  # 5분마다 체크
-      WATCHTOWER_LABEL_ENABLE: "true"  # 라벨 기반 업데이트만
+      WATCHTOWER_POLL_INTERVAL: 300 # 5분마다 체크
+      WATCHTOWER_LABEL_ENABLE: "true" # 라벨 기반 업데이트만
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     restart: unless-stopped

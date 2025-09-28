@@ -64,7 +64,7 @@ replay_pid*
 
 # Environment variables
 .env
-.env.*
+.env.local
 
 # docker test
 Dockerfile.test
