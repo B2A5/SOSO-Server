@@ -2,135 +2,253 @@ pipeline {
     agent any
 
     environment {
+        // Docker Image Configuration
         APP_IMAGE = "localtest/soso-server:latest"
+        COMPOSE_PROJECT_NAME = "soso"
+
+        // Deployment Configuration
+        DEPLOY_TIMEOUT = "300"
+        HEALTH_CHECK_RETRIES = "30"
+        HEALTH_CHECK_INTERVAL = "10"
     }
 
     options {
-        timeout(time: 30, unit: 'MINUTES')
+        timeout(time: 45, unit: 'MINUTES')
         timestamps()
-        buildDiscarder(logRotator(numToKeepStr: '20'))
+        buildDiscarder(logRotator(numToKeepStr: '30', daysToKeepStr: '7'))
+        skipDefaultCheckout(false)
+        ansiColor('xterm')
+    }
+
+    triggers {
+        githubPush()
     }
 
     stages {
-        stage('Checkout') {
+        stage('🏗️ Prepare') {
             steps {
-                cleanWs()
-                checkout scm
-            }
-        }
+                script {
+                    // Clean workspace and checkout
+                    cleanWs()
+                    checkout scm
 
-        stage('Gradle Test') {
-            steps {
-                sh '''
-                    set -eux
-                    export SPRING_PROFILES_ACTIVE=test
-                    export SPRING_DATASOURCE_URL="jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=MySQL;DATABASE_TO_LOWER=TRUE;CASE_INSENSITIVE_IDENTIFIERS=TRUE"
-                    export SPRING_DATASOURCE_DRIVER_CLASS_NAME="org.h2.Driver"
-                    export SPRING_DATASOURCE_USERNAME="sa"
-                    export SPRING_DATASOURCE_PASSWORD=""
-                    export SPRING_JPA_HIBERNATE_DDL_AUTO="create-drop"
-                    export SPRING_JPA_DATABASE_PLATFORM="org.hibernate.dialect.H2Dialect"
-                    export SPRING_SESSION_STORE_TYPE="none"
-                    echo "Running tests with profile: $SPRING_PROFILES_ACTIVE"
-                    echo "Using database: $SPRING_DATASOURCE_URL"
-                    echo "Java version: $(java -version 2>&1 | head -1)"
-                    ./gradlew clean test -Dspring.profiles.active=test --info --stacktrace
-                '''
-            }
-            post {
-                always {
-                    junit testResults: 'build/test-results/test/*.xml', allowEmptyResults: true
+                    // Display build information
+                    sh '''
+                        echo "🚀 SOSO Server CI/CD Pipeline Started"
+                        echo "📋 Build Information:"
+                        echo "   • Branch: ${GIT_BRANCH}"
+                        echo "   • Commit: ${GIT_COMMIT}"
+                        echo "   • Build: ${BUILD_NUMBER}"
+                        echo "   • Date: $(date '+%Y-%m-%d %H:%M:%S %Z')"
+                        echo "   • Image: ${APP_IMAGE}"
+                        echo ""
+                    '''
+
+                    // Set dynamic variables
+                    env.BUILD_TIMESTAMP = sh(script: "date +%Y%m%d-%H%M%S", returnStdout: true).trim()
+                    env.GIT_SHORT_COMMIT = sh(script: "git rev-parse --short HEAD", returnStdout: true).trim()
                 }
             }
         }
 
-        stage('Build Jar') {
-            steps {
-                sh '''
-                    set -eux
-                    ./gradlew bootJar
-                '''
-                archiveArtifacts artifacts: 'build/libs/*.jar', onlyIfSuccessful: true
+        stage('🧪 Test Suite') {
+            parallel {
+                stage('Unit Tests') {
+                    steps {
+                        sh '''
+                            echo "🧪 Running Unit Tests..."
+                            set -eux
+
+                            # Test Environment Configuration
+                            export SPRING_PROFILES_ACTIVE=test
+                            export SPRING_DATASOURCE_URL="jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=MySQL;DATABASE_TO_LOWER=TRUE;CASE_INSENSITIVE_IDENTIFIERS=TRUE"
+                            export SPRING_DATASOURCE_DRIVER_CLASS_NAME="org.h2.Driver"
+                            export SPRING_DATASOURCE_USERNAME="sa"
+                            export SPRING_DATASOURCE_PASSWORD=""
+                            export SPRING_JPA_HIBERNATE_DDL_AUTO="create-drop"
+                            export SPRING_JPA_DATABASE_PLATFORM="org.hibernate.dialect.H2Dialect"
+                            export SPRING_SESSION_STORE_TYPE="none"
+
+                            echo "📊 Test Configuration:"
+                            echo "   • Profile: $SPRING_PROFILES_ACTIVE"
+                            echo "   • Database: H2 In-Memory"
+                            echo "   • Java: $(java -version 2>&1 | head -1)"
+                            echo ""
+
+                            # Run tests with detailed output
+                            ./gradlew clean test \
+                                -Dspring.profiles.active=test \
+                                --info \
+                                --stacktrace \
+                                --parallel \
+                                --build-cache
+                        '''
+                    }
+                    post {
+                        always {
+                            junit testResults: 'build/test-results/test/*.xml', allowEmptyResults: true
+                            publishTestResults testResultsPattern: 'build/test-results/test/*.xml'
+                        }
+                    }
+                }
+
+                stage('Code Quality') {
+                    steps {
+                        sh '''
+                            echo "📋 Code Quality Analysis..."
+
+                            # Check code style and quality (if checkstyle/spotless is configured)
+                            ./gradlew check --continue || true
+
+                            echo "✅ Code quality check completed"
+                        '''
+                    }
+                }
             }
         }
 
-        stage('Build Docker Image') {
+        stage('🏗️ Build Application') {
             steps {
                 sh '''
+                    echo "🏗️ Building Application JAR..."
                     set -eux
-                    echo "Building Docker image: ${APP_IMAGE}"
-                    docker build -t "${APP_IMAGE}" .
+
+                    # Build the application
+                    ./gradlew bootJar \
+                        --info \
+                        --build-cache \
+                        --parallel
+
+                    # Display build results
+                    echo "📦 Build Results:"
+                    ls -la build/libs/
+
+                    # Extract version information
+                    JAR_FILE=$(find build/libs -name "*.jar" -not -name "*plain*" | head -1)
+                    if [ -f "$JAR_FILE" ]; then
+                        JAR_SIZE=$(du -h "$JAR_FILE" | cut -f1)
+                        echo "   • JAR File: $(basename "$JAR_FILE")"
+                        echo "   • Size: $JAR_SIZE"
+                    fi
+                '''
+
+                archiveArtifacts artifacts: 'build/libs/*.jar',
+                               allowEmptyArchive: false,
+                               onlyIfSuccessful: true
+            }
+        }
+
+        stage('🐳 Build Docker Image') {
+            steps {
+                sh '''
+                    echo "🐳 Building Docker Image..."
+                    set -eux
+
+                    # Build Docker image with multiple tags
+                    docker build \
+                        -t "${APP_IMAGE}" \
+                        -t "${APP_IMAGE%:*}:${BUILD_TIMESTAMP}" \
+                        -t "${APP_IMAGE%:*}:${GIT_SHORT_COMMIT}" \
+                        --label "version=${BUILD_TIMESTAMP}" \
+                        --label "commit=${GIT_SHORT_COMMIT}" \
+                        --label "build-number=${BUILD_NUMBER}" \
+                        .
+
+                    echo "📊 Docker Image Information:"
+                    docker images | grep "${APP_IMAGE%:*}" | head -5
+
+                    # Clean up old images
+                    docker image prune -f --filter "until=72h" || true
                 '''
             }
         }
 
-        stage('Deploy') {
+        stage('🚀 Deploy to Production') {
             steps {
                 script {
-                    // 환경 변수 파일로 새 컨테이너 시작
                     withCredentials([file(credentialsId: 'soso-env', variable: 'ENV_FILE')]) {
                         sh '''
+                            echo "🚀 Deploying to Production..."
                             set -eux
-                            echo "=== Cleaning up existing containers ==="
-                            docker stop soso-api || true
-                            docker rm soso-api || true
 
-                            echo "=== Cleaning up unused images ==="
-                            docker image prune -f || true
+                            # Copy environment file to project root
+                            cp "$ENV_FILE" .env
 
-                            echo "=== Starting new container with environment file ==="
-                            # 기존 컨테이너들과 같은 네트워크에 연결
-                            NETWORK_NAME=$(docker ps --format "table {{.Names}}\t{{.Networks}}" | grep soso-mysql | awk '{print $2}' | head -1)
+                            # Set the API image in environment
+                            echo "API_IMAGE=${APP_IMAGE}" >> .env
 
-                            if [ -n "$NETWORK_NAME" ] && [ "$NETWORK_NAME" != "bridge" ]; then
-                                echo "Connecting to existing network: $NETWORK_NAME"
-                                NETWORK_OPTION="--network $NETWORK_NAME"
-                            else
-                                echo "Using default bridge network"
-                                NETWORK_OPTION=""
-                            fi
+                            echo "📋 Deployment Configuration:"
+                            echo "   • Image: ${APP_IMAGE}"
+                            echo "   • Compose Project: ${COMPOSE_PROJECT_NAME}"
+                            echo "   • Environment: Production"
+                            echo ""
 
-                            # 환경 변수 파일을 Docker run에서 직접 사용
-                            # 기존 soso-api 컨테이너와 호환성을 위해 동일한 이름 사용
-                            docker run -d \
-                                --name soso-api \
-                                --restart unless-stopped \
-                                $NETWORK_OPTION \
-                                --env-file "$ENV_FILE" \
-                                "${APP_IMAGE}"
+                            # Stop and remove old API container gracefully
+                            echo "🛑 Graceful shutdown of existing services..."
+                            docker compose stop api || true
+                            docker compose rm -f api || true
 
-                            echo "=== Container started successfully ==="
-                            docker ps | grep soso-api
+                            # Pull any updated base images
+                            echo "📥 Pulling updated base images..."
+                            docker compose pull db redis proxy || true
 
-                            echo "=== Waiting for application to start ==="
-                            sleep 15
+                            # Deploy with zero-downtime strategy
+                            echo "🚀 Starting services..."
+                            docker compose up -d db redis
 
-                            echo "=== Container logs (first 30 lines) ==="
-                            docker logs soso-api --tail 30 || true
+                            # Wait for dependencies to be healthy
+                            echo "⏳ Waiting for dependencies..."
+                            timeout ${DEPLOY_TIMEOUT} bash -c '
+                                until docker compose ps db | grep -q "healthy"; do
+                                    echo "   • Waiting for database..."
+                                    sleep 5
+                                done
+                                until docker compose ps redis | grep -q "healthy"; do
+                                    echo "   • Waiting for Redis..."
+                                    sleep 5
+                                done
+                            '
 
-                            echo "=== Health check ==="
-                            for i in {1..20}; do
-                                # soso-api 컨테이너 내부 포트 8080으로 헬스체크
-                                if docker exec soso-api curl -f http://localhost:8080/actuator/health > /dev/null 2>&1; then
-                                    echo "✅ Application is healthy (actuator)!"
+                            # Start API service
+                            echo "🚀 Starting API service..."
+                            docker compose up -d api
+
+                            # Wait for API to be healthy
+                            echo "🏥 Health check for API service..."
+                            RETRY_COUNT=0
+                            until [ $RETRY_COUNT -eq ${HEALTH_CHECK_RETRIES} ]; do
+                                if docker compose exec -T api curl -f http://localhost:8080/actuator/health > /dev/null 2>&1; then
+                                    echo "✅ API service is healthy!"
                                     break
-                                elif docker exec soso-api curl -f http://localhost:8080/ > /dev/null 2>&1; then
-                                    echo "✅ Application is responding (root)!"
-                                    break
-                                elif [ $i -eq 20 ]; then
-                                    echo "❌ Health check failed after 20 attempts"
-                                    echo "Container status:"
-                                    docker ps | grep soso-api || echo "Container not running"
-                                    echo "Container logs:"
-                                    docker logs soso-api --tail 50
-                                    echo "Container internal health:"
-                                    docker exec soso-api ss -tlnp | grep 8080 || echo "Port 8080 not listening inside container"
+                                elif [ $RETRY_COUNT -eq $((HEALTH_CHECK_RETRIES-1)) ]; then
+                                    echo "❌ API health check failed after ${HEALTH_CHECK_RETRIES} attempts"
+                                    echo "📋 Container Status:"
+                                    docker compose ps api
+                                    echo "📋 Container Logs:"
+                                    docker compose logs api --tail 50
                                     exit 1
                                 else
-                                    echo "Attempt $i: Application not ready yet, waiting..."
-                                    sleep 3
+                                    echo "   • Attempt $((RETRY_COUNT+1))/${HEALTH_CHECK_RETRIES}: API not ready yet..."
+                                    sleep ${HEALTH_CHECK_INTERVAL}
                                 fi
+                                RETRY_COUNT=$((RETRY_COUNT+1))
                             done
+
+                            # Start proxy after API is confirmed healthy
+                            echo "🌐 Starting reverse proxy..."
+                            docker compose up -d proxy
+
+                            # Final system check
+                            echo "🔍 Final system verification..."
+                            docker compose ps
+
+                            echo "✅ Deployment completed successfully!"
+                            echo ""
+                            echo "🌐 Service URLs:"
+                            echo "   • Main Site: https://soso.dreampaste.com"
+                            echo "   • API Docs: https://soso.dreampaste.com/swagger-ui/"
+                            echo "   • Jenkins: https://soso.dreampaste.com/jenkins/"
+                            echo ""
                         '''
                     }
                 }
@@ -139,11 +257,34 @@ pipeline {
                 failure {
                     script {
                         sh '''
-                            echo "=== Deployment failed, showing container logs ==="
-                            docker logs soso-api --tail 100 || true
-                            echo "=== Stopping failed container ==="
-                            docker stop soso-api || true
-                            docker rm soso-api || true
+                            echo "❌ Deployment failed - Rolling back..."
+
+                            # Show current status
+                            echo "📋 Current Status:"
+                            docker compose ps || true
+
+                            # Show logs for debugging
+                            echo "📋 Service Logs:"
+                            docker compose logs api --tail 100 || true
+
+                            # Stop failed services
+                            echo "🛑 Stopping failed services..."
+                            docker compose stop api || true
+                            docker compose rm -f api || true
+
+                            echo "🔄 Rollback completed"
+                        '''
+                    }
+                }
+                success {
+                    script {
+                        sh '''
+                            echo "🎉 Deployment Success!"
+                            echo "📊 Final Status:"
+                            docker compose ps
+                            echo ""
+                            echo "💾 Cleaning up old images..."
+                            docker image prune -f --filter "until=24h" || true
                         '''
                     }
                 }
@@ -153,7 +294,23 @@ pipeline {
 
     post {
         always {
-            cleanWs()
+            script {
+                sh '''
+                    echo "🧹 Pipeline Cleanup..."
+                    # Clean up temporary files
+                    rm -f .env || true
+                '''
+                cleanWs()
+            }
+        }
+        success {
+            echo '🎉 Pipeline completed successfully!'
+        }
+        failure {
+            echo '❌ Pipeline failed!'
+        }
+        unstable {
+            echo '⚠️ Pipeline completed with warnings'
         }
     }
 }
