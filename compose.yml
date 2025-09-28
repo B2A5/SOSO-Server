@@ -11,6 +11,7 @@ services:
     environment:
       TZ: Asia/Seoul
       JAVA_OPTS: "-Djenkins.install.runSetupWizard=false"
+      JENKINS_OPTS: "--prefix=/jenkins"
     ports:
       - "8080:8080" # Jenkins Web UI
       - "50000:50000" # Jenkins Agent Port
