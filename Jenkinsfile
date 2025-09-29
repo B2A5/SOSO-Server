@@ -4,7 +4,7 @@ pipeline {
     environment {
         // Docker Image Configuration
         APP_IMAGE = "localtest/soso-server:latest"
-        COMPOSE_PROJECT_NAME = "soso"
+        COMPOSE_PROJECT_NAME = "soso-server"
 
         // Deployment Configuration
         DEPLOY_TIMEOUT = "300"
@@ -188,8 +188,9 @@ pipeline {
                             docker compose stop api || true
                             docker compose rm -f api || true
 
-                            # 의존성 서비스 시작 (db, redis)
-                            # 이미 실행 중이면 재시작하지 않고, 없으면 새로 생성
+                            # 의존성 서비스 시작
+                            # docker compose up -d는 이미 실행 중인 컨테이너는 건드리지 않고,
+                            # 없거나 중지된 컨테이너만 시작합니다.
                             echo "🚀 의존성 서비스 시작 중..."
                             docker compose up -d db redis
 
