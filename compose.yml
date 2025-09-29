@@ -188,8 +188,8 @@ services:
     depends_on:                                        # 서비스 시작 순서 의존성
       api:
         condition: service_healthy                     # API가 정상일 때 시작
-      jenkins:
-        condition: service_healthy                     # Jenkins가 정상일 때 시작
+      # Jenkins 의존성 제거: Jenkins가 unhealthy여도 Proxy는 정상 작동
+      # Jenkins는 관리 페이지일 뿐, 핵심 서비스 아님
     networks: [soso_net]                               # 내부 네트워크 연결
     restart: unless-stopped                            # 장애 시 자동 재시작
     healthcheck:                                       # Caddy 설정 파일 검증

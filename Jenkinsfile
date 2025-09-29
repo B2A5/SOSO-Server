@@ -169,14 +169,55 @@ pipeline {
                             echo "🚀 Deploying to Production..."
                             set -eux
 
-                            # Copy environment file to project root
-                            cp "$ENV_FILE" .env
+                            # =============================================================
+                            # 영구 배포 디렉토리 사용 (Jenkins workspace와 독립적)
+                            # =============================================================
+                            #
+                            # 왜 이렇게 하는가?
+                            # 1. Jenkins workspace는 cleanWs()로 삭제됨
+                            # 2. Docker 볼륨 마운트가 workspace 경로를 참조하면 안 됨
+                            # 3. 서버의 영구 디렉토리를 배포 기준점으로 사용
+                            # 4. 레포 중심의 인프라 배포 (Infrastructure as Code)
+                            #
+                            # 장점:
+                            # - Caddyfile 등 설정 파일 경로가 항상 유효
+                            # - 컨테이너 재시작 시에도 마운트 경로 보존
+                            # - Git 기반 버전 관리 및 롤백 가능
+                            # =============================================================
+                            DEPLOY_DIR=/srv/soso/app/SOSO-Server
+
+                            echo "📂 배포 디렉토리: $DEPLOY_DIR"
+
+                            # 배포 디렉토리가 없으면 생성
+                            if [ ! -d "$DEPLOY_DIR" ]; then
+                                echo "⚠️  배포 디렉토리가 없습니다. 생성 중..."
+                                mkdir -p "$DEPLOY_DIR"
+                                cd "$DEPLOY_DIR"
+                                git clone https://github.com/B2A5/SOSO-Server.git .
+                            fi
+
+                            # 배포 디렉토리로 이동
+                            cd "$DEPLOY_DIR"
+
+                            # 최신 코드로 업데이트 (현재 브랜치 기준)
+                            echo "🔄 최신 코드로 업데이트 중..."
+                            git fetch origin
+                            git reset --hard origin/${GIT_BRANCH##*/}
+
+                            echo "✅ 현재 커밋:"
+                            git log -1 --oneline
+                            echo ""
+
+                            # Copy environment file to deployment directory
+                            cp "$ENV_FILE" "$DEPLOY_DIR/.env"
 
                             # Set the API image in environment
-                            echo "API_IMAGE=${APP_IMAGE}" >> .env
+                            echo "API_IMAGE=${APP_IMAGE}" >> "$DEPLOY_DIR/.env"
 
                             echo "📋 Deployment Configuration:"
+                            echo "   • Deploy Dir: $DEPLOY_DIR"
                             echo "   • Image: ${APP_IMAGE}"
+                            echo "   • Branch: ${GIT_BRANCH##*/}"
                             echo "   • Compose Project: ${COMPOSE_PROJECT_NAME}"
                             echo "   • Environment: Production"
                             echo ""
@@ -258,6 +299,10 @@ pipeline {
                         sh '''
                             echo "❌ Deployment failed - Rolling back..."
 
+                            # 배포 디렉토리로 이동
+                            DEPLOY_DIR=/srv/soso/app/SOSO-Server
+                            cd "$DEPLOY_DIR"
+
                             # Show current status
                             echo "📋 Current Status:"
                             docker compose ps || true
@@ -279,6 +324,11 @@ pipeline {
                     script {
                         sh '''
                             echo "🎉 Deployment Success!"
+
+                            # 배포 디렉토리로 이동
+                            DEPLOY_DIR=/srv/soso/app/SOSO-Server
+                            cd "$DEPLOY_DIR"
+
                             echo "📊 Final Status:"
                             docker compose ps
                             echo ""
