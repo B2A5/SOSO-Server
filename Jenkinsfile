@@ -80,8 +80,7 @@ pipeline {
                                 -Dspring.profiles.active=test \
                                 --info \
                                 --stacktrace \
-                                --parallel \
-                                --build-cache
+                                --parallel
                         '''
                     }
                     post {
@@ -116,7 +115,6 @@ pipeline {
                     # Build the application
                     ./gradlew bootJar \
                         --info \
-                        --build-cache \
                         --parallel
 
                     # Display build results
