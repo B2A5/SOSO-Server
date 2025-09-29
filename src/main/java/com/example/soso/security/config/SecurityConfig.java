@@ -47,6 +47,8 @@ public class SecurityConfig {
                         .accessDeniedHandler(jwtAccessDeniedHandler)
                 )
                 .authorizeHttpRequests(auth -> auth
+                        // CORS preflight 요청 허용 (모든 OPTIONS 요청)
+                        .requestMatchers("OPTIONS", "/**").permitAll()
                         // 인증 없이 접근 가능한 경로들
                         .requestMatchers(
                                 "/auth/**",           // 인증 관련
