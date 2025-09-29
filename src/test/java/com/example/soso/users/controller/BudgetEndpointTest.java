@@ -24,8 +24,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureWebMvc
+@org.springframework.test.context.ActiveProfiles("test")
 @DisplayName("예산 선택 엔드포인트 테스트")
 class BudgetEndpointTest {
     

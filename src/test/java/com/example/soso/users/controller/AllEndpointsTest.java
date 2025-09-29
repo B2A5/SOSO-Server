@@ -31,8 +31,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureWebMvc
+@org.springframework.test.context.ActiveProfiles("test")
 @DisplayName("전체 회원가입 엔드포인트 단위 테스트")
 class AllEndpointsTest {
 
