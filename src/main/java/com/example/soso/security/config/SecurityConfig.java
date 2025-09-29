@@ -54,7 +54,8 @@ public class SecurityConfig {
                                 "/signup/**",         // 회원가입
                                 "/swagger-ui/**",     // API 문서
                                 "/v3/api-docs/**",    // API 문서
-                                "/kafka/**"           // 카프카
+                                "/kafka/**",          // 카프카
+                                "/actuator/health"    // 헬스체크 (Docker healthcheck 및 모니터링용)
                         ).permitAll()
                         // 자유게시판 조회 (인증 불필요)
                         .requestMatchers("GET", "/community/freeboard/**").permitAll()
