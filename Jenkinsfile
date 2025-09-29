@@ -81,11 +81,15 @@ pipeline {
                             # 2. Remove entire build directory (including corrupted test output storage)
                             rm -rf build || true
 
+                            # Stop any running Gradle daemons to prevent corrupted cache reuse
+                            ./gradlew --stop || true
+
                             # Run tests with detailed output
-                            # NOTE: --parallel removed due to Kryo serialization race condition
-                            # in test output storage (causes EOFException when writing XML reports)
+                            # --no-daemon: Start fresh process each time (prevents cache corruption)
+                            # --no-build-cache: Disable build cache (prevents serialization issues)
                             ./gradlew clean test \
                                 -Dspring.profiles.active=test \
+                                --no-daemon \
                                 --no-build-cache \
                                 --info \
                                 --stacktrace
