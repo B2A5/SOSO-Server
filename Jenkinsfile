@@ -75,9 +75,13 @@ pipeline {
                             echo "   • Java: $(java -version 2>&1 | head -1)"
                             echo ""
 
+                            # Clean Gradle cache to prevent serialization errors
+                            rm -rf .gradle/8.*/fileHashes .gradle/8.*/executionHistory .gradle/buildOutputCleanup/cache.properties || true
+
                             # Run tests with detailed output
                             ./gradlew clean test \
                                 -Dspring.profiles.active=test \
+                                --no-build-cache \
                                 --info \
                                 --stacktrace \
                                 --parallel
