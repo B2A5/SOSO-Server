@@ -193,8 +193,9 @@ pipeline {
                             docker compose pull db redis proxy || true
 
                             # 이미지 업데이트 후 db/redis 서비스 실행 상태 확인
+                            # --no-recreate: 이미 실행 중인 컨테이너는 재생성하지 않음
                             echo "🚀 서비스 실행 상태 확인 중..."
-                            docker compose up -d db redis
+                            docker compose up -d --no-recreate db redis
 
                             # 의존성 서비스들이 정상 상태가 될 때까지 대기
                             echo "⏳ 의존성 서비스 대기 중..."
