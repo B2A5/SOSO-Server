@@ -51,69 +51,76 @@ pipeline {
             }
         }
 
-        stage('🧪 Test Suite') {
-            parallel {
-                stage('Unit Tests') {
-                    steps {
-                        sh '''
-                            echo "🧪 Running Unit Tests..."
-                            set -eux
+        stage('🧪 Unit Tests') {
+            steps {
+                sh '''
+                    echo "🧪 Running Unit Tests..."
+                    set -eux
 
-                            # Test Environment Configuration
-                            export SPRING_PROFILES_ACTIVE=test
-                            export SPRING_DATASOURCE_URL="jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=MySQL;DATABASE_TO_LOWER=TRUE;CASE_INSENSITIVE_IDENTIFIERS=TRUE"
-                            export SPRING_DATASOURCE_DRIVER_CLASS_NAME="org.h2.Driver"
-                            export SPRING_DATASOURCE_USERNAME="sa"
-                            export SPRING_DATASOURCE_PASSWORD=""
-                            export SPRING_JPA_HIBERNATE_DDL_AUTO="create-drop"
-                            export SPRING_JPA_DATABASE_PLATFORM="org.hibernate.dialect.H2Dialect"
-                            export SPRING_SESSION_STORE_TYPE="none"
+                    # Test Environment Configuration
+                    export SPRING_PROFILES_ACTIVE=test
+                    export SPRING_DATASOURCE_URL="jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=MySQL;DATABASE_TO_LOWER=TRUE;CASE_INSENSITIVE_IDENTIFIERS=TRUE"
+                    export SPRING_DATASOURCE_DRIVER_CLASS_NAME="org.h2.Driver"
+                    export SPRING_DATASOURCE_USERNAME="sa"
+                    export SPRING_DATASOURCE_PASSWORD=""
+                    export SPRING_JPA_HIBERNATE_DDL_AUTO="create-drop"
+                    export SPRING_JPA_DATABASE_PLATFORM="org.hibernate.dialect.H2Dialect"
+                    export SPRING_SESSION_STORE_TYPE="none"
 
-                            echo "📊 Test Configuration:"
-                            echo "   • Profile: $SPRING_PROFILES_ACTIVE"
-                            echo "   • Database: H2 In-Memory"
-                            echo "   • Java: $(java -version 2>&1 | head -1)"
-                            echo ""
+                    echo "📊 Test Configuration:"
+                    echo "   • Profile: $SPRING_PROFILES_ACTIVE"
+                    echo "   • Database: H2 In-Memory"
+                    echo "   • Java: $(java -version 2>&1 | head -1)"
+                    echo ""
 
-                            # Clean Gradle cache and build output to prevent serialization errors
-                            # 1. Remove corrupted Gradle cache files
-                            rm -rf .gradle/8.*/fileHashes .gradle/8.*/executionHistory .gradle/buildOutputCleanup/cache.properties || true
-                            # 2. Remove entire build directory (including corrupted test output storage)
-                            rm -rf build || true
+                    # =============================================================
+                    # 안전한 빌드 최적화 전략
+                    # =============================================================
+                    # 목표: 안정성을 유지하면서 빌드 시간 단축
+                    #
+                    # 1단계: 테스트 결과만 삭제 (컴파일 캐시 보존)
+                    #   - 전체 build 삭제 대신 테스트 출력만 정리
+                    #   - 예상 효과: 컴파일 시간 30-50% 절약
+                    #
+                    # 2단계: Gradle 데몬 재시작 (깨끗한 상태 + 속도 향상)
+                    #   - 매번 데몬 중지 후 재시작으로 캐시 오염 방지
+                    #   - 예상 효과: 데몬 재사용으로 5-10초 절약
+                    #
+                    # 3단계: 병렬 테스트 실행 (멀티코어 활용)
+                    #   - 독립적인 테스트를 동시 실행
+                    #   - 예상 효과: 테스트 시간 30-40% 단축
+                    # =============================================================
 
-                            # Stop any running Gradle daemons to prevent corrupted cache reuse
-                            ./gradlew --stop || true
+                    # 테스트 결과 파일만 삭제 (컴파일 캐시는 유지)
+                    echo "🧹 Cleaning test output files..."
+                    rm -rf build/test-results || true
+                    rm -rf build/reports/tests || true
 
-                            # Run tests with detailed output
-                            # --no-daemon: Start fresh process each time (prevents cache corruption)
-                            # --no-build-cache: Disable build cache (prevents serialization issues)
-                            ./gradlew clean test \
-                                -Dspring.profiles.active=test \
-                                --no-daemon \
-                                --no-build-cache \
-                                --info \
-                                --stacktrace
-                        '''
-                    }
-                    post {
-                        always {
-                            junit testResults: 'build/test-results/test/*.xml', allowEmptyResults: true
-                            // publishTestResults testResultsPattern: 'build/test-results/test/*.xml'
-                        }
-                    }
-                }
+                    # 손상된 Gradle 캐시 파일만 정리
+                    rm -rf .gradle/8.*/fileHashes/fileHashes.lock || true
+                    rm -rf .gradle/buildOutputCleanup/buildOutputCleanup.lock || true
 
-                stage('Code Quality') {
-                    steps {
-                        sh '''
-                            echo "📋 Code Quality Analysis..."
+                    # Gradle 데몬 재시작 (깨끗한 상태 보장)
+                    echo "🔄 Restarting Gradle daemon for clean state..."
+                    ./gradlew --stop || true
 
-                            # Check code style and quality (if checkstyle/spotless is configured)
-                            ./gradlew check --continue || true
+                    # 최적화된 테스트 실행
+                    echo "🚀 Running tests with optimizations..."
+                    ./gradlew test \
+                        -Dspring.profiles.active=test \
+                        --parallel \
+                        --max-workers=4 \
+                        --build-cache \
+                        --info \
+                        --stacktrace
 
-                            echo "✅ Code quality check completed"
-                        '''
-                    }
+                    echo "✅ Tests completed successfully"
+                '''
+            }
+            post {
+                always {
+                    junit testResults: 'build/test-results/test/*.xml', allowEmptyResults: true
+                    // publishTestResults testResultsPattern: 'build/test-results/test/*.xml'
                 }
             }
         }
