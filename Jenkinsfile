@@ -82,12 +82,13 @@ pipeline {
                             rm -rf build || true
 
                             # Run tests with detailed output
+                            # NOTE: --parallel removed due to Kryo serialization race condition
+                            # in test output storage (causes EOFException when writing XML reports)
                             ./gradlew clean test \
                                 -Dspring.profiles.active=test \
                                 --no-build-cache \
                                 --info \
-                                --stacktrace \
-                                --parallel
+                                --stacktrace
                         '''
                     }
                     post {
