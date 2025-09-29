@@ -194,7 +194,7 @@ pipeline {
 
                             # Deploy with zero-downtime strategy
                             echo "🚀 Starting services..."
-                            docker compose up -d db redis
+                            echo "Database and Redis already running, skipping"
 
                             # Wait for dependencies to be healthy
                             echo "⏳ Waiting for dependencies..."

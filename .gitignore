@@ -71,3 +71,6 @@ Dockerfile.test
 
 # server ssh connect
 connect.exp
+
+.claude/*
+CLAUDE.*
