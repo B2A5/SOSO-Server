@@ -75,8 +75,11 @@ pipeline {
                             echo "   • Java: $(java -version 2>&1 | head -1)"
                             echo ""
 
-                            # Clean Gradle cache to prevent serialization errors
+                            # Clean Gradle cache and build output to prevent serialization errors
+                            # 1. Remove corrupted Gradle cache files
                             rm -rf .gradle/8.*/fileHashes .gradle/8.*/executionHistory .gradle/buildOutputCleanup/cache.properties || true
+                            # 2. Remove entire build directory (including corrupted test output storage)
+                            rm -rf build || true
 
                             # Run tests with detailed output
                             ./gradlew clean test \
