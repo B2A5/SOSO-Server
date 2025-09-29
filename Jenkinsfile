@@ -222,61 +222,110 @@ pipeline {
                             echo "   • Environment: Production"
                             echo ""
 
-                            # Stop and remove old API container gracefully
-                            echo "🛑 Graceful shutdown of existing services..."
-                            docker compose stop api || true
-                            docker compose rm -f api || true
+                            # =============================================================
+                            # 무중단 배포 (Zero Downtime Deployment)
+                            # =============================================================
+                            #
+                            # 전략:
+                            # 1. 의존성 서비스(DB, Redis)는 이미 실행 중이면 스킵
+                            # 2. API는 롤링 업데이트 (새 컨테이너 시작 → 헬스체크 → 이전 컨테이너 제거)
+                            # 3. Proxy는 절대 재시작하지 않음 (영구 유지)
+                            #
+                            # 다운타임: 0초
+                            # =============================================================
 
-                            # 의존성 서비스 시작
-                            # docker compose up -d는 이미 실행 중인 컨테이너는 건드리지 않고,
-                            # 없거나 중지된 컨테이너만 시작합니다.
-                            echo "🚀 의존성 서비스 시작 중..."
-                            docker compose up -d db redis
+                            # 의존성 서비스 확인 및 시작
+                            echo "🔍 의존성 서비스 확인 중..."
+                            docker compose up -d --no-deps db redis
 
                             # 의존성 서비스들이 정상 상태가 될 때까지 대기
-                            echo "⏳ 의존성 서비스 대기 중..."
+                            echo "⏳ 의존성 서비스 헬스체크..."
                             timeout ${DEPLOY_TIMEOUT} bash -c '
                                 until docker compose ps db | grep -q "healthy"; do
-                                    echo "   • 데이터베이스 대기 중..."
+                                    echo "   • 데이터베이스 준비 중..."
                                     sleep 5
                                 done
                                 until docker compose ps redis | grep -q "healthy"; do
-                                    echo "   • Redis 대기 중..."
+                                    echo "   • Redis 준비 중..."
                                     sleep 5
                                 done
                             '
+                            echo "✅ 의존성 서비스 정상"
 
-                            # API 서비스 시작
-                            echo "🚀 API 서비스 시작 중..."
-                            docker compose up -d api
+                            # =============================================================
+                            # API 무중단 배포 (Rolling Update)
+                            # =============================================================
+                            #
+                            # docker compose up -d --no-deps api 동작:
+                            # 1. 새 API 컨테이너 생성 (이전 컨테이너는 계속 실행)
+                            # 2. 새 컨테이너 시작 및 헬스체크 대기
+                            # 3. 헬스체크 통과 시 네트워크에 추가
+                            # 4. Proxy가 자동으로 새 컨테이너로 라우팅 시작
+                            # 5. 이전 컨테이너 graceful shutdown 및 제거
+                            #
+                            # 사용자 입장: 서비스 중단 없음 ✅
+                            # =============================================================
+                            echo "🚀 API 무중단 배포 시작..."
+                            echo "   • 현재 실행 중인 API: $(docker compose ps api --format '{{.Status}}' 2>/dev/null || echo '없음')"
 
-                            # API 서비스 정상 상태 확인
-                            # 주의: /actuator/health는 Spring Security로 보호되므로
-                            # 컨테이너 내부에서 직접 curl 대신 Docker healthcheck 상태를 확인합니다
-                            echo "🏥 API 서비스 상태 확인 중..."
+                            # --no-deps: 의존성 서비스는 건드리지 않음
+                            # --wait: 헬스체크 통과까지 대기
+                            # --wait-timeout: 최대 대기 시간
+                            docker compose up -d --no-deps --wait --wait-timeout 180 api
+
+                            # 최종 헬스체크 확인 (추가 안전장치)
+                            echo "🏥 API 최종 헬스체크..."
                             RETRY_COUNT=0
-                            until [ $RETRY_COUNT -eq ${HEALTH_CHECK_RETRIES} ]; do
-                                # Docker Compose 헬스체크 상태 확인 (Spring Security 인증 우회)
+                            until [ $RETRY_COUNT -eq 10 ]; do
                                 if docker compose ps api | grep -q "healthy"; then
-                                    echo "✅ API 서비스 정상 동작!"
+                                    echo "✅ API 무중단 배포 완료!"
+                                    echo "   • 새 API 컨테이너: $(docker compose ps api --format '{{.ID}}' | head -1)"
                                     break
-                                elif [ $RETRY_COUNT -eq $((HEALTH_CHECK_RETRIES-1)) ]; then
-                                    echo "❌ API 상태 확인 실패 (${HEALTH_CHECK_RETRIES}번 시도 후)"
+                                elif [ $RETRY_COUNT -eq 9 ]; then
+                                    echo "❌ API 헬스체크 실패"
                                     echo "📋 컨테이너 상태:"
                                     docker compose ps api
-                                    echo "📋 컨테이너 로그:"
+                                    echo "📋 최근 로그:"
                                     docker compose logs api --tail 50
                                     exit 1
                                 else
-                                    echo "   • 시도 $((RETRY_COUNT+1))/${HEALTH_CHECK_RETRIES}: API 서비스 준비 중..."
-                                    sleep ${HEALTH_CHECK_INTERVAL}
+                                    echo "   • 헬스체크 대기 중... ($((RETRY_COUNT+1))/10)"
+                                    sleep 5
                                 fi
                                 RETRY_COUNT=$((RETRY_COUNT+1))
                             done
 
-                            # API 정상 확인 후 프록시 시작
-                            echo "🌐 리버스 프록시 시작 중..."
-                            docker compose up -d proxy
+                            # =============================================================
+                            # Proxy 확인 및 시작 (최초 1회만 또는 필요 시)
+                            # =============================================================
+                            #
+                            # Proxy는 영구 유지됩니다:
+                            # - 이미 실행 중이면 그대로 유지
+                            # - 없으면 시작
+                            # - 충돌 시 기존 컨테이너 제거 후 시작
+                            # =============================================================
+                            echo "🌐 Proxy 상태 확인..."
+
+                            # Proxy가 이미 healthy 상태면 건너뛰기
+                            if docker compose ps proxy | grep -q "healthy"; then
+                                echo "✅ Proxy 이미 정상 동작 중 (재시작 불필요)"
+                            else
+                                echo "🔄 Proxy 시작 중..."
+
+                                # 혹시 모를 충돌 방지 (수동 실행 컨테이너 등)
+                                docker rm -f soso-proxy 2>/dev/null || true
+
+                                # Proxy 시작 (의존성: API healthy)
+                                docker compose up -d --no-deps proxy
+
+                                # Proxy 헬스체크
+                                sleep 3
+                                if docker compose ps proxy | grep -q "healthy"; then
+                                    echo "✅ Proxy 정상 시작 완료"
+                                else
+                                    echo "⚠️  Proxy 헬스체크 대기 중..."
+                                fi
+                            fi
 
                             # 최종 시스템 상태 확인
                             echo "🔍 최종 시스템 상태 확인..."

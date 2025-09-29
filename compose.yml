@@ -145,10 +145,10 @@ services:
 
     healthcheck:                                       # API 서버 상태 확인
       test: ["CMD-SHELL", "curl -f http://localhost:8080/actuator/health || exit 1"]
-      interval: 15s                                    # 15초마다 상태 확인
-      timeout: 5s                                      # 5초 내 응답 없으면 실패
-      retries: 10                                      # 10번 실패 시 unhealthy 상태
-      start_period: 40s                                # 시작 후 40초 대기 시간
+      interval: 10s                                    # 10초마다 상태 확인 (빠른 피드백)
+      timeout: 3s                                      # 3초 내 응답 없으면 실패
+      retries: 5                                       # 5번 실패 시 unhealthy 상태 (Spring Boot는 15-20초면 시작)
+      start_period: 30s                                # 시작 후 30초 대기 시간 (실제 시작 시간에 최적화)
 
     labels:
       - "com.centurylinklabs.watchtower.enable=true"  # Watchtower 자동 업데이트 활성화
