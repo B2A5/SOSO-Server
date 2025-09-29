@@ -125,7 +125,7 @@ soso.dreampaste.com {
 
         # API 서버 헬스체크 설정
         # Spring Boot Actuator의 health 엔드포인트를 사용하여 서버 상태 모니터링
-        health_uri /api/actuator/health
+        health_uri /actuator/health
         health_interval 30s  # 30초마다 헬스체크 실행
         health_timeout 10s   # 10초 내 응답 없으면 비정상으로 간주
     }
