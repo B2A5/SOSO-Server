@@ -188,61 +188,61 @@ pipeline {
                             docker compose stop api || true
                             docker compose rm -f api || true
 
-                            # Pull any updated base images
-                            echo "📥 Pulling updated base images..."
+                            # 업데이트된 베이스 이미지 가져오기
+                            echo "📥 최신 베이스 이미지 가져오는 중..."
                             docker compose pull db redis proxy || true
 
-                            # Deploy with zero-downtime strategy
-                            echo "🚀 Starting services..."
-                            echo "Database and Redis already running, skipping"
+                            # 이미지 업데이트 후 db/redis 서비스 실행 상태 확인
+                            echo "🚀 서비스 실행 상태 확인 중..."
+                            docker compose up -d db redis
 
-                            # Wait for dependencies to be healthy
-                            echo "⏳ Waiting for dependencies..."
+                            # 의존성 서비스들이 정상 상태가 될 때까지 대기
+                            echo "⏳ 의존성 서비스 대기 중..."
                             timeout ${DEPLOY_TIMEOUT} bash -c '
                                 until docker compose ps db | grep -q "healthy"; do
-                                    echo "   • Waiting for database..."
+                                    echo "   • 데이터베이스 대기 중..."
                                     sleep 5
                                 done
                                 until docker compose ps redis | grep -q "healthy"; do
-                                    echo "   • Waiting for Redis..."
+                                    echo "   • Redis 대기 중..."
                                     sleep 5
                                 done
                             '
 
-                            # Start API service
-                            echo "🚀 Starting API service..."
+                            # API 서비스 시작
+                            echo "🚀 API 서비스 시작 중..."
                             docker compose up -d api
 
-                            # Wait for API to be healthy
-                            echo "🏥 Health check for API service..."
+                            # API 서비스 정상 상태 확인
+                            echo "🏥 API 서비스 상태 확인 중..."
                             RETRY_COUNT=0
                             until [ $RETRY_COUNT -eq ${HEALTH_CHECK_RETRIES} ]; do
                                 if docker compose exec -T api curl -f http://localhost:8080/actuator/health > /dev/null 2>&1; then
-                                    echo "✅ API service is healthy!"
+                                    echo "✅ API 서비스 정상 동작!"
                                     break
                                 elif [ $RETRY_COUNT -eq $((HEALTH_CHECK_RETRIES-1)) ]; then
-                                    echo "❌ API health check failed after ${HEALTH_CHECK_RETRIES} attempts"
-                                    echo "📋 Container Status:"
+                                    echo "❌ API 상태 확인 실패 (${HEALTH_CHECK_RETRIES}번 시도 후)"
+                                    echo "📋 컨테이너 상태:"
                                     docker compose ps api
-                                    echo "📋 Container Logs:"
+                                    echo "📋 컨테이너 로그:"
                                     docker compose logs api --tail 50
                                     exit 1
                                 else
-                                    echo "   • Attempt $((RETRY_COUNT+1))/${HEALTH_CHECK_RETRIES}: API not ready yet..."
+                                    echo "   • 시도 $((RETRY_COUNT+1))/${HEALTH_CHECK_RETRIES}: API 서비스 준비 중..."
                                     sleep ${HEALTH_CHECK_INTERVAL}
                                 fi
                                 RETRY_COUNT=$((RETRY_COUNT+1))
                             done
 
-                            # Start proxy after API is confirmed healthy
-                            echo "🌐 Starting reverse proxy..."
+                            # API 정상 확인 후 프록시 시작
+                            echo "🌐 리버스 프록시 시작 중..."
                             docker compose up -d proxy
 
-                            # Final system check
-                            echo "🔍 Final system verification..."
+                            # 최종 시스템 상태 확인
+                            echo "🔍 최종 시스템 상태 확인..."
                             docker compose ps
 
-                            echo "✅ Deployment completed successfully!"
+                            echo "✅ 배포 완료!"
                             echo ""
                             echo "🌐 Service URLs:"
                             echo "   • Main Site: https://soso.dreampaste.com"

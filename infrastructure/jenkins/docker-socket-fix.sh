@@ -1,47 +1,127 @@
 #!/bin/bash
 
-echo "🚀 Starting Jenkins with auto-configuration..."
+# =============================================================================
+# Jenkins 자동 설정 스크립트
+# =============================================================================
+#
+# 이 스크립트는 Jenkins 컨테이너 시작 시 자동으로 실행되어 다음 작업을 수행:
+#
+# 1. Docker 소켓 권한 설정
+#    - Jenkins가 호스트 Docker를 제어할 수 있도록 권한 부여
+#    - Docker-in-Docker 기능 활성화
+#
+# 2. Jenkins 워크스페이스 권한 설정
+#    - 빌드 과정에서 파일 생성/수정이 가능하도록 권한 설정
+#
+# 3. Git 전역 설정 자동화
+#    - 컨테이너 재시작 시마다 Git 사용자 정보 자동 설정
+#    - GitHub 연동을 위한 필수 설정 적용
+#
+# 4. Jenkins 플러그인 및 설정 확인
+#    - 필수 플러그인 설치 상태 확인
+#    - 추가 자동 설정 적용
+#
+# 이 스크립트의 장점:
+# - 컨테이너 재빌드 시 수동 설정 작업 불필요
+# - Git 인증 오류 자동 해결
+# - 일관된 Jenkins 환경 보장
+# =============================================================================
 
-# Docker 소켓 권한 수정 (root 권한으로 실행되므로 sudo 불필요)
+echo "🚀 Jenkins 자동 설정과 함께 시작 중..."
+
+# =============================================================================
+# 1. Docker 소켓 권한 설정
+# =============================================================================
+#
+# Jenkins가 Docker-in-Docker 기능을 사용하여 애플리케이션 빌드 및 배포를
+# 수행할 수 있도록 호스트의 Docker 소켓에 대한 접근 권한을 설정합니다.
+#
+# 보안 고려사항:
+# - 이 설정은 Jenkins에게 호스트 Docker에 대한 완전한 제어권을 부여
+# - 프로덕션 환경에서는 적절한 보안 정책과 함께 사용해야 함
+# =============================================================================
 if [ -S /var/run/docker.sock ]; then
-    chown root:root /var/run/docker.sock 2>/dev/null || true
-    chmod 666 /var/run/docker.sock 2>/dev/null || true
-    echo "✅ Docker socket permissions set successfully"
+    chown root:root /var/run/docker.sock 2>/dev/null || true  # 소유권 설정
+    chmod 666 /var/run/docker.sock 2>/dev/null || true       # 읽기/쓰기 권한 부여
+    echo "✅ Docker 소켓 권한 설정 완료"
 fi
 
-# Jenkins workspace 권한 수정 (배포 시 .env 파일 생성 가능하도록)
+# =============================================================================
+# 2. Jenkins 워크스페이스 권한 설정
+# =============================================================================
+#
+# Jenkins 빌드 과정에서 .env 파일 생성, 임시 파일 생성 등의 작업이
+# 원활하게 수행될 수 있도록 워크스페이스 디렉토리 권한을 설정합니다.
+# =============================================================================
 if [ -d "/var/jenkins_home/workspace" ]; then
-    chmod -R 755 /var/jenkins_home/workspace 2>/dev/null || true
-    echo "✅ Jenkins workspace permissions set successfully"
+    chmod -R 755 /var/jenkins_home/workspace 2>/dev/null || true  # 디렉토리 권한 설정
+    echo "✅ Jenkins 워크스페이스 권한 설정 완료"
 fi
 
-# Git 전역 설정 자동화 (Jenkins 컨테이너 재시작 시 자동 적용)
-echo "🔧 Configuring Git settings..."
-git config --global user.name "Jenkins CI" 2>/dev/null || true
-git config --global user.email "jenkins@dreampaste.com" 2>/dev/null || true
-git config --global init.defaultBranch "main" 2>/dev/null || true
-git config --global safe.directory "*" 2>/dev/null || true
-echo "✅ Git configuration completed"
+# =============================================================================
+# 3. Git 전역 설정 자동화
+# =============================================================================
+#
+# Jenkins가 GitHub과 연동하여 코드를 가져오고 커밋 정보를 처리할 수 있도록
+# Git 사용자 정보를 자동으로 설정합니다.
+#
+# 이 설정이 없으면 다음과 같은 오류가 발생:
+# - "fatal: not in a git directory"
+# - "Please tell me who you are"
+# - Git 커밋 작성자 정보 누락
+# =============================================================================
+echo "🔧 Git 전역 설정 적용 중..."
+git config --global user.name "Jenkins CI" 2>/dev/null || true        # Git 사용자명 설정
+git config --global user.email "jenkins@dreampaste.com" 2>/dev/null || true  # Git 이메일 설정
+git config --global init.defaultBranch "main" 2>/dev/null || true     # 기본 브랜치명 설정
+git config --global safe.directory "*" 2>/dev/null || true            # 모든 디렉토리를 안전한 것으로 처리
+echo "✅ Git 전역 설정 완료"
 
-# Jenkins 초기 설정이 완료될 때까지 대기 후 추가 설정 적용
+# =============================================================================
+# 4. Jenkins 추가 설정 (백그라운드 실행)
+# =============================================================================
+#
+# Jenkins 서버가 완전히 시작된 후 추가적인 설정을 적용합니다.
+# 백그라운드로 실행하여 Jenkins 서버 시작을 지연시키지 않습니다.
+# =============================================================================
 (
-    # 백그라운드에서 Jenkins 완전 시작 대기
-    echo "⏳ Waiting for Jenkins to fully start..."
+    # Jenkins 완전 시작 대기 (웹 UI 및 플러그인 로딩 완료까지)
+    echo "⏳ Jenkins 완전 시작 대기 중..."
     sleep 60
 
-    # Jenkins CLI를 통한 추가 자동 설정 (선택사항)
-    echo "🔧 Applying additional Jenkins configurations..."
+    echo "🔧 추가 Jenkins 설정 적용 중..."
 
-    # GitHub 플러그인 자동 설치 확인 (이미 설치되어 있으면 스킵)
+    # 필수 플러그인 설치 상태 확인
+    echo "📦 필수 플러그인 설치 상태 확인 중..."
+
+    # GitHub 플러그인 확인
     if [ -f /var/jenkins_home/plugins/github.hpi ]; then
-        echo "✅ GitHub plugin already installed"
+        echo "✅ GitHub 플러그인 설치됨"
     else
-        echo "📦 GitHub plugin not found - manual installation may be needed"
+        echo "⚠️  GitHub 플러그인 미설치 - 수동 설치 필요"
     fi
 
-    echo "✅ Jenkins auto-configuration completed"
+    # Docker 플러그인 확인
+    if [ -f /var/jenkins_home/plugins/docker-workflow.hpi ]; then
+        echo "✅ Docker 워크플로우 플러그인 설치됨"
+    else
+        echo "⚠️  Docker 워크플로우 플러그인 확인 필요"
+    fi
+
+    echo "✅ Jenkins 자동 설정 완전 완료"
+    echo "🌐 Jenkins UI: http://localhost:8080/jenkins"
+    echo "📋 설정이 완료되었습니다. GitHub 연동 및 빌드 파이프라인을 사용할 수 있습니다."
 ) &
 
-echo "🚀 Starting Jenkins server..."
-# 원래 Jenkins 엔트리포인트 실행
+# =============================================================================
+# Jenkins 서버 시작
+# =============================================================================
+#
+# 모든 준비 작업이 완료된 후 원래 Jenkins 엔트리포인트를 실행하여
+# Jenkins 서버를 시작합니다.
+#
+# exec 명령을 사용하여 현재 프로세스를 대체하므로 PID 1을 유지하여
+# Docker 신호 처리가 올바르게 작동합니다.
+# =============================================================================
+echo "🚀 Jenkins 서버 시작 중..."
 exec /usr/bin/tini -- /usr/local/bin/jenkins.sh "$@"
