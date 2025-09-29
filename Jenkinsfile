@@ -212,10 +212,13 @@ pipeline {
                             docker compose up -d api
 
                             # API 서비스 정상 상태 확인
+                            # 주의: /actuator/health는 Spring Security로 보호되므로
+                            # 컨테이너 내부에서 직접 curl 대신 Docker healthcheck 상태를 확인합니다
                             echo "🏥 API 서비스 상태 확인 중..."
                             RETRY_COUNT=0
                             until [ $RETRY_COUNT -eq ${HEALTH_CHECK_RETRIES} ]; do
-                                if docker compose exec -T api curl -f http://localhost:8080/actuator/health > /dev/null 2>&1; then
+                                # Docker Compose 헬스체크 상태 확인 (Spring Security 인증 우회)
+                                if docker compose ps api | grep -q "healthy"; then
                                     echo "✅ API 서비스 정상 동작!"
                                     break
                                 elif [ $RETRY_COUNT -eq $((HEALTH_CHECK_RETRIES-1)) ]; then
