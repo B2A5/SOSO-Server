@@ -46,7 +46,7 @@ services:
       DB_USER: ${DB_USER:-soso_user}
       DB_PASS: ${DB_PASS:-12341234}
       # JPA Configuration for Production
-      JPA_DDL: ${JPA_DDL:-validate}
+      JPA_DDL: ${JPA_DDL:-update}
       # Redis Configuration (Override for container network)
       REDIS_HOST: redis
       REDIS_PORT: 6379
