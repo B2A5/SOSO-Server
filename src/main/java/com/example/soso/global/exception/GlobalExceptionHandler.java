@@ -4,6 +4,7 @@ import com.example.soso.global.exception.domain.BaseErrorCode;
 import com.example.soso.global.exception.domain.ErrorResponse;
 import com.example.soso.global.exception.util.BaseException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import feign.FeignException;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
@@ -102,6 +103,32 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorResponse("ILLEGAL_ARGUMENT", ex.getMessage()));
+    }
+
+    /**
+     * Feign 클라이언트 호출 실패 처리 (외부 API 호출 오류)
+     */
+    @ExceptionHandler(FeignException.class)
+    public ResponseEntity<ErrorResponse> handleFeignException(FeignException ex) {
+        int status = ex.status();
+        String responseBody = ex.contentUTF8();
+
+        log.error("External API call failed: status={}, method={}, url={}, response={}",
+                status, ex.request().httpMethod(), ex.request().url(), responseBody);
+
+        // 외부 API의 4xx 에러는 클라이언트 에러로 처리
+        if (status >= 400 && status < 500) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(new ErrorResponse("EXTERNAL_API_CLIENT_ERROR",
+                            "외부 API 호출이 실패했습니다. 요청 정보를 확인해주세요."));
+        }
+
+        // 외부 API의 5xx 에러는 서버 에러로 처리
+        return ResponseEntity
+                .status(HttpStatus.BAD_GATEWAY)
+                .body(new ErrorResponse("EXTERNAL_API_SERVER_ERROR",
+                        "외부 서비스와의 통신 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요."));
     }
 
     /**

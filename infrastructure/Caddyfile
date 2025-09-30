@@ -119,15 +119,23 @@ soso.dreampaste.com {
     # =================================================================
     # Spring Boot 기반의 메인 API 서버에 대한 요청을 처리합니다.
     # 모든 애플리케이션 로직과 데이터 처리가 이루어지는 핵심 서비스입니다.
-    reverse_proxy /api/* api:8080 {
-        # HTTPS 프로토콜 정보를 백엔드에 전달
-        header_up X-Forwarded-Proto {scheme}
 
-        # API 서버 헬스체크 설정
-        # Spring Boot Actuator의 health 엔드포인트를 사용하여 서버 상태 모니터링
+    # 인증 관련 API
+    reverse_proxy /auth/* api:8080 {
+        header_up X-Forwarded-Proto {scheme}
         health_uri /actuator/health
-        health_interval 30s  # 30초마다 헬스체크 실행
-        health_timeout 10s   # 10초 내 응답 없으면 비정상으로 간주
+        health_interval 30s
+        health_timeout 10s
+    }
+
+    # 회원가입 API
+    reverse_proxy /signup/* api:8080 {
+        header_up X-Forwarded-Proto {scheme}
+    }
+
+    # 커뮤니티 API
+    reverse_proxy /community/* api:8080 {
+        header_up X-Forwarded-Proto {scheme}
     }
 
     # =================================================================
