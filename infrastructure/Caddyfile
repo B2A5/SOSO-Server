@@ -99,6 +99,25 @@ soso.dreampaste.com {
     }
 
     # =================================================================
+    # CORS 헤더 설정
+    # =================================================================
+    # Spring Boot의 CORS 설정이 제대로 전달되지 않을 경우를 대비해
+    # Caddy 레벨에서도 CORS 헤더를 추가합니다.
+    @cors_preflight {
+        method OPTIONS
+    }
+    respond @cors_preflight 204 {
+        close
+    }
+    header {
+        defer
+        Access-Control-Allow-Origin "{header.origin}"
+        Access-Control-Allow-Methods "GET, POST, PUT, DELETE, PATCH, OPTIONS"
+        Access-Control-Allow-Headers "*"
+        Access-Control-Allow-Credentials "true"
+    }
+
+    # =================================================================
     # Jenkins CI/CD 관리자 패널 라우팅
     # =================================================================
     # Jenkins 웹 UI에 대한 접근을 처리합니다.
