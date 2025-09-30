@@ -16,6 +16,8 @@ public class SessionConfig {
         serializer.setCookiePath("/");
         serializer.setDomainNamePattern("^.+?(\\w+\\.[a-z]+)$");
         serializer.setUseBase64Encoding(false);
+        serializer.setSameSite("None");  // 크로스 사이트 쿠키 허용 (localhost → soso.dreampaste.com)
+        serializer.setUseSecureCookie(true);  // HTTPS 필수 (SameSite=None 요구사항)
         return serializer;
     }
 }

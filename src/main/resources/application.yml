@@ -1,13 +1,6 @@
 server:
   port: 8080
   forward-headers-strategy: framework
-  servlet:
-    session:
-      cookie:
-        name: JSESSIONID
-        same-site: none      # 크로스 사이트 쿠키 허용 (localhost → soso.dreampaste.com)
-        secure: true         # HTTPS에서만 전송
-        http-only: true      # XSS 공격 방어 (JavaScript 접근 차단)
 
 spring:
   datasource:
