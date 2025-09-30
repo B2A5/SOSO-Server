@@ -323,11 +323,20 @@ pipeline {
                             # - 없으면 시작
                             # - 충돌 시 기존 컨테이너 제거 후 시작
                             # =============================================================
-                            echo "🌐 Proxy 상태 확인..."
+                            echo "🌐 Proxy 배포 중..."
 
-                            # Proxy가 이미 healthy 상태면 건너뛰기
-                            if docker compose ps proxy | grep -q "healthy"; then
-                                echo "✅ Proxy 이미 정상 동작 중 (재시작 불필요)"
+                            # Proxy가 없으면 생성, 있으면 설정 리로드
+                            if docker compose ps proxy | grep -q "proxy"; then
+                                echo "🔄 Proxy 설정 리로드 중 (무중단)..."
+
+                                # Caddy 설정 무중단 리로드
+                                docker exec soso-proxy caddy reload --config /etc/caddy/Caddyfile --force 2>&1 || {
+                                    echo "⚠️  리로드 실패, Proxy 재시작 중..."
+                                    docker compose restart proxy
+                                    sleep 3
+                                }
+
+                                echo "✅ Proxy 설정 업데이트 완료"
                             else
                                 echo "🔄 Proxy 시작 중..."
 
