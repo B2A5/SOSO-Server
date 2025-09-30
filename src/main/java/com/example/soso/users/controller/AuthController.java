@@ -43,4 +43,25 @@ public class AuthController {
         JwtTokenDto jwtToken = authService.refreshAccessToken(refreshToken, response);
         return ResponseEntity.ok(jwtToken);
     }
+
+    @Operation(
+            summary = "로그아웃",
+            description = "Refresh Token을 무효화하고 쿠키를 삭제합니다.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "로그아웃 성공"),
+                    @ApiResponse(responseCode = "400", description = "Refresh Token이 없음")
+            }
+    )
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(
+            @Parameter(description = "HttpOnly 쿠키에 저장된 Refresh Token")
+            @CookieValue(value = "refreshToken", required = false) String refreshToken,
+            HttpServletResponse response
+    ) {
+        if (refreshToken == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        authService.logout(refreshToken, response);
+        return ResponseEntity.ok().build();
+    }
 }

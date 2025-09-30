@@ -48,4 +48,13 @@ public class AuthServiceImpl implements AuthService {
         return new JwtTokenDto(newAccessToken);
     }
 
+    @Override
+    public void logout(String refreshToken, HttpServletResponse response) {
+        // 1. Redis에서 Refresh Token 삭제 (즉시 무효화)
+        refreshTokenService.delete(refreshToken);
+
+        // 2. 쿠키 삭제
+        CookieUtil.deleteRefreshTokenCookie(response);
+    }
+
 }

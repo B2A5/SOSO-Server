@@ -7,4 +7,6 @@ public interface AuthService {
 
     JwtTokenDto refreshAccessToken(String refreshToken, HttpServletResponse response);
 
+    void logout(String refreshToken, HttpServletResponse response);
+
 }
