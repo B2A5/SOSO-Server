@@ -8,11 +8,16 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.example.soso.global.jwt.JwtTokenDto;
 import com.example.soso.users.domain.dto.ExperienceRequest;
+import com.example.soso.users.domain.dto.SignupCompleteResponse;
+import com.example.soso.users.domain.dto.UserResponse;
+import com.example.soso.users.domain.entity.AgeRange;
+import com.example.soso.users.domain.entity.Gender;
 import com.example.soso.users.domain.entity.SignupStep;
 import com.example.soso.users.domain.entity.StartupExperience;
+import com.example.soso.users.domain.entity.UserType;
 import com.example.soso.users.service.SignupService;
+import java.time.LocalDateTime;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -65,14 +70,29 @@ class SignupControllerTest {
     }
 
     @Test
-    @DisplayName("회원가입 완료 시 JWT 토큰을 반환한다")
+    @DisplayName("회원가입 완료 시 JWT 토큰 및 사용자 정보를 반환한다")
     void postComplete() throws Exception {
+        UserResponse userResponse = UserResponse.builder()
+                .id("test-id")
+                .username("테스트")
+                .nickname("테스터")
+                .email("test@example.com")
+                .userType(UserType.FOUNDER)
+                .gender(Gender.MALE)
+                .ageRange(AgeRange.TWENTIES)
+                .location("서울시 강남구")
+                .createdDate(LocalDateTime.now())
+                .lastModifiedDate(LocalDateTime.now())
+                .build();
+
+        SignupCompleteResponse response = new SignupCompleteResponse("access", userResponse);
+
         when(signupService.completeSignup(any(HttpSession.class), any(HttpServletResponse.class)))
-                .thenReturn(new JwtTokenDto("access"));
+                .thenReturn(response);
 
         mockMvc.perform(post("/signup/complete"))
                 .andExpect(status().isOk())
-                .andExpect(content().json("{\"jwtAccessToken\":\"access\"}"));
+                .andExpect(content().json("{\"accessToken\":\"access\"}"));
     }
 
     @Test
