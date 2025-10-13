@@ -3,7 +3,6 @@ package com.example.soso.users.service;
 import com.example.soso.global.exception.util.UserAuthException;
 import com.example.soso.global.jwt.JwtProperties;
 import com.example.soso.global.jwt.JwtProvider;
-import com.example.soso.global.jwt.JwtTokenDto;
 import com.example.soso.global.redis.RefreshTokenRedisRepository;
 import com.example.soso.users.domain.dto.*;
 import com.example.soso.users.domain.entity.*;
@@ -276,23 +275,39 @@ class SignupServiceTest {
             signupSession.setEmail("test@example.com");
             signupSession.setProfileImageUrl("https://example.com/profile.jpg");
             signupSession.setNickname("테스트문어");
+            signupSession.setGender(Gender.MALE);
+            signupSession.setAgeRange(AgeRange.TWENTIES);
+            signupSession.setRegionId("11010");
 
             Users mockUser = mock(Users.class);
+            when(mockUser.getId()).thenReturn("test-user-id");
+            when(mockUser.getUsername()).thenReturn("testUser");
+            when(mockUser.getNickname()).thenReturn("테스트문어");
+            when(mockUser.getEmail()).thenReturn("test@example.com");
+            when(mockUser.getUserType()).thenReturn(UserType.FOUNDER);
+            when(mockUser.getGender()).thenReturn(Gender.MALE);
+            when(mockUser.getAgeRange()).thenReturn(AgeRange.TWENTIES);
+            when(mockUser.getLocation()).thenReturn("서울시 종로구");
+            when(mockUser.getCreatedDate()).thenReturn(java.time.LocalDateTime.now());
+            when(mockUser.getLastModifiedDate()).thenReturn(java.time.LocalDateTime.now());
+
             when(usersRepository.save(any(Users.class))).thenReturn(mockUser);
             when(jwtProvider.generateAccessToken(any())).thenReturn("accessToken");
             when(jwtProvider.generateRefreshToken()).thenReturn("refreshToken");
             when(jwtProperties.getRefreshTokenValidityInMs()).thenReturn(1209600000L);
 
             // when
-            JwtTokenDto result = signupService.completeSignup(mockSession, httpServletResponse);
+            SignupCompleteResponse result = signupService.completeSignup(mockSession, httpServletResponse);
 
             // then
             assertThat(result).isNotNull();
-            assertThat(result.jwtAccessToken()).isEqualTo("accessToken");
+            assertThat(result.accessToken()).isEqualTo("accessToken");
+            assertThat(result.user()).isNotNull();
+            assertThat(result.user().getId()).isEqualTo("test-user-id");
             assertThat(mockSession.getAttribute("signup")).isNull(); // 세션 정리됨
 
             verify(usersRepository).save(any(Users.class));
-            verify(redisService).saveByUserId(any(), eq("refreshToken"), eq(1209600000L));
+            verify(redisService).saveByUserId(eq("test-user-id"), eq("refreshToken"), eq(1209600000L));
         }
 
         @Test

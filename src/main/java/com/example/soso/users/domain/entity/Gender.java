@@ -11,5 +11,8 @@ public enum Gender {
     MALE,
 
     @Schema(description = "여성")
-    FEMALE
+    FEMALE,
+
+    @Schema(description = "선택 안함")
+    NONE
 }
