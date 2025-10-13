@@ -13,19 +13,19 @@ import java.util.List;
 @Schema(description = "사용자 정보 응답")
 public class UserResponse {
 
-    @Schema(description = "사용자 ID (UUID)", example = "550e8400-e29b-41d4-a716-446655440000")
+    @Schema(description = "사용자 ID (UUID)", example = "550e8400-e29b-41d4-a716-446655440000", requiredMode = Schema.RequiredMode.REQUIRED)
     private String id;
 
-    @Schema(description = "사용자명", example = "홍길동")
+    @Schema(description = "사용자명", example = "홍길동", requiredMode = Schema.RequiredMode.REQUIRED)
     private String username;
 
-    @Schema(description = "닉네임", example = "길동이")
+    @Schema(description = "닉네임", example = "길동이", requiredMode = Schema.RequiredMode.REQUIRED)
     private String nickname;
 
-    @Schema(description = "이메일", example = "user@example.com")
+    @Schema(description = "이메일", example = "user@example.com", requiredMode = Schema.RequiredMode.REQUIRED)
     private String email;
 
-    @Schema(description = "사용자 유형 (FOUNDER: 예비 창업자, INHABITANT: 일반 거주민)", example = "FOUNDER")
+    @Schema(description = "사용자 유형 (FOUNDER: 예비 창업자, INHABITANT: 일반 거주민)", example = "FOUNDER", requiredMode = Schema.RequiredMode.REQUIRED)
     private UserType userType;
 
     @Schema(description = "프로필 이미지 URL", example = "https://example.com/profile.jpg")
@@ -43,7 +43,7 @@ public class UserResponse {
     @Schema(description = "창업 경험 여부", example = "창업 경험 유")
     private String startupExperience;
 
-    @Schema(description = "지역명", example = "서울시 강남구")
+    @Schema(description = "지역명", example = "서울시 강남구", requiredMode = Schema.RequiredMode.REQUIRED)
     private String location;
 
     @Schema(description = "관심 업종 목록")
@@ -55,9 +55,9 @@ public class UserResponse {
     @Schema(description = "경도", example = "126.9780")
     private String longitude;
 
-    @Schema(description = "계정 생성일시", example = "2024-01-01T00:00:00")
+    @Schema(description = "계정 생성일시", example = "2024-01-01T00:00:00", requiredMode = Schema.RequiredMode.REQUIRED)
     private LocalDateTime createdDate;
 
-    @Schema(description = "마지막 수정일시", example = "2024-01-01T00:00:00")
+    @Schema(description = "마지막 수정일시", example = "2024-01-01T00:00:00", requiredMode = Schema.RequiredMode.REQUIRED)
     private LocalDateTime lastModifiedDate;
 }
