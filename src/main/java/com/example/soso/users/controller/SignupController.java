@@ -1,12 +1,12 @@
 package com.example.soso.users.controller;
 
 import com.example.soso.global.exception.domain.ErrorResponse;
-import com.example.soso.global.jwt.JwtTokenDto;
 import com.example.soso.users.domain.dto.AgeRangeRequest;
 import com.example.soso.users.domain.dto.BudgetRequest;
 import com.example.soso.users.domain.dto.ExperienceRequest;
 import com.example.soso.users.domain.dto.GenderRequest;
 import com.example.soso.users.domain.dto.RegionRequest;
+import com.example.soso.users.domain.dto.SignupCompleteResponse;
 import com.example.soso.users.domain.dto.UserTypeRequest;
 import com.example.soso.users.domain.entity.InterestRequest;
 import com.example.soso.users.domain.entity.SignupStep;
@@ -69,9 +69,11 @@ public class SignupController {
         @ApiResponse(responseCode = "200", description = "성공 - 다음 단계 반환",
             content = @Content(schema = @Schema(implementation = SignupStep.class))),
         @ApiResponse(responseCode = "400", description = "잘못된 요청",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class),
+                examples = @ExampleObject(value = "{\"code\": \"BAD_REQUEST\", \"message\": \"유효하지 않은 사용자 유형입니다.\"}"))),
         @ApiResponse(responseCode = "401", description = "세션이 유효하지 않음",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class),
+                examples = @ExampleObject(value = "{\"code\": \"UNAUTHORIZED\", \"message\": \"회원가입 세션이 만료되었습니다. 다시 로그인 해주세요.\"}")))
     })
     @PostMapping("/user-type")
     public ResponseEntity<SignupStep> setUserType(@RequestBody @Valid UserTypeRequest request,
@@ -99,9 +101,11 @@ public class SignupController {
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "성공 - 다음 단계 반환"),
         @ApiResponse(responseCode = "400", description = "잘못된 지역 코드",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class),
+                examples = @ExampleObject(value = "{\"code\": \"BAD_REQUEST\", \"message\": \"유효하지 않은 지역 코드입니다.\"}"))),
         @ApiResponse(responseCode = "401", description = "세션이 유효하지 않음",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class),
+                examples = @ExampleObject(value = "{\"code\": \"UNAUTHORIZED\", \"message\": \"회원가입 세션이 만료되었습니다. 다시 로그인 해주세요.\"}")))
     })
     @PostMapping("/region")
     public ResponseEntity<SignupStep> setRegion(@RequestBody @Valid RegionRequest request,
@@ -129,9 +133,11 @@ public class SignupController {
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "성공 - 다음 단계 반환"),
         @ApiResponse(responseCode = "400", description = "잘못된 연령대",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class),
+                examples = @ExampleObject(value = "{\"code\": \"BAD_REQUEST\", \"message\": \"유효하지 않은 연령대입니다.\"}"))),
         @ApiResponse(responseCode = "401", description = "세션이 유효하지 않음",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class),
+                examples = @ExampleObject(value = "{\"code\": \"UNAUTHORIZED\", \"message\": \"회원가입 세션이 만료되었습니다. 다시 로그인 해주세요.\"}")))
     })
     @PostMapping("/age-range")
     public ResponseEntity<SignupStep> setAgeRange(@RequestBody @Valid AgeRangeRequest request,
@@ -149,7 +155,8 @@ public class SignupController {
                 schema = @Schema(implementation = GenderRequest.class),
                 examples = {
                     @ExampleObject(name = "남성", value = "{\"gender\": \"MALE\"}"),
-                    @ExampleObject(name = "여성", value = "{\"gender\": \"FEMALE\"}")
+                    @ExampleObject(name = "여성", value = "{\"gender\": \"FEMALE\"}"),
+                    @ExampleObject(name = "선택 안함", value = "{\"gender\": \"NONE\"}")
                 }
             )
         )
@@ -157,9 +164,11 @@ public class SignupController {
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "성공 - 다음 단계 반환"),
         @ApiResponse(responseCode = "400", description = "잘못된 성별",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class),
+                examples = @ExampleObject(value = "{\"code\": \"BAD_REQUEST\", \"message\": \"유효하지 않은 성별입니다.\"}"))),
         @ApiResponse(responseCode = "401", description = "세션이 유효하지 않음",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class),
+                examples = @ExampleObject(value = "{\"code\": \"UNAUTHORIZED\", \"message\": \"회원가입 세션이 만료되었습니다. 다시 로그인 해주세요.\"}")))
     })
     @PostMapping("/gender")
     public ResponseEntity<SignupStep> setGender(@RequestBody @Valid GenderRequest request,
@@ -186,9 +195,11 @@ public class SignupController {
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "성공 - 다음 단계 반환"),
         @ApiResponse(responseCode = "400", description = "잘못된 업종 코드 또는 일반거주민 접근",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class),
+                examples = @ExampleObject(value = "{\"code\": \"STEPS_NOT_TYPE\", \"message\": \"현재 진행 단계에서 허용되지 않는 요청입니다.\"}"))),
         @ApiResponse(responseCode = "401", description = "세션이 유효하지 않음",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class),
+                examples = @ExampleObject(value = "{\"code\": \"UNAUTHORIZED\", \"message\": \"회원가입 세션이 만료되었습니다. 다시 로그인 해주세요.\"}")))
     })
     @PostMapping("/interests")
     public ResponseEntity<SignupStep> setInterests(@RequestBody @Valid InterestRequest request,
@@ -216,9 +227,11 @@ public class SignupController {
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "성공 - 다음 단계 반환"),
         @ApiResponse(responseCode = "400", description = "잘못된 예산 구간 또는 일반거주민 접근",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class),
+                examples = @ExampleObject(value = "{\"code\": \"STEPS_NOT_TYPE\", \"message\": \"현재 진행 단계에서 허용되지 않는 요청입니다.\"}"))),
         @ApiResponse(responseCode = "401", description = "세션이 유효하지 않음",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class),
+                examples = @ExampleObject(value = "{\"code\": \"UNAUTHORIZED\", \"message\": \"회원가입 세션이 만료되었습니다. 다시 로그인 해주세요.\"}")))
     })
     @PostMapping("/budget")
     public ResponseEntity<SignupStep> setBudget(@RequestBody @Valid BudgetRequest request,
@@ -244,9 +257,11 @@ public class SignupController {
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "성공 - 다음 단계 반환"),
         @ApiResponse(responseCode = "400", description = "잘못된 경험 값 또는 일반거주민 접근",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class),
+                examples = @ExampleObject(value = "{\"code\": \"STEPS_NOT_TYPE\", \"message\": \"현재 진행 단계에서 허용되지 않는 요청입니다.\"}"))),
         @ApiResponse(responseCode = "401", description = "세션이 유효하지 않음",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class),
+                examples = @ExampleObject(value = "{\"code\": \"UNAUTHORIZED\", \"message\": \"회원가입 세션이 만료되었습니다. 다시 로그인 해주세요.\"}")))
     })
     @PostMapping("/experience")
     public ResponseEntity<SignupStep> setExperience(@RequestBody @Valid ExperienceRequest request,
@@ -262,7 +277,8 @@ public class SignupController {
             @ApiResponse(responseCode = "200", description = "성공 - 생성된 닉네임 반환",
                 content = @Content(schema = @Schema(type = "string", example = "활발한코끼리123"))),
             @ApiResponse(responseCode = "401", description = "세션이 유효하지 않음",
-                content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
+                content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class),
+                    examples = @ExampleObject(value = "{\"code\": \"UNAUTHORIZED\", \"message\": \"회원가입 세션이 만료되었습니다. 다시 로그인 해주세요.\"}")))
         }
     )
     @PostMapping("/nickname")
@@ -274,22 +290,26 @@ public class SignupController {
 
     @Operation(
         summary = "[9단계] 회원가입 완료",
-        description = "회원가입을 완료하고 사용자 계정을 생성합니다. JWT 토큰을 발급하고 Refresh Token은 HttpOnly 쿠키로 설정됩니다.",
+        description = "회원가입을 완료하고 사용자 계정을 생성합니다. JWT 토큰 및 사용자 정보를 반환하며, Refresh Token은 HttpOnly 쿠키로 설정됩니다.",
         responses = {
-            @ApiResponse(responseCode = "200", description = "성공 - Access Token 반환",
+            @ApiResponse(responseCode = "200", description = "성공 - Access Token 및 사용자 정보 반환",
                 content = @Content(
-                    schema = @Schema(implementation = JwtTokenDto.class),
-                    examples = @ExampleObject(value = "{\"accessToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\"}"))
-                ),
-            @ApiResponse(responseCode = "400", description = "회원가입 단계가 완료되지 않음"),
-            @ApiResponse(responseCode = "401", description = "세션이 유효하지 않음")
+                    schema = @Schema(implementation = SignupCompleteResponse.class),
+                    examples = @ExampleObject(value = "{\"accessToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\", \"user\": {\"id\": \"550e8400-e29b-41d4-a716-446655440000\", \"username\": \"홍길동\", \"nickname\": \"길동이\", \"email\": \"user@example.com\"}}")
+                )),
+            @ApiResponse(responseCode = "400", description = "회원가입 단계가 완료되지 않음",
+                content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class),
+                    examples = @ExampleObject(value = "{\"code\": \"BAD_REQUEST\", \"message\": \"회원가입이 완료되지 않았습니다.\"}"))),
+            @ApiResponse(responseCode = "401", description = "세션이 유효하지 않음",
+                content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class),
+                    examples = @ExampleObject(value = "{\"code\": \"UNAUTHORIZED\", \"message\": \"회원가입 세션이 만료되었습니다. 다시 로그인 해주세요.\"}")))
         }
     )
     @PostMapping("/complete")
-    public ResponseEntity<JwtTokenDto> completeSignup(@Parameter(hidden = true) HttpSession session,
+    public ResponseEntity<SignupCompleteResponse> completeSignup(@Parameter(hidden = true) HttpSession session,
                                                       @Parameter(hidden = true) HttpServletResponse response) {
-        JwtTokenDto jwtAccessToken = signupService.completeSignup(session, response);
-        return ResponseEntity.ok(jwtAccessToken);
+        SignupCompleteResponse signupCompleteResponse = signupService.completeSignup(session, response);
+        return ResponseEntity.ok(signupCompleteResponse);
     }
 
     @Operation(
@@ -301,8 +321,12 @@ public class SignupController {
                     schema = @Schema(implementation = ExperienceRequest.class),
                     examples = @ExampleObject(value = "{\"experience\": \"YES\"}")
                 )),
-            @ApiResponse(responseCode = "400", description = "일반거주민 접근 또는 데이터 없음"),
-            @ApiResponse(responseCode = "401", description = "세션이 유효하지 않음")
+            @ApiResponse(responseCode = "400", description = "일반거주민 접근 또는 데이터 없음",
+                content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class),
+                    examples = @ExampleObject(value = "{\"code\": \"STEPS_NOT_TYPE\", \"message\": \"현재 진행 단계에서 허용되지 않는 요청입니다.\"}"))),
+            @ApiResponse(responseCode = "401", description = "세션이 유효하지 않음",
+                content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class),
+                    examples = @ExampleObject(value = "{\"code\": \"UNAUTHORIZED\", \"message\": \"회원가입 세션이 만료되었습니다. 다시 로그인 해주세요.\"}")))
         }
     )
     @GetMapping("/experience/data")

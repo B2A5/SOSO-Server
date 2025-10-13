@@ -6,7 +6,10 @@ import com.example.soso.global.exception.util.UserAuthException;
 import com.example.soso.global.jwt.JwtProperties;
 import com.example.soso.global.jwt.JwtProvider;
 import com.example.soso.global.redis.RefreshTokenRedisRepository;
-import com.example.soso.kakao.dto.KakaoLoginResult;
+import com.example.soso.kakao.dto.KakaoLoginResponse;
+import com.example.soso.users.domain.dto.UserMapper;
+import com.example.soso.users.domain.dto.UserResponse;
+import com.example.soso.users.domain.entity.Users;
 import com.example.soso.users.repository.UsersRepository;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -25,17 +28,18 @@ public class UserLoginService {
         return userRepository.existsByEmail(email);
     }
 
-    public KakaoLoginResult login(String email, HttpServletResponse response) {
-        String userId = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UserAuthException(UserErrorCode.USER_NOT_FOUND))
-                .getId();
+    public KakaoLoginResponse login(String email, HttpServletResponse response) {
+        Users user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserAuthException(UserErrorCode.USER_NOT_FOUND));
 
-        String accessToken = jwtProvider.generateAccessToken(userId);
+        String accessToken = jwtProvider.generateAccessToken(user.getId());
         String refreshToken = jwtProvider.generateRefreshToken();
 
-        refreshTokenService.save(refreshToken, userId, jwtProperties.getRefreshTokenValidityInMs());
+        refreshTokenService.save(refreshToken, user.getId(), jwtProperties.getRefreshTokenValidityInMs());
         CookieUtil.addRefreshTokenCookie(response, refreshToken, jwtProperties.getRefreshTokenValidityInMs());
 
-        return new KakaoLoginResult(false, accessToken);
+        UserResponse userResponse = UserMapper.toUserResponse(user);
+
+        return new KakaoLoginResponse(false, accessToken, userResponse);
     }
 }

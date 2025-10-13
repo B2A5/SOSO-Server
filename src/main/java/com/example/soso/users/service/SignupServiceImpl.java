@@ -7,16 +7,17 @@ import static com.example.soso.global.exception.domain.UserErrorCode.STEPS_NOT_T
 import com.example.soso.global.exception.util.UserAuthException;
 import com.example.soso.global.jwt.JwtProperties;
 import com.example.soso.global.jwt.JwtProvider;
-import com.example.soso.global.jwt.JwtTokenDto;
 import com.example.soso.global.redis.RefreshTokenRedisRepository;
 import com.example.soso.users.domain.dto.AgeRangeRequest;
 import com.example.soso.users.domain.dto.BudgetRequest;
 import com.example.soso.users.domain.dto.ExperienceRequest;
 import com.example.soso.users.domain.dto.GenderRequest;
 import com.example.soso.users.domain.dto.RegionRequest;
+import com.example.soso.users.domain.dto.SignupCompleteResponse;
 import com.example.soso.users.domain.dto.SignupSession;
 import com.example.soso.users.domain.dto.TokenPair;
 import com.example.soso.users.domain.dto.UserMapper;
+import com.example.soso.users.domain.dto.UserResponse;
 import com.example.soso.users.domain.entity.AgeRange;
 import com.example.soso.users.domain.entity.BudgetRange;
 import com.example.soso.users.domain.entity.Gender;
@@ -188,7 +189,7 @@ public class SignupServiceImpl implements SignupService {
      * 9단계: 회원가입 완료.
      * 저장된 세션 정보를 기반으로 Users 엔터티를 생성하고 토큰을 발급한다.
      */
-    public JwtTokenDto completeSignup(HttpSession session, HttpServletResponse response) {
+    public SignupCompleteResponse completeSignup(HttpSession session, HttpServletResponse response) {
         // 마지막 단계 검증 및 확인
         SignupSession signup = getValidatedSession(session);
         validateStep(signup, SignupStep.COMPLETE);
@@ -204,9 +205,12 @@ public class SignupServiceImpl implements SignupService {
         redisService.saveByUserId(user.getId(), tokenPair.refreshToken(), jwtProperties.getRefreshTokenValidityInMs());
         addRefreshTokenCookie(response, tokenPair.refreshToken(), jwtProperties.getRefreshTokenValidityInMs());
 
+        // UserResponse 생성
+        UserResponse userResponse = UserMapper.toUserResponse(user);
+
         // 세션 삭제
         session.removeAttribute("signup");
-        return new JwtTokenDto(tokenPair.accessToken());
+        return new SignupCompleteResponse(tokenPair.accessToken(), userResponse);
     }
 
     private TokenPair generateTokens(String userId) {

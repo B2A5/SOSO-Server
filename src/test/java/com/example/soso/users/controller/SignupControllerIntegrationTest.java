@@ -147,7 +147,9 @@ class SignupControllerIntegrationTest {
         mockMvc.perform(post("/signup/complete")
                         .session(mockSession))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.jwtAccessToken").isNotEmpty());
+                .andExpect(jsonPath("$.accessToken").isNotEmpty())
+                .andExpect(jsonPath("$.user").exists())
+                .andExpect(jsonPath("$.user.id").exists());
 
         // 데이터베이스에 사용자가 저장되었는지 확인
         long userCountAfter = usersRepository.count();
@@ -212,7 +214,9 @@ class SignupControllerIntegrationTest {
         mockMvc.perform(post("/signup/complete")
                         .session(mockSession))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.jwtAccessToken").isNotEmpty());
+                .andExpect(jsonPath("$.accessToken").isNotEmpty())
+                .andExpect(jsonPath("$.user").exists())
+                .andExpect(jsonPath("$.user.id").exists());
 
         long userCountAfter = usersRepository.count();
         assertThat(userCountAfter).isEqualTo(userCountBefore + 1);

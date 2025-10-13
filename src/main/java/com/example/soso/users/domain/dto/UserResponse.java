@@ -31,10 +31,10 @@ public class UserResponse {
     @Schema(description = "프로필 이미지 URL", example = "https://example.com/profile.jpg")
     private String profileImageUrl;
 
-    @Schema(description = "성별 (MALE: 남성, FEMALE: 여성)", example = "MALE")
+    @Schema(description = "성별 (MALE: 남성, FEMALE: 여성, NONE: 선택 안함)", example = "MALE", requiredMode = Schema.RequiredMode.REQUIRED)
     private Gender gender;
 
-    @Schema(description = "연령대", example = "TWENTIES")
+    @Schema(description = "연령대", example = "TWENTIES", requiredMode = Schema.RequiredMode.REQUIRED)
     private AgeRange ageRange;
 
     @Schema(description = "예산 구간", example = "3~5천")
