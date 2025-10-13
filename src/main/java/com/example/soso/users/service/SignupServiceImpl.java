@@ -196,7 +196,7 @@ public class SignupServiceImpl implements SignupService {
 
         // 유저 저장
         Users user = UserMapper.fromSignupSession(signup, signup.getUsername(), signup.getEmail(), signup.getProfileImageUrl());
-        usersRepository.save(user);
+        user = usersRepository.save(user);  // save()가 ID가 할당된 엔티티를 반환
 
         // 토큰 만들기
         TokenPair tokenPair = generateTokens(user.getId());

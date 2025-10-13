@@ -307,7 +307,7 @@ class SignupServiceTest {
             assertThat(mockSession.getAttribute("signup")).isNull(); // 세션 정리됨
 
             verify(usersRepository).save(any(Users.class));
-            verify(redisService).saveByUserId(any(), eq("refreshToken"), eq(1209600000L));
+            verify(redisService).saveByUserId(eq("test-user-id"), eq("refreshToken"), eq(1209600000L));
         }
 
         @Test
