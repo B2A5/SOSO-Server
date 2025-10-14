@@ -28,7 +28,7 @@ public class UserResponse {
     @Schema(description = "사용자 유형 (FOUNDER: 예비 창업자, INHABITANT: 일반 거주민)", example = "FOUNDER", requiredMode = Schema.RequiredMode.REQUIRED)
     private UserType userType;
 
-    @Schema(description = "프로필 이미지 URL", example = "https://example.com/profile.jpg")
+    @Schema(description = "프로필 이미지 URL", example = "https://example.com/profile.jpg", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
     private String profileImageUrl;
 
     @Schema(description = "성별 (MALE: 남성, FEMALE: 여성, NONE: 선택 안함)", example = "MALE", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -37,22 +37,22 @@ public class UserResponse {
     @Schema(description = "연령대", example = "TWENTIES", requiredMode = Schema.RequiredMode.REQUIRED)
     private AgeRange ageRange;
 
-    @Schema(description = "예산 구간", example = "3~5천")
+    @Schema(description = "예산 구간", example = "3~5천", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
     private String budget;
 
-    @Schema(description = "창업 경험 여부", example = "창업 경험 유")
+    @Schema(description = "창업 경험 여부", example = "창업 경험 유", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
     private String startupExperience;
 
     @Schema(description = "지역명", example = "서울시 강남구", requiredMode = Schema.RequiredMode.REQUIRED)
     private String location;
 
-    @Schema(description = "관심 업종 목록")
+    @Schema(description = "관심 업종 목록", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
     private List<String> interests;
 
-    @Schema(description = "위도", example = "37.5665")
+    @Schema(description = "위도", example = "37.5665", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
     private String latitude;
 
-    @Schema(description = "경도", example = "126.9780")
+    @Schema(description = "경도", example = "126.9780", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
     private String longitude;
 
     @Schema(description = "계정 생성일시", example = "2024-01-01T00:00:00", requiredMode = Schema.RequiredMode.REQUIRED)

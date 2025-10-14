@@ -11,10 +11,10 @@ public record KakaoLoginResponse(
         @Schema(description = "신규 사용자 여부 (true: 회원가입 필요, false: 기존 사용자)", example = "false", requiredMode = Schema.RequiredMode.REQUIRED)
         boolean isNewUser,
 
-        @Schema(description = "Access Token (기존 사용자인 경우에만 제공)", example = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...")
+        @Schema(description = "Access Token (기존 사용자인 경우에만 제공)", example = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
         String accessToken,
 
-        @Schema(description = "사용자 정보 (기존 사용자인 경우에만 제공)")
+        @Schema(description = "사용자 정보 (기존 사용자인 경우에만 제공)", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
         UserResponse user
 
 ) {}
