@@ -29,7 +29,7 @@ public class UserLoginService {
     }
 
     public KakaoLoginResponse login(String email, HttpServletResponse response) {
-        Users user = userRepository.findByEmail(email)
+        Users user = userRepository.findByEmailWithInterests(email)
                 .orElseThrow(() -> new UserAuthException(UserErrorCode.USER_NOT_FOUND));
 
         String accessToken = jwtProvider.generateAccessToken(user.getId());
