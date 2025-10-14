@@ -74,3 +74,6 @@ connect.exp
 
 .claude/*
 CLAUDE.*
+
+# Documentation folder
+docs/

@@ -243,6 +243,7 @@ public class FreeboardController {
                             description = "페이지 크기 (1-50, 기본값: 10)",
                             example = "10",
                             schema = @io.swagger.v3.oas.annotations.media.Schema(
+                                    type = "integer",
                                     minimum = "1",
                                     maximum = "50"
                             )
@@ -290,11 +291,13 @@ public class FreeboardController {
             userId = userDetails.getUser().getId();
         }
 
-        // Category 파라미터 변환
+        // Category 파라미터 변환 (kebab-case -> UPPER_SNAKE_CASE)
         Category category = null;
         if (categoryParam != null) {
             try {
-                category = Category.valueOf(categoryParam.toUpperCase());
+                // "daily-hobby" -> "DAILY_HOBBY"
+                String enumName = categoryParam.toUpperCase().replace("-", "_");
+                category = Category.valueOf(enumName);
             } catch (IllegalArgumentException e) {
                 log.warn("잘못된 카테고리 파라미터: {}", categoryParam);
                 return ResponseEntity.badRequest().body(
