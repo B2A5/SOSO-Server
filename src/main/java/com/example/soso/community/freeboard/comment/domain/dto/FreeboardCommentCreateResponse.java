@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class FreeboardCommentCreateResponse {
 
-    @Schema(description = "생성/수정된 댓글 ID", example = "456")
+    @Schema(description = "생성/수정된 댓글 ID", example = "456", requiredMode = Schema.RequiredMode.REQUIRED)
     private Long commentId;
 }

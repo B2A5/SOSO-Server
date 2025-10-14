@@ -19,50 +19,50 @@ import java.util.List;
 @Builder
 public class FreeboardDetailResponse {
 
-    @Schema(description = "게시글 ID", example = "123")
+    @Schema(description = "게시글 ID", example = "123", requiredMode = Schema.RequiredMode.REQUIRED)
     private Long postId;
 
-    @Schema(description = "작성자 정보")
+    @Schema(description = "작성자 정보", requiredMode = Schema.RequiredMode.REQUIRED)
     private PostDetailAuthorInfo author;
 
-    @Schema(description = "카테고리", example = "restaurant")
+    @Schema(description = "카테고리", example = "restaurant", requiredMode = Schema.RequiredMode.REQUIRED)
     private Category category;
 
-    @Schema(description = "제목", example = "맛있는 라면집 추천해요!")
+    @Schema(description = "제목", example = "맛있는 라면집 추천해요!", requiredMode = Schema.RequiredMode.REQUIRED)
     private String title;
 
-    @Schema(description = "내용", example = "어제 갔던 라면집이 정말 맛있어서...")
+    @Schema(description = "내용", example = "어제 갔던 라면집이 정말 맛있어서...", requiredMode = Schema.RequiredMode.REQUIRED)
     private String content;
 
-    @Schema(description = "첨부된 이미지 URL 목록")
+    @Schema(description = "첨부된 이미지 URL 목록", requiredMode = Schema.RequiredMode.REQUIRED)
     private List<String> imageUrls;
 
-    @Schema(description = "좋아요 수", example = "15")
+    @Schema(description = "좋아요 수", example = "15", requiredMode = Schema.RequiredMode.REQUIRED)
     private int likeCount;
 
-    @Schema(description = "댓글 수", example = "8")
+    @Schema(description = "댓글 수", example = "8", requiredMode = Schema.RequiredMode.REQUIRED)
     private int commentCount;
 
-    @Schema(description = "조회 수", example = "102")
+    @Schema(description = "조회 수", example = "102", requiredMode = Schema.RequiredMode.REQUIRED)
     private int viewCount;
 
-    @Schema(description = "현재 사용자의 좋아요 여부", example = "true")
+    @Schema(description = "현재 사용자의 좋아요 여부", example = "true", requiredMode = Schema.RequiredMode.REQUIRED)
     @JsonProperty("isLiked")
     private boolean isLiked;
 
-    @Schema(description = "작성 시간", example = "2024-12-25T10:30:00")
+    @Schema(description = "작성 시간", example = "2024-12-25T10:30:00", requiredMode = Schema.RequiredMode.REQUIRED)
     private LocalDateTime createdAt;
 
-    @Schema(description = "수정 시간", example = "2024-12-25T14:20:00")
+    @Schema(description = "수정 시간", example = "2024-12-25T14:20:00", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
     private LocalDateTime updatedAt;
 
-    @Schema(description = "작성자 여부 (현재 사용자가 작성자인지)", example = "true")
+    @Schema(description = "작성자 여부 (현재 사용자가 작성자인지)", example = "true", requiredMode = Schema.RequiredMode.REQUIRED)
     private boolean isAuthor;
 
-    @Schema(description = "편집 가능 여부 (인증된 사용자이고 작성자인 경우)", example = "true")
+    @Schema(description = "편집 가능 여부 (인증된 사용자이고 작성자인 경우)", example = "true", requiredMode = Schema.RequiredMode.REQUIRED)
     private boolean canEdit;
 
-    @Schema(description = "삭제 가능 여부 (인증된 사용자이고 작성자인 경우)", example = "true")
+    @Schema(description = "삭제 가능 여부 (인증된 사용자이고 작성자인 경우)", example = "true", requiredMode = Schema.RequiredMode.REQUIRED)
     private boolean canDelete;
 
     @Schema(description = "작성자 정보")
@@ -71,19 +71,19 @@ public class FreeboardDetailResponse {
     @AllArgsConstructor
     @Builder
     public static class PostDetailAuthorInfo {
-        @Schema(description = "작성자 ID", example = "user123")
+        @Schema(description = "작성자 ID", example = "user123", requiredMode = Schema.RequiredMode.REQUIRED)
         private String userId;
 
-        @Schema(description = "작성자 닉네임", example = "맛집탐험가")
+        @Schema(description = "작성자 닉네임", example = "맛집탐험가", requiredMode = Schema.RequiredMode.REQUIRED)
         private String nickname;
 
-        @Schema(description = "작성자 프로필 이미지 URL")
+        @Schema(description = "작성자 프로필 이미지 URL", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
         private String profileImageUrl;
 
-        @Schema(description = "작성자 유형", example = "INHABITANT")
+        @Schema(description = "작성자 유형", example = "INHABITANT", requiredMode = Schema.RequiredMode.REQUIRED)
         private UserType userType;
 
-        @Schema(description = "작성자 주소", example = "서울시 강남구")
+        @Schema(description = "작성자 주소", example = "서울시 강남구", requiredMode = Schema.RequiredMode.REQUIRED)
         private String address;
     }
 }
