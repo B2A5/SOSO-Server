@@ -243,6 +243,7 @@ public class FreeboardController {
                             description = "페이지 크기 (1-50, 기본값: 10)",
                             example = "10",
                             schema = @io.swagger.v3.oas.annotations.media.Schema(
+                                    type = "integer",
                                     minimum = "1",
                                     maximum = "50"
                             )
