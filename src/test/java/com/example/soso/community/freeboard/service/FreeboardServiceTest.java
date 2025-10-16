@@ -168,8 +168,17 @@ class FreeboardServiceTest {
         Long postId = 123L;
         PostImage postImage = PostImage.builder()
                 .imageUrl("https://example.com/image1.jpg")
+                .sequence(0)
                 .post(testPost)
                 .build();
+        // PostImage에 ID 설정 (리플렉션 사용)
+        try {
+            java.lang.reflect.Field idField = PostImage.class.getDeclaredField("id");
+            idField.setAccessible(true);
+            idField.set(postImage, 1L);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         testPost.addImage(postImage);
 
         when(postRepository.findByIdAndDeletedFalse(postId)).thenReturn(Optional.of(testPost));
@@ -185,8 +194,10 @@ class FreeboardServiceTest {
         assertThat(result.getPostId()).isEqualTo(postId);
         assertThat(result.getTitle()).isEqualTo("맛있는 라면집 추천");
         assertThat(result.getCategory()).isEqualTo(Category.RESTAURANT);
-        assertThat(result.getImageUrls()).hasSize(1);
-        assertThat(result.getImageUrls().get(0)).isEqualTo("https://example.com/image1.jpg");
+        assertThat(result.getImages()).hasSize(1);
+        assertThat(result.getImages().get(0).getImageId()).isEqualTo(1L);
+        assertThat(result.getImages().get(0).getImageUrl()).isEqualTo("https://example.com/image1.jpg");
+        assertThat(result.getImages().get(0).getSequence()).isEqualTo(0);
         assertThat(result.isLiked()).isTrue();
         // assertThat(result.isAuthor()).isTrue(); // 같은 사용자 - TODO: Check method generation
         assertThat(result.getLikeCount()).isEqualTo(15);

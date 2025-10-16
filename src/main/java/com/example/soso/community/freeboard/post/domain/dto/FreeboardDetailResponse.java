@@ -34,8 +34,8 @@ public class FreeboardDetailResponse {
     @Schema(description = "내용", example = "어제 갔던 라면집이 정말 맛있어서...", requiredMode = Schema.RequiredMode.REQUIRED)
     private String content;
 
-    @Schema(description = "첨부된 이미지 URL 목록", requiredMode = Schema.RequiredMode.REQUIRED)
-    private List<String> imageUrls;
+    @Schema(description = "첨부된 이미지 정보 목록", requiredMode = Schema.RequiredMode.REQUIRED)
+    private List<ImageInfo> images;
 
     @Schema(description = "좋아요 수", example = "15", requiredMode = Schema.RequiredMode.REQUIRED)
     private int likeCount;
@@ -64,6 +64,22 @@ public class FreeboardDetailResponse {
 
     @Schema(description = "삭제 가능 여부 (인증된 사용자이고 작성자인 경우)", example = "true", requiredMode = Schema.RequiredMode.REQUIRED)
     private boolean canDelete;
+
+    @Schema(description = "이미지 정보")
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class ImageInfo {
+        @Schema(description = "이미지 ID", example = "1", requiredMode = Schema.RequiredMode.REQUIRED)
+        private Long imageId;
+
+        @Schema(description = "이미지 URL", example = "https://s3.amazonaws.com/bucket/image.jpg", requiredMode = Schema.RequiredMode.REQUIRED)
+        private String imageUrl;
+
+        @Schema(description = "이미지 순서", example = "0", requiredMode = Schema.RequiredMode.REQUIRED)
+        private int sequence;
+    }
 
     @Schema(description = "작성자 정보")
     @Getter

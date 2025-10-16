@@ -107,9 +107,14 @@ public class FreeboardServiceImpl implements FreeboardService {
         // 좋아요 여부 확인 (인증된 사용자인 경우만)
         boolean isLiked = userId != null && postLikeRepository.existsByPost_IdAndUser_Id(postId, userId);
 
-        // 이미지 URL 목록 추출
-        List<String> imageUrls = post.getImages().stream()
-                .map(PostImage::getImageUrl)
+        // 이미지 정보 목록 추출
+        List<FreeboardDetailResponse.ImageInfo> images = post.getImages().stream()
+                .sorted((img1, img2) -> Integer.compare(img1.getSequence(), img2.getSequence()))
+                .map(img -> FreeboardDetailResponse.ImageInfo.builder()
+                        .imageId(img.getId())
+                        .imageUrl(img.getImageUrl())
+                        .sequence(img.getSequence())
+                        .build())
                 .toList();
 
         // 작성자 여부 확인
@@ -128,7 +133,7 @@ public class FreeboardServiceImpl implements FreeboardService {
                 .category(post.getCategory())
                 .title(post.getTitle())
                 .content(post.getContent())
-                .imageUrls(imageUrls)
+                .images(images)
                 .likeCount(post.getLikeCount())
                 .commentCount(post.getCommentCount())
                 .viewCount(post.getViewCount())

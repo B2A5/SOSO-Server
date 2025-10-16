@@ -137,11 +137,11 @@ public class FreeboardController {
                             examples = {
                                     @ExampleObject(
                                             name = "인증 사용자",
-                                            value = "{\"postId\":123,\"author\":{\"userId\":\"author123\",\"nickname\":\"작성자\",\"profileImageUrl\":\"https://cdn.example.com/profile.jpg\",\"userType\":\"INHABITANT\",\"address\":\"서울시 강남구\"},\"category\":\"RESTAURANT\",\"title\":\"맛있는 라면집 추천해요!\",\"content\":\"인증 사용자가 작성한 게시글입니다.\",\"imageUrls\":[\"https://cdn.example.com/image1.jpg\"],\"likeCount\":10,\"commentCount\":3,\"viewCount\":120,\"isLiked\":true,\"createdAt\":\"2025-01-01T10:00:00\",\"updatedAt\":\"2025-01-02T09:30:00\",\"isAuthor\":true,\"canEdit\":true,\"canDelete\":true}"
+                                            value = "{\"postId\":123,\"author\":{\"userId\":\"author123\",\"nickname\":\"작성자\",\"profileImageUrl\":\"https://cdn.example.com/profile.jpg\",\"userType\":\"INHABITANT\",\"address\":\"서울시 강남구\"},\"category\":\"RESTAURANT\",\"title\":\"맛있는 라면집 추천해요!\",\"content\":\"인증 사용자가 작성한 게시글입니다.\",\"images\":[{\"imageId\":1,\"imageUrl\":\"https://cdn.example.com/image1.jpg\",\"sequence\":0}],\"likeCount\":10,\"commentCount\":3,\"viewCount\":120,\"isLiked\":true,\"createdAt\":\"2025-01-01T10:00:00\",\"updatedAt\":\"2025-01-02T09:30:00\",\"isAuthor\":true,\"canEdit\":true,\"canDelete\":true}"
                                     ),
                                     @ExampleObject(
                                             name = "비인증 사용자",
-                                            value = "{\"postId\":123,\"author\":{\"userId\":\"author123\",\"nickname\":\"작성자\",\"profileImageUrl\":\"https://cdn.example.com/profile.jpg\",\"userType\":\"INHABITANT\",\"address\":\"서울시 강남구\"},\"category\":\"RESTAURANT\",\"title\":\"맛있는 라면집 추천해요!\",\"content\":\"비인증 사용자가 조회한 게시글입니다.\",\"imageUrls\":[],\"likeCount\":10,\"commentCount\":3,\"viewCount\":120,\"isLiked\":false,\"createdAt\":\"2025-01-01T10:00:00\",\"updatedAt\":\"2025-01-02T09:30:00\",\"isAuthor\":false,\"canEdit\":false,\"canDelete\":false}"
+                                            value = "{\"postId\":123,\"author\":{\"userId\":\"author123\",\"nickname\":\"작성자\",\"profileImageUrl\":\"https://cdn.example.com/profile.jpg\",\"userType\":\"INHABITANT\",\"address\":\"서울시 강남구\"},\"category\":\"RESTAURANT\",\"title\":\"맛있는 라면집 추천해요!\",\"content\":\"비인증 사용자가 조회한 게시글입니다.\",\"images\":[],\"likeCount\":10,\"commentCount\":3,\"viewCount\":120,\"isLiked\":false,\"createdAt\":\"2025-01-01T10:00:00\",\"updatedAt\":\"2025-01-02T09:30:00\",\"isAuthor\":false,\"canEdit\":false,\"canDelete\":false}"
                                     )
                             }
                     )
