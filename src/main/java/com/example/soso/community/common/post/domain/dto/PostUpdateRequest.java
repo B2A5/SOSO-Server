@@ -14,7 +14,7 @@ public record PostUpdateRequest(
         @Schema(description = "수정할 본문", example = "내용 수정 예시", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
         String content,
 
-        @Schema(description = "수정할 카테고리", example = "ANNOUNCEMENT", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+        @Schema(description = "수정할 카테고리", example = "restaurant", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
         Category category,
 
         @Schema(description = "새 이미지 파일 목록 (선택)", type = "array", implementation = MultipartFile.class, requiredMode = Schema.RequiredMode.NOT_REQUIRED)

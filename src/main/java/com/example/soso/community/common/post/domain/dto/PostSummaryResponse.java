@@ -15,7 +15,7 @@ public record PostSummaryResponse(
         @Schema(description = "게시글 내용", example = "방금 생긴 카페 너무 좋아요!", requiredMode = Schema.RequiredMode.REQUIRED)
         String content,
 
-        @Schema(description = "카테고리", example = "RESTAURANT", requiredMode = Schema.RequiredMode.REQUIRED)
+        @Schema(description = "카테고리", example = "restaurant", requiredMode = Schema.RequiredMode.REQUIRED)
         Category category,
 
         @Schema(description = "좋아요 수", example = "10", requiredMode = Schema.RequiredMode.REQUIRED)

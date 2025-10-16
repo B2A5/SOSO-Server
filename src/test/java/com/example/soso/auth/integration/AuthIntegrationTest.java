@@ -185,7 +185,7 @@ class AuthIntegrationTest {
         mockMvc.perform(multipart("/community/freeboard")
                         .param("title", "인증 테스트 게시글")
                         .param("content", "액세스 토큰으로 인증된 요청입니다.")
-                        .param("category", "RESTAURANT")
+                        .param("category", "restaurant")
                         .header("Authorization", "Bearer " + accessToken))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -202,7 +202,7 @@ class AuthIntegrationTest {
         mockMvc.perform(multipart("/community/freeboard")
                         .param("title", "인증 실패 테스트")
                         .param("content", "잘못된 토큰")
-                        .param("category", "RESTAURANT")
+                        .param("category", "restaurant")
                         .header("Authorization", "Bearer " + invalidAccessToken))
                 .andDo(print())
                 .andExpect(status().isUnauthorized());
@@ -222,7 +222,7 @@ class AuthIntegrationTest {
         mockMvc.perform(multipart("/community/freeboard")
                         .param("title", "만료된 토큰 테스트")
                         .param("content", "만료된 액세스 토큰")
-                        .param("category", "RESTAURANT")
+                        .param("category", "restaurant")
                         .header("Authorization", "Bearer " + expiredAccessToken))
                 .andDo(print())
                 .andExpect(status().isUnauthorized());
@@ -235,7 +235,7 @@ class AuthIntegrationTest {
         mockMvc.perform(multipart("/community/freeboard")
                         .param("title", "헤더 없음 테스트")
                         .param("content", "Authorization 헤더 없음")
-                        .param("category", "RESTAURANT"))
+                        .param("category", "restaurant"))
                 .andDo(print())
                 .andExpect(status().isUnauthorized());
     }
@@ -251,7 +251,7 @@ class AuthIntegrationTest {
         mockMvc.perform(multipart("/community/freeboard")
                         .param("title", "잘못된 형식 테스트")
                         .param("content", "잘못된 Bearer 형식")
-                        .param("category", "RESTAURANT")
+                        .param("category", "restaurant")
                         .header("Authorization", "Token " + accessToken)) // "Bearer" 대신 "Token" 사용
                 .andDo(print())
                 .andExpect(status().isUnauthorized());

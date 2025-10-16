@@ -69,7 +69,7 @@ class ErrorScenarioIntegrationTest {
                         .file(imageFile)
                         .param("title", "무인증 게시글")
                         .param("content", "인증 없이 작성하는 게시글")
-                        .param("category", "OTHERS")
+                        .param("category", "others")
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andDo(print())
                 .andExpect(status().isUnauthorized())
@@ -83,7 +83,7 @@ class ErrorScenarioIntegrationTest {
                         .file(imageFile)
                         .param("title", "잘못된 토큰 게시글")
                         .param("content", "잘못된 토큰으로 작성하는 게시글")
-                        .param("category", "OTHERS")
+                        .param("category", "others")
                         .header("Authorization", "Bearer invalid-token-here")
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andDo(print())
@@ -95,7 +95,7 @@ class ErrorScenarioIntegrationTest {
         System.out.println("\n[테스트 3] 미인증 상태에서 게시글 목록 조회...");
 
         mockMvc.perform(get("/community/freeboard")
-                        .param("category", "OTHERS")
+                        .param("category", "others")
                         .param("sort", "LATEST")
                         .param("size", "10"))
                 .andDo(print())
@@ -125,7 +125,7 @@ class ErrorScenarioIntegrationTest {
                         .file(imageFile)
                         .param("title", "") // 빈 제목
                         .param("content", "내용은 있지만 제목이 없는 게시글")
-                        .param("category", "OTHERS")
+                        .param("category", "others")
                         .header("Authorization", validUser.getAuthHeader())
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andDo(print())
@@ -141,7 +141,7 @@ class ErrorScenarioIntegrationTest {
                         .file(imageFile)
                         .param("title", "제목은 있는 게시글")
                         .param("content", "") // 빈 내용
-                        .param("category", "OTHERS")
+                        .param("category", "others")
                         .header("Authorization", validUser.getAuthHeader())
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andDo(print())
@@ -156,7 +156,7 @@ class ErrorScenarioIntegrationTest {
                         .file(imageFile)
                         .param("title", "정상 제목")
                         .param("content", "정상 내용")
-                        .param("category", "INVALID_CATEGORY") // 존재하지 않는 카테고리
+                        .param("category", "invalid-category") // 존재하지 않는 카테고리
                         .header("Authorization", validUser.getAuthHeader())
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andDo(print())
@@ -171,7 +171,7 @@ class ErrorScenarioIntegrationTest {
                         .file(imageFile)
                         .param("title", longTitle)
                         .param("content", "정상 내용")
-                        .param("category", "OTHERS")
+                        .param("category", "others")
                         .header("Authorization", validUser.getAuthHeader())
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andDo(print())
@@ -203,7 +203,7 @@ class ErrorScenarioIntegrationTest {
                         .file(imageFile)
                         .param("title", "권한 테스트용 게시글")
                         .param("content", "이 게시글은 권한 테스트용입니다.")
-                        .param("category", "OTHERS")
+                        .param("category", "others")
                         .header("Authorization", postAuthor.getAuthHeader())
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andDo(print())
@@ -235,7 +235,7 @@ class ErrorScenarioIntegrationTest {
         mockMvc.perform(multipart("/community/freeboard/{freeboardId}", postId)
                         .param("title", "해킹 시도 제목")
                         .param("content", "다른 사용자가 수정하려는 내용")
-                        .param("category", "OTHERS")
+                        .param("category", "others")
                         .header("Authorization", otherUser.getAuthHeader())
                         .with(request -> {
                             request.setMethod("PATCH");
@@ -328,7 +328,7 @@ class ErrorScenarioIntegrationTest {
         mockMvc.perform(multipart("/community/freeboard/{freeboardId}", 99999L)
                         .param("title", "존재하지 않는 게시글 수정")
                         .param("content", "수정 내용")
-                        .param("category", "OTHERS")
+                        .param("category", "others")
                         .header("Authorization", validUser.getAuthHeader())
                         .with(request -> {
                             request.setMethod("PATCH");
@@ -368,7 +368,7 @@ class ErrorScenarioIntegrationTest {
                         .file(imageFile)
                         .param("title", "댓글 테스트용 게시글")
                         .param("content", "댓글 테스트를 위한 게시글")
-                        .param("category", "OTHERS")
+                        .param("category", "others")
                         .header("Authorization", validUser.getAuthHeader())
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andDo(print())
@@ -411,7 +411,7 @@ class ErrorScenarioIntegrationTest {
                         .file(imageFile)
                         .param("title", "비즈니스 로직 테스트 게시글")
                         .param("content", "비즈니스 로직 테스트를 위한 게시글")
-                        .param("category", "OTHERS")
+                        .param("category", "others")
                         .header("Authorization", user1.getAuthHeader())
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andDo(print())

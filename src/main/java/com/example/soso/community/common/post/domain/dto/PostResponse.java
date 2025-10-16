@@ -17,7 +17,7 @@ public record PostResponse(
         @Schema(description = "내용", example = "오늘 우리 아파트에서 작은 장터가 열립니다.", requiredMode = Schema.RequiredMode.REQUIRED)
         String content,
 
-        @Schema(description = "카테고리", example = "MARKET", requiredMode = Schema.RequiredMode.REQUIRED)
+        @Schema(description = "카테고리", example = "restaurant", requiredMode = Schema.RequiredMode.REQUIRED)
         Category category,
 
         @Schema(description = "이미지 URL 목록", example = "[\"https://example.com/image1.jpg\"]", requiredMode = Schema.RequiredMode.REQUIRED)

@@ -205,7 +205,7 @@ class FreeboardControllerTest {
 
         // when & then
         mockMvc.perform(get("/community/freeboard")
-                        .param("category", category.name())
+                        .param("category", category.getValue())
                         .param("sort", "LATEST")
                         .param("size", "10")
                         .with(SecurityMockMvcRequestPostProcessors.user(testUserDetails)))

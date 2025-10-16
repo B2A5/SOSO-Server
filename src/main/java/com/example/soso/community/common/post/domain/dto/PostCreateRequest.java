@@ -19,7 +19,7 @@ public record PostCreateRequest(
         @NotBlank
         String content,
 
-        @Schema(description = "카테고리", example = "COMMUNITY", requiredMode = Schema.RequiredMode.REQUIRED)
+        @Schema(description = "카테고리", example = "restaurant", requiredMode = Schema.RequiredMode.REQUIRED)
         @NotNull
         Category category,
 

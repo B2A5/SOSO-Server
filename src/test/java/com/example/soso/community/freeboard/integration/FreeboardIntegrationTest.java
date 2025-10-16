@@ -87,7 +87,7 @@ class FreeboardIntegrationTest {
         MvcResult createResult = mockMvc.perform(multipart("/community/freeboard")
                         .param("title", "테스트 제목")
                         .param("content", "테스트 내용")
-                        .param("category", "RESTAURANT")
+                        .param("category", "restaurant")
                         .header("Authorization", authHeader)
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andDo(print())
@@ -164,7 +164,7 @@ class FreeboardIntegrationTest {
         mockMvc.perform(multipart("/community/freeboard/{freeboardId}", postId)
                         .param("title", "수정된 제목")
                         .param("content", "수정된 내용")
-                        .param("category", "LIVING_CONVENIENCE")
+                        .param("category", "living-convenience")
                         .header("Authorization", authHeader)
                         .with(request -> {
                             request.setMethod("PATCH");
@@ -204,7 +204,7 @@ class FreeboardIntegrationTest {
         MvcResult createResult = mockMvc.perform(multipart("/community/freeboard")
                         .param("title", "공개 게시글")
                         .param("content", "모든 사용자가 볼 수 있는 글입니다.")
-                .param("category", "RESTAURANT")
+                .param("category", "restaurant")
                         .header("Authorization", authHeader)
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andExpect(status().isOk())
@@ -241,7 +241,7 @@ class FreeboardIntegrationTest {
         mockMvc.perform(multipart("/community/freeboard")
                         .param("title", "테스트")
                         .param("content", "테스트")
-                        .param("category", "RESTAURANT")
+                        .param("category", "restaurant")
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andDo(print())
                 .andExpect(status().isUnauthorized()); // 401 에러

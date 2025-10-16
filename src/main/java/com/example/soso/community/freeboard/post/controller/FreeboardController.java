@@ -79,7 +79,7 @@ public class FreeboardController {
                             examples = {
                                     @ExampleObject(name = "빈 제목", value = "{\"code\": \"VALIDATION_FAILED\", \"message\": \"[title] 제목은 필수입니다.\"}"),
                                     @ExampleObject(name = "빈 내용", value = "{\"code\": \"VALIDATION_FAILED\", \"message\": \"[content] 내용은 필수입니다.\"}"),
-                                    @ExampleObject(name = "잘못된 카테고리", value = "{\"code\": \"INVALID_ENUM_VALUE\", \"message\": \"'INVALID_CATEGORY'은(는) 허용되지 않는 값입니다. 사용 가능한 값: [DAILY_HOBBY, RESTAURANT, LIVING_CONVENIENCE, NEIGHBORHOOD_NEWS, STARTUP, OTHERS]\"}")
+                                    @ExampleObject(name = "잘못된 카테고리", value = "{\"code\": \"INVALID_ENUM_VALUE\", \"message\": \"'invalid-category'은(는) 허용되지 않는 값입니다. 사용 가능한 값: [daily-hobby, restaurant, living-convenience, neighborhood-news, startup, others]\"}")
                             }
                     )
             ),
@@ -137,11 +137,11 @@ public class FreeboardController {
                             examples = {
                                     @ExampleObject(
                                             name = "인증 사용자",
-                                            value = "{\"postId\":123,\"author\":{\"userId\":\"author123\",\"nickname\":\"작성자\",\"profileImageUrl\":\"https://cdn.example.com/profile.jpg\",\"userType\":\"INHABITANT\",\"address\":\"서울시 강남구\"},\"category\":\"RESTAURANT\",\"title\":\"맛있는 라면집 추천해요!\",\"content\":\"인증 사용자가 작성한 게시글입니다.\",\"images\":[{\"imageId\":1,\"imageUrl\":\"https://cdn.example.com/image1.jpg\",\"sequence\":0}],\"likeCount\":10,\"commentCount\":3,\"viewCount\":120,\"isLiked\":true,\"createdAt\":\"2025-01-01T10:00:00\",\"updatedAt\":\"2025-01-02T09:30:00\",\"isAuthor\":true,\"canEdit\":true,\"canDelete\":true}"
+                                            value = "{\"postId\":123,\"author\":{\"userId\":\"author123\",\"nickname\":\"작성자\",\"profileImageUrl\":\"https://cdn.example.com/profile.jpg\",\"userType\":\"INHABITANT\",\"address\":\"서울시 강남구\"},\"category\":\"restaurant\",\"title\":\"맛있는 라면집 추천해요!\",\"content\":\"인증 사용자가 작성한 게시글입니다.\",\"images\":[{\"imageId\":1,\"imageUrl\":\"https://cdn.example.com/image1.jpg\",\"sequence\":0}],\"likeCount\":10,\"commentCount\":3,\"viewCount\":120,\"isLiked\":true,\"createdAt\":\"2025-01-01T10:00:00\",\"updatedAt\":\"2025-01-02T09:30:00\",\"isAuthor\":true,\"canEdit\":true,\"canDelete\":true}"
                                     ),
                                     @ExampleObject(
                                             name = "비인증 사용자",
-                                            value = "{\"postId\":123,\"author\":{\"userId\":\"author123\",\"nickname\":\"작성자\",\"profileImageUrl\":\"https://cdn.example.com/profile.jpg\",\"userType\":\"INHABITANT\",\"address\":\"서울시 강남구\"},\"category\":\"RESTAURANT\",\"title\":\"맛있는 라면집 추천해요!\",\"content\":\"비인증 사용자가 조회한 게시글입니다.\",\"images\":[],\"likeCount\":10,\"commentCount\":3,\"viewCount\":120,\"isLiked\":false,\"createdAt\":\"2025-01-01T10:00:00\",\"updatedAt\":\"2025-01-02T09:30:00\",\"isAuthor\":false,\"canEdit\":false,\"canDelete\":false}"
+                                            value = "{\"postId\":123,\"author\":{\"userId\":\"author123\",\"nickname\":\"작성자\",\"profileImageUrl\":\"https://cdn.example.com/profile.jpg\",\"userType\":\"INHABITANT\",\"address\":\"서울시 강남구\"},\"category\":\"restaurant\",\"title\":\"맛있는 라면집 추천해요!\",\"content\":\"비인증 사용자가 조회한 게시글입니다.\",\"images\":[],\"likeCount\":10,\"commentCount\":3,\"viewCount\":120,\"isLiked\":false,\"createdAt\":\"2025-01-01T10:00:00\",\"updatedAt\":\"2025-01-02T09:30:00\",\"isAuthor\":false,\"canEdit\":false,\"canDelete\":false}"
                                     )
                             }
                     )
@@ -257,7 +257,7 @@ public class FreeboardController {
                     content = @Content(
                             schema = @Schema(implementation = FreeboardCursorResponse.class),
                             examples = @ExampleObject(
-                                    value = "{\"posts\":[{\"postId\":101,\"author\":{\"userId\":\"author101\",\"nickname\":\"작성자\",\"profileImageUrl\":\"https://cdn.example.com/profile.jpg\",\"userType\":\"INHABITANT\"},\"category\":\"RESTAURANT\",\"title\":\"테스트 제목\",\"contentPreview\":\"테스트 내용 미리보기...\",\"thumbnailUrl\":null,\"imageCount\":1,\"likeCount\":5,\"commentCount\":2,\"viewCount\":80,\"isLiked\":false,\"createdAt\":\"2025-01-01T10:00:00\",\"updatedAt\":null}],\"hasNext\":true,\"nextCursor\":\"eyJpZCI6MTAxLCJzb3J0VmFsdWUiOiIyMDI1LTAxLTAxVDEwOjAwOjAwIn0=\",\"size\":1,\"totalCount\":20}"
+                                    value = "{\"posts\":[{\"postId\":101,\"author\":{\"userId\":\"author101\",\"nickname\":\"작성자\",\"profileImageUrl\":\"https://cdn.example.com/profile.jpg\",\"userType\":\"INHABITANT\"},\"category\":\"restaurant\",\"title\":\"테스트 제목\",\"contentPreview\":\"테스트 내용 미리보기...\",\"thumbnailUrl\":null,\"imageCount\":1,\"likeCount\":5,\"commentCount\":2,\"viewCount\":80,\"isLiked\":false,\"createdAt\":\"2025-01-01T10:00:00\",\"updatedAt\":null}],\"hasNext\":true,\"nextCursor\":\"eyJpZCI6MTAxLCJzb3J0VmFsdWUiOiIyMDI1LTAxLTAxVDEwOjAwOjAwIn0=\",\"size\":1,\"totalCount\":20}"
                             )
                     )
             ),
@@ -276,7 +276,7 @@ public class FreeboardController {
     })
     @GetMapping
     public ResponseEntity<?> getPostsByCursor(
-            @RequestParam(value = "category", required = false) String categoryParam,
+            @RequestParam(value = "category", required = false) Category category,
             @RequestParam(defaultValue = "LATEST") FreeboardSortType sort,
             @RequestParam(required = false) String cursor,
             @RequestParam(defaultValue = "10") int size
@@ -289,21 +289,6 @@ public class FreeboardController {
             authentication.getPrincipal() instanceof CustomUserDetails) {
             CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
             userId = userDetails.getUser().getId();
-        }
-
-        // Category 파라미터 변환 (kebab-case -> UPPER_SNAKE_CASE)
-        Category category = null;
-        if (categoryParam != null) {
-            try {
-                // "daily-hobby" -> "DAILY_HOBBY"
-                String enumName = categoryParam.toUpperCase().replace("-", "_");
-                category = Category.valueOf(enumName);
-            } catch (IllegalArgumentException e) {
-                log.warn("잘못된 카테고리 파라미터: {}", categoryParam);
-                return ResponseEntity.badRequest().body(
-                        new ErrorResponse(PostErrorCode.INVALID_CATEGORY.name(), PostErrorCode.INVALID_CATEGORY.getMessage())
-                );
-            }
         }
 
         log.info("자유게시판 목록 조회 요청: category={}, sort={}, cursor={}, size={}, userId={}",
@@ -355,7 +340,7 @@ public class FreeboardController {
                                     @ExampleObject(name = "빈 제목", value = "{\"code\": \"VALIDATION_FAILED\", \"message\": \"[title] 제목은 필수입니다.\"}"),
                                     @ExampleObject(name = "빈 내용", value = "{\"code\": \"VALIDATION_FAILED\", \"message\": \"[content] 내용은 필수입니다.\"}"),
                                     @ExampleObject(name = "이미지 개수 초과", value = "{\"code\": \"ILLEGAL_ARGUMENT\", \"message\": \"총 이미지 개수는 4개를 초과할 수 없습니다.\"}"),
-                                    @ExampleObject(name = "잘못된 카테고리", value = "{\"code\": \"INVALID_ENUM_VALUE\", \"message\": \"'INVALID_CATEGORY'은(는) 허용되지 않는 값입니다. 사용 가능한 값: [DAILY_HOBBY, RESTAURANT, LIVING_CONVENIENCE, NEIGHBORHOOD_NEWS, STARTUP, OTHERS]\"}")
+                                    @ExampleObject(name = "잘못된 카테고리", value = "{\"code\": \"INVALID_ENUM_VALUE\", \"message\": \"'invalid-category'은(는) 허용되지 않는 값입니다. 사용 가능한 값: [daily-hobby, restaurant, living-convenience, neighborhood-news, startup, others]\"}")
                             }
                     )
             ),

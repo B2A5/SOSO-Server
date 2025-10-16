@@ -101,7 +101,7 @@ class PerformancePaginationIntegrationTest {
         }
 
         List<Long> postIds = new ArrayList<>();
-        String[] categories = {"RESTAURANT", "DAILY_HOBBY", "LIVING_CONVENIENCE", "STARTUP", "OTHERS"};
+        String[] categories = {"restaurant", "daily-hobby", "living-convenience", "startup", "others"};
 
         long startTime = System.currentTimeMillis();
 
@@ -251,7 +251,7 @@ class PerformancePaginationIntegrationTest {
 
         // ==================== STEP 1: 카테고리별 테스트 데이터 생성 ====================
         TestUser author = testUserHelper.createFounderUser();
-        String[] categories = {"RESTAURANT", "DAILY_HOBBY", "LIVING_CONVENIENCE", "STARTUP", "OTHERS"};
+        String[] categories = {"restaurant", "daily-hobby", "living-convenience", "startup", "others"};
 
         System.out.println("\n[STEP 1] 각 카테고리별로 3개씩 게시글 생성...");
 
@@ -309,7 +309,7 @@ class PerformancePaginationIntegrationTest {
 
             // 모든 게시글이 해당 카테고리인지 검증
             response.getPosts().forEach(post -> {
-                if (!post.getCategory().name().equals(category)) {
+                if (!post.getCategory().getValue().equals(category)) {
                     throw new AssertionError("카테고리 필터링 실패: 예상=" + category + ", 실제=" + post.getCategory());
                 }
             });
@@ -353,7 +353,7 @@ class PerformancePaginationIntegrationTest {
                         .param("content", "이 게시글은 많은 댓글을 받을 예정인 인기 게시글입니다!\n" +
                                 "댓글 페이징 테스트를 위해 생성되었습니다.\n" +
                                 "많은 댓글 부탁드려요! 💬")
-                        .param("category", "OTHERS")
+                        .param("category", "others")
                         .header("Authorization", postAuthor.getAuthHeader())
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andExpect(status().isOk())
@@ -493,7 +493,7 @@ class PerformancePaginationIntegrationTest {
                             .file(imageFile)
                             .param("title", "초기 게시글 " + i + "번")
                             .param("content", "커서 테스트를 위한 초기 게시글 " + i + "번입니다.")
-                            .param("category", "OTHERS")
+                            .param("category", "others")
                             .header("Authorization", author1.getAuthHeader())
                             .contentType(MediaType.MULTIPART_FORM_DATA))
                     .andExpect(status().isOk());
@@ -541,7 +541,7 @@ class PerformancePaginationIntegrationTest {
                             .file(imageFile)
                             .param("title", "🆕 새 게시글 " + i + "번 (페이징 중 추가)")
                             .param("content", "페이징 테스트 중간에 추가된 게시글 " + i + "번입니다.")
-                            .param("category", "OTHERS")
+                            .param("category", "others")
                             .header("Authorization", author2.getAuthHeader())
                             .contentType(MediaType.MULTIPART_FORM_DATA))
                     .andExpect(status().isOk());

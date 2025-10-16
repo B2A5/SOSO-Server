@@ -84,7 +84,7 @@ class UserJourneyIntegrationTest {
         MvcResult createResult = mockMvc.perform(multipart("/community/freeboard")
                         .param("title", postTitle)
                         .param("content", postContent)
-                        .param("category", "RESTAURANT")
+                        .param("category", "restaurant")
                         .header("Authorization", founder.getAuthHeader())
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andDo(print())
@@ -160,7 +160,7 @@ class UserJourneyIntegrationTest {
         mockMvc.perform(multipart("/community/freeboard/{freeboardId}", postId)
                         .param("title", updatedTitle)
                         .param("content", updatedContent)
-                        .param("category", "RESTAURANT")
+                        .param("category", "restaurant")
                         .header("Authorization", founder.getAuthHeader())
                         .contentType(MediaType.MULTIPART_FORM_DATA)
                         .with(request -> {
@@ -283,7 +283,7 @@ class UserJourneyIntegrationTest {
         MvcResult createResult = mockMvc.perform(multipart("/community/freeboard")
                         .param("title", tipTitle)
                         .param("content", tipContent)
-                        .param("category", "LIVING_CONVENIENCE")
+                        .param("category", "living-convenience")
                         .header("Authorization", inhabitant.getAuthHeader())
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andDo(print())
@@ -299,7 +299,7 @@ class UserJourneyIntegrationTest {
         // ==================== 카테고리별 조회 테스트 ====================
         System.out.println("\n📂 카테고리별 게시글 조회 테스트...");
         mockMvc.perform(get("/community/freeboard")
-                        .param("category", "LIVING_CONVENIENCE")
+                        .param("category", "living-convenience")
                         .param("sort", "LATEST")
                         .param("size", "10"))
                 .andDo(print())
