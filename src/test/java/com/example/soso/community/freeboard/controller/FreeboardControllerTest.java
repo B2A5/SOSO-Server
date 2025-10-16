@@ -165,7 +165,7 @@ class FreeboardControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.postId").value(postId))
                 .andExpect(jsonPath("$.title").value("맛있는 라면집 추천"))
-                .andExpect(jsonPath("$.category").value("RESTAURANT"))
+                .andExpect(jsonPath("$.category").value("restaurant"))
                 .andExpect(jsonPath("$.author.nickname").value("작성자"))
                 .andExpect(jsonPath("$.likeCount").value(15))
                 .andExpect(jsonPath("$.commentCount").value(8));
@@ -212,7 +212,7 @@ class FreeboardControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.posts").isArray())
-                .andExpect(jsonPath("$.posts[0].category").value(category.toString()))
+                .andExpect(jsonPath("$.posts[0].category").value(category.getValue()))
                 .andExpect(jsonPath("$.hasNext").value(false))
                 .andExpect(jsonPath("$.size").value(1));
     }

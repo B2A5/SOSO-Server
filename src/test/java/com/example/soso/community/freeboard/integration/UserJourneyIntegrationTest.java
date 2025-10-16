@@ -129,7 +129,7 @@ class UserJourneyIntegrationTest {
                 .andExpect(jsonPath("$.postId").value(postId))
                 .andExpect(jsonPath("$.title").value(postTitle))
                 .andExpect(jsonPath("$.content").value(postContent))
-                .andExpect(jsonPath("$.category").value("RESTAURANT"))
+                .andExpect(jsonPath("$.category").value("restaurant"))
                 .andExpect(jsonPath("$.author.userType").value("FOUNDER"))
                 .andExpect(jsonPath("$.author.nickname").value(founder.getNickname()))
                 .andExpect(jsonPath("$.author.address").exists())
@@ -306,7 +306,7 @@ class UserJourneyIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.posts").isArray())
                 .andExpect(jsonPath("$.posts[0].postId").value(postId))
-                .andExpect(jsonPath("$.posts[0].category").value("LIVING_CONVENIENCE"))
+                .andExpect(jsonPath("$.posts[0].category").value("living-convenience"))
                 .andExpect(jsonPath("$.posts[0].author.userType").value("INHABITANT"));
 
         System.out.println("✅ 카테고리별 조회 확인 완료");
