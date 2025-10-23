@@ -110,6 +110,7 @@ public class FreeboardCommentServiceImpl
                 .hasNext(hasNext)
                 .nextCursor(nextCursor)
                 .size(summaries.size())
+                .isAuthorized(userId != null)
                 .build();
     }
 
@@ -146,9 +147,9 @@ public class FreeboardCommentServiceImpl
         // 댓글 좋아요 수 조회
         int likeCount = commentLikeRepository.countByComment_Id(comment.getId());
 
-        // 현재 사용자의 댓글 좋아요 여부 확인
-        boolean isLiked = userId != null &&
-                commentLikeRepository.existsByComment_IdAndUser_Id(comment.getId(), userId);
+        // 현재 사용자의 댓글 좋아요 여부 확인 (비인증 사용자는 null)
+        Boolean isLiked = userId != null ?
+                commentLikeRepository.existsByComment_IdAndUser_Id(comment.getId(), userId) : null;
 
         return FreeboardCommentCursorResponse.FreeboardCommentSummary.builder()
                 .commentId(comment.getId())

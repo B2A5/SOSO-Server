@@ -50,7 +50,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
         OrderSpecifier<?>[] order = postCursorOrder.build(post, sort);
 
         // PostSummaryResponse 생성자 순서: postId, title, content, category, likeCount, commentCount, viewCount, likeByPost, createdAt, user
-        // userId가 null인 경우 좋아요 정보 없이 조회
+        // userId가 null인 경우 좋아요 정보 없이 조회 (null 반환)
         if (userId == null) {
             return queryFactory
                     .select(Projections.constructor(PostSummaryResponse.class,
@@ -61,7 +61,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                             post.likeCount, // int likeCount
                             post.commentCount, // int commentCount
                             post.viewCount, // int viewCount
-                            com.querydsl.core.types.dsl.Expressions.constant(false), // boolean likeByPost
+                            com.querydsl.core.types.dsl.Expressions.nullExpression(Boolean.class), // Boolean likeByPost = null
                             post.createdDate, // LocalDateTime createdAt
                             Projections.constructor(com.example.soso.community.common.post.domain.dto.UserSummaryResponse.class,
                                     user.id,

@@ -1,5 +1,6 @@
 package com.example.soso.community.freeboard.comment.domain.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -29,6 +30,9 @@ public class FreeboardCommentCursorResponse {
     @Schema(description = "현재 페이지 크기", example = "20", requiredMode = Schema.RequiredMode.REQUIRED)
     private int size;
 
+    @Schema(description = "요청한 사용자가 인증되었는지 여부 (액세스 토큰 제공 여부)", example = "true", requiredMode = Schema.RequiredMode.REQUIRED)
+    private boolean isAuthorized;
+
     @Schema(description = "댓글 요약 정보")
     @Getter
     @NoArgsConstructor
@@ -56,9 +60,14 @@ public class FreeboardCommentCursorResponse {
         @Schema(description = "댓글 좋아요 수", example = "5", requiredMode = Schema.RequiredMode.REQUIRED)
         private int likeCount;
 
-        @Schema(description = "현재 사용자의 댓글 좋아요 여부", example = "true", requiredMode = Schema.RequiredMode.REQUIRED)
+        @Schema(
+            description = "현재 사용자의 댓글 좋아요 여부 (비인증 사용자인 경우 null)",
+            example = "true",
+            requiredMode = Schema.RequiredMode.REQUIRED,
+            nullable = true
+        )
         @JsonProperty("isLiked")
-        private boolean isLiked;
+        private Boolean isLiked;
 
         @Schema(description = "댓글 깊이 (0: 일반 댓글, 1: 대댓글)", example = "0", requiredMode = Schema.RequiredMode.REQUIRED)
         private int depth;
@@ -74,6 +83,12 @@ public class FreeboardCommentCursorResponse {
 
         @Schema(description = "수정 시간", example = "2024-12-25T14:20:00", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
         private LocalDateTime updatedAt;
+
+        // Lombok @Getter가 생성하는 isLiked() 메서드를 Jackson이 "liked"로 직렬화하는 것을 방지
+        @JsonIgnore
+        public Boolean isLiked() {
+            return isLiked;
+        }
     }
 
     @Schema(description = "작성자 정보")

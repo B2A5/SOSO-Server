@@ -135,6 +135,7 @@ class LikeSystemIntegrationTest {
                         .header("Authorization", liker1.getAuthHeader()))
                 .andDo(print())
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.isAuthorized").value(true))
                 .andExpect(jsonPath("$.likeCount").value(1))
                 .andExpect(jsonPath("$.isLiked").value(true))
                 .andReturn();
@@ -156,6 +157,7 @@ class LikeSystemIntegrationTest {
                         .header("Authorization", postAuthor.getAuthHeader()))
                 .andDo(print())
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.isAuthorized").value(true))
                 .andExpect(jsonPath("$.likeCount").value(2))
                 .andExpect(jsonPath("$.isLiked").value(false)) // 작성자는 아직 좋아요 안 눌렀음
                 .andReturn();
@@ -217,6 +219,7 @@ class LikeSystemIntegrationTest {
                         .param("size", "20"))
                 .andDo(print())
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.isAuthorized").value(true))
                 .andExpect(jsonPath("$.comments").isArray())
                 .andExpect(jsonPath("$.comments[0].likeCount").value(3))
                 .andExpect(jsonPath("$.comments[0].isLiked").value(true)); // liker1이 좋아요 눌렀으므로
@@ -240,6 +243,7 @@ class LikeSystemIntegrationTest {
                         .header("Authorization", liker1.getAuthHeader()))
                 .andDo(print())
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.isAuthorized").value(true))
                 .andExpect(jsonPath("$.likeCount").value(1)) // 2개에서 1개로 감소
                 .andExpect(jsonPath("$.isLiked").value(false)); // 취소했으므로 false
 
@@ -272,6 +276,7 @@ class LikeSystemIntegrationTest {
                         .header("Authorization", commenter.getAuthHeader()))
                 .andDo(print())
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.isAuthorized").value(true))
                 .andExpect(jsonPath("$.comments[0].likeCount").value(2))
                 .andExpect(jsonPath("$.comments[0].isLiked").value(false)); // commenter는 댓글에 좋아요 안 눌렀음
 
@@ -421,6 +426,7 @@ class LikeSystemIntegrationTest {
                         .header("Authorization", users[0].getAuthHeader()))
                 .andDo(print())
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.isAuthorized").value(true))
                 .andExpect(jsonPath("$.likeCount").value(5))
                 .andExpect(jsonPath("$.isLiked").value(true));
 

@@ -27,8 +27,13 @@ public record PostSummaryResponse(
         @Schema(description = "조회 수", example = "120", requiredMode = Schema.RequiredMode.REQUIRED)
         int viewCount,
 
-        @Schema(description = "내가 좋아요 누름 게시글", example = "true", requiredMode = Schema.RequiredMode.REQUIRED)
-        boolean likeByPost,
+        @Schema(
+            description = "내가 좋아요 누른 게시글 여부 (비인증 사용자인 경우 null)",
+            example = "true",
+            requiredMode = Schema.RequiredMode.REQUIRED,
+            nullable = true
+        )
+        Boolean likeByPost,
 
         @Schema(description = "작성 시간", example = "2025-07-28T15:30:00", requiredMode = Schema.RequiredMode.REQUIRED)
         java.time.LocalDateTime createdAt,
