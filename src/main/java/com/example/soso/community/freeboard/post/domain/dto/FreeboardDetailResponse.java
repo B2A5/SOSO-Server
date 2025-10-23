@@ -3,6 +3,7 @@ package com.example.soso.community.freeboard.post.domain.dto;
 import com.example.soso.community.common.post.domain.entity.Category;
 import com.example.soso.users.domain.entity.UserType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -54,9 +55,11 @@ public class FreeboardDetailResponse {
     private LocalDateTime updatedAt;
 
     @Schema(description = "요청한 사용자가 인증되었는지 여부 (액세스 토큰 제공 여부)", example = "true", requiredMode = Schema.RequiredMode.REQUIRED)
+    @JsonProperty("isAuthorized")
     private boolean isAuthorized;
 
     @Schema(description = "작성자 여부 (현재 사용자가 작성자인지)", example = "true", requiredMode = Schema.RequiredMode.REQUIRED)
+    @JsonProperty("isAuthor")
     private boolean isAuthor;
 
     @Schema(
@@ -66,6 +69,7 @@ public class FreeboardDetailResponse {
         nullable = true
     )
     @JsonProperty("isLiked")
+    @JsonInclude(JsonInclude.Include.ALWAYS)
     private Boolean isLiked;
 
     @Schema(
@@ -74,6 +78,7 @@ public class FreeboardDetailResponse {
         requiredMode = Schema.RequiredMode.REQUIRED,
         nullable = true
     )
+    @JsonInclude(JsonInclude.Include.ALWAYS)
     private Boolean canEdit;
 
     @Schema(
@@ -82,20 +87,20 @@ public class FreeboardDetailResponse {
         requiredMode = Schema.RequiredMode.REQUIRED,
         nullable = true
     )
+    @JsonInclude(JsonInclude.Include.ALWAYS)
     private Boolean canDelete;
 
-    // Lombok @Getter가 생성하는 isLiked() 메서드를 Jackson이 "liked"로 직렬화하는 것을 방지
-    @JsonIgnore
+    // Lombok @Getter가 생성하는 메서드들을 오버라이드
+    // Boolean 타입이므로 Lombok은 getIsLiked()를 생성하지만,
+    // 테스트 코드와의 호환성을 위해 is prefix 메서드도 제공
     public Boolean isLiked() {
         return isLiked;
     }
 
-    @JsonIgnore
     public Boolean isCanEdit() {
         return canEdit;
     }
 
-    @JsonIgnore
     public Boolean isCanDelete() {
         return canDelete;
     }

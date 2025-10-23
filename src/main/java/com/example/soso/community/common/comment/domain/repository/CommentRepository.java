@@ -39,6 +39,9 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     int countByPostIdAndDeletedFalse(Long postId);
 
+    // 총 댓글 수 (삭제된 댓글 포함)
+    long countByPostId(Long postId);
+
     // 커서 기반 페이징을 위한 메서드들 (삭제된 댓글 제외)
     List<Comment> findByPostIdAndDeletedFalseAndCreatedDateBefore(Long postId, LocalDateTime createdDate, Pageable pageable);
 

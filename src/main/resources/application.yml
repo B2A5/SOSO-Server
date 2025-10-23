@@ -24,6 +24,9 @@ spring:
     init:
       encoding: UTF-8
 
+  jackson:
+    default-property-inclusion: always
+
   session:
     store-type: redis
     redis:

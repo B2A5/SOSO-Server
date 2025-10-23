@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.nullValue;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -208,8 +209,10 @@ class UserJourneyIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.postId").value(postId))
-                .andExpect(jsonPath("$.canEdit").value(false))
-                .andExpect(jsonPath("$.canDelete").value(false))
+                .andExpect(jsonPath("$.isAuthorized").value(false))
+                .andExpect(jsonPath("$.canEdit").value(nullValue()))
+                .andExpect(jsonPath("$.canDelete").value(nullValue()))
+                .andExpect(jsonPath("$.isLiked").value(nullValue()))
                 .andExpect(jsonPath("$.author.userType").value("FOUNDER"))
                 .andExpect(jsonPath("$.author.address").exists());
 

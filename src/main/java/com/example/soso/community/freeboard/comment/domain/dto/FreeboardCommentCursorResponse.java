@@ -2,6 +2,7 @@ package com.example.soso.community.freeboard.comment.domain.dto;
 
 import com.example.soso.users.domain.entity.UserType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -35,6 +36,7 @@ public class FreeboardCommentCursorResponse {
     private long total;
 
     @Schema(description = "요청한 사용자가 인증되었는지 여부 (액세스 토큰 제공 여부)", example = "true", requiredMode = Schema.RequiredMode.REQUIRED)
+    @JsonProperty("isAuthorized")
     private boolean isAuthorized;
 
     @Schema(description = "댓글 요약 정보")
@@ -71,6 +73,7 @@ public class FreeboardCommentCursorResponse {
         private boolean deleted;
 
         @Schema(description = "현재 사용자가 작성한 댓글인지", example = "true", requiredMode = Schema.RequiredMode.REQUIRED)
+        @JsonProperty("isAuthor")
         private boolean isAuthor;
 
         @Schema(
@@ -80,6 +83,7 @@ public class FreeboardCommentCursorResponse {
             nullable = true
         )
         @JsonProperty("isLiked")
+        @JsonInclude(JsonInclude.Include.ALWAYS)
         private Boolean isLiked;
 
         @Schema(
@@ -88,6 +92,7 @@ public class FreeboardCommentCursorResponse {
             requiredMode = Schema.RequiredMode.REQUIRED,
             nullable = true
         )
+        @JsonInclude(JsonInclude.Include.ALWAYS)
         private Boolean canEdit;
 
         @Schema(
@@ -96,6 +101,7 @@ public class FreeboardCommentCursorResponse {
             requiredMode = Schema.RequiredMode.REQUIRED,
             nullable = true
         )
+        @JsonInclude(JsonInclude.Include.ALWAYS)
         private Boolean canDelete;
 
         @Schema(description = "작성 시간", example = "2024-12-25T10:30:00", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -104,18 +110,17 @@ public class FreeboardCommentCursorResponse {
         @Schema(description = "수정 시간", example = "2024-12-25T14:20:00", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
         private LocalDateTime updatedAt;
 
-        // Lombok @Getter가 생성하는 isLiked() 메서드를 Jackson이 "liked"로 직렬화하는 것을 방지
-        @JsonIgnore
+        // Lombok @Getter가 생성하는 메서드들을 오버라이드
+        // Boolean 타입이므로 Lombok은 getIsLiked()를 생성하지만,
+        // 테스트 코드와의 호환성을 위해 is prefix 메서드도 제공
         public Boolean isLiked() {
             return isLiked;
         }
 
-        @JsonIgnore
         public Boolean isCanEdit() {
             return canEdit;
         }
 
-        @JsonIgnore
         public Boolean isCanDelete() {
             return canDelete;
         }

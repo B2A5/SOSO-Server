@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.nullValue;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -81,14 +82,16 @@ class AuthenticationPermissionTest {
                 .andExpect(jsonPath("$.posts").isArray())
                 .andExpect(jsonPath("$.totalCount").exists());
 
-        // 2. 게시글 상세 조회 - 성공해야 함 (canEdit/canDelete는 false)
+        // 2. 게시글 상세 조회 - 성공해야 함 (비인증이므로 canEdit/canDelete/isLiked는 null, isAuthorized는 false)
         System.out.println("  2. 게시글 상세 조회...");
         MvcResult detailResult = mockMvc.perform(get("/community/freeboard/{freeboardId}", postId))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.postId").value(postId))
-                .andExpect(jsonPath("$.canEdit").value(false))
-                .andExpect(jsonPath("$.canDelete").value(false))
+                .andExpect(jsonPath("$.isAuthorized").value(false))
+                .andExpect(jsonPath("$.canEdit").value(nullValue()))
+                .andExpect(jsonPath("$.canDelete").value(nullValue()))
+                .andExpect(jsonPath("$.isLiked").value(nullValue()))
                 .andExpect(jsonPath("$.author.userType").value("FOUNDER"))
                 .andExpect(jsonPath("$.author.address").exists())
                 .andReturn();
@@ -165,8 +168,10 @@ class AuthenticationPermissionTest {
         System.out.println("✅ 미인증 사용자 차단 작업들 모두 확인!");
 
         // ==================== 검증 ====================
-        assertThat(response.isCanEdit()).isFalse();
-        assertThat(response.isCanDelete()).isFalse();
+        assertThat(response.isAuthorized()).isFalse();
+        assertThat(response.getCanEdit()).isNull();
+        assertThat(response.getCanDelete()).isNull();
+        assertThat(response.getIsLiked()).isNull();
         assertThat(response.getAuthor().getUserType().toString()).isEqualTo("FOUNDER");
         assertThat(response.getAuthor().getAddress()).isNotEmpty();
 
@@ -192,14 +197,16 @@ class AuthenticationPermissionTest {
         // ==================== 원작성자 권한 테스트 ====================
         System.out.println("\n✅ [원작성자] 모든 권한이 있는 사용자 테스트:");
 
-        // 1. 상세 조회 - canEdit/canDelete = true
+        // 1. 상세 조회 - isAuthorized=true, canEdit/canDelete=true, isLiked=false
         System.out.println("  1. 원작성자의 게시글 조회...");
         MvcResult authorResult = mockMvc.perform(get("/community/freeboard/{freeboardId}", postId)
                         .header("Authorization", originalAuthor.getAuthHeader()))
                 .andDo(print())
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.isAuthorized").value(true))
                 .andExpect(jsonPath("$.canEdit").value(true))
                 .andExpect(jsonPath("$.canDelete").value(true))
+                .andExpect(jsonPath("$.isLiked").value(false))
                 .andExpect(jsonPath("$.author.userType").value("FOUNDER"))
                 .andReturn();
 
@@ -223,14 +230,16 @@ class AuthenticationPermissionTest {
         // ==================== 다른 사용자 권한 테스트 ====================
         System.out.println("\n🚫 [다른사용자] 제한된 권한을 가진 사용자 테스트:");
 
-        // 1. 상세 조회 - canEdit/canDelete = false
+        // 1. 상세 조회 - isAuthorized=true, canEdit/canDelete=false, isLiked=false
         System.out.println("  1. 다른 사용자의 게시글 조회...");
         mockMvc.perform(get("/community/freeboard/{freeboardId}", postId)
                         .header("Authorization", otherUser.getAuthHeader()))
                 .andDo(print())
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.isAuthorized").value(true))
                 .andExpect(jsonPath("$.canEdit").value(false))
                 .andExpect(jsonPath("$.canDelete").value(false))
+                .andExpect(jsonPath("$.isLiked").value(false))
                 .andExpect(jsonPath("$.author.userType").value("FOUNDER"));
 
         // 2. 수정 시도 - 403 Forbidden
@@ -292,10 +301,12 @@ class AuthenticationPermissionTest {
         System.out.println("  - 좋아요 수: " + finalResponse.getLikeCount());
 
         // ==================== 검증 ====================
+        assertThat(finalResponse.isAuthorized()).isTrue();
         assertThat(finalResponse.getCommentCount()).isEqualTo(1);
         assertThat(finalResponse.getLikeCount()).isEqualTo(1);
-        assertThat(finalResponse.isCanEdit()).isTrue(); // 원작성자 관점
-        assertThat(finalResponse.isCanDelete()).isTrue(); // 원작성자 관점
+        assertThat(finalResponse.getCanEdit()).isTrue(); // 원작성자 관점
+        assertThat(finalResponse.getCanDelete()).isTrue(); // 원작성자 관점
+        assertThat(finalResponse.getIsLiked()).isFalse(); // 원작성자는 자신의 글에 좋아요 안 함
 
         System.out.println("🎯 인증된 사용자 권한 상세 테스트 완료! 🎉");
     }
@@ -330,8 +341,10 @@ class AuthenticationPermissionTest {
                         .header("Authorization", founder.getAuthHeader()))
                 .andDo(print())
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.isAuthorized").value(true))
                 .andExpect(jsonPath("$.canEdit").value(false))
                 .andExpect(jsonPath("$.canDelete").value(false))
+                .andExpect(jsonPath("$.isLiked").value(false))
                 .andExpect(jsonPath("$.author.userType").value("INHABITANT"));
 
         // 거주민 → 창업가 게시글 접근
@@ -340,8 +353,10 @@ class AuthenticationPermissionTest {
                         .header("Authorization", inhabitant.getAuthHeader()))
                 .andDo(print())
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.isAuthorized").value(true))
                 .andExpect(jsonPath("$.canEdit").value(false))
                 .andExpect(jsonPath("$.canDelete").value(false))
+                .andExpect(jsonPath("$.isLiked").value(false))
                 .andExpect(jsonPath("$.author.userType").value("FOUNDER"));
 
         // ==================== 각자의 게시글에 대한 권한 확인 ====================
@@ -352,16 +367,20 @@ class AuthenticationPermissionTest {
                         .header("Authorization", founder.getAuthHeader()))
                 .andDo(print())
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.isAuthorized").value(true))
                 .andExpect(jsonPath("$.canEdit").value(true))
-                .andExpect(jsonPath("$.canDelete").value(true));
+                .andExpect(jsonPath("$.canDelete").value(true))
+                .andExpect(jsonPath("$.isLiked").value(false));
 
         // 거주민 → 자신의 게시글
         mockMvc.perform(get("/community/freeboard/{freeboardId}", inhabitantPostId)
                         .header("Authorization", inhabitant.getAuthHeader()))
                 .andDo(print())
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.isAuthorized").value(true))
                 .andExpect(jsonPath("$.canEdit").value(true))
-                .andExpect(jsonPath("$.canDelete").value(true));
+                .andExpect(jsonPath("$.canDelete").value(true))
+                .andExpect(jsonPath("$.isLiked").value(false));
 
         System.out.println("✅ 사용자 유형별 상호작용 테스트 완료! 🎉");
     }
