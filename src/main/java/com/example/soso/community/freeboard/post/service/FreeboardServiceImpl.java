@@ -104,8 +104,8 @@ public class FreeboardServiceImpl implements FreeboardService {
 
         post.increaseViewCount();
 
-        // 좋아요 여부 확인 (인증된 사용자인 경우만)
-        boolean isLiked = userId != null && postLikeRepository.existsByPost_IdAndUser_Id(postId, userId);
+        // 인증 여부 확인
+        boolean isAuthorized = userId != null;
 
         // 이미지 정보 목록 추출
         List<FreeboardDetailResponse.ImageInfo> images = post.getImages().stream()
@@ -121,7 +121,7 @@ public class FreeboardServiceImpl implements FreeboardService {
         boolean isAuthor = userId != null && post.getUser().getId().equals(userId);
 
         // 응답 DTO 생성
-        return FreeboardDetailResponse.builder()
+        FreeboardDetailResponse.FreeboardDetailResponseBuilder builder = FreeboardDetailResponse.builder()
                 .postId(post.getId())
                 .author(FreeboardDetailResponse.PostDetailAuthorInfo.builder()
                         .userId(post.getUser().getId())
@@ -137,13 +137,25 @@ public class FreeboardServiceImpl implements FreeboardService {
                 .likeCount(post.getLikeCount())
                 .commentCount(post.getCommentCount())
                 .viewCount(post.getViewCount())
-                .isLiked(isLiked)
                 .createdAt(post.getCreatedAt())
                 .updatedAt(post.getUpdatedAt())
-                .isAuthor(isAuthor)
-                .canEdit(userId != null && isAuthor) // 인증된 사용자이고 작성자인 경우만 편집 가능
-                .canDelete(userId != null && isAuthor) // 인증된 사용자이고 작성자인 경우만 삭제 가능
-                .build();
+                .isAuthorized(isAuthorized)
+                .isAuthor(isAuthor);
+
+        // 인증된 사용자인 경우에만 isLiked, canEdit, canDelete 설정
+        if (isAuthorized) {
+            boolean isLiked = postLikeRepository.existsByPost_IdAndUser_Id(postId, userId);
+            builder.isLiked(isLiked)
+                   .canEdit(isAuthor)
+                   .canDelete(isAuthor);
+        } else {
+            // 비인증 사용자는 null
+            builder.isLiked(null)
+                   .canEdit(null)
+                   .canDelete(null);
+        }
+
+        return builder.build();
     }
 
     @Override
@@ -192,6 +204,7 @@ public class FreeboardServiceImpl implements FreeboardService {
                 .nextCursor(nextCursor)
                 .size(summaries.size())
                 .totalCount(totalCount)
+                .isAuthorized(userId != null)
                 .build();
     }
 

@@ -105,11 +105,20 @@ public class FreeboardCommentServiceImpl
                 .map(comment -> createCommentSummary(comment, userId))
                 .toList();
 
+        // 첫 번째 댓글의 postId로 총 댓글 수 조회
+        long total = 0;
+        if (!comments.isEmpty()) {
+            Long postId = comments.get(0).getPost().getId();
+            total = commentRepository.countByPostId(postId);
+        }
+
         return FreeboardCommentCursorResponse.builder()
                 .comments(summaries)
                 .hasNext(hasNext)
                 .nextCursor(nextCursor)
                 .size(summaries.size())
+                .total(total)
+                .isAuthorized(userId != null)
                 .build();
     }
 
@@ -146,9 +155,19 @@ public class FreeboardCommentServiceImpl
         // 댓글 좋아요 수 조회
         int likeCount = commentLikeRepository.countByComment_Id(comment.getId());
 
-        // 현재 사용자의 댓글 좋아요 여부 확인
-        boolean isLiked = userId != null &&
-                commentLikeRepository.existsByComment_IdAndUser_Id(comment.getId(), userId);
+        // 인증 여부 확인
+        boolean isAuthorized = userId != null;
+
+        // 작성자 여부 확인
+        boolean isAuthor = userId != null && comment.getUser().getId().equals(userId);
+
+        // 인증된 사용자의 댓글 좋아요 여부 확인 (비인증 사용자는 null)
+        Boolean isLiked = isAuthorized ?
+                commentLikeRepository.existsByComment_IdAndUser_Id(comment.getId(), userId) : null;
+
+        // canEdit, canDelete 설정 (비인증 사용자는 null, 인증 사용자는 작성자 여부에 따라 boolean)
+        Boolean canEdit = isAuthorized ? isAuthor : null;
+        Boolean canDelete = isAuthorized ? isAuthor : null;
 
         return FreeboardCommentCursorResponse.FreeboardCommentSummary.builder()
                 .commentId(comment.getId())
@@ -158,14 +177,17 @@ public class FreeboardCommentServiceImpl
                         .userId(comment.getUser().getId())
                         .nickname(comment.getUser().getNickname())
                         .profileImageUrl(comment.getUser().getProfileImageUrl())
+                        .userType(comment.getUser().getUserType())
                         .build())
                 .content(comment.isDeleted() ? "삭제된 댓글입니다." : comment.getContent())
                 .replyCount(replyCount)
                 .likeCount(likeCount)
-                .isLiked(isLiked)
                 .depth(depth)
                 .deleted(comment.isDeleted())
-                .isAuthor(comment.getUser().getId().equals(userId))
+                .isAuthor(isAuthor)
+                .isLiked(isLiked)
+                .canEdit(canEdit)
+                .canDelete(canDelete)
                 .createdAt(comment.getCreatedDate())
                 .updatedAt(comment.getLastModifiedDate())
                 .build();

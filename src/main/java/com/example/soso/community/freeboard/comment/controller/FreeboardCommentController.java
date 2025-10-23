@@ -118,7 +118,20 @@ public class FreeboardCommentController {
                     **특징:**
                     - 계층 구조 지원 (부모 댓글 → 대댓글)
                     - 삭제된 댓글은 "삭제된 댓글입니다" 표시
-                    - 작성자 정보 포함
+                    - 총 댓글 수 제공 (total)
+                    - 인증/비인증 사용자 모두 조회 가능
+
+                    **인증 사용자:**
+                    - isAuthorized: true
+                    - isLiked: boolean (좋아요 상태)
+                    - canEdit: boolean (수정 권한)
+                    - canDelete: boolean (삭제 권한)
+
+                    **비인증 사용자:**
+                    - isAuthorized: false
+                    - isLiked: null
+                    - canEdit: null
+                    - canDelete: null
                     """,
             parameters = {
                     @Parameter(
@@ -144,9 +157,16 @@ public class FreeboardCommentController {
                     description = "조회 성공",
                     content = @Content(
                             schema = @Schema(implementation = FreeboardCommentCursorResponse.class),
-                            examples = @ExampleObject(
-                                    value = "{\"comments\":[{\"commentId\":456,\"postId\":123,\"parentCommentId\":null,\"author\":{\"userId\":\"commenter1\",\"nickname\":\"댓글러\",\"profileImageUrl\":\"https://cdn.example.com/user.jpg\"},\"content\":\"첫 댓글입니다.\",\"replyCount\":0,\"likeCount\":0,\"isLiked\":false,\"depth\":0,\"deleted\":false,\"isAuthor\":false,\"createdAt\":\"2025-01-01T10:10:00\",\"updatedAt\":\"2025-01-01T10:10:00\"}],\"hasNext\":false,\"nextCursor\":null,\"size\":1}"
-                            )
+                            examples = {
+                                    @ExampleObject(
+                                            name = "인증 사용자 (본인 댓글 포함)",
+                                            value = "{\"comments\":[{\"commentId\":456,\"postId\":123,\"parentCommentId\":null,\"author\":{\"userId\":\"commenter1\",\"nickname\":\"댓글러\",\"profileImageUrl\":\"https://cdn.example.com/user.jpg\",\"userType\":\"INHABITANT\"},\"content\":\"첫 댓글입니다.\",\"replyCount\":2,\"likeCount\":5,\"depth\":0,\"deleted\":false,\"isAuthor\":true,\"isLiked\":false,\"canEdit\":true,\"canDelete\":true,\"createdAt\":\"2025-01-01T10:10:00\",\"updatedAt\":\"2025-01-01T10:10:00\"}],\"hasNext\":true,\"nextCursor\":\"eyJpZCI6NDU2fQ==\",\"size\":1,\"total\":50,\"isAuthorized\":true}"
+                                    ),
+                                    @ExampleObject(
+                                            name = "비인증 사용자",
+                                            value = "{\"comments\":[{\"commentId\":456,\"postId\":123,\"parentCommentId\":null,\"author\":{\"userId\":\"commenter1\",\"nickname\":\"댓글러\",\"profileImageUrl\":\"https://cdn.example.com/user.jpg\",\"userType\":\"INHABITANT\"},\"content\":\"첫 댓글입니다.\",\"replyCount\":2,\"likeCount\":5,\"depth\":0,\"deleted\":false,\"isAuthor\":false,\"isLiked\":null,\"canEdit\":null,\"canDelete\":null,\"createdAt\":\"2025-01-01T10:10:00\"}],\"hasNext\":true,\"nextCursor\":\"eyJpZCI6NDU2fQ==\",\"size\":1,\"total\":50,\"isAuthorized\":false}"
+                                    )
+                            }
                     )
             ),
             @ApiResponse(

@@ -2,6 +2,7 @@ package com.example.soso.community.freeboard.post.domain.dto;
 
 import com.example.soso.community.common.post.domain.entity.Category;
 import com.example.soso.users.domain.entity.UserType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -46,24 +47,58 @@ public class FreeboardDetailResponse {
     @Schema(description = "조회 수", example = "102", requiredMode = Schema.RequiredMode.REQUIRED)
     private int viewCount;
 
-    @Schema(description = "현재 사용자의 좋아요 여부", example = "true", requiredMode = Schema.RequiredMode.REQUIRED)
-    @JsonProperty("isLiked")
-    private boolean isLiked;
-
     @Schema(description = "작성 시간", example = "2024-12-25T10:30:00", requiredMode = Schema.RequiredMode.REQUIRED)
     private LocalDateTime createdAt;
 
     @Schema(description = "수정 시간", example = "2024-12-25T14:20:00", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
     private LocalDateTime updatedAt;
 
+    @Schema(description = "요청한 사용자가 인증되었는지 여부 (액세스 토큰 제공 여부)", example = "true", requiredMode = Schema.RequiredMode.REQUIRED)
+    private boolean isAuthorized;
+
     @Schema(description = "작성자 여부 (현재 사용자가 작성자인지)", example = "true", requiredMode = Schema.RequiredMode.REQUIRED)
     private boolean isAuthor;
 
-    @Schema(description = "편집 가능 여부 (인증된 사용자이고 작성자인 경우)", example = "true", requiredMode = Schema.RequiredMode.REQUIRED)
-    private boolean canEdit;
+    @Schema(
+        description = "현재 사용자의 좋아요 여부 (비인증 사용자인 경우 null)",
+        example = "true",
+        requiredMode = Schema.RequiredMode.REQUIRED,
+        nullable = true
+    )
+    @JsonProperty("isLiked")
+    private Boolean isLiked;
 
-    @Schema(description = "삭제 가능 여부 (인증된 사용자이고 작성자인 경우)", example = "true", requiredMode = Schema.RequiredMode.REQUIRED)
-    private boolean canDelete;
+    @Schema(
+        description = "편집 가능 여부 (비인증 사용자인 경우 null)",
+        example = "true",
+        requiredMode = Schema.RequiredMode.REQUIRED,
+        nullable = true
+    )
+    private Boolean canEdit;
+
+    @Schema(
+        description = "삭제 가능 여부 (비인증 사용자인 경우 null)",
+        example = "true",
+        requiredMode = Schema.RequiredMode.REQUIRED,
+        nullable = true
+    )
+    private Boolean canDelete;
+
+    // Lombok @Getter가 생성하는 isLiked() 메서드를 Jackson이 "liked"로 직렬화하는 것을 방지
+    @JsonIgnore
+    public Boolean isLiked() {
+        return isLiked;
+    }
+
+    @JsonIgnore
+    public Boolean isCanEdit() {
+        return canEdit;
+    }
+
+    @JsonIgnore
+    public Boolean isCanDelete() {
+        return canDelete;
+    }
 
     @Schema(description = "이미지 정보")
     @Getter

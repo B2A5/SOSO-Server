@@ -126,7 +126,26 @@ public class FreeboardController {
 
     @Operation(
             summary = "자유게시판 글 상세 조회",
-            description = "게시글 ID를 통해 특정 게시글의 상세 정보를 조회합니다. 조회 시 조회수가 증가합니다."
+            description = """
+                    게시글 ID를 통해 특정 게시글의 상세 정보를 조회합니다.
+
+                    **특징:**
+                    - 조회 시 조회수 자동 증가
+                    - 인증/비인증 사용자 모두 조회 가능
+                    - 인증 여부에 따라 isLiked, canEdit, canDelete 값 변경
+
+                    **인증 사용자:**
+                    - isAuthorized: true
+                    - isLiked: boolean (좋아요 상태)
+                    - canEdit: boolean (수정 권한)
+                    - canDelete: boolean (삭제 권한)
+
+                    **비인증 사용자:**
+                    - isAuthorized: false
+                    - isLiked: null
+                    - canEdit: null
+                    - canDelete: null
+                    """
     )
     @ApiResponses({
             @ApiResponse(
@@ -136,12 +155,16 @@ public class FreeboardController {
                             schema = @Schema(implementation = FreeboardDetailResponse.class),
                             examples = {
                                     @ExampleObject(
-                                            name = "인증 사용자",
-                                            value = "{\"postId\":123,\"author\":{\"userId\":\"author123\",\"nickname\":\"작성자\",\"profileImageUrl\":\"https://cdn.example.com/profile.jpg\",\"userType\":\"INHABITANT\",\"address\":\"서울시 강남구\"},\"category\":\"restaurant\",\"title\":\"맛있는 라면집 추천해요!\",\"content\":\"인증 사용자가 작성한 게시글입니다.\",\"images\":[{\"imageId\":1,\"imageUrl\":\"https://cdn.example.com/image1.jpg\",\"sequence\":0}],\"likeCount\":10,\"commentCount\":3,\"viewCount\":120,\"isLiked\":true,\"createdAt\":\"2025-01-01T10:00:00\",\"updatedAt\":\"2025-01-02T09:30:00\",\"isAuthor\":true,\"canEdit\":true,\"canDelete\":true}"
+                                            name = "인증 사용자 (본인 작성)",
+                                            value = "{\"postId\":123,\"author\":{\"userId\":\"author123\",\"nickname\":\"작성자\",\"profileImageUrl\":\"https://cdn.example.com/profile.jpg\",\"userType\":\"INHABITANT\",\"address\":\"서울시 강남구\"},\"category\":\"restaurant\",\"title\":\"맛있는 라면집 추천해요!\",\"content\":\"인증 사용자가 작성한 게시글입니다.\",\"images\":[{\"imageId\":1,\"imageUrl\":\"https://cdn.example.com/image1.jpg\",\"sequence\":0}],\"likeCount\":10,\"commentCount\":3,\"viewCount\":120,\"createdAt\":\"2025-01-01T10:00:00\",\"updatedAt\":\"2025-01-02T09:30:00\",\"isAuthorized\":true,\"isAuthor\":true,\"isLiked\":false,\"canEdit\":true,\"canDelete\":true}"
+                                    ),
+                                    @ExampleObject(
+                                            name = "인증 사용자 (다른 사람 글, 좋아요 누름)",
+                                            value = "{\"postId\":456,\"author\":{\"userId\":\"other-user\",\"nickname\":\"다른사용자\",\"profileImageUrl\":\"https://cdn.example.com/profile2.jpg\",\"userType\":\"FOUNDER\",\"address\":\"서울시 서초구\"},\"category\":\"startup\",\"title\":\"창업 성공 스토리\",\"content\":\"3개월만에 매출 10배 증가!\",\"images\":[],\"likeCount\":50,\"commentCount\":15,\"viewCount\":500,\"createdAt\":\"2025-01-05T14:20:00\",\"updatedAt\":\"2025-01-06T10:15:00\",\"isAuthorized\":true,\"isAuthor\":false,\"isLiked\":true,\"canEdit\":false,\"canDelete\":false}"
                                     ),
                                     @ExampleObject(
                                             name = "비인증 사용자",
-                                            value = "{\"postId\":123,\"author\":{\"userId\":\"author123\",\"nickname\":\"작성자\",\"profileImageUrl\":\"https://cdn.example.com/profile.jpg\",\"userType\":\"INHABITANT\",\"address\":\"서울시 강남구\"},\"category\":\"restaurant\",\"title\":\"맛있는 라면집 추천해요!\",\"content\":\"비인증 사용자가 조회한 게시글입니다.\",\"images\":[],\"likeCount\":10,\"commentCount\":3,\"viewCount\":120,\"isLiked\":false,\"createdAt\":\"2025-01-01T10:00:00\",\"updatedAt\":\"2025-01-02T09:30:00\",\"isAuthor\":false,\"canEdit\":false,\"canDelete\":false}"
+                                            value = "{\"postId\":123,\"author\":{\"userId\":\"author123\",\"nickname\":\"작성자\",\"profileImageUrl\":\"https://cdn.example.com/profile.jpg\",\"userType\":\"INHABITANT\",\"address\":\"서울시 강남구\"},\"category\":\"restaurant\",\"title\":\"맛있는 라면집 추천해요!\",\"content\":\"비인증 사용자가 조회한 게시글입니다.\",\"images\":[],\"likeCount\":10,\"commentCount\":3,\"viewCount\":120,\"createdAt\":\"2025-01-01T10:00:00\",\"isAuthorized\":false,\"isAuthor\":false,\"isLiked\":null,\"canEdit\":null,\"canDelete\":null}"
                                     )
                             }
                     )
