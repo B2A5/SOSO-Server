@@ -27,6 +27,12 @@ spring:
   jackson:
     default-property-inclusion: always
 
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 5MB
+      max-request-size: 25MB  # 이미지 4개 + 메타데이터
+
   session:
     store-type: redis
     redis:
