@@ -73,13 +73,16 @@ public class FreeboardController {
             ),
             @ApiResponse(
                     responseCode = "400",
-                    description = "잘못된 요청",
+                    description = "잘못된 요청 (검증 실패, 이미지 관련 오류)",
                     content = @Content(
                             schema = @Schema(implementation = ErrorResponse.class),
                             examples = {
                                     @ExampleObject(name = "빈 제목", value = "{\"code\": \"VALIDATION_FAILED\", \"message\": \"[title] 제목은 필수입니다.\"}"),
                                     @ExampleObject(name = "빈 내용", value = "{\"code\": \"VALIDATION_FAILED\", \"message\": \"[content] 내용은 필수입니다.\"}"),
-                                    @ExampleObject(name = "잘못된 카테고리", value = "{\"code\": \"INVALID_ENUM_VALUE\", \"message\": \"'invalid-category'은(는) 허용되지 않는 값입니다. 사용 가능한 값: [daily-hobby, restaurant, living-convenience, neighborhood-news, startup, others]\"}")
+                                    @ExampleObject(name = "잘못된 카테고리", value = "{\"code\": \"INVALID_ENUM_VALUE\", \"message\": \"'invalid-category'은(는) 허용되지 않는 값입니다. 사용 가능한 값: [daily-hobby, restaurant, living-convenience, neighborhood-news, startup, others]\"}"),
+                                    @ExampleObject(name = "이미지 개수 초과", value = "{\"code\": \"ILLEGAL_ARGUMENT\", \"message\": \"이미지는 최대 4장까지 업로드 가능합니다.\"}"),
+                                    @ExampleObject(name = "지원하지 않는 파일 형식", value = "{\"code\": \"ILLEGAL_ARGUMENT\", \"message\": \"지원하지 않는 파일 형식입니다. 지원 형식: image/jpeg, image/jpg, image/png, image/gif, image/webp\"}"),
+                                    @ExampleObject(name = "빈 파일", value = "{\"code\": \"ILLEGAL_ARGUMENT\", \"message\": \"이미지 파일이 비어있습니다.\"}")
                             }
                     )
             ),
@@ -93,10 +96,10 @@ public class FreeboardController {
             ),
             @ApiResponse(
                     responseCode = "413",
-                    description = "파일 크기 초과",
+                    description = "파일 크기 초과 (Spring multipart 제한)",
                     content = @Content(
                             schema = @Schema(implementation = ErrorResponse.class),
-                            examples = @ExampleObject(value = "{\"code\": \"FILE_TOO_LARGE\", \"message\": \"파일 크기가 너무 큽니다. (최대 5MB)\"}")
+                            examples = @ExampleObject(value = "{\"code\": \"FILE_SIZE_EXCEEDED\", \"message\": \"파일 크기가 너무 큽니다. 최대 업로드 크기는 5MB입니다.\"}")
                     )
             )
     })
@@ -356,15 +359,25 @@ public class FreeboardController {
             ),
             @ApiResponse(
                     responseCode = "400",
-                    description = "잘못된 요청",
+                    description = "잘못된 요청 (검증 실패, 이미지 관련 오류)",
                     content = @Content(
                             schema = @Schema(implementation = ErrorResponse.class),
                             examples = {
                                     @ExampleObject(name = "빈 제목", value = "{\"code\": \"VALIDATION_FAILED\", \"message\": \"[title] 제목은 필수입니다.\"}"),
                                     @ExampleObject(name = "빈 내용", value = "{\"code\": \"VALIDATION_FAILED\", \"message\": \"[content] 내용은 필수입니다.\"}"),
-                                    @ExampleObject(name = "이미지 개수 초과", value = "{\"code\": \"ILLEGAL_ARGUMENT\", \"message\": \"총 이미지 개수는 4개를 초과할 수 없습니다.\"}"),
-                                    @ExampleObject(name = "잘못된 카테고리", value = "{\"code\": \"INVALID_ENUM_VALUE\", \"message\": \"'invalid-category'은(는) 허용되지 않는 값입니다. 사용 가능한 값: [daily-hobby, restaurant, living-convenience, neighborhood-news, startup, others]\"}")
+                                    @ExampleObject(name = "잘못된 카테고리", value = "{\"code\": \"INVALID_ENUM_VALUE\", \"message\": \"'invalid-category'은(는) 허용되지 않는 값입니다. 사용 가능한 값: [daily-hobby, restaurant, living-convenience, neighborhood-news, startup, others]\"}"),
+                                    @ExampleObject(name = "이미지 개수 초과", value = "{\"code\": \"ILLEGAL_ARGUMENT\", \"message\": \"이미지는 최대 4장까지 업로드 가능합니다.\"}"),
+                                    @ExampleObject(name = "지원하지 않는 파일 형식", value = "{\"code\": \"ILLEGAL_ARGUMENT\", \"message\": \"지원하지 않는 파일 형식입니다. 지원 형식: image/jpeg, image/jpg, image/png, image/gif, image/webp\"}"),
+                                    @ExampleObject(name = "빈 파일", value = "{\"code\": \"ILLEGAL_ARGUMENT\", \"message\": \"이미지 파일이 비어있습니다.\"}")
                             }
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "413",
+                    description = "파일 크기 초과 (Spring multipart 제한)",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorResponse.class),
+                            examples = @ExampleObject(value = "{\"code\": \"FILE_SIZE_EXCEEDED\", \"message\": \"파일 크기가 너무 큽니다. 최대 업로드 크기는 5MB입니다.\"}")
                     )
             ),
             @ApiResponse(
