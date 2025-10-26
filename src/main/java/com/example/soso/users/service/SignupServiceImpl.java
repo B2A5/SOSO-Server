@@ -54,6 +54,7 @@ public class SignupServiceImpl implements SignupService {
     private final JwtProvider jwtProvider;
     private final JwtProperties jwtProperties;
     private final RefreshTokenRedisRepository redisService;
+    private final UserMapper userMapper;
 
     /**
      * 1단계: 사용자 타입 저장. 첫 진입에서만 호출되며 이후 플로우가 결정된다.
@@ -195,7 +196,7 @@ public class SignupServiceImpl implements SignupService {
         validateStep(signup, SignupStep.COMPLETE);
 
         // 유저 저장
-        Users user = UserMapper.fromSignupSession(signup, signup.getUsername(), signup.getEmail(), signup.getProfileImageUrl());
+        Users user = userMapper.fromSignupSession(signup, signup.getUsername(), signup.getEmail(), signup.getProfileImageUrl());
         user = usersRepository.save(user);  // save()가 ID가 할당된 엔티티를 반환
 
         // 토큰 만들기
@@ -206,7 +207,7 @@ public class SignupServiceImpl implements SignupService {
         addRefreshTokenCookie(response, tokenPair.refreshToken(), jwtProperties.getRefreshTokenValidityInMs());
 
         // UserResponse 생성
-        UserResponse userResponse = UserMapper.toUserResponse(user);
+        UserResponse userResponse = userMapper.toUserResponse(user);
 
         // 세션 삭제
         session.removeAttribute("signup");

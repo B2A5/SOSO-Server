@@ -23,6 +23,7 @@ public class UserLoginService {
     private final JwtProvider jwtProvider;
     private final JwtProperties jwtProperties;
     private final RefreshTokenRedisRepository refreshTokenService;
+    private final UserMapper userMapper;
 
     public boolean isRegistered(String email) {
         return userRepository.existsByEmail(email);
@@ -38,7 +39,7 @@ public class UserLoginService {
         refreshTokenService.save(refreshToken, user.getId(), jwtProperties.getRefreshTokenValidityInMs());
         CookieUtil.addRefreshTokenCookie(response, refreshToken, jwtProperties.getRefreshTokenValidityInMs());
 
-        UserResponse userResponse = UserMapper.toUserResponse(user);
+        UserResponse userResponse = userMapper.toUserResponse(user);
 
         return new KakaoLoginResponse(false, accessToken, userResponse);
     }

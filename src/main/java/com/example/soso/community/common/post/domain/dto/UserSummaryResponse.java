@@ -12,7 +12,7 @@ public record UserSummaryResponse(
         @Schema(description = "닉네임", example = "소소한개발자", requiredMode = Schema.RequiredMode.REQUIRED)
         String nickname,
 
-        @Schema(description = "지역", example = "서울특별시 강남구", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+        @Schema(description = "지역명 (시군구코드가 변환된 도시명, 변환 불가 시 '소소 타운')", example = "서울특별시 강남구", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
         String location,
 
         @Schema(description = "프로필 이미지 URL", example = "https://example.com/profile.jpg", requiredMode = Schema.RequiredMode.NOT_REQUIRED)

@@ -32,7 +32,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
-// 컨트롤러(웹 요청 처리부)가 호출해서 “게시글 생성/조회/수정/삭제/목록” 같은 비즈니스 로직을 처리
+// 컨트롤러(웹 요청 처리부)가 호출해서 "게시글 생성/조회/수정/삭제/목록" 같은 비즈니스 로직을 처리
 public class PostServiceImpl implements PostService {
     // 의존성 주입을 통해 필요한 레포지토리와 서비스들을 주입받음
     private final PostRepository postRepository;
@@ -42,6 +42,7 @@ public class PostServiceImpl implements PostService {
     private final S3Service s3Service;
     private final UsersRepository usersRepository;
     private final PostLikeRepository postLikeRepository;
+    private final PostMapper postMapper;
 
     // 게시글 생성 메서드
     // userId를 통해 작성자를 조회하고, 게시글 엔티티를 생성하여 저장
@@ -50,7 +51,7 @@ public class PostServiceImpl implements PostService {
     public PostCreateResponse createPost(PostCreateRequest request, String userId) {
         Users users = getUserById(userId);
 
-        Post post = PostMapper.toEntity(request, users);
+        Post post = postMapper.toEntity(request, users);
         postRepository.save(post);
 
         List<PostImage> postImages = createPostImages(request.images(), post);
@@ -71,7 +72,7 @@ public class PostServiceImpl implements PostService {
                 .orElseThrow(() -> new PostException(PostErrorCode.NOT_FOUND));
         boolean isLiked = postLikeRepository.existsByPost_IdAndUser_Id(postId, userId);
 
-        return PostMapper.toResponse(post, isLiked);
+        return postMapper.toResponse(post, isLiked);
     }
 
     // 게시글 목록 조회 메서드
