@@ -4,10 +4,16 @@ import com.example.soso.community.common.post.domain.entity.Post;
 import com.example.soso.community.common.post.domain.entity.PostImage;
 import com.example.soso.users.domain.dto.UserMapper;
 import com.example.soso.users.domain.entity.Users;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
+@Component
+@RequiredArgsConstructor
 public class PostMapper {
 
-    public static Post toEntity(PostCreateRequest dto, Users user) {
+    private final UserMapper userMapper;
+
+    public Post toEntity(PostCreateRequest dto, Users user) {
         return Post.builder()
                 .title(dto.title())
                 .content(dto.content())
@@ -18,7 +24,7 @@ public class PostMapper {
                 .build();
     }
 
-    public static PostResponse toResponse(Post post, boolean isLiked) {
+    public PostResponse toResponse(Post post, boolean isLiked) {
         return new PostResponse(
                 post.getId(),
                 post.getTitle(),
@@ -30,7 +36,7 @@ public class PostMapper {
                 post.getLikeCount(),
                 isLiked,
                 post.getCreatedDate().toString(),
-                UserMapper.toUserSummary(post.getUser())
+                userMapper.toUserSummary(post.getUser())
         );
     }
 }

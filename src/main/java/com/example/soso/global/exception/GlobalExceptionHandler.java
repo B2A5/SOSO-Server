@@ -16,6 +16,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 @Slf4j
 @RestControllerAdvice
@@ -148,6 +149,31 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .badRequest()
                 .body(new ErrorResponse("VALIDATION_FAILED", message));
+    }
+
+    /**
+     * 파일 업로드 크기 제한 초과 시 발생하는 예외 처리
+     *
+     * Spring의 multipart 설정(max-file-size, max-request-size)을 초과한 경우 발생
+     * 설정: application.yml의 spring.servlet.multipart
+     */
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public ResponseEntity<ErrorResponse> handleMaxUploadSizeExceeded(MaxUploadSizeExceededException ex) {
+        long maxFileSize = ex.getMaxUploadSize();
+
+        String message;
+        if (maxFileSize > 0) {
+            long maxFileSizeMB = maxFileSize / (1024 * 1024);
+            message = String.format("파일 크기가 너무 큽니다. 최대 업로드 크기는 %dMB입니다.", maxFileSizeMB);
+        } else {
+            message = "파일 크기가 너무 큽니다. 업로드 크기 제한을 초과했습니다.";
+        }
+
+        log.warn("File upload size exceeded: maxSize={}, message={}", maxFileSize, ex.getMessage());
+
+        return ResponseEntity
+                .status(HttpStatus.PAYLOAD_TOO_LARGE)
+                .body(new ErrorResponse("FILE_SIZE_EXCEEDED", message));
     }
 
     /**

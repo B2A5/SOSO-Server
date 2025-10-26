@@ -4,10 +4,16 @@ import com.example.soso.community.common.comment.domain.entity.Comment;
 import com.example.soso.community.common.post.domain.entity.Post;
 import com.example.soso.users.domain.dto.UserMapper;
 import com.example.soso.users.domain.entity.Users;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
+@Component
+@RequiredArgsConstructor
 public class CommentMapper {
 
-    public static Comment toEntity(CommentCreateRequest dto, Post post, Users user) {
+    private final UserMapper userMapper;
+
+    public Comment toEntity(CommentCreateRequest dto, Post post, Users user) {
         return Comment.builder()
                 .post(post)
                 .user(user)
@@ -16,13 +22,13 @@ public class CommentMapper {
                 .build();
     }
 
-    public static PostCommentResponse toResponse(Comment comment) {
+    public PostCommentResponse toResponse(Comment comment) {
         return new PostCommentResponse(
                 comment.getId(),
                 comment.getContent(),
                 comment.getLikeCount(),
                 comment.getLastModifiedDate().toString(),
-                UserMapper.toUserSummary(comment.getUser())
+                userMapper.toUserSummary(comment.getUser())
         );
     }
-    }
+}

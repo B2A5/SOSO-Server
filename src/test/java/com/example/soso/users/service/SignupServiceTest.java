@@ -45,6 +45,9 @@ class SignupServiceTest {
     private RefreshTokenRedisRepository redisService;
 
     @Mock
+    private UserMapper userMapper;
+
+    @Mock
     private HttpServletResponse httpServletResponse;
 
     @InjectMocks
@@ -281,16 +284,23 @@ class SignupServiceTest {
 
             Users mockUser = mock(Users.class);
             when(mockUser.getId()).thenReturn("test-user-id");
-            when(mockUser.getUsername()).thenReturn("testUser");
-            when(mockUser.getNickname()).thenReturn("테스트문어");
-            when(mockUser.getEmail()).thenReturn("test@example.com");
-            when(mockUser.getUserType()).thenReturn(UserType.FOUNDER);
-            when(mockUser.getGender()).thenReturn(Gender.MALE);
-            when(mockUser.getAgeRange()).thenReturn(AgeRange.TWENTIES);
-            when(mockUser.getLocation()).thenReturn("서울시 종로구");
-            when(mockUser.getCreatedDate()).thenReturn(java.time.LocalDateTime.now());
-            when(mockUser.getLastModifiedDate()).thenReturn(java.time.LocalDateTime.now());
 
+            UserResponse mockUserResponse = UserResponse.builder()
+                .id("test-user-id")
+                .username("testUser")
+                .nickname("테스트문어")
+                .email("test@example.com")
+                .userType(UserType.FOUNDER)
+                .gender(Gender.MALE)
+                .ageRange(AgeRange.TWENTIES)
+                .location("서울시 종로구")
+                .interests(List.of())
+                .createdDate(java.time.LocalDateTime.now())
+                .lastModifiedDate(java.time.LocalDateTime.now())
+                .build();
+
+            when(userMapper.fromSignupSession(any(), anyString(), anyString(), anyString())).thenReturn(mockUser);
+            when(userMapper.toUserResponse(any(Users.class))).thenReturn(mockUserResponse);
             when(usersRepository.save(any(Users.class))).thenReturn(mockUser);
             when(jwtProvider.generateAccessToken(any())).thenReturn("accessToken");
             when(jwtProvider.generateRefreshToken()).thenReturn("refreshToken");

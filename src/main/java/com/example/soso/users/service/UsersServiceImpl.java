@@ -16,13 +16,14 @@ import org.springframework.transaction.annotation.Transactional;
 public class UsersServiceImpl implements UsersService {
 
     private final UsersRepository usersRepository;
+    private final UserMapper userMapper;
 
     @Override
     public UserResponse getCurrentUserInfo(String userId) {
         Users user = usersRepository.findById(userId)
                 .orElseThrow(() -> new UserAuthException(UserErrorCode.USER_NOT_FOUND));
 
-        return UserMapper.toUserResponse(user);
+        return userMapper.toUserResponse(user);
     }
 
 }

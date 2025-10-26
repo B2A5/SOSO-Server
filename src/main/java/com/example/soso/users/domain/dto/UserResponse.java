@@ -43,7 +43,7 @@ public class UserResponse {
     @Schema(description = "창업 경험 여부", example = "창업 경험 유", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
     private String startupExperience;
 
-    @Schema(description = "지역명", example = "서울시 강남구", requiredMode = Schema.RequiredMode.REQUIRED)
+    @Schema(description = "지역명 (시군구코드가 변환된 도시명, 변환 불가 시 '소소 타운')", example = "서울특별시 강남구", requiredMode = Schema.RequiredMode.REQUIRED)
     private String location;
 
     @Schema(description = "관심 업종 목록", requiredMode = Schema.RequiredMode.NOT_REQUIRED)

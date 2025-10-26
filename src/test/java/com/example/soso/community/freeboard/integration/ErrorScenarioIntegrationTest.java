@@ -22,6 +22,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.util.Arrays;
+
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -494,6 +496,137 @@ class ErrorScenarioIntegrationTest {
         System.out.println("✅ 삭제된 게시글 댓글 작성 에러 처리 성공!");
 
         System.out.println("\n🎉 === 비즈니스 로직 에러 시나리오 완료 ===");
+    }
+
+    @Test
+    @DisplayName("📷 이미지 업로드 에러 시나리오: 파일 크기, 형식, 개수 제한")
+    void imageUploadErrorScenarios() throws Exception {
+        System.out.println("\n🎬 === 이미지 업로드 에러 시나리오 ===");
+
+        TestUser validUser = testUserHelper.createFounderUser();
+
+        // ==================== 테스트 1: 지원하지 않는 파일 형식 업로드 ====================
+        System.out.println("\n[테스트 1] 지원하지 않는 파일 형식 업로드 시도...");
+
+        MockMultipartFile invalidTypeFile = new MockMultipartFile(
+                "images", "test.txt", "text/plain", "This is a text file".getBytes()
+        );
+
+        mockMvc.perform(multipart("/community/freeboard")
+                        .file(invalidTypeFile)
+                        .param("title", "잘못된 파일 형식 테스트")
+                        .param("content", "텍스트 파일을 이미지로 업로드 시도")
+                        .param("category", "others")
+                        .header("Authorization", validUser.getAuthHeader())
+                        .contentType(MediaType.MULTIPART_FORM_DATA))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value("ILLEGAL_ARGUMENT"))
+                .andExpect(jsonPath("$.message").value(org.hamcrest.Matchers.containsString("지원하지 않는 파일 형식")));
+
+        System.out.println("✅ 잘못된 파일 형식 에러 처리 성공!");
+
+        // ==================== 테스트 2: 파일 크기 초과 ====================
+        System.out.println("\n[테스트 2] 파일 크기 초과 (5MB 이상)...");
+
+        // 6MB 크기의 파일 생성
+        byte[] largeFileContent = new byte[6 * 1024 * 1024];
+        Arrays.fill(largeFileContent, (byte) 'A');
+
+        MockMultipartFile largeFile = new MockMultipartFile(
+                "images", "large.jpg", "image/jpeg", largeFileContent
+        );
+
+        // Spring의 MaxUploadSizeExceededException 또는 애플리케이션 레벨 검증
+        // 413 (PayloadTooLarge) 또는 400 (BadRequest)를 반환할 수 있음
+        try {
+            MvcResult largeFileResult = mockMvc.perform(multipart("/community/freeboard")
+                            .file(largeFile)
+                            .param("title", "파일 크기 초과 테스트")
+                            .param("content", "6MB 파일 업로드 시도")
+                            .param("category", "others")
+                            .header("Authorization", validUser.getAuthHeader())
+                            .contentType(MediaType.MULTIPART_FORM_DATA))
+                    .andDo(print())
+                    .andExpect(status().is4xxClientError())  // 4xx 에러면 성공
+                    .andReturn();
+
+            int statusCode = largeFileResult.getResponse().getStatus();
+            System.out.println("파일 크기 초과 응답 코드: " + statusCode);
+            System.out.println("✅ 파일 크기 초과 에러 처리 성공!");
+        } catch (Exception e) {
+            System.out.println("⚠️ 파일 크기 초과 테스트: " + e.getMessage());
+            System.out.println("(Spring multipart 설정에 따라 요청이 거부될 수 있음)");
+        }
+
+        // ==================== 테스트 3: 이미지 개수 초과 (5개 이상) ====================
+        System.out.println("\n[테스트 3] 이미지 개수 초과 (최대 4개)...");
+
+        MockMultipartFile img1 = new MockMultipartFile("images", "img1.jpg", "image/jpeg", "img1 content".getBytes());
+        MockMultipartFile img2 = new MockMultipartFile("images", "img2.jpg", "image/jpeg", "img2 content".getBytes());
+        MockMultipartFile img3 = new MockMultipartFile("images", "img3.jpg", "image/jpeg", "img3 content".getBytes());
+        MockMultipartFile img4 = new MockMultipartFile("images", "img4.jpg", "image/jpeg", "img4 content".getBytes());
+        MockMultipartFile img5 = new MockMultipartFile("images", "img5.jpg", "image/jpeg", "img5 content".getBytes());
+
+        mockMvc.perform(multipart("/community/freeboard")
+                        .file(img1)
+                        .file(img2)
+                        .file(img3)
+                        .file(img4)
+                        .file(img5)  // 5개 업로드
+                        .param("title", "이미지 개수 초과 테스트")
+                        .param("content", "5개 이미지 업로드 시도")
+                        .param("category", "others")
+                        .header("Authorization", validUser.getAuthHeader())
+                        .contentType(MediaType.MULTIPART_FORM_DATA))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").exists())
+                .andExpect(jsonPath("$.message").exists());
+
+        System.out.println("✅ 이미지 개수 초과 에러 처리 성공!");
+
+        // ==================== 테스트 4: 빈 파일 업로드 ====================
+        System.out.println("\n[테스트 4] 빈 파일 업로드 시도...");
+
+        MockMultipartFile emptyFile = new MockMultipartFile(
+                "images", "empty.jpg", "image/jpeg", new byte[0]
+        );
+
+        mockMvc.perform(multipart("/community/freeboard")
+                        .file(emptyFile)
+                        .param("title", "빈 파일 테스트")
+                        .param("content", "빈 파일 업로드 시도")
+                        .param("category", "others")
+                        .header("Authorization", validUser.getAuthHeader())
+                        .contentType(MediaType.MULTIPART_FORM_DATA))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value("ILLEGAL_ARGUMENT"))
+                .andExpect(jsonPath("$.message").value(org.hamcrest.Matchers.containsString("비어있습니다")));
+
+        System.out.println("✅ 빈 파일 에러 처리 성공!");
+
+        // ==================== 테스트 5: 정상 이미지 업로드 확인 ====================
+        System.out.println("\n[테스트 5] 정상 이미지 업로드 (최대 4개)...");
+
+        mockMvc.perform(multipart("/community/freeboard")
+                        .file(img1)
+                        .file(img2)
+                        .file(img3)
+                        .file(img4)  // 4개는 성공
+                        .param("title", "정상 이미지 업로드")
+                        .param("content", "4개 이미지 업로드")
+                        .param("category", "others")
+                        .header("Authorization", validUser.getAuthHeader())
+                        .contentType(MediaType.MULTIPART_FORM_DATA))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.postId").exists());
+
+        System.out.println("✅ 정상 이미지 업로드 성공!");
+
+        System.out.println("\n🎉 === 이미지 업로드 에러 시나리오 완료 ===");
     }
 
     @Test

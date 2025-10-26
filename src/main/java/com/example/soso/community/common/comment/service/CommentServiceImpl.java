@@ -27,6 +27,7 @@ public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
     private final UsersRepository usersRepository;
+    private final CommentMapper commentMapper;
 
     @Override
     @Transactional
@@ -35,7 +36,7 @@ public class CommentServiceImpl implements CommentService {
                 .orElseThrow(() -> new PostException(PostErrorCode.NOT_FOUND));
         Users user = usersRepository.findById(userId)
                 .orElseThrow(() -> new UserAuthException(UserErrorCode.USER_NOT_FOUND));
-        Comment comment = CommentMapper.toEntity(request, post, user);
+        Comment comment = commentMapper.toEntity(request, post, user);
         commentRepository.save(comment);
     }
 
@@ -56,7 +57,7 @@ public class CommentServiceImpl implements CommentService {
         List<Comment> comments = commentRepository.findAllByPost(post);
         List<PostCommentResponse> responseList = new ArrayList<>();
         for (Comment comment : comments) {
-            responseList.add(CommentMapper.toResponse(comment));
+            responseList.add(commentMapper.toResponse(comment));
         }
         return responseList;
     }
