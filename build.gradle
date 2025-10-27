@@ -14,7 +14,7 @@ java {
 	}
 }
 
-def querydslDir = layout.buildDirectory.dir("generated/querydsl").get().asFile
+def querydslDir = layout.buildDirectory.dir("generated/sources/annotationProcessor/java/main").get().asFile
 
 sourceSets {
 	main {
@@ -22,15 +22,9 @@ sourceSets {
 	}
 }
 
-tasks.withType(JavaCompile).configureEach {
-	options.compilerArgs += [
-			"-Aquerydsl.generatedSourcesDir=${querydslDir}"
-	]
-}
-
 tasks.named("clean") {
 	doLast {
-		delete querydslDir
+		delete file("build/generated")
 	}
 }
 
