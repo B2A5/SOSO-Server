@@ -180,7 +180,7 @@ class UserAddressConversionIntegrationTest {
         // then
         assertThat(summary.location()).isEqualTo("서울특별시 강남구");
         assertThat(summary.userId()).isEqualTo(user.getId());
-        assertThat(summary.nickname()).isEqualTo(user.getUsername());
+        assertThat(summary.nickname()).isEqualTo(user.getNickname());
     }
 
     @Test

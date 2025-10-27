@@ -43,7 +43,7 @@ public class UserMapper {
         String address = sigunguCodeService.convertToAddressSafe(users.getLocation());
         return new UserSummaryResponse(
                 users.getId(),
-                users.getUsername(),
+                users.getNickname(),  // nickname 사용 (username이 아님)
                 address,  // 시군구 코드를 도시명으로 변환
                 users.getProfileImageUrl(),
                 users.getUserType()

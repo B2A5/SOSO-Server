@@ -1,0 +1,52 @@
+package com.example.soso.community.voteboard.domain.dto;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+/**
+ * 투표 게시글 생성 요청 DTO
+ */
+@Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Schema(description = "투표 게시글 생성 요청")
+public class VotePostCreateRequest {
+
+    @NotBlank(message = "제목은 필수입니다.")
+    @Size(max = 100, message = "제목은 최대 100자까지 입력 가능합니다.")
+    @Schema(description = "게시글 제목", example = "우리 동네 카페 선호도 조사", requiredMode = Schema.RequiredMode.REQUIRED)
+    private String title;
+
+    @NotBlank(message = "내용은 필수입니다.")
+    @Size(max = 5000, message = "내용은 최대 5000자까지 입력 가능합니다.")
+    @Schema(description = "게시글 내용", example = "여러분이 가장 좋아하는 카페 스타일은 무엇인가요?", requiredMode = Schema.RequiredMode.REQUIRED)
+    private String content;
+
+    @Schema(description = "이미지 URL 목록 (최대 5개)", example = "[\"https://example.com/image1.jpg\", \"https://example.com/image2.jpg\"]")
+    @Size(max = 5, message = "이미지는 최대 5개까지 업로드 가능합니다.")
+    private List<String> imageUrls;
+
+    @NotNull(message = "투표 옵션은 필수입니다.")
+    @Size(min = 2, max = 5, message = "투표 옵션은 최소 2개, 최대 5개까지 가능합니다.")
+    @Valid
+    @Schema(description = "투표 옵션 목록 (2-5개)", requiredMode = Schema.RequiredMode.REQUIRED)
+    private List<VoteOptionRequest> voteOptions;
+
+    @NotNull(message = "투표 마감 시간은 필수입니다.")
+    @Future(message = "투표 마감 시간은 미래 시간이어야 합니다.")
+    @Schema(description = "투표 마감 시간", example = "2024-12-31T23:59:59", requiredMode = Schema.RequiredMode.REQUIRED)
+    private LocalDateTime endTime;
+
+    @NotNull(message = "재투표 허용 여부는 필수입니다.")
+    @Schema(description = "재투표 허용 여부", example = "true", requiredMode = Schema.RequiredMode.REQUIRED)
+    private Boolean allowRevote;
+}
