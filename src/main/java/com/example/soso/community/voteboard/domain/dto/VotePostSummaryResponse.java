@@ -2,11 +2,13 @@ package com.example.soso.community.voteboard.domain.dto;
 
 import com.example.soso.community.voteboard.domain.entity.VoteStatus;
 import com.example.soso.community.common.post.domain.dto.UserSummaryResponse;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * 투표 게시글 요약 응답 DTO (목록 조회용)
@@ -42,6 +44,16 @@ public class VotePostSummaryResponse {
 
     @Schema(description = "재투표 허용 여부", example = "true", requiredMode = Schema.RequiredMode.REQUIRED)
     private boolean allowRevote;
+
+    @Schema(description = "투표 옵션 목록 (미리보기, 최대 3개)", requiredMode = Schema.RequiredMode.REQUIRED)
+    private List<VoteOptionResponse> voteOptions;
+
+    @Schema(description = "좋아요 수", example = "23", requiredMode = Schema.RequiredMode.REQUIRED)
+    private long likeCount;
+
+    @Schema(description = "현재 사용자의 좋아요 여부 (비로그인 시 false)", example = "false", requiredMode = Schema.RequiredMode.REQUIRED)
+    @JsonProperty("isLiked")
+    private boolean isLiked;
 
     @Schema(description = "생성일시", example = "2024-01-01T10:00:00", requiredMode = Schema.RequiredMode.REQUIRED)
     private LocalDateTime createdDate;

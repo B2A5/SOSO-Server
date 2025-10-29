@@ -49,7 +49,13 @@ public class VotePostMapper {
     /**
      * VotePost를 요약 응답 DTO로 변환 (목록 조회용)
      */
-    public VotePostSummaryResponse toSummaryResponse(VotePost votePost, long commentCount) {
+    public VotePostSummaryResponse toSummaryResponse(VotePost votePost, long commentCount, long likeCount, boolean isLiked) {
+        // 투표 옵션 미리보기 (최대 3개)
+        List<VoteOptionResponse> voteOptions = votePost.getVoteOptions().stream()
+                .limit(3)
+                .map(option -> toVoteOptionResponse(option, votePost.getTotalVotes()))
+                .toList();
+
         return VotePostSummaryResponse.builder()
                 .id(votePost.getId())
                 .title(votePost.getTitle())
@@ -60,6 +66,9 @@ public class VotePostMapper {
                 .voteStatus(votePost.getVoteStatus())
                 .endTime(votePost.getEndTime())
                 .allowRevote(votePost.isAllowRevote())
+                .voteOptions(voteOptions)
+                .likeCount(likeCount)
+                .isLiked(isLiked)
                 .createdDate(votePost.getCreatedDate())
                 .lastModifiedDate(votePost.getLastModifiedDate())
                 .build();
@@ -71,7 +80,9 @@ public class VotePostMapper {
     public VotePostDetailResponse toDetailResponse(
             VotePost votePost,
             long commentCount,
-            VoteResult userVoteResult
+            VoteResult userVoteResult,
+            long likeCount,
+            boolean isLiked
     ) {
         return VotePostDetailResponse.builder()
                 .id(votePost.getId())
@@ -91,6 +102,8 @@ public class VotePostMapper {
                 .allowRevote(votePost.isAllowRevote())
                 .viewCount(votePost.getViewCount())
                 .commentCount(commentCount)
+                .likeCount(likeCount)
+                .isLiked(isLiked)
                 .createdDate(votePost.getCreatedDate())
                 .lastModifiedDate(votePost.getLastModifiedDate())
                 .build();

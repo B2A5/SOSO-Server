@@ -32,9 +32,10 @@ public interface VotePostService {
      * @param status 투표 상태 필터 (IN_PROGRESS, COMPLETED, null=전체)
      * @param size 페이지 크기
      * @param cursor 커서 값 (null이면 첫 페이지)
+     * @param userId 조회하는 사용자 ID (null 가능 - 비로그인)
      * @return 게시글 목록과 커서 정보
      */
-    VotePostListResponse getVotePostsByCursor(VoteStatus status, int size, Long cursor);
+    VotePostListResponse getVotePostsByCursor(VoteStatus status, int size, Long cursor, String userId);
 
     /**
      * 투표 게시글을 수정합니다 (제목, 내용, 이미지, 투표 설정만 가능).

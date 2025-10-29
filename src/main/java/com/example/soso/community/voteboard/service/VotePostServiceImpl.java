@@ -6,6 +6,7 @@ import com.example.soso.community.voteboard.domain.entity.VoteOption;
 import com.example.soso.community.voteboard.domain.entity.VotePost;
 import com.example.soso.community.voteboard.domain.entity.VoteResult;
 import com.example.soso.community.voteboard.domain.entity.VoteStatus;
+import com.example.soso.community.voteboard.repository.VotePostLikeRepository;
 import com.example.soso.community.voteboard.repository.VoteOptionRepository;
 import com.example.soso.community.voteboard.repository.VotePostRepository;
 import com.example.soso.community.voteboard.repository.VoteResultRepository;
@@ -38,6 +39,7 @@ public class VotePostServiceImpl implements VotePostService {
     private final VoteResultRepository voteResultRepository;
     private final UsersRepository usersRepository;
     private final CommentRepository commentRepository;
+    private final VotePostLikeRepository votePostLikeRepository;
     private final VotePostMapper votePostMapper;
 
     @Override
@@ -66,19 +68,24 @@ public class VotePostServiceImpl implements VotePostService {
         // 댓글 수 조회
         long commentCount = commentRepository.countByPostId(postId);
 
+        // 좋아요 수 조회
+        long likeCount = votePostLikeRepository.countByVotePostId(postId);
+
         // 사용자의 투표 결과 조회 (비로그인 시 null)
         VoteResult userVoteResult = null;
+        boolean isLiked = false;
         if (userId != null) {
             Users user = findUserById(userId);
             userVoteResult = voteResultRepository.findByUserAndVotePost(user, votePost).orElse(null);
+            isLiked = votePostLikeRepository.existsByVotePostIdAndUserId(postId, userId);
         }
 
-        return votePostMapper.toDetailResponse(votePost, commentCount, userVoteResult);
+        return votePostMapper.toDetailResponse(votePost, commentCount, userVoteResult, likeCount, isLiked);
     }
 
     @Override
-    public VotePostListResponse getVotePostsByCursor(VoteStatus status, int size, Long cursor) {
-        log.debug("투표 게시글 목록 조회: status={}, size={}, cursor={}", status, size, cursor);
+    public VotePostListResponse getVotePostsByCursor(VoteStatus status, int size, Long cursor, String userId) {
+        log.debug("투표 게시글 목록 조회: status={}, size={}, cursor={}, userId={}", status, size, cursor, userId);
 
         PageRequest pageRequest = PageRequest.of(0, size + 1);
         LocalDateTime now = LocalDateTime.now();
@@ -117,7 +124,9 @@ public class VotePostServiceImpl implements VotePostService {
         List<VotePostSummaryResponse> summaries = posts.stream()
                 .map(post -> {
                     long commentCount = commentRepository.countByPostId(post.getId());
-                    return votePostMapper.toSummaryResponse(post, commentCount);
+                    long likeCount = votePostLikeRepository.countByVotePostId(post.getId());
+                    boolean isLiked = userId != null && votePostLikeRepository.existsByVotePostIdAndUserId(post.getId(), userId);
+                    return votePostMapper.toSummaryResponse(post, commentCount, likeCount, isLiked);
                 })
                 .toList();
 

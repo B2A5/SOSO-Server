@@ -14,6 +14,8 @@ public enum PostErrorCode implements BaseErrorCode {
     EMPTY_CONTENT("게시글 내용은 비어 있을 수 없습니다.", HttpStatus.BAD_REQUEST),
     LIKE_COUNT_NOT_FOUND("좋아요 수를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
     COMMENT_NOT_FOUND("없는 댓글 입니다", HttpStatus.NOT_FOUND),
+    COMMENT_ALREADY_DELETED("이미 삭제된 댓글입니다.", HttpStatus.BAD_REQUEST),
+    REPLY_DEPTH_EXCEEDED("대댓글의 대댓글은 허용되지 않습니다.", HttpStatus.BAD_REQUEST),
     INVALID_CURSOR("유효하지 않은 커서 값입니다.", HttpStatus.BAD_REQUEST),
 
     // 투표 관련 에러
