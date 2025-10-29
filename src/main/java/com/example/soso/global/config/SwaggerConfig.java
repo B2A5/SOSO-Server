@@ -39,7 +39,16 @@ public class SwaggerConfig {
     @Bean
     public OpenApiCustomizer customOpenAPI() {
         List<String> tagOrder = List.of(
-                "Signup", "Auth", "Freeboard", "Freeboard Like", "Freeboard Comment", "Freeboard Comment Like"
+                "Signup",
+                "Auth",
+                "Freeboard",
+                "Freeboard Like",
+                "Freeboard Comment",
+                "Freeboard Comment Like",
+                "Voteboard",
+                "Voteboard Like",
+                "Voteboard Comment",
+                "Voteboard Comment Like"
         );
 
         return openApi -> openApi.setTags(

@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/community/votesboard")
 @RequiredArgsConstructor
-@Tag(name = "투표 게시판", description = "투표 게시판 API")
+@Tag(name = "Voteboard", description = "투표 게시판 API")
 public class VoteboardController {
 
     private final VotePostService votePostService;
