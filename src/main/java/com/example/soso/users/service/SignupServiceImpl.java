@@ -1,5 +1,6 @@
 package com.example.soso.users.service;
 
+import static com.example.soso.global.config.CookieUtil.addAccessTokenCookie;
 import static com.example.soso.global.config.CookieUtil.addRefreshTokenCookie;
 import static com.example.soso.global.exception.domain.UserErrorCode.SESSION_NOT_VALID;
 import static com.example.soso.global.exception.domain.UserErrorCode.STEPS_NOT_TYPE;
@@ -204,6 +205,9 @@ public class SignupServiceImpl implements SignupService {
 
         // 레디스 와 httpOnly 쿠기 저장
         redisService.saveByUserId(user.getId(), tokenPair.refreshToken(), jwtProperties.getRefreshTokenValidityInMs());
+
+        // 쿠키에 토큰 설정 (SSR 지원)
+        addAccessTokenCookie(response, tokenPair.accessToken(), jwtProperties.getAccessTokenValidityInMs());
         addRefreshTokenCookie(response, tokenPair.refreshToken(), jwtProperties.getRefreshTokenValidityInMs());
 
         // UserResponse 생성

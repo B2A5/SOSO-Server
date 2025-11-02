@@ -23,7 +23,17 @@ public class AuthController {
 
     @Operation(
             summary = "Access Token 재발급",
-            description = "Refresh Token 쿠키가 유효하면 새로운 Access Token과 Refresh Token을 발급합니다.",
+            description = """
+                    Refresh Token 쿠키가 유효하면 새로운 Access Token과 Refresh Token을 발급합니다.
+
+                    **RTR (Refresh Token Rotation):**
+                    - 기존 Refresh Token 무효화
+                    - 새로운 Access Token, Refresh Token 발급
+
+                    **토큰 발급 방식:**
+                    - Response Body: accessToken 포함 (기존 호환성 유지)
+                    - Set-Cookie 헤더: accessToken, refreshToken 쿠키 설정 (SSR 지원)
+                    """,
             responses = {
                     @ApiResponse(responseCode = "200", description = "토큰 재발급 성공",
                             content = @Content(schema = @Schema(implementation = JwtTokenDto.class))),
@@ -46,7 +56,14 @@ public class AuthController {
 
     @Operation(
             summary = "로그아웃",
-            description = "Refresh Token을 무효화하고 쿠키를 삭제합니다.",
+            description = """
+                    Refresh Token을 무효화하고 쿠키를 삭제합니다.
+
+                    **동작:**
+                    - Redis에서 Refresh Token 삭제
+                    - Access Token 쿠키 삭제
+                    - Refresh Token 쿠키 삭제
+                    """,
             responses = {
                     @ApiResponse(responseCode = "200", description = "로그아웃 성공"),
                     @ApiResponse(responseCode = "400", description = "Refresh Token이 없음")

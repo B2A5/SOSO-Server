@@ -12,8 +12,30 @@ public class CookieUtil {
     private static final boolean HTTP_ONLY = true;
     private static final String PATH = "/";
 
-    public static void addRefreshTokenCookie(HttpServletResponse response, String refreshToken, long maxAgeMs) {
+    /**
+     * Access Token 쿠키 추가
+     * - HttpOnly: false (JavaScript에서 접근 가능하도록 설정 - 클라이언트에서 헤더에 포함 가능)
+     * - Secure: true (HTTPS 전용)
+     * - SameSite: None (크로스 도메인 요청 허용)
+     */
+    public static void addAccessTokenCookie(HttpServletResponse response, String accessToken, long maxAgeMs) {
+        ResponseCookie cookie = ResponseCookie.from("accessToken", accessToken)
+                .httpOnly(false)  // JavaScript에서 접근 가능
+                .secure(SECURE)
+                .path(PATH)
+                .maxAge(Duration.ofMillis(maxAgeMs))
+                .sameSite(SAME_SITE)
+                .build();
+        response.addHeader("Set-Cookie", cookie.toString());
+    }
 
+    /**
+     * Refresh Token 쿠키 추가
+     * - HttpOnly: true (XSS 공격 방지)
+     * - Secure: true (HTTPS 전용)
+     * - SameSite: None (크로스 도메인 요청 허용)
+     */
+    public static void addRefreshTokenCookie(HttpServletResponse response, String refreshToken, long maxAgeMs) {
         ResponseCookie cookie = ResponseCookie.from("refreshToken", refreshToken)
                 .httpOnly(HTTP_ONLY)
                 .secure(SECURE)
@@ -21,9 +43,26 @@ public class CookieUtil {
                 .maxAge(Duration.ofMillis(maxAgeMs))
                 .sameSite(SAME_SITE)
                 .build();
-        response.setHeader("Set-Cookie", cookie.toString());
+        response.addHeader("Set-Cookie", cookie.toString());
     }
 
+    /**
+     * Access Token 쿠키 삭제
+     */
+    public static void deleteAccessTokenCookie(HttpServletResponse response) {
+        ResponseCookie cookie = ResponseCookie.from("accessToken", "")
+                .httpOnly(false)
+                .secure(SECURE)
+                .path(PATH)
+                .maxAge(0)  // 즉시 만료
+                .sameSite(SAME_SITE)
+                .build();
+        response.addHeader("Set-Cookie", cookie.toString());
+    }
+
+    /**
+     * Refresh Token 쿠키 삭제
+     */
     public static void deleteRefreshTokenCookie(HttpServletResponse response) {
         ResponseCookie cookie = ResponseCookie.from("refreshToken", "")
                 .httpOnly(HTTP_ONLY)
@@ -32,6 +71,6 @@ public class CookieUtil {
                 .maxAge(0)  // 즉시 만료
                 .sameSite(SAME_SITE)
                 .build();
-        response.setHeader("Set-Cookie", cookie.toString());
+        response.addHeader("Set-Cookie", cookie.toString());
     }
 }

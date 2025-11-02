@@ -26,7 +26,16 @@ public class KakaoAuthController {
 
     @Operation(
             summary = "카카오 로그인",
-            description = "카카오 인가 코드를 통해 사용자 로그인을 처리합니다. 기존 사용자는 JWT 토큰 및 사용자 정보를 반환하고, 신규 사용자는 회원가입 세션을 생성합니다.",
+            description = """
+                    카카오 인가 코드를 통해 사용자 로그인을 처리합니다.
+
+                    **토큰 발급 방식:**
+                    - Response Body: accessToken 포함 (기존 호환성 유지)
+                    - Set-Cookie 헤더: accessToken, refreshToken 쿠키 설정 (SSR 지원)
+
+                    **기존 사용자:** JWT 토큰 및 사용자 정보 반환
+                    **신규 사용자:** 회원가입 세션 생성
+                    """,
             responses = {
                     @ApiResponse(responseCode = "200", description = "로그인 성공",
                             content = @Content(

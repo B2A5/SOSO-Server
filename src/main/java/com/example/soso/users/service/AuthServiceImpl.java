@@ -39,12 +39,14 @@ public class AuthServiceImpl implements AuthService {
         String newRefreshToken = jwtProvider.generateRefreshToken(); // userId 없음
         refreshTokenService.save(newRefreshToken, userId, jwtProperties.getRefreshTokenValidityInMs());
 
-        // 4. 쿠키에 새 refreshToken 저장
-        CookieUtil.addRefreshTokenCookie(response, newRefreshToken, jwtProperties.getRefreshTokenValidityInMs());
-
-        // 5. 새 accessToken 발급
+        // 4. 새 accessToken 발급
         String newAccessToken = jwtProvider.generateAccessToken(userId);
 
+        // 5. 쿠키에 새 토큰 저장 (SSR 지원)
+        CookieUtil.addAccessTokenCookie(response, newAccessToken, jwtProperties.getAccessTokenValidityInMs());
+        CookieUtil.addRefreshTokenCookie(response, newRefreshToken, jwtProperties.getRefreshTokenValidityInMs());
+
+        // Body에도 accessToken 포함 (기존 호환성 유지)
         return new JwtTokenDto(newAccessToken);
     }
 
@@ -53,7 +55,8 @@ public class AuthServiceImpl implements AuthService {
         // 1. Redis에서 Refresh Token 삭제 (즉시 무효화)
         refreshTokenService.delete(refreshToken);
 
-        // 2. 쿠키 삭제
+        // 2. 쿠키 삭제 (AccessToken, RefreshToken 모두 삭제)
+        CookieUtil.deleteAccessTokenCookie(response);
         CookieUtil.deleteRefreshTokenCookie(response);
     }
 

@@ -149,7 +149,27 @@ class SignupControllerIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.accessToken").isNotEmpty())
                 .andExpect(jsonPath("$.user").exists())
-                .andExpect(jsonPath("$.user.id").exists());
+                .andExpect(jsonPath("$.user.id").exists())
+                .andExpect(header().exists("Set-Cookie"))
+                .andExpect(result -> {
+                    var setCookieHeaders = result.getResponse().getHeaders("Set-Cookie");
+                    boolean hasAccessToken = false;
+                    boolean hasRefreshToken = false;
+                    for (String cookie : setCookieHeaders) {
+                        if (cookie.contains("accessToken=")) {
+                            hasAccessToken = true;
+                            assert cookie.contains("Secure");
+                            assert cookie.contains("SameSite=None");
+                            assert !cookie.contains("HttpOnly"); // Access Token은 HttpOnly=false
+                        }
+                        if (cookie.contains("refreshToken=")) {
+                            hasRefreshToken = true;
+                            assert cookie.contains("HttpOnly"); // Refresh Token은 HttpOnly=true
+                        }
+                    }
+                    assert hasAccessToken : "Access Token 쿠키가 없습니다";
+                    assert hasRefreshToken : "Refresh Token 쿠키가 없습니다";
+                });
 
         // 데이터베이스에 사용자가 저장되었는지 확인
         long userCountAfter = usersRepository.count();
@@ -216,7 +236,23 @@ class SignupControllerIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.accessToken").isNotEmpty())
                 .andExpect(jsonPath("$.user").exists())
-                .andExpect(jsonPath("$.user.id").exists());
+                .andExpect(jsonPath("$.user.id").exists())
+                .andExpect(header().exists("Set-Cookie"))
+                .andExpect(result -> {
+                    var setCookieHeaders = result.getResponse().getHeaders("Set-Cookie");
+                    boolean hasAccessToken = false;
+                    boolean hasRefreshToken = false;
+                    for (String cookie : setCookieHeaders) {
+                        if (cookie.contains("accessToken=")) {
+                            hasAccessToken = true;
+                        }
+                        if (cookie.contains("refreshToken=")) {
+                            hasRefreshToken = true;
+                        }
+                    }
+                    assert hasAccessToken : "Access Token 쿠키가 없습니다";
+                    assert hasRefreshToken : "Refresh Token 쿠키가 없습니다";
+                });
 
         long userCountAfter = usersRepository.count();
         assertThat(userCountAfter).isEqualTo(userCountBefore + 1);
