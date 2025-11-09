@@ -224,6 +224,7 @@ class VoteboardLikeInfoIntegrationTest {
                 ))
                 .endTime(LocalDateTime.now().plusDays(7))
                 .allowRevote(false)
+                .allowMultipleChoice(false)
                 .build();
 
         MvcResult result = mockMvc.perform(post("/community/votesboard")

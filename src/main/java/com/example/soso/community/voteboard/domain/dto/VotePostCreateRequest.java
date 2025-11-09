@@ -47,6 +47,14 @@ public class VotePostCreateRequest {
     private LocalDateTime endTime;
 
     @NotNull(message = "재투표 허용 여부는 필수입니다.")
-    @Schema(description = "재투표 허용 여부", example = "true", requiredMode = Schema.RequiredMode.REQUIRED)
+    @Schema(description = "재투표 허용 여부 (투표 후 변경 가능 여부)", example = "true", requiredMode = Schema.RequiredMode.REQUIRED)
     private Boolean allowRevote;
+
+    @NotNull(message = "중복 선택 허용 여부는 필수입니다.")
+    @Schema(
+            description = "중복 선택 허용 여부 (true: 여러 옵션 동시 선택 가능, 최대 n-1개 / false: 하나의 옵션만 선택 가능)",
+            example = "false",
+            requiredMode = Schema.RequiredMode.REQUIRED
+    )
+    private Boolean allowMultipleChoice;
 }

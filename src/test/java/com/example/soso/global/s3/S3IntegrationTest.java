@@ -1,6 +1,6 @@
 package com.example.soso.global.s3;
 
-import com.example.soso.global.config.S3Config;
+
 import com.example.soso.global.image.service.ImageUploadService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

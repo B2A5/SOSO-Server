@@ -4,7 +4,6 @@ import com.example.soso.global.time.BaseTimeEntity;
 import com.example.soso.users.domain.entity.Users;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;

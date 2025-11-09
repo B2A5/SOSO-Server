@@ -42,8 +42,11 @@ public class VotePostSummaryResponse {
     @Schema(description = "투표 마감 시간", example = "2024-12-31T23:59:59", requiredMode = Schema.RequiredMode.REQUIRED)
     private LocalDateTime endTime;
 
-    @Schema(description = "재투표 허용 여부", example = "true", requiredMode = Schema.RequiredMode.REQUIRED)
+    @Schema(description = "재투표 허용 여부 (투표 후 변경 가능 여부)", example = "true", requiredMode = Schema.RequiredMode.REQUIRED)
     private boolean allowRevote;
+
+    @Schema(description = "중복 선택 허용 여부 (여러 옵션 동시 선택 가능 여부)", example = "false", requiredMode = Schema.RequiredMode.REQUIRED)
+    private boolean allowMultipleChoice;
 
     @Schema(description = "투표 옵션 목록 (미리보기, 최대 3개)", requiredMode = Schema.RequiredMode.REQUIRED)
     private List<VoteOptionResponse> voteOptions;

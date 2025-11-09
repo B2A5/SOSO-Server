@@ -16,9 +16,14 @@ import java.util.Optional;
 public interface VoteResultRepository extends JpaRepository<VoteResult, Long> {
 
     /**
-     * 특정 사용자의 특정 투표에 대한 투표 결과 조회
+     * 특정 사용자의 특정 투표에 대한 투표 결과 조회 (단일 선택용)
      */
     Optional<VoteResult> findByUserAndVotePost(Users user, VotePost votePost);
+
+    /**
+     * 특정 사용자의 특정 투표에 대한 모든 투표 결과 조회 (중복 선택용)
+     */
+    List<VoteResult> findAllByUserAndVotePost(Users user, VotePost votePost);
 
     /**
      * 특정 사용자가 특정 투표에 참여했는지 확인

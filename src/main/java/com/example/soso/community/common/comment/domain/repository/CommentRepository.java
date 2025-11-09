@@ -2,7 +2,6 @@ package com.example.soso.community.common.comment.domain.repository;
 
 import com.example.soso.community.common.comment.domain.entity.Comment;
 import com.example.soso.community.common.post.domain.entity.Post;
-import com.example.soso.users.domain.entity.Users;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;

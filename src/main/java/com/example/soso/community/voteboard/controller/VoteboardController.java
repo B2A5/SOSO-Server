@@ -105,23 +105,48 @@ public class VoteboardController {
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = VotePostCreateRequest.class),
-                            examples = @ExampleObject(
-                                    name = "투표 생성 예시",
-                                    value = """
-                                            {
-                                              "title": "점심 메뉴 투표",
-                                              "content": "오늘 점심 뭐 먹을까요?",
-                                              "imageUrls": ["https://example.com/food.jpg"],
-                                              "voteOptions": [
-                                                {"content": "한식"},
-                                                {"content": "중식"},
-                                                {"content": "일식"}
-                                              ],
-                                              "endTime": "2025-12-31T12:00:00",
-                                              "allowRevote": true
-                                            }
-                                            """
-                            )
+                            examples = {
+                                    @ExampleObject(
+                                            name = "단일 선택 투표 생성",
+                                            value = """
+                                                    {
+                                                      "title": "점심 메뉴 투표",
+                                                      "content": "오늘 점심 뭐 먹을까요?",
+                                                      "imageUrls": ["https://example.com/food.jpg"],
+                                                      "voteOptions": [
+                                                        {"content": "한식"},
+                                                        {"content": "중식"},
+                                                        {"content": "일식"}
+                                                      ],
+                                                      "endTime": "2025-12-31T12:00:00",
+                                                      "allowRevote": true,
+                                                      "allowMultipleChoice": false
+                                                    }
+                                                    """,
+                                            description = "하나의 옵션만 선택 가능한 일반 투표"
+                                    ),
+                                    @ExampleObject(
+                                            name = "중복 선택 투표 생성",
+                                            value = """
+                                                    {
+                                                      "title": "좋아하는 취미 선택",
+                                                      "content": "좋아하는 취미를 모두 선택해주세요 (최대 4개)",
+                                                      "imageUrls": [],
+                                                      "voteOptions": [
+                                                        {"content": "독서"},
+                                                        {"content": "운동"},
+                                                        {"content": "영화감상"},
+                                                        {"content": "게임"},
+                                                        {"content": "여행"}
+                                                      ],
+                                                      "endTime": "2025-12-31T12:00:00",
+                                                      "allowRevote": true,
+                                                      "allowMultipleChoice": true
+                                                    }
+                                                    """,
+                                            description = "여러 옵션을 동시에 선택 가능한 투표 (최대 n-1개)"
+                                    )
+                            }
                     )
             )
             @Valid @RequestBody VotePostCreateRequest request,
@@ -289,6 +314,15 @@ public class VoteboardController {
                     - 진행 중인 투표에만 참여 가능
                     - 선택한 옵션은 해당 투표의 옵션이어야 함
 
+                    **단일 선택 투표 (allowMultipleChoice = false):**
+                    - 정확히 1개의 옵션만 선택 가능
+                    - 예: voteOptionIds: [1]
+
+                    **중복 선택 투표 (allowMultipleChoice = true):**
+                    - 최소 1개, 최대 n-1개 선택 가능 (n = 전체 옵션 수)
+                    - 예: 옵션이 5개일 때, 1~4개까지 선택 가능
+                    - 예: voteOptionIds: [1, 2, 3]
+
                     **권한:** 로그인 사용자만 가능
                     """
     )
@@ -349,10 +383,18 @@ public class VoteboardController {
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = VoteRequest.class),
-                            examples = @ExampleObject(
-                                    name = "투표 참여 예시",
-                                    value = "{\"voteOptionId\": 2}"
-                            )
+                            examples = {
+                                    @ExampleObject(
+                                            name = "단일 선택",
+                                            value = "{\"voteOptionIds\": [1]}",
+                                            description = "allowMultipleChoice = false인 경우"
+                                    ),
+                                    @ExampleObject(
+                                            name = "중복 선택",
+                                            value = "{\"voteOptionIds\": [1, 2, 3]}",
+                                            description = "allowMultipleChoice = true인 경우"
+                                    )
+                            }
                     )
             )
             @Valid @RequestBody VoteRequest request,
@@ -373,6 +415,14 @@ public class VoteboardController {
                     - 재투표가 허용된 경우에만 가능 (allowRevote = true)
                     - 진행 중인 투표에만 가능
                     - 기존에 투표한 기록이 있어야 함
+
+                    **단일 선택 투표 (allowMultipleChoice = false):**
+                    - 정확히 1개의 옵션만 선택 가능
+                    - 예: 옵션 1 → 옵션 2로 변경
+
+                    **중복 선택 투표 (allowMultipleChoice = true):**
+                    - 최소 1개, 최대 n-1개 선택 가능
+                    - 예: [1, 2] → [2, 3, 4]로 변경
 
                     **권한:** 로그인 사용자만 가능
                     """
@@ -428,11 +478,18 @@ public class VoteboardController {
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = VoteRequest.class),
-                            examples = @ExampleObject(
-                                    name = "재투표 예시",
-                                    value = "{\"voteOptionId\": 3}",
-                                    description = "한식(1) → 일식(3)으로 변경"
-                            )
+                            examples = {
+                                    @ExampleObject(
+                                            name = "단일 선택 변경",
+                                            value = "{\"voteOptionIds\": [3]}",
+                                            description = "옵션 1 → 옵션 3으로 변경"
+                                    ),
+                                    @ExampleObject(
+                                            name = "중복 선택 변경",
+                                            value = "{\"voteOptionIds\": [2, 3, 4]}",
+                                            description = "[1, 2] → [2, 3, 4]로 변경"
+                                    )
+                            }
                     )
             )
             @Valid @RequestBody VoteRequest request,

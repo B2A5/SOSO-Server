@@ -69,6 +69,14 @@ public class VotePost extends BaseTimeEntity {
     private boolean allowRevote = false;
 
     /**
+     * 중복 선택 허용 여부
+     * true: 여러 옵션 동시 선택 가능 (최대 n-1개)
+     * false: 하나의 옵션만 선택 가능 (기본값)
+     */
+    @Column(name = "allow_multiple_choice", nullable = false)
+    private boolean allowMultipleChoice = false;
+
+    /**
      * 총 투표 참여자 수
      */
     @Column(name = "total_votes", nullable = false)
@@ -78,13 +86,14 @@ public class VotePost extends BaseTimeEntity {
      * VotePost 생성 정적 팩토리 메서드
      */
     public static VotePost create(Users user, String title, String content,
-                                   LocalDateTime endTime, boolean allowRevote) {
+                                   LocalDateTime endTime, boolean allowRevote, boolean allowMultipleChoice) {
         VotePost votePost = new VotePost();
         votePost.user = user;
         votePost.title = title;
         votePost.content = content;
         votePost.endTime = endTime;
         votePost.allowRevote = allowRevote;
+        votePost.allowMultipleChoice = allowMultipleChoice;
         votePost.totalVotes = 0;
         votePost.viewCount = 0;
         votePost.deleted = false;
@@ -170,10 +179,11 @@ public class VotePost extends BaseTimeEntity {
     /**
      * 투표 설정 수정
      */
-    public void updateVoteSettings(LocalDateTime endTime, boolean allowRevote) {
+    public void updateVoteSettings(LocalDateTime endTime, boolean allowRevote, boolean allowMultipleChoice) {
         if (this.totalVotes == 0) {
             this.endTime = endTime;
             this.allowRevote = allowRevote;
+            this.allowMultipleChoice = allowMultipleChoice;
         }
     }
 

@@ -86,6 +86,7 @@ class VoteboardIntegrationTest {
                 ))
                 .endTime(LocalDateTime.now().plusDays(7))
                 .allowRevote(true)
+                .allowMultipleChoice(false)
                 .build();
 
         // when & then
@@ -109,6 +110,7 @@ class VoteboardIntegrationTest {
                 ))
                 .endTime(LocalDateTime.now().plusDays(7))
                 .allowRevote(true)
+                .allowMultipleChoice(false)
                 .build();
 
         // when & then
@@ -136,6 +138,7 @@ class VoteboardIntegrationTest {
                 ))
                 .endTime(LocalDateTime.now().plusDays(7))
                 .allowRevote(true)
+                .allowMultipleChoice(false)
                 .build();
 
         // when & then
@@ -159,6 +162,7 @@ class VoteboardIntegrationTest {
                 ))
                 .endTime(LocalDateTime.now().minusDays(1))  // 과거 시간
                 .allowRevote(true)
+                .allowMultipleChoice(false)
                 .build();
 
         // when & then
@@ -216,6 +220,7 @@ class VoteboardIntegrationTest {
                 ))
                 .endTime(LocalDateTime.now().plusDays(7))
                 .allowRevote(true)
+                .allowMultipleChoice(false)
                 .build();
 
         // when & then

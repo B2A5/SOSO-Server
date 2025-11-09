@@ -29,7 +29,8 @@ public class VotePostMapper {
                 request.getTitle(),
                 request.getContent(),
                 request.getEndTime(),
-                request.getAllowRevote()
+                request.getAllowRevote(),
+                request.getAllowMultipleChoice()
         );
 
         // 투표 옵션 추가
@@ -66,6 +67,7 @@ public class VotePostMapper {
                 .voteStatus(votePost.getVoteStatus())
                 .endTime(votePost.getEndTime())
                 .allowRevote(votePost.isAllowRevote())
+                .allowMultipleChoice(votePost.isAllowMultipleChoice())
                 .voteOptions(voteOptions)
                 .likeCount(likeCount)
                 .isLiked(isLiked)
@@ -80,10 +82,17 @@ public class VotePostMapper {
     public VotePostDetailResponse toDetailResponse(
             VotePost votePost,
             long commentCount,
-            VoteResult userVoteResult,
+            List<VoteResult> userVoteResults,
             long likeCount,
             boolean isLiked
     ) {
+        // 사용자가 선택한 옵션 ID 목록
+        List<Long> selectedOptionIds = userVoteResults != null ?
+                userVoteResults.stream()
+                        .map(vr -> vr.getVoteOption().getId())
+                        .toList() :
+                List.of();
+
         return VotePostDetailResponse.builder()
                 .id(votePost.getId())
                 .title(votePost.getTitle())
@@ -95,11 +104,12 @@ public class VotePostMapper {
                 .voteOptions(votePost.getVoteOptions().stream()
                         .map(option -> toVoteOptionResponse(option, votePost.getTotalVotes()))
                         .toList())
-                .selectedOptionId(userVoteResult != null ? userVoteResult.getVoteOption().getId() : null)
+                .selectedOptionIds(selectedOptionIds)
                 .totalVotes(votePost.getTotalVotes())
                 .voteStatus(votePost.getVoteStatus())
                 .endTime(votePost.getEndTime())
                 .allowRevote(votePost.isAllowRevote())
+                .allowMultipleChoice(votePost.isAllowMultipleChoice())
                 .viewCount(votePost.getViewCount())
                 .commentCount(commentCount)
                 .likeCount(likeCount)

@@ -2,7 +2,6 @@ package com.example.soso.community.freeboard.integration;
 
 import com.example.soso.community.freeboard.post.domain.dto.*;
 import com.example.soso.community.freeboard.comment.domain.dto.*;
-import com.example.soso.community.common.post.domain.entity.Category;
 import com.example.soso.global.jwt.JwtProvider;
 import com.example.soso.users.domain.entity.Users;
 import com.example.soso.users.repository.UsersRepository;
@@ -18,10 +17,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
-
-import java.util.UUID;
 
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;

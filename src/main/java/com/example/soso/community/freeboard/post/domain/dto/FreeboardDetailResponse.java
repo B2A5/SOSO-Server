@@ -2,7 +2,6 @@ package com.example.soso.community.freeboard.post.domain.dto;
 
 import com.example.soso.community.common.post.domain.entity.Category;
 import com.example.soso.users.domain.entity.UserType;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;

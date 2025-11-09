@@ -2,7 +2,6 @@ package com.example.soso.community.common.post.service;
 
 import com.example.soso.global.exception.domain.UserErrorCode;
 import com.example.soso.global.exception.util.UserAuthException;
-import com.example.soso.global.s3.GcsService;
 import com.example.soso.global.s3.S3Service;
 import com.example.soso.global.exception.domain.PostErrorCode;
 import com.example.soso.global.exception.util.PostException;

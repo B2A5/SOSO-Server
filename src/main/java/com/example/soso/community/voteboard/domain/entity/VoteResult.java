@@ -20,13 +20,14 @@ import lombok.NoArgsConstructor;
     name = "vote_result",
     uniqueConstraints = {
         @UniqueConstraint(
-            name = "uk_vote_result_user_post",
-            columnNames = {"user_id", "vote_post_id"}
+            name = "uk_vote_result_user_post_option",
+            columnNames = {"user_id", "vote_post_id", "vote_option_id"}
         )
     },
     indexes = {
         @Index(name = "idx_vote_result_user", columnList = "user_id"),
-        @Index(name = "idx_vote_result_post", columnList = "vote_post_id")
+        @Index(name = "idx_vote_result_post", columnList = "vote_post_id"),
+        @Index(name = "idx_vote_result_user_post", columnList = "user_id, vote_post_id")
     }
 )
 public class VoteResult extends BaseTimeEntity {

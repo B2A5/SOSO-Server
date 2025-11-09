@@ -72,15 +72,15 @@ public class VotePostServiceImpl implements VotePostService {
         long likeCount = votePostLikeRepository.countByVotePostId(postId);
 
         // 사용자의 투표 결과 조회 (비로그인 시 null)
-        VoteResult userVoteResult = null;
+        List<VoteResult> userVoteResults = null;
         boolean isLiked = false;
         if (userId != null) {
             Users user = findUserById(userId);
-            userVoteResult = voteResultRepository.findByUserAndVotePost(user, votePost).orElse(null);
+            userVoteResults = voteResultRepository.findAllByUserAndVotePost(user, votePost);
             isLiked = votePostLikeRepository.existsByVotePostIdAndUserId(postId, userId);
         }
 
-        return votePostMapper.toDetailResponse(votePost, commentCount, userVoteResult, likeCount, isLiked);
+        return votePostMapper.toDetailResponse(votePost, commentCount, userVoteResults, likeCount, isLiked);
     }
 
     @Override
@@ -159,10 +159,11 @@ public class VotePostServiceImpl implements VotePostService {
         votePost.updatePost(request.getTitle(), request.getContent(), null);
 
         // 투표 설정 수정 (투표 시작 전에만 가능)
-        if (request.getEndTime() != null || request.getAllowRevote() != null) {
+        if (request.getEndTime() != null || request.getAllowRevote() != null || request.getAllowMultipleChoice() != null) {
             LocalDateTime endTime = request.getEndTime() != null ? request.getEndTime() : votePost.getEndTime();
             boolean allowRevote = request.getAllowRevote() != null ? request.getAllowRevote() : votePost.isAllowRevote();
-            votePost.updateVoteSettings(endTime, allowRevote);
+            boolean allowMultipleChoice = request.getAllowMultipleChoice() != null ? request.getAllowMultipleChoice() : votePost.isAllowMultipleChoice();
+            votePost.updateVoteSettings(endTime, allowRevote, allowMultipleChoice);
         }
 
         log.info("투표 게시글 수정 완료: postId={}", postId);
@@ -186,11 +187,11 @@ public class VotePostServiceImpl implements VotePostService {
     @Override
     @Transactional
     public void vote(Long postId, VoteRequest request, String userId) {
-        log.info("투표 참여 시작: postId={}, userId={}, optionId={}", postId, userId, request.getVoteOptionId());
+        log.info("투표 참여 시작: postId={}, userId={}, optionIds={}", postId, userId, request.getVoteOptionIds());
 
         VotePost votePost = findVotePostById(postId);
         Users user = findUserById(userId);
-        VoteOption selectedOption = findVoteOptionById(request.getVoteOptionId());
+        List<Long> selectedOptionIds = request.getVoteOptionIds();
 
         // 투표 진행 중인지 확인
         if (!votePost.isActive()) {
@@ -202,34 +203,65 @@ public class VotePostServiceImpl implements VotePostService {
             throw new PostException(PostErrorCode.ALREADY_VOTED);
         }
 
-        // 옵션이 해당 투표 게시글의 것인지 확인
-        if (!selectedOption.getVotePost().getId().equals(postId)) {
-            throw new PostException(PostErrorCode.INVALID_VOTE_OPTION);
+        // 선택된 옵션 개수 검증
+        int totalOptions = votePost.getVoteOptions().size();
+        int selectedCount = selectedOptionIds.size();
+
+        if (votePost.isAllowMultipleChoice()) {
+            // 중복 선택 허용: 최소 1개, 최대 n-1개
+            if (selectedCount == 0) {
+                throw new PostException(PostErrorCode.INVALID_VOTE_COUNT);
+            }
+            if (selectedCount >= totalOptions) {
+                throw new PostException(PostErrorCode.TOO_MANY_VOTE_OPTIONS);
+            }
+        } else {
+            // 단일 선택: 정확히 1개
+            if (selectedCount != 1) {
+                throw new PostException(PostErrorCode.SINGLE_VOTE_REQUIRED);
+            }
         }
 
-        // 투표 결과 저장
-        VoteResult voteResult = VoteResult.builder()
-                .user(user)
-                .votePost(votePost)
-                .voteOption(selectedOption)
-                .build();
-        voteResultRepository.save(voteResult);
+        // 중복 옵션 선택 확인
+        if (selectedOptionIds.size() != selectedOptionIds.stream().distinct().count()) {
+            throw new PostException(PostErrorCode.DUPLICATE_VOTE_OPTION);
+        }
 
-        // 투표 수 증가
-        selectedOption.increaseVoteCount();
+        // 각 옵션에 대해 투표 처리
+        for (Long optionId : selectedOptionIds) {
+            VoteOption selectedOption = findVoteOptionById(optionId);
+
+            // 옵션이 해당 투표 게시글의 것인지 확인
+            if (!selectedOption.getVotePost().getId().equals(postId)) {
+                throw new PostException(PostErrorCode.INVALID_VOTE_OPTION);
+            }
+
+            // 투표 결과 저장
+            VoteResult voteResult = VoteResult.builder()
+                    .user(user)
+                    .votePost(votePost)
+                    .voteOption(selectedOption)
+                    .build();
+            voteResultRepository.save(voteResult);
+
+            // 투표 수 증가
+            selectedOption.increaseVoteCount();
+        }
+
+        // 총 투표 참여자 수 증가 (한 명이 여러 옵션 선택해도 1명으로 카운트)
         votePost.increaseTotalVotes();
 
-        log.info("투표 참여 완료: postId={}, userId={}, optionId={}", postId, userId, request.getVoteOptionId());
+        log.info("투표 참여 완료: postId={}, userId={}, optionIds={}", postId, userId, selectedOptionIds);
     }
 
     @Override
     @Transactional
     public void changeVote(Long postId, VoteRequest request, String userId) {
-        log.info("투표 변경 시작: postId={}, userId={}, newOptionId={}", postId, userId, request.getVoteOptionId());
+        log.info("투표 변경 시작: postId={}, userId={}, newOptionIds={}", postId, userId, request.getVoteOptionIds());
 
         VotePost votePost = findVotePostById(postId);
         Users user = findUserById(userId);
-        VoteOption newOption = findVoteOptionById(request.getVoteOptionId());
+        List<Long> newOptionIds = request.getVoteOptionIds();
 
         // 재투표 허용 확인
         if (!votePost.isAllowRevote()) {
@@ -242,19 +274,75 @@ public class VotePostServiceImpl implements VotePostService {
         }
 
         // 기존 투표 결과 조회
-        VoteResult voteResult = voteResultRepository.findByUserAndVotePost(user, votePost)
-                .orElseThrow(() -> new PostException(PostErrorCode.VOTE_NOT_FOUND));
+        List<VoteResult> existingVotes = voteResultRepository.findAllByUserAndVotePost(user, votePost);
+        if (existingVotes.isEmpty()) {
+            throw new PostException(PostErrorCode.VOTE_NOT_FOUND);
+        }
 
-        // 같은 옵션으로 변경 시도하는 경우
-        if (voteResult.getVoteOption().getId().equals(newOption.getId())) {
-            log.warn("동일한 옵션으로 재투표 시도: postId={}, userId={}, optionId={}", postId, userId, newOption.getId());
+        // 선택된 옵션 개수 검증
+        int totalOptions = votePost.getVoteOptions().size();
+        int selectedCount = newOptionIds.size();
+
+        if (votePost.isAllowMultipleChoice()) {
+            // 중복 선택 허용: 최소 1개, 최대 n-1개
+            if (selectedCount == 0) {
+                throw new PostException(PostErrorCode.INVALID_VOTE_COUNT);
+            }
+            if (selectedCount >= totalOptions) {
+                throw new PostException(PostErrorCode.TOO_MANY_VOTE_OPTIONS);
+            }
+        } else {
+            // 단일 선택: 정확히 1개
+            if (selectedCount != 1) {
+                throw new PostException(PostErrorCode.SINGLE_VOTE_REQUIRED);
+            }
+        }
+
+        // 중복 옵션 선택 확인
+        if (newOptionIds.size() != newOptionIds.stream().distinct().count()) {
+            throw new PostException(PostErrorCode.DUPLICATE_VOTE_OPTION);
+        }
+
+        // 기존 선택과 동일한지 확인
+        List<Long> existingOptionIds = existingVotes.stream()
+                .map(vr -> vr.getVoteOption().getId())
+                .sorted()
+                .toList();
+        List<Long> sortedNewOptionIds = newOptionIds.stream().sorted().toList();
+
+        if (existingOptionIds.equals(sortedNewOptionIds)) {
+            log.warn("동일한 옵션으로 재투표 시도: postId={}, userId={}, optionIds={}", postId, userId, newOptionIds);
             return;
         }
 
-        // 투표 변경
-        voteResult.changeVote(newOption);
+        // 기존 투표 결과 삭제 및 투표 수 감소
+        for (VoteResult existingVote : existingVotes) {
+            existingVote.getVoteOption().decreaseVoteCount();
+            voteResultRepository.delete(existingVote);
+        }
 
-        log.info("투표 변경 완료: postId={}, userId={}, newOptionId={}", postId, userId, request.getVoteOptionId());
+        // 새로운 투표 결과 저장
+        for (Long optionId : newOptionIds) {
+            VoteOption newOption = findVoteOptionById(optionId);
+
+            // 옵션이 해당 투표 게시글의 것인지 확인
+            if (!newOption.getVotePost().getId().equals(postId)) {
+                throw new PostException(PostErrorCode.INVALID_VOTE_OPTION);
+            }
+
+            // 투표 결과 저장
+            VoteResult voteResult = VoteResult.builder()
+                    .user(user)
+                    .votePost(votePost)
+                    .voteOption(newOption)
+                    .build();
+            voteResultRepository.save(voteResult);
+
+            // 투표 수 증가
+            newOption.increaseVoteCount();
+        }
+
+        log.info("투표 변경 완료: postId={}, userId={}, newOptionIds={}", postId, userId, newOptionIds);
     }
 
     @Override
@@ -276,17 +364,21 @@ public class VotePostServiceImpl implements VotePostService {
         }
 
         // 기존 투표 결과 조회
-        VoteResult voteResult = voteResultRepository.findByUserAndVotePost(user, votePost)
-                .orElseThrow(() -> new PostException(PostErrorCode.VOTE_NOT_FOUND));
+        List<VoteResult> voteResults = voteResultRepository.findAllByUserAndVotePost(user, votePost);
+        if (voteResults.isEmpty()) {
+            throw new PostException(PostErrorCode.VOTE_NOT_FOUND);
+        }
 
-        // 투표 수 감소
-        voteResult.getVoteOption().decreaseVoteCount();
+        // 모든 투표 결과 삭제 및 투표 수 감소
+        for (VoteResult voteResult : voteResults) {
+            voteResult.getVoteOption().decreaseVoteCount();
+            voteResultRepository.delete(voteResult);
+        }
+
+        // 총 투표 참여자 수 감소
         votePost.decreaseTotalVotes();
 
-        // 투표 결과 삭제
-        voteResultRepository.delete(voteResult);
-
-        log.info("투표 취소 완료: postId={}, userId={}", postId, userId);
+        log.info("투표 취소 완료: postId={}, userId={}, canceledCount={}", postId, userId, voteResults.size());
     }
 
     // 헬퍼 메서드들

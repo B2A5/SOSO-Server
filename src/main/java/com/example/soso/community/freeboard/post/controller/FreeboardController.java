@@ -5,7 +5,6 @@ import com.example.soso.community.freeboard.post.service.FreeboardService;
 import com.example.soso.community.common.post.domain.entity.Category;
 import com.example.soso.security.domain.CustomUserDetails;
 import com.example.soso.global.exception.domain.ErrorResponse;
-import com.example.soso.global.exception.domain.PostErrorCode;
 import com.example.soso.global.exception.util.PostException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

@@ -4,8 +4,6 @@ package com.example.soso.community.common.post.repository;
 import com.example.soso.community.common.post.domain.dto.PostSortType;
 import com.example.soso.community.common.post.domain.dto.PostSummaryResponse;
 import com.example.soso.community.common.post.domain.entity.Category;
-import com.example.soso.community.common.post.domain.entity.Post;
-
 import java.util.List;
 
 public interface PostRepositoryCustom {

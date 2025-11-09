@@ -24,7 +24,11 @@ public enum PostErrorCode implements BaseErrorCode {
     INVALID_VOTE_OPTION("유효하지 않은 투표 옵션입니다.", HttpStatus.BAD_REQUEST),
     REVOTE_NOT_ALLOWED("재투표가 허용되지 않습니다.", HttpStatus.FORBIDDEN),
     VOTE_NOT_FOUND("투표 기록을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
-    VOTE_OPTION_NOT_FOUND("투표 옵션을 찾을 수 없습니다.", HttpStatus.NOT_FOUND);
+    VOTE_OPTION_NOT_FOUND("투표 옵션을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
+    INVALID_VOTE_COUNT("최소 1개의 옵션을 선택해야 합니다.", HttpStatus.BAD_REQUEST),
+    TOO_MANY_VOTE_OPTIONS("선택 가능한 옵션 개수를 초과했습니다. (최대 n-1개)", HttpStatus.BAD_REQUEST),
+    SINGLE_VOTE_REQUIRED("이 투표는 하나의 옵션만 선택 가능합니다.", HttpStatus.BAD_REQUEST),
+    DUPLICATE_VOTE_OPTION("중복된 옵션을 선택할 수 없습니다.", HttpStatus.BAD_REQUEST);
 
     private final String message;
     private final HttpStatus httpStatus;
