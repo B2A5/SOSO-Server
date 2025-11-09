@@ -30,6 +30,7 @@ public class FreeboardLikeController {
     private final FreeboardLikeService freeboardLikeService;
 
     @Operation(
+            operationId = "toggleFreeboardLike",
             summary = "자유게시판 글 좋아요 토글",
             description = """
                     게시글에 좋아요를 추가하거나 취소합니다.
@@ -70,7 +71,7 @@ public class FreeboardLikeController {
             )
     })
     @PostMapping
-    public ResponseEntity<?> toggleLike(
+    public ResponseEntity<Object> toggleLike(
             @Parameter(description = "자유게시판 게시글 ID", example = "123")
             @PathVariable Long freeboardId,
             @AuthenticationPrincipal CustomUserDetails userDetails
@@ -89,6 +90,7 @@ public class FreeboardLikeController {
     }
 
     @Operation(
+            operationId = "getFreeboardLikeStatus",
             summary = "자유게시판 글 좋아요 상태 확인",
             description = """
                     사용자가 특정 게시글에 좋아요를 했는지 확인합니다.
@@ -125,7 +127,7 @@ public class FreeboardLikeController {
             )
     })
     @GetMapping
-    public ResponseEntity<?> getLikeStatus(
+    public ResponseEntity<Object> getLikeStatus(
             @Parameter(description = "자유게시판 게시글 ID", example = "123")
             @PathVariable Long freeboardId,
             @AuthenticationPrincipal CustomUserDetails userDetails

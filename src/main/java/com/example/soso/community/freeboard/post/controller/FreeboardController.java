@@ -43,6 +43,7 @@ public class FreeboardController {
     private final FreeboardService freeboardService;
 
     @Operation(
+            operationId = "createFreeboardPost",
             summary = "자유게시판 글 작성",
             description = """
                     자유게시판에 새 글을 작성합니다.
@@ -104,7 +105,7 @@ public class FreeboardController {
             )
     })
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> createPost(
+    public ResponseEntity<Object> createPost(
             @ModelAttribute @Valid FreeboardCreateRequest request,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
@@ -128,6 +129,7 @@ public class FreeboardController {
     }
 
     @Operation(
+            operationId = "getFreeboardPost",
             summary = "자유게시판 글 상세 조회",
             description = """
                     게시글 ID를 통해 특정 게시글의 상세 정보를 조회합니다.
@@ -204,6 +206,7 @@ public class FreeboardController {
     }
 
     @Operation(
+            operationId = "getFreeboardPostsByCursor",
             summary = "자유게시판 글 목록 조회 (커서 기반)",
             description = """
                     커서 기반 페이지네이션을 사용하여 게시글 목록을 조회합니다.
@@ -301,7 +304,7 @@ public class FreeboardController {
             )
     })
     @GetMapping
-    public ResponseEntity<?> getPostsByCursor(
+    public ResponseEntity<FreeboardCursorResponse> getPostsByCursor(
             @RequestParam(value = "category", required = false) Category category,
             @RequestParam(defaultValue = "LATEST") FreeboardSortType sort,
             @RequestParam(required = false) String cursor,
@@ -338,6 +341,7 @@ public class FreeboardController {
     }
 
     @Operation(
+            operationId = "updateFreeboardPost",
             summary = "자유게시판 글 수정",
             description = """
                     작성한 게시글을 수정합니다.
@@ -406,7 +410,7 @@ public class FreeboardController {
             )
     })
     @PatchMapping(value = "/{freeboardId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> updatePost(
+    public ResponseEntity<Object> updatePost(
             @Parameter(description = "수정할 게시글 ID", example = "123")
             @PathVariable Long freeboardId,
             @ModelAttribute @Valid FreeboardUpdateRequest request,
@@ -429,6 +433,7 @@ public class FreeboardController {
     }
 
     @Operation(
+            operationId = "deleteFreeboardPost",
             summary = "자유게시판 글 삭제 (소프트 삭제)",
             description = """
                     게시글을 삭제합니다. (소프트 삭제)
@@ -469,7 +474,7 @@ public class FreeboardController {
             )
     })
     @DeleteMapping("/{freeboardId}")
-    public ResponseEntity<?> deletePost(
+    public ResponseEntity<Object> deletePost(
             @Parameter(description = "삭제할 게시글 ID", example = "123")
             @PathVariable Long freeboardId,
             @AuthenticationPrincipal CustomUserDetails userDetails
@@ -491,6 +496,7 @@ public class FreeboardController {
     }
 
     @Operation(
+            operationId = "hardDeleteFreeboardPost",
             summary = "자유게시판 글 영구 삭제",
             description = """
                     게시글을 영구적으로 삭제합니다. (하드 삭제)
@@ -529,7 +535,7 @@ public class FreeboardController {
             )
     })
     @DeleteMapping("/{freeboardId}/force")
-    public ResponseEntity<?> hardDeletePost(
+    public ResponseEntity<Object> hardDeletePost(
             @Parameter(description = "영구 삭제할 게시글 ID", example = "123")
             @PathVariable Long freeboardId,
             @AuthenticationPrincipal CustomUserDetails userDetails

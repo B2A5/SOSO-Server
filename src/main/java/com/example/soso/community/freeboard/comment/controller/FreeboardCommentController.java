@@ -39,6 +39,7 @@ public class FreeboardCommentController {
     private final FreeboardCommentService commentService;
 
     @Operation(
+            operationId = "createFreeboardComment",
             summary = "댓글 작성",
             description = """
                     자유게시판 게시글에 댓글을 작성합니다.
@@ -84,7 +85,7 @@ public class FreeboardCommentController {
             )
     })
     @PostMapping
-    public ResponseEntity<?> createComment(
+    public ResponseEntity<Object> createComment(
             @Parameter(description = "게시글 ID", example = "123")
             @PathVariable Long freeboardId,
             @RequestBody @Valid FreeboardCommentCreateRequest request,
@@ -107,6 +108,7 @@ public class FreeboardCommentController {
     }
 
     @Operation(
+            operationId = "getFreeboardCommentsByCursor",
             summary = "댓글 목록 조회 (커서 기반)",
             description = """
                     게시글의 댓글 목록을 커서 기반으로 조회합니다.
@@ -190,6 +192,11 @@ public class FreeboardCommentController {
     public ResponseEntity<FreeboardCommentCursorResponse> getCommentsByCursor(
             @Parameter(description = "게시글 ID", example = "123")
             @PathVariable Long freeboardId,
+            @Parameter(
+                    description = "정렬 순서 (LATEST: 최신순, OLDEST: 오래된순)",
+                    example = "LATEST",
+                    schema = @Schema(allowableValues = {"LATEST", "OLDEST"})
+            )
             @RequestParam(defaultValue = "LATEST") FreeboardCommentSortType sort,
             @RequestParam(required = false) String cursor,
             @RequestParam(defaultValue = "20") int size
@@ -215,6 +222,7 @@ public class FreeboardCommentController {
     }
 
     @Operation(
+            operationId = "updateFreeboardComment",
             summary = "댓글 수정",
             description = """
                     작성한 댓글을 수정합니다.
@@ -268,7 +276,7 @@ public class FreeboardCommentController {
             )
     })
     @PatchMapping("/{commentId}")
-    public ResponseEntity<?> updateComment(
+    public ResponseEntity<Object> updateComment(
             @Parameter(description = "게시글 ID", example = "123")
             @PathVariable Long freeboardId,
             @Parameter(description = "댓글 ID", example = "456")
@@ -293,6 +301,7 @@ public class FreeboardCommentController {
     }
 
     @Operation(
+            operationId = "deleteFreeboardComment",
             summary = "댓글 삭제 (소프트 삭제)",
             description = """
                     댓글을 삭제합니다. (소프트 삭제)
@@ -332,7 +341,7 @@ public class FreeboardCommentController {
             )
     })
     @DeleteMapping("/{commentId}")
-    public ResponseEntity<?> deleteComment(
+    public ResponseEntity<Object> deleteComment(
             @Parameter(description = "게시글 ID", example = "123")
             @PathVariable Long freeboardId,
             @Parameter(description = "댓글 ID", example = "456")
@@ -356,6 +365,7 @@ public class FreeboardCommentController {
     }
 
     @Operation(
+            operationId = "hardDeleteFreeboardComment",
             summary = "댓글 영구 삭제",
             description = """
                     댓글을 영구적으로 삭제합니다. (하드 삭제)
@@ -394,7 +404,7 @@ public class FreeboardCommentController {
             )
     })
     @DeleteMapping("/{commentId}/force")
-    public ResponseEntity<?> hardDeleteComment(
+    public ResponseEntity<Object> hardDeleteComment(
             @Parameter(description = "게시글 ID", example = "123")
             @PathVariable Long freeboardId,
             @Parameter(description = "댓글 ID", example = "456")

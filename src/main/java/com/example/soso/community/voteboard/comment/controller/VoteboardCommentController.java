@@ -39,6 +39,7 @@ public class VoteboardCommentController {
     private final VoteboardCommentService commentService;
 
     @Operation(
+            operationId = "createVoteboardComment",
             summary = "댓글 작성",
             description = """
                     투표 게시판 게시글에 댓글을 작성합니다.
@@ -84,7 +85,7 @@ public class VoteboardCommentController {
             )
     })
     @PostMapping
-    public ResponseEntity<?> createComment(
+    public ResponseEntity<Object> createComment(
             @Parameter(description = "투표 게시글 ID", example = "123")
             @PathVariable Long votePostId,
             @RequestBody @Valid VoteboardCommentCreateRequest request,
@@ -107,6 +108,7 @@ public class VoteboardCommentController {
     }
 
     @Operation(
+            operationId = "getVoteboardCommentsByCursor",
             summary = "댓글 목록 조회 (커서 기반)",
             description = """
                     게시글의 댓글 목록을 커서 기반으로 조회합니다.
@@ -178,6 +180,11 @@ public class VoteboardCommentController {
     public ResponseEntity<VoteboardCommentCursorResponse> getCommentsByCursor(
             @Parameter(description = "투표 게시글 ID", example = "123")
             @PathVariable Long votePostId,
+            @Parameter(
+                    description = "정렬 순서 (LATEST: 최신순, OLDEST: 오래된순)",
+                    example = "LATEST",
+                    schema = @Schema(allowableValues = {"LATEST", "OLDEST"})
+            )
             @RequestParam(defaultValue = "LATEST") VoteboardCommentSortType sort,
             @RequestParam(required = false) String cursor,
             @RequestParam(defaultValue = "20") int size
@@ -203,6 +210,7 @@ public class VoteboardCommentController {
     }
 
     @Operation(
+            operationId = "updateVoteboardComment",
             summary = "댓글 수정",
             description = """
                     작성한 댓글을 수정합니다.
@@ -256,7 +264,7 @@ public class VoteboardCommentController {
             )
     })
     @PatchMapping("/{commentId}")
-    public ResponseEntity<?> updateComment(
+    public ResponseEntity<Object> updateComment(
             @Parameter(description = "투표 게시글 ID", example = "123")
             @PathVariable Long votePostId,
             @Parameter(description = "댓글 ID", example = "456")
@@ -281,6 +289,7 @@ public class VoteboardCommentController {
     }
 
     @Operation(
+            operationId = "deleteVoteboardComment",
             summary = "댓글 삭제 (소프트 삭제)",
             description = """
                     댓글을 삭제합니다. (소프트 삭제)
@@ -320,7 +329,7 @@ public class VoteboardCommentController {
             )
     })
     @DeleteMapping("/{commentId}")
-    public ResponseEntity<?> deleteComment(
+    public ResponseEntity<Object> deleteComment(
             @Parameter(description = "투표 게시글 ID", example = "123")
             @PathVariable Long votePostId,
             @Parameter(description = "댓글 ID", example = "456")

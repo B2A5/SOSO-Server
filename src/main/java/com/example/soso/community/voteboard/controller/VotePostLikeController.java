@@ -30,6 +30,7 @@ public class VotePostLikeController {
     private final VotePostLikeService votePostLikeService;
 
     @Operation(
+            operationId = "toggleVotePostLike",
             summary = "투표 게시글 좋아요 토글",
             description = """
                     투표 게시글에 좋아요를 추가하거나 취소합니다.
@@ -70,7 +71,7 @@ public class VotePostLikeController {
             )
     })
     @PostMapping
-    public ResponseEntity<?> toggleLike(
+    public ResponseEntity<Object> toggleLike(
             @Parameter(description = "투표 게시글 ID", example = "123")
             @PathVariable Long votePostId,
             @AuthenticationPrincipal CustomUserDetails userDetails
@@ -89,6 +90,7 @@ public class VotePostLikeController {
     }
 
     @Operation(
+            operationId = "getVotePostLikeStatus",
             summary = "투표 게시글 좋아요 상태 확인",
             description = """
                     사용자가 특정 투표 게시글에 좋아요를 했는지 확인합니다.
@@ -125,7 +127,7 @@ public class VotePostLikeController {
             )
     })
     @GetMapping
-    public ResponseEntity<?> getLikeStatus(
+    public ResponseEntity<Object> getLikeStatus(
             @Parameter(description = "투표 게시글 ID", example = "123")
             @PathVariable Long votePostId,
             @AuthenticationPrincipal CustomUserDetails userDetails

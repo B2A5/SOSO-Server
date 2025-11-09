@@ -30,6 +30,7 @@ public class FreeboardCommentLikeController {
     private final FreeboardCommentLikeService commentLikeService;
 
     @Operation(
+            operationId = "toggleFreeboardCommentLike",
             summary = "자유게시판 댓글 좋아요 토글",
             description = """
                     댓글에 좋아요를 추가하거나 취소합니다.
@@ -70,7 +71,7 @@ public class FreeboardCommentLikeController {
             )
     })
     @PostMapping
-    public ResponseEntity<?> toggleCommentLike(
+    public ResponseEntity<Object> toggleCommentLike(
             @Parameter(description = "자유게시판 게시글 ID", example = "123")
             @PathVariable Long freeboardId,
             @Parameter(description = "댓글 ID", example = "456")
@@ -92,6 +93,7 @@ public class FreeboardCommentLikeController {
     }
 
     @Operation(
+            operationId = "getFreeboardCommentLikeStatus",
             summary = "자유게시판 댓글 좋아요 상태 확인",
             description = """
                     사용자가 특정 댓글에 좋아요를 했는지 확인합니다.
@@ -128,7 +130,7 @@ public class FreeboardCommentLikeController {
             )
     })
     @GetMapping
-    public ResponseEntity<?> getCommentLikeStatus(
+    public ResponseEntity<Object> getCommentLikeStatus(
             @Parameter(description = "자유게시판 게시글 ID", example = "123")
             @PathVariable Long freeboardId,
             @Parameter(description = "댓글 ID", example = "456")

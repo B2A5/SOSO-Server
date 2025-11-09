@@ -35,6 +35,7 @@ public class VoteboardController {
 
     @PostMapping
     @Operation(
+            operationId = "createVotePost",
             summary = "투표 게시글 작성",
             description = """
                     새로운 투표 게시글을 작성합니다.
@@ -132,7 +133,11 @@ public class VoteboardController {
     }
 
     @GetMapping("/{votesboardId}")
-    @Operation(summary = "투표 게시글 상세 조회", description = "투표 게시글의 상세 정보를 조회합니다. 비로그인 사용자도 조회 가능합니다.")
+    @Operation(
+            operationId = "getVotePost",
+            summary = "투표 게시글 상세 조회",
+            description = "투표 게시글의 상세 정보를 조회합니다. 비로그인 사용자도 조회 가능합니다."
+    )
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
@@ -163,7 +168,11 @@ public class VoteboardController {
     }
 
     @GetMapping
-    @Operation(summary = "투표 게시글 목록 조회 (커서 기반)", description = "커서 기반 페이지네이션으로 투표 게시글 목록을 조회합니다.")
+    @Operation(
+            operationId = "getVotePostsByCursor",
+            summary = "투표 게시글 목록 조회 (커서 기반)",
+            description = "커서 기반 페이지네이션으로 투표 게시글 목록을 조회합니다."
+    )
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
@@ -190,7 +199,11 @@ public class VoteboardController {
     }
 
     @PutMapping("/{votesboardId}")
-    @Operation(summary = "투표 게시글 수정", description = "투표 게시글을 수정합니다. 투표 옵션은 수정할 수 없습니다.")
+    @Operation(
+            operationId = "updateVotePost",
+            summary = "투표 게시글 수정",
+            description = "투표 게시글을 수정합니다. 투표 옵션은 수정할 수 없습니다."
+    )
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
@@ -226,7 +239,11 @@ public class VoteboardController {
     }
 
     @DeleteMapping("/{votesboardId}")
-    @Operation(summary = "투표 게시글 삭제", description = "투표 게시글을 삭제합니다 (소프트 삭제).")
+    @Operation(
+            operationId = "deleteVotePost",
+            summary = "투표 게시글 삭제",
+            description = "투표 게시글을 삭제합니다 (소프트 삭제)."
+    )
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
@@ -262,6 +279,7 @@ public class VoteboardController {
 
     @PostMapping("/{votesboardId}/vote")
     @Operation(
+            operationId = "castVote",
             summary = "투표 참여",
             description = """
                     투표에 참여합니다.
@@ -346,6 +364,7 @@ public class VoteboardController {
 
     @PutMapping("/{votesboardId}/vote")
     @Operation(
+            operationId = "changeVote",
             summary = "투표 변경 (재투표)",
             description = """
                     이미 참여한 투표를 변경합니다.
@@ -424,7 +443,11 @@ public class VoteboardController {
     }
 
     @DeleteMapping("/{votesboardId}/vote")
-    @Operation(summary = "투표 취소", description = "참여한 투표를 취소합니다. 재투표가 허용된 경우에만 가능합니다.")
+    @Operation(
+            operationId = "cancelVote",
+            summary = "투표 취소",
+            description = "참여한 투표를 취소합니다. 재투표가 허용된 경우에만 가능합니다."
+    )
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
