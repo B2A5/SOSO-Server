@@ -47,6 +47,7 @@ public class VoteboardCommentLikeController {
                     responseCode = "200",
                     description = "좋아요 토글 성공",
                     content = @Content(
+                            schema = @Schema(implementation = Boolean.class),
                             examples = {
                                     @ExampleObject(name = "좋아요 추가", value = "true"),
                                     @ExampleObject(name = "좋아요 취소", value = "false")
@@ -105,6 +106,7 @@ public class VoteboardCommentLikeController {
                     responseCode = "200",
                     description = "좋아요 상태 조회 성공",
                     content = @Content(
+                            schema = @Schema(implementation = Boolean.class),
                             examples = {
                                     @ExampleObject(name = "좋아요 한 상태", value = "true"),
                                     @ExampleObject(name = "좋아요 안 한 상태", value = "false")
