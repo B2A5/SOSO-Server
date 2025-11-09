@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Voteboard Like", description = "투표 게시글 좋아요 API")
 @Slf4j
 @RestController
-@RequestMapping("/community/votesboard/{votePostId}/like")
+@RequestMapping("/community/votesboard/{votesboardId}/like")
 @RequiredArgsConstructor
 public class VotePostLikeController {
 
@@ -74,18 +74,18 @@ public class VotePostLikeController {
     @PostMapping
     public ResponseEntity<Object> toggleLike(
             @Parameter(description = "투표 게시글 ID", example = "123")
-            @PathVariable Long votePostId,
+            @PathVariable Long votesboardId,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
         if (userDetails == null) {
-            log.warn("toggleLike 요청 시 인증 정보 없음: votePostId={}", votePostId);
+            log.warn("toggleLike 요청 시 인증 정보 없음: votesboardId={}", votesboardId);
             ErrorResponse errorResponse = new ErrorResponse("AUTHENTICATION_FAILED", "인증이 필요합니다.");
             return ResponseEntity.status(401).body(errorResponse);
         }
 
-        log.info("투표 게시글 좋아요 토글: votePostId={}, userId={}", votePostId, userDetails.getUsername());
+        log.info("투표 게시글 좋아요 토글: votesboardId={}, userId={}", votesboardId, userDetails.getUsername());
 
-        boolean isLiked = votePostLikeService.toggleLike(votePostId, userDetails.getUsername());
+        boolean isLiked = votePostLikeService.toggleLike(votesboardId, userDetails.getUsername());
 
         return ResponseEntity.ok(isLiked);
     }
@@ -131,18 +131,18 @@ public class VotePostLikeController {
     @GetMapping
     public ResponseEntity<Object> getLikeStatus(
             @Parameter(description = "투표 게시글 ID", example = "123")
-            @PathVariable Long votePostId,
+            @PathVariable Long votesboardId,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
         if (userDetails == null) {
-            log.warn("getLikeStatus 요청 시 인증 정보 없음: votePostId={}", votePostId);
+            log.warn("getLikeStatus 요청 시 인증 정보 없음: votesboardId={}", votesboardId);
             ErrorResponse errorResponse = new ErrorResponse("AUTHENTICATION_FAILED", "인증이 필요합니다.");
             return ResponseEntity.status(401).body(errorResponse);
         }
 
-        log.debug("투표 게시글 좋아요 상태 조회: votePostId={}, userId={}", votePostId, userDetails.getUsername());
+        log.debug("투표 게시글 좋아요 상태 조회: votesboardId={}, userId={}", votesboardId, userDetails.getUsername());
 
-        boolean isLiked = votePostLikeService.isLikedByUser(votePostId, userDetails.getUsername());
+        boolean isLiked = votePostLikeService.isLikedByUser(votesboardId, userDetails.getUsername());
 
         return ResponseEntity.ok(isLiked);
     }

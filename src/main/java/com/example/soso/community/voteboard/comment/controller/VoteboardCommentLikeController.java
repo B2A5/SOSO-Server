@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Voteboard Comment Like", description = "투표 게시판 댓글 좋아요 API")
 @Slf4j
 @RestController
-@RequestMapping("/community/votesboard/{votePostId}/comments/{commentId}/like")
+@RequestMapping("/community/votesboard/{votesboardId}/comments/{commentId}/like")
 @RequiredArgsConstructor
 public class VoteboardCommentLikeController {
 
@@ -74,7 +74,7 @@ public class VoteboardCommentLikeController {
     @PostMapping
     public ResponseEntity<Object> toggleLike(
             @Parameter(description = "투표 게시글 ID", example = "123")
-            @PathVariable Long votePostId,
+            @PathVariable Long votesboardId,
             @Parameter(description = "댓글 ID", example = "456")
             @PathVariable Long commentId,
             @AuthenticationPrincipal CustomUserDetails userDetails
@@ -133,7 +133,7 @@ public class VoteboardCommentLikeController {
     @GetMapping
     public ResponseEntity<Object> getLikeStatus(
             @Parameter(description = "투표 게시글 ID", example = "123")
-            @PathVariable Long votePostId,
+            @PathVariable Long votesboardId,
             @Parameter(description = "댓글 ID", example = "456")
             @PathVariable Long commentId,
             @AuthenticationPrincipal CustomUserDetails userDetails

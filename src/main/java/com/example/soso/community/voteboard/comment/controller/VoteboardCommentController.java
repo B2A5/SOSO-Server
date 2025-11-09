@@ -33,7 +33,7 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Voteboard Comment", description = "투표 게시판 댓글 API")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/community/votesboard/{votePostId}/comments")
+@RequestMapping("/community/votesboard/{votesboardId}/comments")
 public class VoteboardCommentController {
 
     private final VoteboardCommentService commentService;
@@ -87,21 +87,21 @@ public class VoteboardCommentController {
     @PostMapping
     public ResponseEntity<Object> createComment(
             @Parameter(description = "투표 게시글 ID", example = "123")
-            @PathVariable Long votePostId,
+            @PathVariable Long votesboardId,
             @RequestBody @Valid VoteboardCommentCreateRequest request,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
         if (userDetails == null) {
-            log.warn("투표게시판 댓글 작성 요청 시 인증 정보 없음: votePostId={}", votePostId);
+            log.warn("투표게시판 댓글 작성 요청 시 인증 정보 없음: votesboardId={}", votesboardId);
             ErrorResponse errorResponse = new ErrorResponse("AUTHENTICATION_FAILED", "인증이 필요합니다.");
             return ResponseEntity.status(401).body(errorResponse);
         }
 
-        log.info("투표게시판 댓글 작성 요청: votePostId={}, userId={}, parentCommentId={}",
-                votePostId, userDetails.getUser().getId(), request.getParentCommentId());
+        log.info("투표게시판 댓글 작성 요청: votesboardId={}, userId={}, parentCommentId={}",
+                votesboardId, userDetails.getUser().getId(), request.getParentCommentId());
 
         String userId = userDetails.getUser().getId();
-        VoteboardCommentCreateResponse response = commentService.createComment(votePostId, request, userId);
+        VoteboardCommentCreateResponse response = commentService.createComment(votesboardId, request, userId);
 
         log.info("투표게시판 댓글 작성 완료: commentId={}", response.getCommentId());
         return ResponseEntity.status(201).body(response);
@@ -179,7 +179,7 @@ public class VoteboardCommentController {
     @GetMapping
     public ResponseEntity<VoteboardCommentCursorResponse> getCommentsByCursor(
             @Parameter(description = "투표 게시글 ID", example = "123")
-            @PathVariable Long votePostId,
+            @PathVariable Long votesboardId,
             @Parameter(
                     description = "정렬 순서 (LATEST: 최신순, OLDEST: 오래된순)",
                     example = "LATEST",
@@ -199,10 +199,10 @@ public class VoteboardCommentController {
             userId = userDetails.getUser().getId();
         }
 
-        log.info("투표게시판 댓글 목록 조회 요청: votePostId={}, sort={}, cursor={}, size={}, userId={}",
-                votePostId, sort, cursor != null ? "present" : "null", size, userId != null ? userId : "anonymous");
+        log.info("투표게시판 댓글 목록 조회 요청: votesboardId={}, sort={}, cursor={}, size={}, userId={}",
+                votesboardId, sort, cursor != null ? "present" : "null", size, userId != null ? userId : "anonymous");
 
-        VoteboardCommentCursorResponse response = commentService.getCommentsByCursor(votePostId, sort, size, cursor, userId);
+        VoteboardCommentCursorResponse response = commentService.getCommentsByCursor(votesboardId, sort, size, cursor, userId);
 
         log.debug("투표게시판 댓글 목록 조회 완료: resultCount={}, hasNext={}",
                 response.getComments().size(), response.isHasNext());
@@ -266,23 +266,23 @@ public class VoteboardCommentController {
     @PatchMapping("/{commentId}")
     public ResponseEntity<Object> updateComment(
             @Parameter(description = "투표 게시글 ID", example = "123")
-            @PathVariable Long votePostId,
+            @PathVariable Long votesboardId,
             @Parameter(description = "댓글 ID", example = "456")
             @PathVariable Long commentId,
             @RequestBody @Valid VoteboardCommentUpdateRequest request,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
         if (userDetails == null) {
-            log.warn("투표게시판 댓글 수정 요청 시 인증 정보 없음: votePostId={}, commentId={}", votePostId, commentId);
+            log.warn("투표게시판 댓글 수정 요청 시 인증 정보 없음: votesboardId={}, commentId={}", votesboardId, commentId);
             ErrorResponse errorResponse = new ErrorResponse("AUTHENTICATION_FAILED", "인증이 필요합니다.");
             return ResponseEntity.status(401).body(errorResponse);
         }
 
-        log.info("투표게시판 댓글 수정 요청: votePostId={}, commentId={}, userId={}",
-                votePostId, commentId, userDetails.getUser().getId());
+        log.info("투표게시판 댓글 수정 요청: votesboardId={}, commentId={}, userId={}",
+                votesboardId, commentId, userDetails.getUser().getId());
 
         String userId = userDetails.getUser().getId();
-        VoteboardCommentCreateResponse response = commentService.updateComment(votePostId, commentId, request, userId);
+        VoteboardCommentCreateResponse response = commentService.updateComment(votesboardId, commentId, request, userId);
 
         log.info("투표게시판 댓글 수정 완료: commentId={}", response.getCommentId());
         return ResponseEntity.ok(response);
@@ -331,22 +331,22 @@ public class VoteboardCommentController {
     @DeleteMapping("/{commentId}")
     public ResponseEntity<Object> deleteComment(
             @Parameter(description = "투표 게시글 ID", example = "123")
-            @PathVariable Long votePostId,
+            @PathVariable Long votesboardId,
             @Parameter(description = "댓글 ID", example = "456")
             @PathVariable Long commentId,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
         if (userDetails == null) {
-            log.warn("투표게시판 댓글 삭제 요청 시 인증 정보 없음: votePostId={}, commentId={}", votePostId, commentId);
+            log.warn("투표게시판 댓글 삭제 요청 시 인증 정보 없음: votesboardId={}, commentId={}", votesboardId, commentId);
             ErrorResponse errorResponse = new ErrorResponse("AUTHENTICATION_FAILED", "인증이 필요합니다.");
             return ResponseEntity.status(401).body(errorResponse);
         }
 
-        log.info("투표게시판 댓글 삭제 요청: votePostId={}, commentId={}, userId={}",
-                votePostId, commentId, userDetails.getUser().getId());
+        log.info("투표게시판 댓글 삭제 요청: votesboardId={}, commentId={}, userId={}",
+                votesboardId, commentId, userDetails.getUser().getId());
 
         String userId = userDetails.getUser().getId();
-        commentService.deleteComment(votePostId, commentId, userId);
+        commentService.deleteComment(votesboardId, commentId, userId);
 
         log.info("투표게시판 댓글 삭제 완료: commentId={}", commentId);
         return ResponseEntity.noContent().build();
