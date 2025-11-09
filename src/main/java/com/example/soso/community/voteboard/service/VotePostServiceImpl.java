@@ -84,8 +84,19 @@ public class VotePostServiceImpl implements VotePostService {
     }
 
     @Override
-    public VotePostListResponse getVotePostsByCursor(VoteStatus status, int size, Long cursor, String userId) {
+    public VotePostListResponse getVotePostsByCursor(VoteStatus status, int size, String cursor, String userId) {
         log.debug("투표 게시글 목록 조회: status={}, size={}, cursor={}, userId={}", status, size, cursor, userId);
+
+        // String cursor를 Long으로 파싱
+        Long cursorId = null;
+        if (cursor != null && !cursor.isEmpty()) {
+            try {
+                cursorId = Long.parseLong(cursor);
+            } catch (NumberFormatException e) {
+                log.warn("잘못된 커서 형식: cursor={}", cursor);
+                throw new PostException(PostErrorCode.INVALID_CURSOR);
+            }
+        }
 
         PageRequest pageRequest = PageRequest.of(0, size + 1);
         LocalDateTime now = LocalDateTime.now();
@@ -94,19 +105,19 @@ public class VotePostServiceImpl implements VotePostService {
         // 상태별로 다른 쿼리 실행
         if (status == null) {
             // 전체 조회
-            posts = (cursor == null)
+            posts = (cursorId == null)
                     ? votePostRepository.findAllWithoutStatus(pageRequest)
-                    : votePostRepository.findAllByCursorWithoutStatus(cursor, pageRequest);
+                    : votePostRepository.findAllByCursorWithoutStatus(cursorId, pageRequest);
         } else if (status == VoteStatus.IN_PROGRESS) {
             // 진행 중인 투표만
-            posts = (cursor == null)
+            posts = (cursorId == null)
                     ? votePostRepository.findInProgress(now, pageRequest)
-                    : votePostRepository.findInProgressByCursor(cursor, now, pageRequest);
+                    : votePostRepository.findInProgressByCursor(cursorId, now, pageRequest);
         } else {
             // 완료된 투표만
-            posts = (cursor == null)
+            posts = (cursorId == null)
                     ? votePostRepository.findCompleted(now, pageRequest)
-                    : votePostRepository.findCompletedByCursor(cursor, now, pageRequest);
+                    : votePostRepository.findCompletedByCursor(cursorId, now, pageRequest);
         }
 
         // 다음 페이지 존재 여부 확인
@@ -115,9 +126,9 @@ public class VotePostServiceImpl implements VotePostService {
             posts = posts.subList(0, size);
         }
 
-        // 다음 커서 계산
-        Long nextCursor = hasNext && !posts.isEmpty()
-                ? posts.get(posts.size() - 1).getId()
+        // 다음 커서 계산 (Long을 String으로 변환)
+        String nextCursor = hasNext && !posts.isEmpty()
+                ? String.valueOf(posts.get(posts.size() - 1).getId())
                 : null;
 
         // DTO 변환

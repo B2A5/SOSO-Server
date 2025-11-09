@@ -189,7 +189,7 @@ public class VoteboardController {
             @Parameter(description = "페이지 크기", example = "20")
             @RequestParam(defaultValue = "20") int size,
             @Parameter(description = "커서 (이전 페이지의 마지막 게시글 ID)")
-            @RequestParam(required = false) Long cursor,
+            @RequestParam(required = false) String cursor,
             @Parameter(hidden = true)
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {

@@ -18,7 +18,7 @@ public class VotePostListResponse {
     private List<VotePostSummaryResponse> posts;
 
     @Schema(description = "다음 커서 (다음 페이지 조회용, 없으면 null)", example = "42")
-    private Long nextCursor;
+    private String nextCursor;
 
     @Schema(description = "다음 페이지 존재 여부", example = "true", requiredMode = Schema.RequiredMode.REQUIRED)
     private boolean hasNext;

@@ -127,7 +127,7 @@ public class VotePostMapper {
      */
     public VotePostListResponse toListResponse(
             List<VotePostSummaryResponse> posts,
-            Long nextCursor,
+            String nextCursor,
             boolean hasNext
     ) {
         return VotePostListResponse.builder()

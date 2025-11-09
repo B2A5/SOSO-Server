@@ -35,7 +35,7 @@ public interface VotePostService {
      * @param userId 조회하는 사용자 ID (null 가능 - 비로그인)
      * @return 게시글 목록과 커서 정보
      */
-    VotePostListResponse getVotePostsByCursor(VoteStatus status, int size, Long cursor, String userId);
+    VotePostListResponse getVotePostsByCursor(VoteStatus status, int size, String cursor, String userId);
 
     /**
      * 투표 게시글을 수정합니다 (제목, 내용, 이미지, 투표 설정만 가능).
