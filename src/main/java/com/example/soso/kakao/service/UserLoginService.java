@@ -45,8 +45,9 @@ public class UserLoginService {
 
         UserResponse userResponse = userMapper.toUserResponse(user);
 
-        // Body에도 accessToken 포함 (프론트엔드 호환성 - 추후 제거 가능)
-        // 프론트엔드에서 user만 localStorage에 저장하도록 변경하면 null로 대체 가능
+        // Body에도 accessToken 포함 (모바일 앱 지원 필수)
+        // - 웹: 쿠키 자동 관리 (httpOnly=true)
+        // - 모바일: Body에서 토큰 추출 후 AsyncStorage/SharedPreferences 저장
         return new KakaoLoginResponse(false, accessToken, userResponse);
     }
 }

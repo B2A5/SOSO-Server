@@ -206,7 +206,7 @@ public class SignupServiceImpl implements SignupService {
         // 레디스 와 httpOnly 쿠기 저장
         redisService.saveByUserId(user.getId(), tokenPair.refreshToken(), jwtProperties.getRefreshTokenValidityInMs());
 
-        // 쿠키에 토큰 설정 (SSR 지원)
+        // 쿠키에 토큰 설정 (웹 브라우저용, httpOnly=true로 XSS 방어)
         addAccessTokenCookie(response, tokenPair.accessToken(), jwtProperties.getAccessTokenValidityInMs());
         addRefreshTokenCookie(response, tokenPair.refreshToken(), jwtProperties.getRefreshTokenValidityInMs());
 
@@ -215,6 +215,10 @@ public class SignupServiceImpl implements SignupService {
 
         // 세션 삭제
         session.removeAttribute("signup");
+
+        // Body에도 accessToken 포함 (모바일 앱 지원 필수)
+        // - 웹: 쿠키 자동 관리
+        // - 모바일: Body에서 토큰 추출 후 저장소에 저장
         return new SignupCompleteResponse(tokenPair.accessToken(), userResponse);
     }
 

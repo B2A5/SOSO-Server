@@ -46,7 +46,9 @@ public class AuthServiceImpl implements AuthService {
         CookieUtil.addAccessTokenCookie(response, newAccessToken, jwtProperties.getAccessTokenValidityInMs());
         CookieUtil.addRefreshTokenCookie(response, newRefreshToken, jwtProperties.getRefreshTokenValidityInMs());
 
-        // Body에도 accessToken 포함 (프론트엔드 호환성)
+        // Body에도 accessToken 포함 (모바일 앱 지원 필수)
+        // - 웹: 쿠키 자동 갱신
+        // - 모바일: Body에서 새 토큰 추출 후 저장소 업데이트
         return new JwtTokenDto(newAccessToken);
     }
 
