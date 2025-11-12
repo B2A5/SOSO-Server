@@ -160,7 +160,7 @@ class SignupControllerIntegrationTest {
                             hasAccessToken = true;
                             assert cookie.contains("Secure");
                             assert cookie.contains("SameSite=None");
-                            assert !cookie.contains("HttpOnly"); // Access Token은 HttpOnly=false
+                            assert cookie.contains("HttpOnly"); // Access Token은 HttpOnly=true (XSS 방어)
                         }
                         if (cookie.contains("refreshToken=")) {
                             hasRefreshToken = true;
