@@ -3,6 +3,7 @@ package com.example.soso.security.filter;
 import com.example.soso.global.jwt.JwtProvider;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -59,12 +60,32 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     /**
      * HTTP 요청에서 JWT 토큰 추출
+     *
+     * 우선순위:
+     * 1. Authorization 헤더 (기존 호환성 유지)
+     * 2. accessToken 쿠키 (httpOnly=true로 XSS 방어)
      */
     private String resolveToken(HttpServletRequest request) {
+        // 1순위: Authorization 헤더에서 추출 (하위 호환성)
         String bearerToken = request.getHeader("Authorization");
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7);
         }
+
+        // 2순위: 쿠키에서 추출 (httpOnly=true)
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("accessToken".equals(cookie.getName())) {
+                    String token = cookie.getValue();
+                    if (StringUtils.hasText(token)) {
+                        log.debug("쿠키에서 AccessToken 추출: {}", request.getRequestURI());
+                        return token;
+                    }
+                }
+            }
+        }
+
         return null;
     }
 

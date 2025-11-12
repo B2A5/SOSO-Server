@@ -39,13 +39,14 @@ public class UserLoginService {
         // Redis에 Refresh Token 저장
         refreshTokenService.save(refreshToken, user.getId(), jwtProperties.getRefreshTokenValidityInMs());
 
-        // 쿠키에 토큰 설정 (SSR 지원)
+        // 쿠키에 토큰 설정 (httpOnly=true로 XSS 방어)
         CookieUtil.addAccessTokenCookie(response, accessToken, jwtProperties.getAccessTokenValidityInMs());
         CookieUtil.addRefreshTokenCookie(response, refreshToken, jwtProperties.getRefreshTokenValidityInMs());
 
         UserResponse userResponse = userMapper.toUserResponse(user);
 
-        // Body에도 accessToken 포함 (기존 호환성 유지)
+        // Body에도 accessToken 포함 (프론트엔드 호환성 - 추후 제거 가능)
+        // 프론트엔드에서 user만 localStorage에 저장하도록 변경하면 null로 대체 가능
         return new KakaoLoginResponse(false, accessToken, userResponse);
     }
 }

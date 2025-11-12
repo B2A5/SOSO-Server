@@ -14,13 +14,13 @@ public class CookieUtil {
 
     /**
      * Access Token 쿠키 추가
-     * - HttpOnly: false (JavaScript에서 접근 가능하도록 설정 - 클라이언트에서 헤더에 포함 가능)
+     * - HttpOnly: true (XSS 공격 방지 - JavaScript 접근 차단)
      * - Secure: true (HTTPS 전용)
      * - SameSite: None (크로스 도메인 요청 허용)
      */
     public static void addAccessTokenCookie(HttpServletResponse response, String accessToken, long maxAgeMs) {
         ResponseCookie cookie = ResponseCookie.from("accessToken", accessToken)
-                .httpOnly(false)  // JavaScript에서 접근 가능
+                .httpOnly(HTTP_ONLY)  // XSS 공격 방지
                 .secure(SECURE)
                 .path(PATH)
                 .maxAge(Duration.ofMillis(maxAgeMs))
@@ -51,7 +51,7 @@ public class CookieUtil {
      */
     public static void deleteAccessTokenCookie(HttpServletResponse response) {
         ResponseCookie cookie = ResponseCookie.from("accessToken", "")
-                .httpOnly(false)
+                .httpOnly(HTTP_ONLY)
                 .secure(SECURE)
                 .path(PATH)
                 .maxAge(0)  // 즉시 만료

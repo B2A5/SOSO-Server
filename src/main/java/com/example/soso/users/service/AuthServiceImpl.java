@@ -42,11 +42,11 @@ public class AuthServiceImpl implements AuthService {
         // 4. 새 accessToken 발급
         String newAccessToken = jwtProvider.generateAccessToken(userId);
 
-        // 5. 쿠키에 새 토큰 저장 (SSR 지원)
+        // 5. 쿠키에 새 토큰 저장 (httpOnly=true로 XSS 방어)
         CookieUtil.addAccessTokenCookie(response, newAccessToken, jwtProperties.getAccessTokenValidityInMs());
         CookieUtil.addRefreshTokenCookie(response, newRefreshToken, jwtProperties.getRefreshTokenValidityInMs());
 
-        // Body에도 accessToken 포함 (기존 호환성 유지)
+        // Body에도 accessToken 포함 (프론트엔드 호환성)
         return new JwtTokenDto(newAccessToken);
     }
 
