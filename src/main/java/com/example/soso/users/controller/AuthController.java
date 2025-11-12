@@ -31,8 +31,16 @@ public class AuthController {
                     - 새로운 Access Token, Refresh Token 발급
 
                     **토큰 발급 방식:**
-                    - Response Body: accessToken 포함 (기존 호환성 유지)
-                    - Set-Cookie 헤더: accessToken, refreshToken 쿠키 설정 (SSR 지원)
+                    - Response Body: accessToken 포함 (모바일 앱 지원)
+                    - Set-Cookie 헤더: accessToken, refreshToken 쿠키 갱신 (웹 브라우저 자동 관리)
+
+                    **쿠키 보안 속성:**
+                    - accessToken: HttpOnly=true, Secure=true, SameSite=None (XSS 방어)
+                    - refreshToken: HttpOnly=true, Secure=true, SameSite=None (XSS 방어)
+
+                    **클라이언트별 사용 방법:**
+                    - 웹 브라우저: 쿠키 자동 갱신, 별도 처리 불필요
+                    - 모바일 앱: Body에서 새 accessToken 추출 후 저장소 업데이트
                     """,
             responses = {
                     @ApiResponse(responseCode = "200", description = "토큰 재발급 성공",

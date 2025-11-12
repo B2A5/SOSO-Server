@@ -294,12 +294,16 @@ public class SignupController {
             회원가입을 완료하고 사용자 계정을 생성합니다.
 
             **토큰 발급 방식:**
-            - Response Body: accessToken 포함 (기존 호환성 유지)
-            - Set-Cookie 헤더: accessToken, refreshToken 쿠키 설정 (SSR 지원)
+            - Response Body: accessToken 포함 (모바일 앱 지원)
+            - Set-Cookie 헤더: accessToken, refreshToken 쿠키 설정 (웹 브라우저 자동 관리)
 
-            **쿠키 속성:**
-            - accessToken: HttpOnly=false (JavaScript 접근 가능, 30분)
-            - refreshToken: HttpOnly=true (XSS 보호, 7일)
+            **쿠키 보안 속성:**
+            - accessToken: HttpOnly=true, Secure=true, SameSite=None (XSS 방어, 30분)
+            - refreshToken: HttpOnly=true, Secure=true, SameSite=None (XSS 방어, 14일)
+
+            **클라이언트별 사용 방법:**
+            - 웹 브라우저: 쿠키 자동 관리, credentials: 'include' 설정 필요
+            - 모바일 앱: Body에서 accessToken 추출 후 AsyncStorage/SharedPreferences 저장
             """,
         responses = {
             @ApiResponse(responseCode = "200", description = "성공 - Access Token 및 사용자 정보 반환",

@@ -159,8 +159,8 @@ class AuthCookieIntegrationTest {
     }
 
     @Test
-    @DisplayName("Access Token 쿠키는 HttpOnly=false (JavaScript 접근 가능)")
-    void accessTokenCookie_IsNotHttpOnly() throws Exception {
+    @DisplayName("Access Token 쿠키는 HttpOnly=true (XSS 방어)")
+    void accessTokenCookie_IsHttpOnly() throws Exception {
         // given
         String refreshToken = jwtProvider.generateRefreshToken();
         refreshTokenRedisRepository.save(refreshToken, testUser.getId(), 7 * 24 * 60 * 60 * 1000L);
@@ -170,16 +170,19 @@ class AuthCookieIntegrationTest {
                         .cookie(new Cookie("refreshToken", refreshToken)))
                 .andExpect(status().isOk())
                 .andExpect(result -> {
-                    String setCookieHeaders = String.join(", ", result.getResponse().getHeaders("Set-Cookie"));
-                    String[] cookies = setCookieHeaders.split(", ");
+                    var setCookieHeaders = result.getResponse().getHeaders("Set-Cookie");
+                    boolean foundAccessTokenWithHttpOnly = false;
 
                     // accessToken 쿠키 찾기
-                    for (String cookie : cookies) {
-                        if (cookie.startsWith("accessToken=")) {
-                            // HttpOnly가 없어야 함 (JavaScript 접근 가능)
-                            assert !cookie.contains("HttpOnly") : "accessToken 쿠키는 HttpOnly가 아니어야 합니다";
+                    for (String cookie : setCookieHeaders) {
+                        if (cookie.contains("accessToken=")) {
+                            // HttpOnly가 있어야 함 (XSS 방어)
+                            assert cookie.contains("HttpOnly") : "accessToken 쿠키는 HttpOnly여야 합니다";
+                            foundAccessTokenWithHttpOnly = true;
                         }
                     }
+
+                    assert foundAccessTokenWithHttpOnly : "accessToken 쿠키를 찾을 수 없습니다";
                 });
     }
 
