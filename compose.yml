@@ -57,7 +57,7 @@ services:
     networks: [soso_net] # 내부 네트워크 연결
     restart: unless-stopped # 시스템 재부팅 시 자동 시작
     healthcheck: # Jenkins 서비스 상태 확인
-      test: ["CMD-SHELL", "curl -f http://localhost:8080/login || exit 1"]
+      test: ["CMD-SHELL", "curl -f http://localhost:8080/jenkins/login || exit 1"]
       interval: 30s # 30초마다 상태 확인
       timeout: 10s # 10초 내 응답 없으면 실패
       retries: 3 # 3번 실패 시 unhealthy 상태
