@@ -57,7 +57,8 @@ services:
     networks: [soso_net] # 내부 네트워크 연결
     restart: unless-stopped # 시스템 재부팅 시 자동 시작
     healthcheck: # Jenkins 서비스 상태 확인
-      test: ["CMD-SHELL", "curl -f http://localhost:8080/jenkins/login || exit 1"]
+      test:
+        ["CMD-SHELL", "curl -f http://localhost:8080/jenkins/login || exit 1"]
       interval: 30s # 30초마다 상태 확인
       timeout: 10s # 10초 내 응답 없으면 실패
       retries: 3 # 3번 실패 시 unhealthy 상태
@@ -331,7 +332,7 @@ services:
 # - 브리지 네트워크 (컨테이너 간 통신)
 # - 서비스명으로 DNS 해결 (db, redis, api 등)
 # - 외부와 격리된 내부 통신
-# - 172.18.0.0/16 서브넷 사용
+# - 172.18.0.0/25 서브넷 사용
 # =============================================================================
 networks:
   soso_net:
@@ -339,7 +340,7 @@ networks:
     driver: bridge # 브리지 드라이버 (기본값)
     ipam: # IP 주소 관리
       config:
-        - subnet: 172.18.0.0/16 # 사용할 IP 대역
+        - subnet: 172.18.0.0/25 # 사용할 IP 대역
 
 # =============================================================================
 # 영구 볼륨 설정
