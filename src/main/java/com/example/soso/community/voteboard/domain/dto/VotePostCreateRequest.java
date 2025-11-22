@@ -1,12 +1,12 @@
 package com.example.soso.community.voteboard.domain.dto;
 
+import com.example.soso.community.common.post.domain.entity.Category;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -15,11 +15,18 @@ import java.util.List;
  * 투표 게시글 생성 요청 DTO
  */
 @Getter
-@Builder
+@Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @Schema(description = "투표 게시글 생성 요청")
 public class VotePostCreateRequest {
+
+    @Schema(
+            description = "게시글 카테고리",
+            example = "restaurant",
+            allowableValues = {"daily-hobby", "restaurant", "living-convenience", "neighborhood-news", "startup", "others"}
+    )
+    @NotNull(message = "카테고리는 필수입니다.")
+    private Category category;
 
     @NotBlank(message = "제목은 필수입니다.")
     @Size(max = 100, message = "제목은 최대 100자까지 입력 가능합니다.")
@@ -30,10 +37,6 @@ public class VotePostCreateRequest {
     @Size(max = 5000, message = "내용은 최대 5000자까지 입력 가능합니다.")
     @Schema(description = "게시글 내용", example = "여러분이 가장 좋아하는 카페 스타일은 무엇인가요?", requiredMode = Schema.RequiredMode.REQUIRED)
     private String content;
-
-    @Schema(description = "이미지 URL 목록 (최대 5개)", example = "[\"https://example.com/image1.jpg\", \"https://example.com/image2.jpg\"]")
-    @Size(max = 5, message = "이미지는 최대 5개까지 업로드 가능합니다.")
-    private List<String> imageUrls;
 
     @NotNull(message = "투표 옵션은 필수입니다.")
     @Size(min = 2, max = 5, message = "투표 옵션은 최소 2개, 최대 5개까지 가능합니다.")

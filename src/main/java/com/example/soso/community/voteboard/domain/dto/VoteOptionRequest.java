@@ -3,18 +3,16 @@ package com.example.soso.community.voteboard.domain.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * 투표 옵션 요청 DTO
  */
 @Getter
-@Builder
+@Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @Schema(description = "투표 옵션 생성 요청")
 public class VoteOptionRequest {
 

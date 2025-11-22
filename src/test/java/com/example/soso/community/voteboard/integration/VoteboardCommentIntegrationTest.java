@@ -1,8 +1,9 @@
 package com.example.soso.community.voteboard.integration;
 
+import com.example.soso.community.common.post.domain.entity.Category;
+import com.example.soso.community.voteboard.comment.domain.dto.VoteboardCommentCreateRequest;
 import com.example.soso.community.voteboard.domain.dto.VoteOptionRequest;
 import com.example.soso.community.voteboard.domain.dto.VotePostCreateRequest;
-import com.example.soso.community.voteboard.comment.domain.dto.VoteboardCommentCreateRequest;
 import com.example.soso.security.domain.CustomUserDetails;
 import com.example.soso.users.domain.entity.UserType;
 import com.example.soso.users.domain.entity.Users;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -22,7 +24,8 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -252,22 +255,34 @@ class VoteboardCommentIntegrationTest {
     // Helper methods
 
     private Long createVotePost(CustomUserDetails userDetails, String title) throws Exception {
-        VotePostCreateRequest request = VotePostCreateRequest.builder()
-                .title(title)
-                .content("테스트 내용")
-                .voteOptions(Arrays.asList(
-                        VoteOptionRequest.builder().content("옵션 A").build(),
-                        VoteOptionRequest.builder().content("옵션 B").build()
-                ))
-                .endTime(LocalDateTime.now().plusDays(7))
-                .allowRevote(false)
-                .allowMultipleChoice(false)
-                .build();
+        VotePostCreateRequest request = new VotePostCreateRequest();
+        request.setCategory(Category.DAILY_HOBBY);
+        request.setTitle(title);
+        request.setContent("테스트 내용");
+        request.setEndTime(LocalDateTime.now().plusDays(7));
+        request.setAllowRevote(false);
+        request.setAllowMultipleChoice(false);
 
-        MvcResult result = mockMvc.perform(post("/community/votesboard")
+        List<VoteOptionRequest> voteOptions = new ArrayList<>();
+        VoteOptionRequest option1 = new VoteOptionRequest();
+        option1.setContent("옵션 A");
+        VoteOptionRequest option2 = new VoteOptionRequest();
+        option2.setContent("옵션 B");
+        voteOptions.add(option1);
+        voteOptions.add(option2);
+        request.setVoteOptions(voteOptions);
+
+        MockMultipartFile data = new MockMultipartFile(
+                "data",
+                "",
+                "application/json",
+                objectMapper.writeValueAsBytes(request)
+        );
+
+        MvcResult result = mockMvc.perform(multipart("/community/votesboard")
+                        .file(data)
                         .with(SecurityMockMvcRequestPostProcessors.user(userDetails))
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
+                        .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andExpect(status().isCreated())
                 .andReturn();
 

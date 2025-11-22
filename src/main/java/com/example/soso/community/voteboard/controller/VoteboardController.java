@@ -17,9 +17,13 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 /**
  * 투표 게시판 컨트롤러
@@ -33,7 +37,7 @@ public class VoteboardController {
 
     private final VotePostService votePostService;
 
-    @PostMapping
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(
             operationId = "createVotePost",
             summary = "투표 게시글 작성",
@@ -44,8 +48,16 @@ public class VoteboardController {
                     - 투표 옵션: 최소 2개, 최대 5개
                     - 제목: 최대 100자
                     - 내용: 최대 5000자
-                    - 이미지: 최대 5개
+                    - 이미지: 최대 4개 (Multipart 업로드)
                     - 마감 시간: 현재 시간보다 미래여야 함
+                    - 카테고리: 필수
+
+                    **지원 파일 형식:** jpg, jpeg, png, gif, webp
+                    **최대 파일 크기:** 5MB per image
+
+                    **요청 형식:**
+                    - data: JSON 형식의 게시글 정보 (RequestPart)
+                    - images: 이미지 파일들 (RequestPart, 선택사항)
 
                     **권한:** 로그인 사용자만 가능
                     """
@@ -99,60 +111,13 @@ public class VoteboardController {
             )
     })
     public ResponseEntity<VotePostIdResponse> createVotePost(
-            @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                    description = "투표 게시글 생성 정보",
-                    required = true,
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = VotePostCreateRequest.class),
-                            examples = {
-                                    @ExampleObject(
-                                            name = "단일 선택 투표 생성",
-                                            value = """
-                                                    {
-                                                      "title": "점심 메뉴 투표",
-                                                      "content": "오늘 점심 뭐 먹을까요?",
-                                                      "imageUrls": ["https://example.com/food.jpg"],
-                                                      "voteOptions": [
-                                                        {"content": "한식"},
-                                                        {"content": "중식"},
-                                                        {"content": "일식"}
-                                                      ],
-                                                      "endTime": "2025-12-31T12:00:00",
-                                                      "allowRevote": true,
-                                                      "allowMultipleChoice": false
-                                                    }
-                                                    """,
-                                            description = "하나의 옵션만 선택 가능한 일반 투표"
-                                    ),
-                                    @ExampleObject(
-                                            name = "중복 선택 투표 생성",
-                                            value = """
-                                                    {
-                                                      "title": "좋아하는 취미 선택",
-                                                      "content": "좋아하는 취미를 모두 선택해주세요 (최대 4개)",
-                                                      "imageUrls": [],
-                                                      "voteOptions": [
-                                                        {"content": "독서"},
-                                                        {"content": "운동"},
-                                                        {"content": "영화감상"},
-                                                        {"content": "게임"},
-                                                        {"content": "여행"}
-                                                      ],
-                                                      "endTime": "2025-12-31T12:00:00",
-                                                      "allowRevote": true,
-                                                      "allowMultipleChoice": true
-                                                    }
-                                                    """,
-                                            description = "여러 옵션을 동시에 선택 가능한 투표 (최대 n-1개)"
-                                    )
-                            }
-                    )
-            )
-            @Valid @RequestBody VotePostCreateRequest request,
+            @Parameter(description = "투표 게시글 데이터 (JSON)", required = true)
+            @RequestPart("data") @Valid VotePostCreateRequest request,
+            @Parameter(description = "첨부 이미지 파일들 (최대 4장)")
+            @RequestPart(value = "images", required = false) List<MultipartFile> images,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-        Long votesboardId = votePostService.createVotePost(request, userDetails.getUser().getId());
+        Long votesboardId = votePostService.createVotePost(request, images, userDetails.getUser().getId());
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new VotePostIdResponse(votesboardId));
     }
@@ -223,11 +188,27 @@ public class VoteboardController {
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping("/{votesboardId}")
+    @PutMapping(value = "/{votesboardId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(
             operationId = "updateVotePost",
             summary = "투표 게시글 수정",
-            description = "투표 게시글을 수정합니다. 투표 옵션은 수정할 수 없습니다."
+            description = """
+                    투표 게시글을 수정합니다. 투표 옵션은 수정할 수 없습니다.
+
+                    **수정 가능 항목:**
+                    - 카테고리
+                    - 제목, 내용
+                    - 이미지 (추가/삭제)
+                    - 투표 설정 (투표 시작 전에만 가능)
+
+                    **Multipart 업로드**
+                    """,
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    content = @Content(
+                            mediaType = MediaType.MULTIPART_FORM_DATA_VALUE,
+                            schema = @Schema(implementation = VotePostUpdateRequest.class)
+                    )
+            )
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -256,7 +237,7 @@ public class VoteboardController {
     public ResponseEntity<Void> updateVotePost(
             @Parameter(description = "투표 게시글 ID", required = true)
             @PathVariable Long votesboardId,
-            @Valid @RequestBody VotePostUpdateRequest request,
+            @ModelAttribute @Valid VotePostUpdateRequest request,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
         votePostService.updateVotePost(votesboardId, request, userDetails.getUser().getId());

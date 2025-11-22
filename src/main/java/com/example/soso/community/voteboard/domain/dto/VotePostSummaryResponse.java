@@ -1,5 +1,6 @@
 package com.example.soso.community.voteboard.domain.dto;
 
+import com.example.soso.community.common.post.domain.entity.Category;
 import com.example.soso.community.voteboard.domain.entity.VoteStatus;
 import com.example.soso.community.common.post.domain.dto.UserSummaryResponse;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -21,11 +22,14 @@ public class VotePostSummaryResponse {
     @Schema(description = "게시글 ID", example = "1", requiredMode = Schema.RequiredMode.REQUIRED)
     private Long id;
 
-    @Schema(description = "게시글 제목", example = "우리 동네 카페 선호도 조사", requiredMode = Schema.RequiredMode.REQUIRED)
-    private String title;
-
     @Schema(description = "작성자 정보", requiredMode = Schema.RequiredMode.REQUIRED)
     private UserSummaryResponse author;
+
+    @Schema(description = "카테고리", example = "restaurant", requiredMode = Schema.RequiredMode.REQUIRED)
+    private Category category;
+
+    @Schema(description = "게시글 제목", example = "우리 동네 카페 선호도 조사", requiredMode = Schema.RequiredMode.REQUIRED)
+    private String title;
 
     @Schema(description = "조회수", example = "123", requiredMode = Schema.RequiredMode.REQUIRED)
     private int viewCount;

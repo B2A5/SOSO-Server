@@ -1,11 +1,14 @@
 package com.example.soso.community.voteboard.domain.dto;
 
+import com.example.soso.community.common.post.domain.entity.Category;
 import com.example.soso.community.voteboard.domain.entity.VoteStatus;
 import com.example.soso.community.common.post.domain.dto.UserSummaryResponse;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -15,11 +18,19 @@ import java.util.List;
  */
 @Getter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Schema(description = "투표 게시글 상세 정보")
 public class VotePostDetailResponse {
 
     @Schema(description = "게시글 ID", example = "1", requiredMode = Schema.RequiredMode.REQUIRED)
     private Long id;
+
+    @Schema(description = "작성자 정보", requiredMode = Schema.RequiredMode.REQUIRED)
+    private UserSummaryResponse author;
+
+    @Schema(description = "카테고리", example = "restaurant", requiredMode = Schema.RequiredMode.REQUIRED)
+    private Category category;
 
     @Schema(description = "게시글 제목", example = "우리 동네 카페 선호도 조사", requiredMode = Schema.RequiredMode.REQUIRED)
     private String title;
@@ -27,11 +38,8 @@ public class VotePostDetailResponse {
     @Schema(description = "게시글 내용", example = "여러분이 가장 좋아하는 카페 스타일은 무엇인가요?", requiredMode = Schema.RequiredMode.REQUIRED)
     private String content;
 
-    @Schema(description = "작성자 정보", requiredMode = Schema.RequiredMode.REQUIRED)
-    private UserSummaryResponse author;
-
-    @Schema(description = "이미지 URL 목록", example = "[\"https://example.com/image1.jpg\", \"https://example.com/image2.jpg\"]")
-    private List<String> imageUrls;
+    @Schema(description = "첨부된 이미지 정보 목록", requiredMode = Schema.RequiredMode.REQUIRED)
+    private List<ImageInfo> images;
 
     @Schema(description = "투표 옵션 목록", requiredMode = Schema.RequiredMode.REQUIRED)
     private List<VoteOptionResponse> voteOptions;
@@ -72,4 +80,20 @@ public class VotePostDetailResponse {
 
     @Schema(description = "수정일시", example = "2024-01-02T15:30:00", requiredMode = Schema.RequiredMode.REQUIRED)
     private LocalDateTime lastModifiedDate;
+
+    @Schema(description = "이미지 정보")
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class ImageInfo {
+        @Schema(description = "이미지 ID", example = "1", requiredMode = Schema.RequiredMode.REQUIRED)
+        private Long imageId;
+
+        @Schema(description = "이미지 URL", example = "https://s3.amazonaws.com/bucket/image.jpg", requiredMode = Schema.RequiredMode.REQUIRED)
+        private String imageUrl;
+
+        @Schema(description = "이미지 순서", example = "0", requiredMode = Schema.RequiredMode.REQUIRED)
+        private int sequence;
+    }
 }

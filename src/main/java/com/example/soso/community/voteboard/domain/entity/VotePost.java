@@ -1,5 +1,6 @@
 package com.example.soso.community.voteboard.domain.entity;
 
+import com.example.soso.community.common.post.domain.entity.Category;
 import com.example.soso.global.time.BaseTimeEntity;
 import com.example.soso.users.domain.entity.Users;
 import jakarta.persistence.*;
@@ -36,6 +37,10 @@ public class VotePost extends BaseTimeEntity {
     @Lob
     @Column(nullable = false)
     private String content;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 50)
+    private Category category;
 
     @OneToMany(mappedBy = "votePost", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("sequence ASC")
@@ -85,12 +90,13 @@ public class VotePost extends BaseTimeEntity {
     /**
      * VotePost 생성 정적 팩토리 메서드
      */
-    public static VotePost create(Users user, String title, String content,
+    public static VotePost create(Users user, String title, String content, Category category,
                                    LocalDateTime endTime, boolean allowRevote, boolean allowMultipleChoice) {
         VotePost votePost = new VotePost();
         votePost.user = user;
         votePost.title = title;
         votePost.content = content;
+        votePost.category = category;
         votePost.endTime = endTime;
         votePost.allowRevote = allowRevote;
         votePost.allowMultipleChoice = allowMultipleChoice;
@@ -163,16 +169,15 @@ public class VotePost extends BaseTimeEntity {
     /**
      * 게시글 수정 (투표 옵션 제외)
      */
-    public void updatePost(String title, String content, List<VotePostImage> newImages) {
+    public void updatePost(String title, String content, Category category) {
         if (title != null) {
             this.title = title;
         }
         if (content != null) {
             this.content = content;
         }
-        if (newImages != null && !newImages.isEmpty()) {
-            this.images.clear();
-            this.images.addAll(newImages);
+        if (category != null) {
+            this.category = category;
         }
     }
 

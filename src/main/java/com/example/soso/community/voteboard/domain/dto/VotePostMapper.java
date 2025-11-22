@@ -28,6 +28,7 @@ public class VotePostMapper {
                 user,
                 request.getTitle(),
                 request.getContent(),
+                request.getCategory(),
                 request.getEndTime(),
                 request.getAllowRevote(),
                 request.getAllowMultipleChoice()
@@ -59,8 +60,9 @@ public class VotePostMapper {
 
         return VotePostSummaryResponse.builder()
                 .id(votePost.getId())
-                .title(votePost.getTitle())
                 .author(userMapper.toUserSummary(votePost.getUser()))
+                .category(votePost.getCategory())
+                .title(votePost.getTitle())
                 .viewCount(votePost.getViewCount())
                 .commentCount(commentCount)
                 .totalVotes(votePost.getTotalVotes())
@@ -93,14 +95,23 @@ public class VotePostMapper {
                         .toList() :
                 List.of();
 
+        // 이미지 정보 목록 추출
+        List<VotePostDetailResponse.ImageInfo> images = votePost.getImages().stream()
+                .sorted((img1, img2) -> Integer.compare(img1.getSequence(), img2.getSequence()))
+                .map(img -> VotePostDetailResponse.ImageInfo.builder()
+                        .imageId(img.getId())
+                        .imageUrl(img.getImageUrl())
+                        .sequence(img.getSequence())
+                        .build())
+                .toList();
+
         return VotePostDetailResponse.builder()
                 .id(votePost.getId())
+                .author(userMapper.toUserSummary(votePost.getUser()))
+                .category(votePost.getCategory())
                 .title(votePost.getTitle())
                 .content(votePost.getContent())
-                .author(userMapper.toUserSummary(votePost.getUser()))
-                .imageUrls(votePost.getImages().stream()
-                        .map(VotePostImage::getImageUrl)
-                        .toList())
+                .images(images)
                 .voteOptions(votePost.getVoteOptions().stream()
                         .map(option -> toVoteOptionResponse(option, votePost.getTotalVotes()))
                         .toList())

@@ -4,6 +4,7 @@ import com.example.soso.community.common.comment.domain.repository.CommentReposi
 import com.example.soso.community.voteboard.domain.dto.*;
 import com.example.soso.community.voteboard.domain.entity.VoteOption;
 import com.example.soso.community.voteboard.domain.entity.VotePost;
+import com.example.soso.community.voteboard.domain.entity.VotePostImage;
 import com.example.soso.community.voteboard.domain.entity.VoteResult;
 import com.example.soso.community.voteboard.domain.entity.VoteStatus;
 import com.example.soso.community.voteboard.repository.VotePostLikeRepository;
@@ -14,6 +15,7 @@ import com.example.soso.global.exception.domain.PostErrorCode;
 import com.example.soso.global.exception.domain.UserErrorCode;
 import com.example.soso.global.exception.util.PostException;
 import com.example.soso.global.exception.util.UserAuthException;
+import com.example.soso.global.image.service.ImageUploadService;
 import com.example.soso.users.domain.entity.Users;
 import com.example.soso.users.repository.UsersRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -34,6 +37,8 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class VotePostServiceImpl implements VotePostService {
 
+    private static final String VOTEBOARD_DIRECTORY = "voteboard";
+
     private final VotePostRepository votePostRepository;
     private final VoteOptionRepository voteOptionRepository;
     private final VoteResultRepository voteResultRepository;
@@ -41,17 +46,25 @@ public class VotePostServiceImpl implements VotePostService {
     private final CommentRepository commentRepository;
     private final VotePostLikeRepository votePostLikeRepository;
     private final VotePostMapper votePostMapper;
+    private final ImageUploadService imageUploadService;
 
     @Override
     @Transactional
-    public Long createVotePost(VotePostCreateRequest request, String userId) {
+    public Long createVotePost(VotePostCreateRequest request, List<org.springframework.web.multipart.MultipartFile> images, String userId) {
         log.info("투표 게시글 작성 시작: userId={}, optionCount={}", userId, request.getVoteOptions().size());
 
         Users user = findUserById(userId);
         VotePost votePost = votePostMapper.toEntity(request, user);
         VotePost savedPost = votePostRepository.save(votePost);
 
-        log.info("투표 게시글 작성 완료: postId={}, optionCount={}", savedPost.getId(), savedPost.getVoteOptions().size());
+        // 이미지 업로드 및 저장
+        if (images != null && !images.isEmpty()) {
+            List<String> imageUrls = imageUploadService.uploadImages(images, VOTEBOARD_DIRECTORY);
+            saveVotePostImages(savedPost, imageUrls);
+        }
+
+        log.info("투표 게시글 작성 완료: postId={}, optionCount={}, imageCount={}",
+                savedPost.getId(), savedPost.getVoteOptions().size(), savedPost.getImages().size());
         return savedPost.getId();
     }
 
@@ -155,8 +168,27 @@ public class VotePostServiceImpl implements VotePostService {
         // 권한 검증
         validateAuthor(votePost, user);
 
+        // 기존 이미지 삭제 처리
+        if (request.getDeleteImageIds() != null && !request.getDeleteImageIds().isEmpty()) {
+            deleteVotePostImages(votePost, request.getDeleteImageIds());
+        }
+
+        // 새로운 이미지 업로드
+        List<String> newImageUrls = Collections.emptyList();
+        if (request.getImages() != null && !request.getImages().isEmpty()) {
+            // 현재 이미지 개수 + 새 이미지 개수가 4개를 초과하지 않는지 확인
+            int currentImageCount = votePost.getImages().size();
+            int newImageCount = request.getImages().size();
+            if (currentImageCount + newImageCount > imageUploadService.getMaxImageCount()) {
+                throw new IllegalArgumentException("총 이미지 개수는 " + imageUploadService.getMaxImageCount() + "개를 초과할 수 없습니다.");
+            }
+
+            newImageUrls = imageUploadService.uploadImages(request.getImages(), VOTEBOARD_DIRECTORY);
+            saveVotePostImages(votePost, newImageUrls);
+        }
+
         // 게시글 내용 수정
-        votePost.updatePost(request.getTitle(), request.getContent(), null);
+        votePost.updatePost(request.getTitle(), request.getContent(), request.getCategory());
 
         // 투표 설정 수정 (투표 시작 전에만 가능)
         if (request.getEndTime() != null || request.getAllowRevote() != null || request.getAllowMultipleChoice() != null) {
@@ -166,7 +198,7 @@ public class VotePostServiceImpl implements VotePostService {
             votePost.updateVoteSettings(endTime, allowRevote, allowMultipleChoice);
         }
 
-        log.info("투표 게시글 수정 완료: postId={}", postId);
+        log.info("투표 게시글 수정 완료: postId={}, newImageCount={}", postId, newImageUrls.size());
     }
 
     @Override
@@ -401,6 +433,28 @@ public class VotePostServiceImpl implements VotePostService {
     private void validateAuthor(VotePost votePost, Users user) {
         if (!votePost.getUser().getId().equals(user.getId())) {
             throw new UserAuthException(UserErrorCode.UNAUTHORIZED_ACCESS);
+        }
+    }
+
+    private void saveVotePostImages(VotePost votePost, List<String> imageUrls) {
+        for (String imageUrl : imageUrls) {
+            VotePostImage votePostImage = VotePostImage.builder()
+                    .votePost(votePost)
+                    .imageUrl(imageUrl)
+                    .sequence(votePost.getImages().size())
+                    .build();
+            votePost.addImage(votePostImage);
+        }
+    }
+
+    private void deleteVotePostImages(VotePost votePost, List<Long> deleteImageIds) {
+        List<VotePostImage> imagesToDelete = votePost.getImages().stream()
+                .filter(image -> deleteImageIds.contains(image.getId()))
+                .toList();
+
+        for (VotePostImage image : imagesToDelete) {
+            imageUploadService.deleteImage(image.getImageUrl());
+            votePost.getImages().remove(image);
         }
     }
 }
