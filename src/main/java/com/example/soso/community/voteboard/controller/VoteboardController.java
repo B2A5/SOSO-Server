@@ -55,12 +55,19 @@ public class VoteboardController {
                     **지원 파일 형식:** jpg, jpeg, png, gif, webp
                     **최대 파일 크기:** 5MB per image
 
-                    **요청 형식:**
-                    - data: JSON 형식의 게시글 정보 (RequestPart)
-                    - images: 이미지 파일들 (RequestPart, 선택사항)
-
                     **권한:** 로그인 사용자만 가능
-                    """
+                    """,
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    required = true,
+                    content = @Content(
+                            mediaType = MediaType.MULTIPART_FORM_DATA_VALUE,
+                            schema = @Schema(
+                                    type = "object",
+                                    requiredProperties = {"data"},
+                                    description = "Multipart form data with JSON data part and optional image files"
+                            )
+                    )
+            )
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -111,10 +118,26 @@ public class VoteboardController {
             )
     })
     public ResponseEntity<VotePostIdResponse> createVotePost(
-            @Parameter(description = "투표 게시글 데이터 (JSON)", required = true)
+            @Parameter(
+                    description = "투표 게시글 데이터 (JSON 형식)",
+                    required = true,
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = VotePostCreateRequest.class)
+                    )
+            )
             @RequestPart("data") @Valid VotePostCreateRequest request,
-            @Parameter(description = "첨부 이미지 파일들 (최대 4장)")
+
+            @Parameter(
+                    description = "첨부 이미지 파일들 (최대 4장)",
+                    required = false,
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_OCTET_STREAM_VALUE,
+                            schema = @Schema(type = "array", format = "binary")
+                    )
+            )
             @RequestPart(value = "images", required = false) List<MultipartFile> images,
+
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
         Long votesboardId = votePostService.createVotePost(request, images, userDetails.getUser().getId());
