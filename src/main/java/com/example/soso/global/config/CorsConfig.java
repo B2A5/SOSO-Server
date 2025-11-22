@@ -17,10 +17,14 @@ public class CorsConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
 
-        config.setAllowedOrigins(frontOrigins);
+        // allowCredentials: true를 사용할 때는 allowedOriginPatterns를 사용해야 함
+        config.setAllowedOriginPatterns(frontOrigins);
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);
+
+        // 쿠키를 포함한 응답 헤더를 클라이언트에서 읽을 수 있도록 설정
+        config.setExposedHeaders(List.of("Set-Cookie", "Authorization"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
