@@ -1,8 +1,5 @@
 package com.example.soso.community.voteboard.integration;
 
-import com.example.soso.community.common.post.domain.entity.Category;
-import com.example.soso.community.voteboard.domain.dto.VoteOptionRequest;
-import com.example.soso.community.voteboard.domain.dto.VotePostCreateRequest;
 import com.example.soso.community.voteboard.domain.dto.VoteRequest;
 import com.example.soso.security.domain.CustomUserDetails;
 import com.example.soso.users.domain.entity.Users;
@@ -16,13 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -71,32 +66,20 @@ class VoteboardVotingIntegrationTest {
      */
     private Long createVotePost(String title, String content, List<String> options,
                                 LocalDateTime endTime, boolean allowRevote, boolean allowMultipleChoice) throws Exception {
-        VotePostCreateRequest request = new VotePostCreateRequest();
-        request.setCategory(Category.DAILY_HOBBY);
-        request.setTitle(title);
-        request.setContent(content);
-        request.setEndTime(endTime);
-        request.setAllowRevote(allowRevote);
-        request.setAllowMultipleChoice(allowMultipleChoice);
+        var requestBuilder = multipart("/community/votesboard")
+                .param("category", "daily-hobby")
+                .param("title", title)
+                .param("content", content)
+                .param("endTime", endTime.toString())
+                .param("allowRevote", String.valueOf(allowRevote))
+                .param("allowMultipleChoice", String.valueOf(allowMultipleChoice));
 
         // 투표 옵션 추가
-        List<VoteOptionRequest> voteOptions = new ArrayList<>();
-        for (String optionContent : options) {
-            VoteOptionRequest option = new VoteOptionRequest();
-            option.setContent(optionContent);
-            voteOptions.add(option);
+        for (int i = 0; i < options.size(); i++) {
+            requestBuilder.param("voteOptions[" + i + "].content", options.get(i));
         }
-        request.setVoteOptions(voteOptions);
 
-        MockMultipartFile data = new MockMultipartFile(
-                "data",
-                "",
-                "application/json",
-                objectMapper.writeValueAsBytes(request)
-        );
-
-        String createResponse = mockMvc.perform(multipart("/community/votesboard")
-                        .file(data)
+        String createResponse = mockMvc.perform(requestBuilder
                         .with(SecurityMockMvcRequestPostProcessors.user(testUserDetails))
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andExpect(status().isCreated())

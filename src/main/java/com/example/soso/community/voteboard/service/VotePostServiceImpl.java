@@ -50,16 +50,18 @@ public class VotePostServiceImpl implements VotePostService {
 
     @Override
     @Transactional
-    public Long createVotePost(VotePostCreateRequest request, List<org.springframework.web.multipart.MultipartFile> images, String userId) {
-        log.info("투표 게시글 작성 시작: userId={}, optionCount={}", userId, request.getVoteOptions().size());
+    public Long createVotePost(VotePostCreateRequest request, String userId) {
+        log.info("투표 게시글 작성 시작: userId={}, optionCount={}, imageCount={}",
+                userId, request.getVoteOptions().size(),
+                request.getImages() != null ? request.getImages().size() : 0);
 
         Users user = findUserById(userId);
         VotePost votePost = votePostMapper.toEntity(request, user);
         VotePost savedPost = votePostRepository.save(votePost);
 
         // 이미지 업로드 및 저장
-        if (images != null && !images.isEmpty()) {
-            List<String> imageUrls = imageUploadService.uploadImages(images, VOTEBOARD_DIRECTORY);
+        if (request.getImages() != null && !request.getImages().isEmpty()) {
+            List<String> imageUrls = imageUploadService.uploadImages(request.getImages(), VOTEBOARD_DIRECTORY);
             saveVotePostImages(savedPost, imageUrls);
         }
 

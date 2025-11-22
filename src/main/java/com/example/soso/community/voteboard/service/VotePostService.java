@@ -2,9 +2,6 @@ package com.example.soso.community.voteboard.service;
 
 import com.example.soso.community.voteboard.domain.dto.*;
 import com.example.soso.community.voteboard.domain.entity.VoteStatus;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 
 /**
  * 투표 게시판 비즈니스 로직 인터페이스
@@ -14,12 +11,11 @@ public interface VotePostService {
     /**
      * 새 투표 게시글을 작성합니다.
      *
-     * @param request 투표 게시글 작성 요청 데이터
-     * @param images 첨부 이미지 파일들 (최대 4장)
+     * @param request 투표 게시글 작성 요청 데이터 (이미지 포함)
      * @param userId 작성자 ID
      * @return 생성된 게시글 ID
      */
-    Long createVotePost(VotePostCreateRequest request, List<MultipartFile> images, String userId);
+    Long createVotePost(VotePostCreateRequest request, String userId);
 
     /**
      * 투표 게시글 상세 정보를 조회합니다.

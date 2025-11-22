@@ -21,9 +21,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 
 /**
  * 투표 게시판 컨트롤러
@@ -44,28 +41,22 @@ public class VoteboardController {
             description = """
                     새로운 투표 게시글을 작성합니다.
 
-                    **제약사항:**
-                    - 투표 옵션: 최소 2개, 최대 5개
-                    - 제목: 최대 100자
-                    - 내용: 최대 5000자
-                    - 이미지: 최대 4개 (Multipart 업로드)
-                    - 마감 시간: 현재 시간보다 미래여야 함
-                    - 카테고리: 필수
+                    **특징:**
+                    - 2-5개의 투표 옵션 필수
+                    - 이미지 업로드 지원 (최대 4장)
+                    - 투표 마감 시간 설정 필수
+                    - 재투표 허용 여부 설정
+                    - 중복 선택 허용 여부 설정
+                    - Multipart 방식으로 이미지와 텍스트 데이터를 함께 전송
+                    - 카테고리 필수 선택
 
                     **지원 파일 형식:** jpg, jpeg, png, gif, webp
                     **최대 파일 크기:** 5MB per image
-
-                    **권한:** 로그인 사용자만 가능
                     """,
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                    required = true,
                     content = @Content(
                             mediaType = MediaType.MULTIPART_FORM_DATA_VALUE,
-                            schema = @Schema(
-                                    type = "object",
-                                    requiredProperties = {"data"},
-                                    description = "Multipart form data with JSON data part and optional image files"
-                            )
+                            schema = @Schema(implementation = VotePostCreateRequest.class)
                     )
             )
     )
@@ -84,63 +75,48 @@ public class VoteboardController {
             ),
             @ApiResponse(
                     responseCode = "400",
-                    description = "잘못된 요청",
+                    description = "잘못된 요청 (검증 실패, 이미지 관련 오류)",
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = ErrorResponse.class),
                             examples = {
-                                    @ExampleObject(
-                                            name = "옵션 개수 부족",
-                                            value = "{\"code\": \"BAD_REQUEST\", \"message\": \"투표 옵션은 최소 2개, 최대 5개까지 가능합니다.\"}"
-                                    ),
-                                    @ExampleObject(
-                                            name = "과거 마감 시간",
-                                            value = "{\"code\": \"BAD_REQUEST\", \"message\": \"투표 마감 시간은 미래 시간이어야 합니다.\"}"
-                                    ),
-                                    @ExampleObject(
-                                            name = "필수 필드 누락",
-                                            value = "{\"code\": \"BAD_REQUEST\", \"message\": \"제목은 필수입니다.\"}"
-                                    )
+                                    @ExampleObject(name = "빈 제목", value = "{\"code\": \"VALIDATION_FAILED\", \"message\": \"[title] 제목은 필수입니다.\"}"),
+                                    @ExampleObject(name = "빈 내용", value = "{\"code\": \"VALIDATION_FAILED\", \"message\": \"[content] 내용은 필수입니다.\"}"),
+                                    @ExampleObject(name = "옵션 개수 부족", value = "{\"code\": \"BAD_REQUEST\", \"message\": \"투표 옵션은 최소 2개, 최대 5개까지 가능합니다.\"}"),
+                                    @ExampleObject(name = "과거 마감 시간", value = "{\"code\": \"BAD_REQUEST\", \"message\": \"투표 마감 시간은 미래 시간이어야 합니다.\"}"),
+                                    @ExampleObject(name = "잘못된 카테고리", value = "{\"code\": \"INVALID_ENUM_VALUE\", \"message\": \"'invalid-category'은(는) 허용되지 않는 값입니다. 사용 가능한 값: [daily-hobby, restaurant, living-convenience, neighborhood-news, startup, others]\"}"),
+                                    @ExampleObject(name = "이미지 개수 초과", value = "{\"code\": \"ILLEGAL_ARGUMENT\", \"message\": \"이미지는 최대 4장까지 업로드 가능합니다.\"}"),
+                                    @ExampleObject(name = "지원하지 않는 파일 형식", value = "{\"code\": \"ILLEGAL_ARGUMENT\", \"message\": \"지원하지 않는 파일 형식입니다. 지원 형식: image/jpeg, image/jpg, image/png, image/gif, image/webp\"}"),
+                                    @ExampleObject(name = "빈 파일", value = "{\"code\": \"ILLEGAL_ARGUMENT\", \"message\": \"이미지 파일이 비어있습니다.\"}")
                             }
                     )
             ),
             @ApiResponse(
                     responseCode = "401",
-                    description = "인증되지 않은 사용자",
+                    description = "인증 실패",
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = ErrorResponse.class),
                             examples = @ExampleObject(
                                     name = "인증 실패",
-                                    value = "{\"code\": \"UNAUTHORIZED\", \"message\": \"인증되지 않은 사용자입니다.\"}"
+                                    value = "{\"code\": \"AUTHENTICATION_FAILED\", \"message\": \"인증이 필요합니다.\"}"
                             )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "413",
+                    description = "파일 크기 초과 (Spring multipart 제한)",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorResponse.class),
+                            examples = @ExampleObject(value = "{\"code\": \"FILE_SIZE_EXCEEDED\", \"message\": \"파일 크기가 너무 큽니다. 최대 업로드 크기는 5MB입니다.\"}")
                     )
             )
     })
     public ResponseEntity<VotePostIdResponse> createVotePost(
-            @Parameter(
-                    description = "투표 게시글 데이터 (JSON 형식)",
-                    required = true,
-                    content = @Content(
-                            mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = VotePostCreateRequest.class)
-                    )
-            )
-            @RequestPart("data") @Valid VotePostCreateRequest request,
-
-            @Parameter(
-                    description = "첨부 이미지 파일들 (최대 4장)",
-                    required = false,
-                    content = @Content(
-                            mediaType = MediaType.APPLICATION_OCTET_STREAM_VALUE,
-                            schema = @Schema(type = "array", format = "binary")
-                    )
-            )
-            @RequestPart(value = "images", required = false) List<MultipartFile> images,
-
+            @ModelAttribute @Valid VotePostCreateRequest request,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-        Long votesboardId = votePostService.createVotePost(request, images, userDetails.getUser().getId());
+        Long votesboardId = votePostService.createVotePost(request, userDetails.getUser().getId());
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new VotePostIdResponse(votesboardId));
     }

@@ -7,6 +7,7 @@ import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -60,4 +61,12 @@ public class VotePostCreateRequest {
             requiredMode = Schema.RequiredMode.REQUIRED
     )
     private Boolean allowMultipleChoice;
+
+    @Schema(
+            description = "첨부 이미지 파일들 (최대 4장)",
+            type = "array",
+            format = "binary"
+    )
+    @Size(max = 4, message = "이미지는 최대 4장까지 업로드 가능합니다.")
+    private List<MultipartFile> images;
 }
