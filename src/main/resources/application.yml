@@ -34,9 +34,7 @@ spring:
       max-request-size: 25MB  # 이미지 4개 + 메타데이터
 
   session:
-    store-type: redis
-    redis:
-      namespace: shboard:session
+    store-type: none  # JWT 인증 사용으로 세션 비활성화
 
   data:
     redis:
