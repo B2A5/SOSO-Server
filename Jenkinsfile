@@ -157,26 +157,56 @@ pipeline {
 
         stage('🐳 Build Docker Image') {
             steps {
-                sh '''
-                    echo "🐳 Building Docker Image..."
-                    set -eux
+                script {
+                    echo "🔍 1. compose.yml 변경 여부 체크"
+                    //HEAD 커밋과 그 전 커밋의 compose.yml 파일 변경 여부 확인
+                    def changedFiles = sh(
+                        script: "git diff --name-only HEAD~1 HEAD || true",
+                        returnStdout: true
+                    ).trim()
+                    echo "Changed files: ${changedFiles}"
+                    echo "📂 Changed files (HEAD~1..HEAD):"
+                    echo changedFiles ?: "   (no changes detected)"
 
-                    # Build Docker image with multiple tags
-                    docker build \
-                        -t "${APP_IMAGE}" \
-                        -t "${APP_IMAGE%:*}:${BUILD_TIMESTAMP}" \
-                        -t "${APP_IMAGE%:*}:${GIT_SHORT_COMMIT}" \
-                        --label "version=${BUILD_TIMESTAMP}" \
-                        --label "commit=${GIT_SHORT_COMMIT}" \
-                        --label "build-number=${BUILD_NUMBER}" \
-                        .
+                    // compose.yml이 변경됐는지 여부
+                    def composeChanged = false
+                    if (changedFiles) {
+                        composeChanged = changedFiles
+                            .readLines()
+                            .any { it == 'compose.yml' || it.endsWith('/compose.yml') }
+                    }
 
-                    echo "📊 Docker Image Information:"
-                    docker images | grep "${APP_IMAGE%:*}" | head -5
+                    if (composeChanged) {
+                        echo "🔄 compose.yml changed → using DOCKER BUILD with --no-cache"
+                        env.NO_CACHE_OPTION = "--no-cache"
+                    } else {
+                        echo "✨ compose.yml not changed → using normal docker build cache"
+                        env.NO_CACHE_OPTION = ""
+                    }
+                
+                    sh """
+                        echo "🐳 Building Docker Image with cache option..."
+                        set -eux
 
-                    # Clean up old images
-                    docker image prune -f --filter "until=72h" || true
-                '''
+                        echo "   • NO_CACHE_OPTION: '${env.NO_CACHE_OPTION}'"
+
+                        # Build Docker image with multiple tags
+                        docker build ${env.NO_CACHE_OPTION} \
+                            -t "${APP_IMAGE}" \
+                            -t "${APP_IMAGE%:*}:${BUILD_TIMESTAMP}" \
+                            -t "${APP_IMAGE%:*}:${GIT_SHORT_COMMIT}" \
+                            --label "version=${BUILD_TIMESTAMP}" \
+                            --label "commit=${GIT_SHORT_COMMIT}" \
+                            --label "build-number=${BUILD_NUMBER}" \
+                            .
+
+                        echo "📊 Docker Image Information:"
+                        docker images | grep "${APP_IMAGE%:*}" | head -5
+
+                        # Clean up old images
+                        docker image prune -f --filter "until=72h" || true
+                    """
+                }
             }
         }
 
