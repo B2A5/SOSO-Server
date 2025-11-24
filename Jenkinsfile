@@ -202,7 +202,7 @@ pipeline {
                             .
 
                         echo "📊 Docker Image Information:"
-                        docker images | grep "${APP_IMAGE%:*}" | head -5
+                        docker images | grep "${imageBase}" | head -5
 
                         # Clean up old images
                         docker image prune -f --filter "until=72h" || true
