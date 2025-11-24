@@ -138,6 +138,11 @@ soso.dreampaste.com {
         header_up X-Forwarded-Proto {scheme}
     }
 
+    # 사용자 API
+    reverse_proxy /users/* api:8080 {
+        header_up X-Forwarded-Proto {scheme}
+    }
+
     # =================================================================
     # API 문서 (Swagger UI) 라우팅
     # =================================================================
