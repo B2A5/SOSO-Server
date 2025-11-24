@@ -183,6 +183,7 @@ pipeline {
                         echo "✨ compose.yml not changed → using normal docker build cache"
                         env.NO_CACHE_OPTION = ""
                     }
+                    def imageBase = APP_IMAGE.split(':')[0] // "localtest/soso-server"
                 
                     sh """
                         echo "🐳 Building Docker Image with cache option..."
@@ -193,8 +194,8 @@ pipeline {
                         # Build Docker image with multiple tags
                         docker build ${env.NO_CACHE_OPTION} \
                             -t "${APP_IMAGE}" \
-                            -t "${APP_IMAGE%:*}:${BUILD_TIMESTAMP}" \
-                            -t "${APP_IMAGE%:*}:${GIT_SHORT_COMMIT}" \
+                            -t "${imageBase}:${BUILD_TIMESTAMP}" \
+                            -t "${imageBase}:${GIT_SHORT_COMMIT}" \
                             --label "version=${BUILD_TIMESTAMP}" \
                             --label "commit=${GIT_SHORT_COMMIT}" \
                             --label "build-number=${BUILD_NUMBER}" \
