@@ -24,6 +24,7 @@ public class UserLoginService {
     private final JwtProperties jwtProperties;
     private final RefreshTokenRedisRepository refreshTokenService;
     private final UserMapper userMapper;
+    private final CookieUtil cookieUtil;
 
     public boolean isRegistered(String email) {
         return userRepository.existsByEmail(email);
@@ -40,8 +41,8 @@ public class UserLoginService {
         refreshTokenService.save(refreshToken, user.getId(), jwtProperties.getRefreshTokenValidityInMs());
 
         // 쿠키에 토큰 설정 (httpOnly=true로 XSS 방어)
-        CookieUtil.addAccessTokenCookie(response, accessToken, jwtProperties.getAccessTokenValidityInMs());
-        CookieUtil.addRefreshTokenCookie(response, refreshToken, jwtProperties.getRefreshTokenValidityInMs());
+        cookieUtil.addAccessTokenCookie(response, accessToken, jwtProperties.getAccessTokenValidityInMs());
+        cookieUtil.addRefreshTokenCookie(response, refreshToken, jwtProperties.getRefreshTokenValidityInMs());
 
         UserResponse userResponse = userMapper.toUserResponse(user);
 

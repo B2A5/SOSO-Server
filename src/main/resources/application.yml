@@ -93,3 +93,10 @@ jwt:
 # CORS 허용 원점(쉼표 분리)
 frontend:
   origin: ${FRONTEND_ORIGIN:http://localhost:3000,https://soso-front-end-web.vercel.app}
+
+# 쿠키 설정 (환경별)
+# 로컬 개발: secure=false, sameSite=Lax (HTTP 허용)
+# 프로덕션: secure=true, sameSite=None (HTTPS 필수, 크로스 도메인 허용)
+cookie:
+  secure: ${COOKIE_SECURE:false}
+  same-site: ${COOKIE_SAME_SITE:Lax}

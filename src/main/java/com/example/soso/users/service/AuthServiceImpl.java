@@ -19,6 +19,7 @@ public class AuthServiceImpl implements AuthService {
     private final JwtProvider jwtProvider;
     private final RefreshTokenRedisRepository refreshTokenService;
     private final JwtProperties jwtProperties;
+    private final CookieUtil cookieUtil;
 
     @Override
     public JwtTokenDto refreshAccessToken(String refreshToken, HttpServletResponse response) {
@@ -43,8 +44,8 @@ public class AuthServiceImpl implements AuthService {
         String newAccessToken = jwtProvider.generateAccessToken(userId);
 
         // 5. 쿠키에 새 토큰 저장 (httpOnly=true로 XSS 방어)
-        CookieUtil.addAccessTokenCookie(response, newAccessToken, jwtProperties.getAccessTokenValidityInMs());
-        CookieUtil.addRefreshTokenCookie(response, newRefreshToken, jwtProperties.getRefreshTokenValidityInMs());
+        cookieUtil.addAccessTokenCookie(response, newAccessToken, jwtProperties.getAccessTokenValidityInMs());
+        cookieUtil.addRefreshTokenCookie(response, newRefreshToken, jwtProperties.getRefreshTokenValidityInMs());
 
         // Body에도 accessToken 포함 (모바일 앱 지원 필수)
         // - 웹: 쿠키 자동 갱신
@@ -58,8 +59,8 @@ public class AuthServiceImpl implements AuthService {
         refreshTokenService.delete(refreshToken);
 
         // 2. 쿠키 삭제 (AccessToken, RefreshToken 모두 삭제)
-        CookieUtil.deleteAccessTokenCookie(response);
-        CookieUtil.deleteRefreshTokenCookie(response);
+        cookieUtil.deleteAccessTokenCookie(response);
+        cookieUtil.deleteRefreshTokenCookie(response);
     }
 
 }

@@ -1,10 +1,9 @@
 package com.example.soso.users.service;
 
-import static com.example.soso.global.config.CookieUtil.addAccessTokenCookie;
-import static com.example.soso.global.config.CookieUtil.addRefreshTokenCookie;
 import static com.example.soso.global.exception.domain.UserErrorCode.SESSION_NOT_VALID;
 import static com.example.soso.global.exception.domain.UserErrorCode.STEPS_NOT_TYPE;
 
+import com.example.soso.global.config.CookieUtil;
 import com.example.soso.global.exception.util.UserAuthException;
 import com.example.soso.global.jwt.JwtProperties;
 import com.example.soso.global.jwt.JwtProvider;
@@ -56,6 +55,7 @@ public class SignupServiceImpl implements SignupService {
     private final JwtProperties jwtProperties;
     private final RefreshTokenRedisRepository redisService;
     private final UserMapper userMapper;
+    private final CookieUtil cookieUtil;
 
     /**
      * 1단계: 사용자 타입 저장. 첫 진입에서만 호출되며 이후 플로우가 결정된다.
@@ -207,8 +207,8 @@ public class SignupServiceImpl implements SignupService {
         redisService.saveByUserId(user.getId(), tokenPair.refreshToken(), jwtProperties.getRefreshTokenValidityInMs());
 
         // 쿠키에 토큰 설정 (웹 브라우저용, httpOnly=true로 XSS 방어)
-        addAccessTokenCookie(response, tokenPair.accessToken(), jwtProperties.getAccessTokenValidityInMs());
-        addRefreshTokenCookie(response, tokenPair.refreshToken(), jwtProperties.getRefreshTokenValidityInMs());
+        cookieUtil.addAccessTokenCookie(response, tokenPair.accessToken(), jwtProperties.getAccessTokenValidityInMs());
+        cookieUtil.addRefreshTokenCookie(response, tokenPair.refreshToken(), jwtProperties.getRefreshTokenValidityInMs());
 
         // UserResponse 생성
         UserResponse userResponse = userMapper.toUserResponse(user);
