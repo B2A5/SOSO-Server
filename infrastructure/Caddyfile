@@ -149,9 +149,9 @@ soso.dreampaste.com {
     # 개발자와 클라이언트가 API 스펙을 확인하고 테스트할 수 있는
     # Swagger UI 인터페이스에 대한 접근을 처리합니다.
 
-    # /swagger → /swagger-ui/ 영구 리다이렉트
-    redir /swagger /swagger-ui/ permanent
-    redir /swagger/ /swagger-ui/ permanent
+    # /swagger → /swagger-ui/index.html 영구 리다이렉트
+    redir /swagger /swagger-ui/index.html permanent
+    redir /swagger/ /swagger-ui/index.html permanent
 
     # Swagger UI 정적 파일들 프록시
     reverse_proxy /swagger-ui/* api:8080
