@@ -48,6 +48,9 @@ class SignupServiceTest {
     private UserMapper userMapper;
 
     @Mock
+    private com.example.soso.global.config.CookieUtil cookieUtil;
+
+    @Mock
     private HttpServletResponse httpServletResponse;
 
     @InjectMocks

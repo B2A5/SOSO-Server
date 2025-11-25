@@ -59,6 +59,11 @@ jwt:
   access-token-validity-in-ms: 1800000
   refresh-token-validity-in-ms: 1209600000
 
+# Cookie settings for tests (테스트는 secure=true 사용)
+cookie:
+  secure: true
+  same-site: None
+
 # Test profile specific settings
 logging:
   level:

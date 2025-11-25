@@ -44,7 +44,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         "spring.session.store-type=none",
         "jwt.secret-key=test-jwt-secret-key-that-is-sufficiently-long-and-secure-for-testing-purposes-minimum-256-bits-required-by-jwt-library",
         "jwt.access-token-validity-in-ms=1800000",
-        "jwt.refresh-token-validity-in-ms=1209600000"
+        "jwt.refresh-token-validity-in-ms=1209600000",
+        "cookie.secure=true",
+        "cookie.same-site=None"
 })
 @AutoConfigureMockMvc
 @Transactional
