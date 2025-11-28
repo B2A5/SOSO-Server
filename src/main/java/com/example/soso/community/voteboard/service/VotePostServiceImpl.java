@@ -88,14 +88,14 @@ public class VotePostServiceImpl implements VotePostService {
 
         // 사용자의 투표 결과 조회 (비로그인 시 null)
         List<VoteResult> userVoteResults = null;
-        boolean isLiked = false;
+        Boolean isLiked = null;
         if (userId != null) {
             Users user = findUserById(userId);
             userVoteResults = voteResultRepository.findAllByUserAndVotePost(user, votePost);
             isLiked = votePostLikeRepository.existsByVotePostIdAndUserId(postId, userId);
         }
 
-        return votePostMapper.toDetailResponse(votePost, commentCount, userVoteResults, likeCount, isLiked);
+        return votePostMapper.toDetailResponse(votePost, commentCount, userVoteResults, likeCount, isLiked, userId);
     }
 
     @Override

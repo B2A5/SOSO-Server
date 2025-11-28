@@ -408,22 +408,25 @@ public class FreeboardServiceImpl implements FreeboardService {
                     .build();
         }
 
+        // 내용 미리보기 생성
+        String contentPreview = postSummary.content() != null && postSummary.content().length() > 100 ?
+                postSummary.content().substring(0, 100) + "..." :
+                postSummary.content();
+
         return FreeboardCursorResponse.FreeboardSummary.builder()
                 .postId(postSummary.postId())
                 .author(authorInfo)
                 .category(postSummary.category())
                 .title(postSummary.title())
-                .contentPreview(postSummary.content().length() > 100 ?
-                    postSummary.content().substring(0, 100) + "..." :
-                    postSummary.content())
+                .contentPreview(contentPreview)
                 .likeCount(postSummary.likeCount())
                 .commentCount(postSummary.commentCount())
                 .isLiked(postSummary.likeByPost())
                 .createdAt(postSummary.createdAt())
                 .viewCount(postSummary.viewCount())
-                .thumbnailUrl(null) // TODO: thumbnailUrl 처리 필요
-                .imageCount(0) // TODO: imageCount 처리 필요
-                .updatedAt(null) // TODO: updatedAt 처리 필요
+                .thumbnailUrl(postSummary.thumbnailUrl())
+                .imageCount(postSummary.imageCount() != null ? postSummary.imageCount() : 0)
+                .updatedAt(postSummary.updatedAt())
                 .build();
     }
 

@@ -71,9 +71,21 @@ public class VotePostDetailResponse {
     @Schema(description = "좋아요 수", example = "42", requiredMode = Schema.RequiredMode.REQUIRED)
     private long likeCount;
 
-    @Schema(description = "현재 사용자의 좋아요 여부 (비로그인 시 false)", example = "true", requiredMode = Schema.RequiredMode.REQUIRED)
+    @Schema(description = "현재 사용자의 좋아요 여부 (비인증 사용자인 경우 null)", example = "true", requiredMode = Schema.RequiredMode.REQUIRED, nullable = true)
     @JsonProperty("isLiked")
-    private boolean isLiked;
+    private Boolean isLiked;
+
+    @Schema(description = "요청한 사용자가 인증되었는지 여부 (액세스 토큰 제공 여부)", example = "true", requiredMode = Schema.RequiredMode.REQUIRED)
+    private boolean isAuthorized;
+
+    @Schema(description = "현재 사용자가 게시글 작성자인지 여부 (비인증 사용자인 경우 false)", example = "false", requiredMode = Schema.RequiredMode.REQUIRED)
+    private boolean isAuthor;
+
+    @Schema(description = "현재 사용자가 게시글 수정 권한이 있는지 여부 (비인증 사용자인 경우 null, 작성자인 경우 true)", example = "false", requiredMode = Schema.RequiredMode.REQUIRED, nullable = true)
+    private Boolean canEdit;
+
+    @Schema(description = "현재 사용자가 게시글 삭제 권한이 있는지 여부 (비인증 사용자인 경우 null, 작성자인 경우 true)", example = "false", requiredMode = Schema.RequiredMode.REQUIRED, nullable = true)
+    private Boolean canDelete;
 
     @Schema(description = "생성일시", example = "2024-01-01T10:00:00", requiredMode = Schema.RequiredMode.REQUIRED)
     private LocalDateTime createdDate;

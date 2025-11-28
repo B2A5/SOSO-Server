@@ -5,12 +5,15 @@ import com.example.soso.community.common.post.domain.dto.PostSortType;
 import com.example.soso.community.common.post.domain.dto.PostSummaryResponse;
 import com.example.soso.community.common.post.domain.entity.Category;
 import com.example.soso.community.common.post.domain.entity.QPost;
+import com.example.soso.community.common.post.domain.entity.QPostImage;
 import com.example.soso.community.common.post.util.PostCursorOrder;
 import com.example.soso.community.common.post.util.PostCursorWhere;
 import com.example.soso.users.domain.entity.QUsers;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -48,7 +51,27 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
         condition.and(postCursorWhere.build(post, sort, cursor, idAfter));
         OrderSpecifier<?>[] order = postCursorOrder.build(post, sort);
 
-        // PostSummaryResponse 생성자 순서: postId, title, content, category, likeCount, commentCount, viewCount, likeByPost, createdAt, user
+        // 서브쿼리: 첫 번째 이미지 URL 조회 (sequence 순서로 정렬한 첫 번째)
+        QPostImage subImage = new QPostImage("subImage");
+        var thumbnailUrlSubQuery = JPAExpressions
+                .select(subImage.imageUrl.min())
+                .from(subImage)
+                .where(subImage.post.id.eq(post.id)
+                        .and(subImage.sequence.eq(
+                                JPAExpressions
+                                        .select(subImage.sequence.min())
+                                        .from(subImage)
+                                        .where(subImage.post.id.eq(post.id))
+                        )));
+
+        // 서브쿼리: 이미지 개수 조회
+        QPostImage countImage = new QPostImage("countImage");
+        var imageCountSubQuery = JPAExpressions
+                .select(countImage.count().intValue())
+                .from(countImage)
+                .where(countImage.post.id.eq(post.id));
+
+        // PostSummaryResponse 생성자 순서: postId, title, content, category, likeCount, commentCount, viewCount, likeByPost, createdAt, updatedAt, thumbnailUrl, imageCount, user
         // userId가 null인 경우 좋아요 정보 없이 조회 (null 반환)
         if (userId == null) {
             return queryFactory
@@ -60,8 +83,11 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                             post.likeCount, // int likeCount
                             post.commentCount, // int commentCount
                             post.viewCount, // int viewCount
-                            com.querydsl.core.types.dsl.Expressions.nullExpression(Boolean.class), // Boolean likeByPost = null
+                            Expressions.nullExpression(Boolean.class), // Boolean likeByPost = null
                             post.createdDate, // LocalDateTime createdAt
+                            post.lastModifiedDate, // LocalDateTime updatedAt
+                            thumbnailUrlSubQuery, // String thumbnailUrl
+                            imageCountSubQuery, // Integer imageCount
                             Projections.constructor(com.example.soso.community.common.post.domain.dto.UserSummaryResponse.class,
                                     user.id,
                                     user.nickname,
@@ -88,6 +114,9 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                             post.viewCount, // int viewCount
                             like.id.isNotNull(), // boolean likeByPost
                             post.createdDate, // LocalDateTime createdAt
+                            post.lastModifiedDate, // LocalDateTime updatedAt
+                            thumbnailUrlSubQuery, // String thumbnailUrl
+                            imageCountSubQuery, // Integer imageCount
                             Projections.constructor(com.example.soso.community.common.post.domain.dto.UserSummaryResponse.class,
                                     user.id,
                                     user.nickname,

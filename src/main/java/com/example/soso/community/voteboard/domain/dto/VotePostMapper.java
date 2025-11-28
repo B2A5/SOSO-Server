@@ -58,11 +58,23 @@ public class VotePostMapper {
                 .map(option -> toVoteOptionResponse(option, votePost.getTotalVotes()))
                 .toList();
 
+        // 이미지 정보 추출
+        List<VotePostImage> images = votePost.getImages();
+        String thumbnailUrl = images.isEmpty() ? null :
+                images.stream()
+                        .sorted((img1, img2) -> Integer.compare(img1.getSequence(), img2.getSequence()))
+                        .findFirst()
+                        .map(VotePostImage::getImageUrl)
+                        .orElse(null);
+        int imageCount = images.size();
+
         return VotePostSummaryResponse.builder()
                 .id(votePost.getId())
                 .author(userMapper.toUserSummary(votePost.getUser()))
                 .category(votePost.getCategory())
                 .title(votePost.getTitle())
+                .thumbnailUrl(thumbnailUrl)
+                .imageCount(imageCount)
                 .viewCount(votePost.getViewCount())
                 .commentCount(commentCount)
                 .totalVotes(votePost.getTotalVotes())
@@ -86,8 +98,15 @@ public class VotePostMapper {
             long commentCount,
             List<VoteResult> userVoteResults,
             long likeCount,
-            boolean isLiked
+            Boolean isLiked,
+            String userId
     ) {
+        // 인증 여부 확인
+        boolean isAuthorized = userId != null;
+
+        // 작성자 여부 확인
+        boolean isAuthor = userId != null && votePost.getUser().getId().equals(userId);
+
         // 사용자가 선택한 옵션 ID 목록
         List<Long> selectedOptionIds = userVoteResults != null ?
                 userVoteResults.stream()
@@ -125,6 +144,10 @@ public class VotePostMapper {
                 .commentCount(commentCount)
                 .likeCount(likeCount)
                 .isLiked(isLiked)
+                .isAuthorized(isAuthorized)
+                .isAuthor(isAuthor)
+                .canEdit(isAuthorized ? isAuthor : null)
+                .canDelete(isAuthorized ? isAuthor : null)
                 .createdDate(votePost.getCreatedDate())
                 .lastModifiedDate(votePost.getLastModifiedDate())
                 .build();

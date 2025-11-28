@@ -125,7 +125,29 @@ public class VoteboardController {
     @Operation(
             operationId = "getVotePost",
             summary = "투표 게시글 상세 조회",
-            description = "투표 게시글의 상세 정보를 조회합니다. 비로그인 사용자도 조회 가능합니다."
+            description = """
+                    투표 게시글의 상세 정보를 조회합니다.
+
+                    **특징:**
+                    - 조회 시 조회수 자동 증가
+                    - 인증/비인증 사용자 모두 조회 가능
+                    - 인증 여부에 따라 isLiked, canEdit, canDelete 값 변경
+                    - 투표 참여 여부에 따라 selectedOptionIds 값 변경
+
+                    **인증 사용자:**
+                    - isAuthorized: true
+                    - isLiked: boolean (좋아요 상태)
+                    - canEdit: boolean (수정 권한 - 작성자인 경우 true)
+                    - canDelete: boolean (삭제 권한 - 작성자인 경우 true)
+                    - selectedOptionIds: 투표한 옵션 ID 목록 (투표 전이면 빈 배열)
+
+                    **비인증 사용자:**
+                    - isAuthorized: false
+                    - isLiked: null
+                    - canEdit: null
+                    - canDelete: null
+                    - selectedOptionIds: 빈 배열
+                    """
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -133,7 +155,25 @@ public class VoteboardController {
                     description = "투표 게시글 조회 성공",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = VotePostDetailResponse.class)
+                            schema = @Schema(implementation = VotePostDetailResponse.class),
+                            examples = {
+                                    @ExampleObject(
+                                            name = "인증 사용자 (본인 작성, 투표 전)",
+                                            value = "{\"id\":1,\"author\":{\"userId\":\"author123\",\"nickname\":\"작성자\",\"address\":\"서울시 강남구\",\"profileImageUrl\":\"https://cdn.example.com/profile.jpg\",\"userType\":\"INHABITANT\"},\"category\":\"restaurant\",\"title\":\"우리 동네 카페 선호도 조사\",\"content\":\"여러분이 가장 좋아하는 카페 스타일은 무엇인가요?\",\"images\":[{\"imageId\":1,\"imageUrl\":\"https://cdn.example.com/vote1.jpg\",\"sequence\":0}],\"voteOptions\":[{\"id\":1,\"content\":\"조용한 분위기\",\"sequence\":0,\"voteCount\":15,\"percentage\":37.5},{\"id\":2,\"content\":\"활기찬 분위기\",\"sequence\":1,\"voteCount\":10,\"percentage\":25.0},{\"id\":3,\"content\":\"작업하기 좋은 곳\",\"sequence\":2,\"voteCount\":15,\"percentage\":37.5}],\"selectedOptionIds\":[],\"totalVotes\":40,\"voteStatus\":\"IN_PROGRESS\",\"endTime\":\"2025-12-31T23:59:59\",\"allowRevote\":true,\"allowMultipleChoice\":false,\"viewCount\":120,\"commentCount\":5,\"likeCount\":8,\"isLiked\":false,\"isAuthorized\":true,\"isAuthor\":true,\"canEdit\":true,\"canDelete\":true,\"createdDate\":\"2025-01-01T10:00:00\",\"lastModifiedDate\":\"2025-01-01T10:00:00\"}"
+                                    ),
+                                    @ExampleObject(
+                                            name = "인증 사용자 (다른 사람 글, 투표 완료)",
+                                            value = "{\"id\":2,\"author\":{\"userId\":\"other-user\",\"nickname\":\"다른사용자\",\"address\":\"서울시 서초구\",\"profileImageUrl\":\"https://cdn.example.com/profile2.jpg\",\"userType\":\"FOUNDER\"},\"category\":\"startup\",\"title\":\"스타트업 근무 환경 선호도\",\"content\":\"어떤 근무 환경을 선호하시나요? (복수 선택 가능)\",\"images\":[],\"voteOptions\":[{\"id\":4,\"content\":\"재택근무\",\"sequence\":0,\"voteCount\":25,\"percentage\":50.0},{\"id\":5,\"content\":\"사무실 근무\",\"sequence\":1,\"voteCount\":15,\"percentage\":30.0},{\"id\":6,\"content\":\"하이브리드\",\"sequence\":2,\"voteCount\":10,\"percentage\":20.0}],\"selectedOptionIds\":[4,6],\"totalVotes\":50,\"voteStatus\":\"IN_PROGRESS\",\"endTime\":\"2025-06-30T23:59:59\",\"allowRevote\":true,\"allowMultipleChoice\":true,\"viewCount\":350,\"commentCount\":25,\"likeCount\":42,\"isLiked\":true,\"isAuthorized\":true,\"isAuthor\":false,\"canEdit\":false,\"canDelete\":false,\"createdDate\":\"2025-01-05T14:00:00\",\"lastModifiedDate\":\"2025-01-05T14:00:00\"}"
+                                    ),
+                                    @ExampleObject(
+                                            name = "비인증 사용자",
+                                            value = "{\"id\":1,\"author\":{\"userId\":\"author123\",\"nickname\":\"작성자\",\"address\":\"서울시 강남구\",\"profileImageUrl\":\"https://cdn.example.com/profile.jpg\",\"userType\":\"INHABITANT\"},\"category\":\"restaurant\",\"title\":\"우리 동네 카페 선호도 조사\",\"content\":\"여러분이 가장 좋아하는 카페 스타일은 무엇인가요?\",\"images\":[],\"voteOptions\":[{\"id\":1,\"content\":\"조용한 분위기\",\"sequence\":0,\"voteCount\":15,\"percentage\":37.5},{\"id\":2,\"content\":\"활기찬 분위기\",\"sequence\":1,\"voteCount\":10,\"percentage\":25.0},{\"id\":3,\"content\":\"작업하기 좋은 곳\",\"sequence\":2,\"voteCount\":15,\"percentage\":37.5}],\"selectedOptionIds\":[],\"totalVotes\":40,\"voteStatus\":\"IN_PROGRESS\",\"endTime\":\"2025-12-31T23:59:59\",\"allowRevote\":true,\"allowMultipleChoice\":false,\"viewCount\":120,\"commentCount\":5,\"likeCount\":8,\"isLiked\":null,\"isAuthorized\":false,\"isAuthor\":false,\"canEdit\":null,\"canDelete\":null,\"createdDate\":\"2025-01-01T10:00:00\",\"lastModifiedDate\":\"2025-01-01T10:00:00\"}"
+                                    ),
+                                    @ExampleObject(
+                                            name = "투표 완료된 게시글",
+                                            value = "{\"id\":3,\"author\":{\"userId\":\"poll-master\",\"nickname\":\"투표왕\",\"address\":\"서울시 송파구\",\"profileImageUrl\":null,\"userType\":\"INHABITANT\"},\"category\":\"neighborhood-news\",\"title\":\"동네 축제 개최 시기 투표\",\"content\":\"언제 축제를 개최하면 좋을까요?\",\"images\":[],\"voteOptions\":[{\"id\":7,\"content\":\"봄 (3-5월)\",\"sequence\":0,\"voteCount\":30,\"percentage\":30.0},{\"id\":8,\"content\":\"여름 (6-8월)\",\"sequence\":1,\"voteCount\":20,\"percentage\":20.0},{\"id\":9,\"content\":\"가을 (9-11월)\",\"sequence\":2,\"voteCount\":50,\"percentage\":50.0}],\"selectedOptionIds\":[9],\"totalVotes\":100,\"voteStatus\":\"COMPLETED\",\"endTime\":\"2025-01-10T23:59:59\",\"allowRevote\":false,\"allowMultipleChoice\":false,\"viewCount\":500,\"commentCount\":35,\"likeCount\":65,\"isLiked\":false,\"isAuthorized\":true,\"isAuthor\":false,\"canEdit\":false,\"canDelete\":false,\"createdDate\":\"2025-01-01T09:00:00\",\"lastModifiedDate\":\"2025-01-01T09:00:00\"}"
+                                    )
+                            }
                     )
             ),
             @ApiResponse(

@@ -31,6 +31,12 @@ public class VotePostSummaryResponse {
     @Schema(description = "게시글 제목", example = "우리 동네 카페 선호도 조사", requiredMode = Schema.RequiredMode.REQUIRED)
     private String title;
 
+    @Schema(description = "첫 번째 이미지 URL (썸네일용)", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+    private String thumbnailUrl;
+
+    @Schema(description = "이미지 개수", example = "2", requiredMode = Schema.RequiredMode.REQUIRED)
+    private int imageCount;
+
     @Schema(description = "조회수", example = "123", requiredMode = Schema.RequiredMode.REQUIRED)
     private int viewCount;
 

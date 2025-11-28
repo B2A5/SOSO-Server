@@ -38,6 +38,15 @@ public record PostSummaryResponse(
         @Schema(description = "작성 시간", example = "2025-07-28T15:30:00", requiredMode = Schema.RequiredMode.REQUIRED)
         java.time.LocalDateTime createdAt,
 
+        @Schema(description = "수정 시간", example = "2025-07-28T16:00:00", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+        java.time.LocalDateTime updatedAt,
+
+        @Schema(description = "첫 번째 이미지 URL (썸네일용)", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+        String thumbnailUrl,
+
+        @Schema(description = "이미지 개수", example = "2", requiredMode = Schema.RequiredMode.REQUIRED)
+        Integer imageCount,
+
         @Schema(description = "작성자 정보", requiredMode = Schema.RequiredMode.REQUIRED)
         UserSummaryResponse user
 
