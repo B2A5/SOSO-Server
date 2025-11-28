@@ -13,7 +13,9 @@ import com.example.soso.community.common.post.repository.PostImageRepository;
 import com.example.soso.community.common.post.repository.PostRepository;
 import com.example.soso.community.common.post.domain.dto.PostSortType;
 import com.example.soso.community.common.post.domain.dto.PostSummaryResponse;
+import com.example.soso.community.common.post.domain.dto.UserSummaryResponse;
 import com.example.soso.users.domain.entity.Users;
+import com.example.soso.users.domain.entity.UserType;
 import com.example.soso.users.repository.UsersRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -227,9 +229,19 @@ class FreeboardServiceTest {
     @DisplayName("카테고리별 게시글 목록 조회")
     void getPostsByCursor_ByCategory(Category category) {
         // given
+        UserSummaryResponse mockUser = new UserSummaryResponse(
+                "testUser123", "테스터", "서울시 강남구",
+                "https://example.com/profile.jpg", UserType.INHABITANT
+        );
+
         PostSummaryResponse mockPostSummary = new PostSummaryResponse(
                 1L, "테스트 제목", "테스트 내용", category,
-                15, 8, 120, false, LocalDateTime.of(2024, 12, 25, 10, 30, 0), null
+                15, 8, 120, false,
+                LocalDateTime.of(2024, 12, 25, 10, 30, 0), // createdAt
+                LocalDateTime.of(2024, 12, 25, 10, 30, 0), // updatedAt
+                null, // thumbnailUrl
+                0,    // imageCount
+                mockUser
         );
 
         List<PostSummaryResponse> mockPostSummaries = List.of(mockPostSummary);
@@ -246,6 +258,8 @@ class FreeboardServiceTest {
         assertThat(result).isNotNull();
         assertThat(result.getPosts()).hasSize(1);
         assertThat(result.getPosts().get(0).getCategory()).isEqualTo(category);
+        assertThat(result.getPosts().get(0).getThumbnailUrl()).isNull();
+        assertThat(result.getPosts().get(0).getImageCount()).isEqualTo(0);
         assertThat(result.isHasNext()).isFalse();
 
         verify(postRepository).findAllByCursorPaging(
@@ -256,9 +270,19 @@ class FreeboardServiceTest {
     @DisplayName("전체 카테고리 게시글 목록 조회")
     void getPostsByCursor_AllCategories() {
         // given
+        UserSummaryResponse mockUser = new UserSummaryResponse(
+                "testUser123", "테스터", "서울시 강남구",
+                "https://example.com/profile.jpg", UserType.INHABITANT
+        );
+
         PostSummaryResponse mockPostSummary = new PostSummaryResponse(
                 123L, "테스트 제목", "테스트 내용", Category.RESTAURANT,
-                10, 5, 77, true, LocalDateTime.of(2024, 12, 25, 10, 30, 0), null
+                10, 5, 77, true,
+                LocalDateTime.of(2024, 12, 25, 10, 30, 0), // createdAt
+                LocalDateTime.of(2024, 12, 25, 11, 0, 0),  // updatedAt
+                "https://example.com/thumb.jpg", // thumbnailUrl
+                2,    // imageCount
+                mockUser
         );
 
         List<PostSummaryResponse> mockPostSummaries = List.of(mockPostSummary);
@@ -275,6 +299,9 @@ class FreeboardServiceTest {
         assertThat(result).isNotNull();
         assertThat(result.getPosts()).hasSize(1);
         assertThat(result.getPosts().get(0).isLiked()).isTrue(); // 좋아요 한 게시글
+        assertThat(result.getPosts().get(0).getThumbnailUrl()).isEqualTo("https://example.com/thumb.jpg");
+        assertThat(result.getPosts().get(0).getImageCount()).isEqualTo(2);
+        assertThat(result.getPosts().get(0).getUpdatedAt()).isNotNull();
         assertThat(result.isHasNext()).isFalse();
 
         verify(postRepository).findAllByCursorPaging(
@@ -434,9 +461,19 @@ class FreeboardServiceTest {
     void createContentPreview_Test() {
         // given
         String longContent = "a".repeat(150); // 100자 초과 내용
+        UserSummaryResponse mockUser = new UserSummaryResponse(
+                "testUser123", "테스터", "서울시 강남구",
+                "https://example.com/profile.jpg", UserType.INHABITANT
+        );
+
         PostSummaryResponse mockPostSummary = new PostSummaryResponse(
                 456L, "긴 내용 테스트", longContent, Category.DAILY_HOBBY,
-                0, 0, 5, false, LocalDateTime.of(2024, 12, 25, 10, 30, 0), null
+                0, 0, 5, false,
+                LocalDateTime.of(2024, 12, 25, 10, 30, 0), // createdAt
+                LocalDateTime.of(2024, 12, 25, 10, 30, 0), // updatedAt
+                null, // thumbnailUrl
+                0,    // imageCount
+                mockUser
         );
 
         when(postRepository.findAllByCursorPaging(

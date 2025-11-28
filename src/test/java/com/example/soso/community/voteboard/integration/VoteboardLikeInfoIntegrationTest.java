@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
@@ -166,7 +167,7 @@ class VoteboardLikeInfoIntegrationTest {
     }
 
     @Test
-    @DisplayName("비로그인 사용자의 게시글 상세 조회 - isLiked는 항상 false")
+    @DisplayName("비로그인 사용자의 게시글 상세 조회 - isLiked는 null")
     void getVotePostDetail_WithoutAuth_IsLikedAlwaysFalse() throws Exception {
         // given - 투표 게시글 생성 및 좋아요 추가
         Long votePostId = createVotePost(testUserDetails, "비로그인 테스트");
@@ -176,9 +177,10 @@ class VoteboardLikeInfoIntegrationTest {
 
         // when & then - 비로그인 상태에서 조회
         mockMvc.perform(get("/community/votesboard/" + votePostId))
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.likeCount").value(1))
-                .andExpect(jsonPath("$.isLiked").value(false));
+                .andExpect(jsonPath("$.isLiked").doesNotExist()); // 비인증 사용자는 null (JSON에서는 필드가 포함되지 않음)
     }
 
     @Test
