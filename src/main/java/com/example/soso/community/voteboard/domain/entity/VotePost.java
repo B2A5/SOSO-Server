@@ -49,6 +49,12 @@ public class VotePost extends BaseTimeEntity {
     @Column(name = "view_count", nullable = false)
     private int viewCount = 0;
 
+    @Column(name = "like_count", nullable = false)
+    private int likeCount = 0;
+
+    @Column(name = "comment_count", nullable = false)
+    private int commentCount = 0;
+
     @Column(nullable = false)
     private boolean deleted = false;
 
@@ -197,6 +203,20 @@ public class VotePost extends BaseTimeEntity {
      */
     public void increaseViewCount() {
         this.viewCount++;
+    }
+
+    /**
+     * 좋아요 수 업데이트
+     */
+    public void updateLikeCount(int redisLikeCount) {
+        this.likeCount = redisLikeCount;
+    }
+
+    /**
+     * 댓글 수 업데이트
+     */
+    public void updateCommentCount(int commentCount) {
+        this.commentCount = commentCount;
     }
 
     /**

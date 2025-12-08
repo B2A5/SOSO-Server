@@ -2,6 +2,7 @@ package com.example.soso.community.voteboard.service;
 
 import com.example.soso.community.common.comment.domain.repository.CommentRepository;
 import com.example.soso.community.voteboard.domain.dto.*;
+import com.example.soso.community.voteboard.dto.VoteboardSortType;
 import com.example.soso.community.voteboard.domain.entity.VoteOption;
 import com.example.soso.community.voteboard.domain.entity.VotePost;
 import com.example.soso.community.voteboard.domain.entity.VotePostImage;
@@ -20,7 +21,6 @@ import com.example.soso.users.domain.entity.Users;
 import com.example.soso.users.repository.UsersRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -99,8 +99,8 @@ public class VotePostServiceImpl implements VotePostService {
     }
 
     @Override
-    public VotePostListResponse getVotePostsByCursor(VoteStatus status, int size, String cursor, String userId) {
-        log.debug("투표 게시글 목록 조회: status={}, size={}, cursor={}, userId={}", status, size, cursor, userId);
+    public VotePostListResponse getVotePostsByCursor(VoteStatus status, VoteboardSortType sort, int size, String cursor, String userId) {
+        log.debug("투표 게시글 목록 조회: status={}, sort={}, size={}, cursor={}, userId={}", status, sort, size, cursor, userId);
 
         // String cursor를 Long으로 파싱
         Long cursorId = null;
@@ -113,27 +113,8 @@ public class VotePostServiceImpl implements VotePostService {
             }
         }
 
-        PageRequest pageRequest = PageRequest.of(0, size + 1);
-        LocalDateTime now = LocalDateTime.now();
-        List<VotePost> posts;
-
-        // 상태별로 다른 쿼리 실행
-        if (status == null) {
-            // 전체 조회
-            posts = (cursorId == null)
-                    ? votePostRepository.findAllWithoutStatus(pageRequest)
-                    : votePostRepository.findAllByCursorWithoutStatus(cursorId, pageRequest);
-        } else if (status == VoteStatus.IN_PROGRESS) {
-            // 진행 중인 투표만
-            posts = (cursorId == null)
-                    ? votePostRepository.findInProgress(now, pageRequest)
-                    : votePostRepository.findInProgressByCursor(cursorId, now, pageRequest);
-        } else {
-            // 완료된 투표만
-            posts = (cursorId == null)
-                    ? votePostRepository.findCompleted(now, pageRequest)
-                    : votePostRepository.findCompletedByCursor(cursorId, now, pageRequest);
-        }
+        // Custom Repository를 사용하여 정렬된 목록 조회
+        List<VotePost> posts = votePostRepository.findAllBySortAndCursor(status, sort, cursorId, size);
 
         // 다음 페이지 존재 여부 확인
         boolean hasNext = posts.size() > size;

@@ -16,7 +16,7 @@ import java.util.Optional;
  * 투표 게시글 레포지토리
  */
 @Repository
-public interface VotePostRepository extends JpaRepository<VotePost, Long> {
+public interface VotePostRepository extends JpaRepository<VotePost, Long>, VotePostRepositoryCustom {
 
     /**
      * ID로 삭제되지 않은 투표 게시글 조회

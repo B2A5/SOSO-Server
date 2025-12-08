@@ -200,7 +200,19 @@ public class VoteboardController {
     @Operation(
             operationId = "getVotePostsByCursor",
             summary = "투표 게시글 목록 조회 (커서 기반)",
-            description = "커서 기반 페이지네이션으로 투표 게시글 목록을 조회합니다."
+            description = """
+                    커서 기반 페이지네이션으로 투표 게시글 목록을 조회합니다.
+
+                    **정렬 옵션:**
+                    - LATEST: 최신순 (기본값)
+                    - LIKE: 투표순 (투표 인원 많은 순)
+                    - COMMENT: 댓글순
+                    - VIEW: 조회순
+
+                    **커서 사용법:**
+                    첫 요청: cursor 없이 요청
+                    다음 페이지: 이전 응답의 nextCursor 값을 사용
+                    """
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -210,20 +222,51 @@ public class VoteboardController {
                             mediaType = "application/json",
                             schema = @Schema(implementation = VotePostListResponse.class)
                     )
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "잘못된 파라미터",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorResponse.class),
+                            examples = {
+                                    @ExampleObject(name = "잘못된 정렬 값", value = "{\"code\": \"INVALID_ENUM_VALUE\", \"message\": \"'INVALID_SORT'은(는) 허용되지 않는 값입니다. 사용 가능한 값: [LATEST, LIKE, COMMENT, VIEW]\"}"),
+                                    @ExampleObject(name = "잘못된 커서", value = "{\"code\": \"INVALID_CURSOR\", \"message\": \"유효하지 않은 커서 값입니다.\"}")
+                            }
+                    )
             )
     })
     public ResponseEntity<VotePostListResponse> getVotePostList(
             @Parameter(description = "투표 상태 (IN_PROGRESS: 진행중, COMPLETED: 완료, null: 전체)")
             @RequestParam(required = false) VoteStatus status,
-            @Parameter(description = "페이지 크기", example = "20")
+            @Parameter(
+                    description = """
+                            정렬 기준
+
+                            - LATEST: 최신순 (기본값)
+                            - LIKE: 투표순 (투표 인원 많은 순)
+                            - COMMENT: 댓글순
+                            - VIEW: 조회순
+                            """,
+                    example = "LATEST"
+            )
+            @RequestParam(defaultValue = "LATEST") com.example.soso.community.voteboard.dto.VoteboardSortType sort,
+            @Parameter(description = "페이지 크기 (1-50, 기본값: 20)", example = "20")
             @RequestParam(defaultValue = "20") int size,
-            @Parameter(description = "커서 (이전 페이지의 마지막 게시글 ID)", example = "42")
+            @Parameter(
+                    description = """
+                            커서 기반 페이징을 위한 커서 값
+
+                            **첫 요청:** cursor 없이 요청
+                            **다음 페이지:** 이전 응답의 nextCursor 값 사용
+                            """,
+                    example = "42"
+            )
             @RequestParam(required = false) String cursor,
             @Parameter(hidden = true)
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
         String userId = userDetails != null ? userDetails.getUser().getId() : null;
-        VotePostListResponse response = votePostService.getVotePostsByCursor(status, size, cursor, userId);
+        VotePostListResponse response = votePostService.getVotePostsByCursor(status, sort, size, cursor, userId);
         return ResponseEntity.ok(response);
     }
 
