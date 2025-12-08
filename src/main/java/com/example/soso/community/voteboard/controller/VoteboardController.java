@@ -131,18 +131,20 @@ public class VoteboardController {
                     **특징:**
                     - 조회 시 조회수 자동 증가
                     - 인증/비인증 사용자 모두 조회 가능
-                    - 인증 여부에 따라 isLiked, canEdit, canDelete 값 변경
+                    - 인증 여부에 따라 hasVoted, isLiked, canEdit, canDelete 값 변경
                     - 투표 참여 여부에 따라 selectedOptionIds 값 변경
 
                     **인증 사용자:**
                     - isAuthorized: true
+                    - hasVoted: boolean (투표 참여 여부 - 참여했으면 true, 안 했으면 false)
                     - isLiked: boolean (좋아요 상태)
                     - canEdit: boolean (수정 권한 - 작성자인 경우 true)
                     - canDelete: boolean (삭제 권한 - 작성자인 경우 true)
-                    - selectedOptionIds: 투표한 옵션 ID 목록 (투표 전이면 빈 배열)
+                    - selectedOptionIds: 투표한 옵션 ID 목록 (투표 전이면 빈 배열, 투표 후에는 선택한 옵션 ID들)
 
                     **비인증 사용자:**
                     - isAuthorized: false
+                    - hasVoted: null
                     - isLiked: null
                     - canEdit: null
                     - canDelete: null
@@ -212,6 +214,13 @@ public class VoteboardController {
                     **커서 사용법:**
                     첫 요청: cursor 없이 요청
                     다음 페이지: 이전 응답의 nextCursor 값을 사용
+
+                    **응답 필드:**
+                    - contentPreview: 게시글 내용 미리보기 (100자 제한)
+                    - hasVoted: 현재 사용자의 투표 참여 여부 (인증 사용자만, 비인증 시 null)
+                    - isLiked: 현재 사용자의 좋아요 여부 (인증 사용자만, 비인증 시 null)
+                    - totalCount: 전체 게시글 수 (필터 적용된 결과)
+                    - isAuthorized: 요청 사용자의 인증 여부
                     """
     )
     @ApiResponses(value = {

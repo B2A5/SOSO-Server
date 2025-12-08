@@ -44,6 +44,14 @@ public class VotePostDetailResponse {
     @Schema(description = "투표 옵션 목록", requiredMode = Schema.RequiredMode.REQUIRED)
     private List<VoteOptionResponse> voteOptions;
 
+    @Schema(
+        description = "현재 사용자의 투표 참여 여부 (비인증 사용자인 경우 null, 참여하지 않은 경우 false, 참여한 경우 true)",
+        example = "true",
+        requiredMode = Schema.RequiredMode.REQUIRED,
+        nullable = true
+    )
+    private Boolean hasVoted;
+
     @Schema(description = "현재 사용자가 선택한 옵션 ID 목록 (미투표 시 빈 리스트)", example = "[1, 2]")
     private List<Long> selectedOptionIds;
 

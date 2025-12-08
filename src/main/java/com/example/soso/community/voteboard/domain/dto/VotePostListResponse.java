@@ -1,5 +1,6 @@
 package com.example.soso.community.voteboard.domain.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -34,5 +35,6 @@ public class VotePostListResponse {
     private long totalCount;
 
     @Schema(description = "요청한 사용자가 인증되었는지 여부 (액세스 토큰 제공 여부)", example = "true", requiredMode = Schema.RequiredMode.REQUIRED)
+    @JsonProperty("isAuthorized")
     private boolean isAuthorized;
 }

@@ -51,7 +51,7 @@ public class VotePostMapper {
     /**
      * VotePost를 요약 응답 DTO로 변환 (목록 조회용)
      */
-    public VotePostSummaryResponse toSummaryResponse(VotePost votePost, long commentCount, long likeCount, Boolean isLiked) {
+    public VotePostSummaryResponse toSummaryResponse(VotePost votePost, long commentCount, long likeCount, Boolean isLiked, Boolean hasVoted) {
         // 투표 옵션 미리보기 (최대 3개)
         List<VoteOptionResponse> voteOptions = votePost.getVoteOptions().stream()
                 .limit(3)
@@ -68,16 +68,23 @@ public class VotePostMapper {
                         .orElse(null);
         int imageCount = images.size();
 
+        // 내용 미리보기 생성 (100자 제한)
+        String contentPreview = votePost.getContent() != null && votePost.getContent().length() > 100
+                ? votePost.getContent().substring(0, 100) + "..."
+                : votePost.getContent();
+
         return VotePostSummaryResponse.builder()
                 .id(votePost.getId())
                 .author(userMapper.toUserSummary(votePost.getUser()))
                 .category(votePost.getCategory())
                 .title(votePost.getTitle())
+                .contentPreview(contentPreview)
                 .thumbnailUrl(thumbnailUrl)
                 .imageCount(imageCount)
                 .viewCount(votePost.getViewCount())
                 .commentCount(commentCount)
                 .totalVotes(votePost.getTotalVotes())
+                .hasVoted(hasVoted)
                 .voteStatus(votePost.getVoteStatus())
                 .endTime(votePost.getEndTime())
                 .allowRevote(votePost.isAllowRevote())
@@ -114,6 +121,11 @@ public class VotePostMapper {
                         .toList() :
                 List.of();
 
+        // 투표 참여 여부 계산
+        Boolean hasVoted = userId != null
+                ? (userVoteResults != null && !userVoteResults.isEmpty())
+                : null;
+
         // 이미지 정보 목록 추출
         List<VotePostDetailResponse.ImageInfo> images = votePost.getImages().stream()
                 .sorted((img1, img2) -> Integer.compare(img1.getSequence(), img2.getSequence()))
@@ -134,6 +146,7 @@ public class VotePostMapper {
                 .voteOptions(votePost.getVoteOptions().stream()
                         .map(option -> toVoteOptionResponse(option, votePost.getTotalVotes()))
                         .toList())
+                .hasVoted(hasVoted)
                 .selectedOptionIds(selectedOptionIds)
                 .totalVotes(votePost.getTotalVotes())
                 .voteStatus(votePost.getVoteStatus())

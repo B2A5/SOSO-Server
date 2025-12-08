@@ -201,12 +201,42 @@ class VoteboardIntegrationTest {
     @DisplayName("투표 게시글 목록 조회 성공")
     void getVotePostList_Success() throws Exception {
         // when & then
-        mockMvc.perform(get("/community/votesboard")
+        String response = mockMvc.perform(get("/community/votesboard")
                         .param("size", "20"))
+                .andDo(print())  // 응답 출력
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.posts").isArray())
                 .andExpect(jsonPath("$.hasNext").exists())
-                .andExpect(jsonPath("$.size").exists());
+                .andExpect(jsonPath("$.size").exists())
+                .andReturn().getResponse().getContentAsString();
+
+        System.out.println("Response: " + response);
+    }
+
+    @Test
+    @DisplayName("투표 게시글 목록 조회 - 인증 사용자 (hasVoted, isLiked 검증)")
+    void getVotePostList_Authenticated() throws Exception {
+        // when & then
+        mockMvc.perform(get("/community/votesboard")
+                        .param("size", "20")
+                        .with(SecurityMockMvcRequestPostProcessors.user(testUserDetails)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.posts").isArray())
+                .andExpect(jsonPath("$.totalCount").exists())
+                .andExpect(jsonPath("$.isAuthorized").value(true));
+    }
+
+    @Test
+    @DisplayName("투표 게시글 목록 조회 - 비인증 사용자 (hasVoted, isLiked null 검증)")
+    void getVotePostList_Unauthenticated() throws Exception {
+        // when & then
+        mockMvc.perform(get("/community/votesboard")
+                        .param("size", "20"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.isAuthorized").value(false))
+                .andExpect(jsonPath("$.totalCount").exists());
     }
 
     @Test

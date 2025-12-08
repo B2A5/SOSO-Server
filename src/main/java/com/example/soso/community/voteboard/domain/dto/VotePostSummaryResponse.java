@@ -36,6 +36,9 @@ public class VotePostSummaryResponse {
     @Schema(description = "게시글 제목", example = "우리 동네 카페 선호도 조사", requiredMode = Schema.RequiredMode.REQUIRED)
     private String title;
 
+    @Schema(description = "내용 미리보기 (100자 제한)", example = "여러분이 가장 좋아하는 카페 스타일은 무엇인가요? 조용한 분위기, 활기찬 분위기...", requiredMode = Schema.RequiredMode.REQUIRED)
+    private String contentPreview;
+
     @Schema(description = "첫 번째 이미지 URL (썸네일용)", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
     private String thumbnailUrl;
 
@@ -50,6 +53,14 @@ public class VotePostSummaryResponse {
 
     @Schema(description = "총 투표 참여자 수", example = "89", requiredMode = Schema.RequiredMode.REQUIRED)
     private int totalVotes;
+
+    @Schema(
+        description = "현재 사용자의 투표 참여 여부 (비인증 사용자인 경우 null, 참여하지 않은 경우 false, 참여한 경우 true)",
+        example = "true",
+        requiredMode = Schema.RequiredMode.REQUIRED,
+        nullable = true
+    )
+    private Boolean hasVoted;
 
     @Schema(description = "투표 상태 (IN_PROGRESS: 진행중, COMPLETED: 완료)", example = "IN_PROGRESS", requiredMode = Schema.RequiredMode.REQUIRED)
     private VoteStatus voteStatus;

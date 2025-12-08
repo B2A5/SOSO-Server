@@ -142,6 +142,7 @@ public class VotePostServiceImpl implements VotePostService {
         boolean isAuthorized = userId != null;
 
         // DTO 변환
+        Users user = userId != null ? findUserById(userId) : null;
         List<VotePostSummaryResponse> summaries = posts.stream()
                 .map(post -> {
                     long commentCount = commentRepository.countByPostId(post.getId());
@@ -149,7 +150,10 @@ public class VotePostServiceImpl implements VotePostService {
                     Boolean isLiked = userId != null
                         ? votePostLikeRepository.existsByVotePostIdAndUserId(post.getId(), userId)
                         : null;
-                    return votePostMapper.toSummaryResponse(post, commentCount, likeCount, isLiked);
+                    Boolean hasVoted = userId != null
+                        ? voteResultRepository.existsByUserAndVotePost(user, post)
+                        : null;
+                    return votePostMapper.toSummaryResponse(post, commentCount, likeCount, isLiked, hasVoted);
                 })
                 .toList();
 
