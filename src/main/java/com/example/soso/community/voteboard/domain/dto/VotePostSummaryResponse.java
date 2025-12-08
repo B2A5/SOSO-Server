@@ -3,10 +3,13 @@ package com.example.soso.community.voteboard.domain.dto;
 import com.example.soso.community.common.post.domain.entity.Category;
 import com.example.soso.community.voteboard.domain.entity.VoteStatus;
 import com.example.soso.community.common.post.domain.dto.UserSummaryResponse;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -14,9 +17,11 @@ import java.util.List;
 /**
  * 투표 게시글 요약 응답 DTO (목록 조회용)
  */
-@Getter
-@Builder
 @Schema(description = "투표 게시글 요약 정보 (목록 조회)")
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class VotePostSummaryResponse {
 
     @Schema(description = "게시글 ID", example = "1", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -64,13 +69,24 @@ public class VotePostSummaryResponse {
     @Schema(description = "좋아요 수", example = "23", requiredMode = Schema.RequiredMode.REQUIRED)
     private long likeCount;
 
-    @Schema(description = "현재 사용자의 좋아요 여부 (비로그인 시 false)", example = "false", requiredMode = Schema.RequiredMode.REQUIRED)
+    @Schema(
+        description = "현재 사용자의 좋아요 여부 (비인증 사용자인 경우 null)",
+        example = "false",
+        requiredMode = Schema.RequiredMode.REQUIRED,
+        nullable = true
+    )
     @JsonProperty("isLiked")
-    private boolean isLiked;
+    private Boolean isLiked;
 
     @Schema(description = "생성일시", example = "2024-01-01T10:00:00", requiredMode = Schema.RequiredMode.REQUIRED)
     private LocalDateTime createdDate;
 
     @Schema(description = "수정일시", example = "2024-01-02T15:30:00", requiredMode = Schema.RequiredMode.REQUIRED)
     private LocalDateTime lastModifiedDate;
+
+    // Lombok @Getter가 생성하는 isLiked() 메서드를 Jackson이 "liked"로 직렬화하는 것을 방지
+    @JsonIgnore
+    public Boolean isLiked() {
+        return isLiked;
+    }
 }

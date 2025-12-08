@@ -127,17 +127,33 @@ public class VotePostServiceImpl implements VotePostService {
                 ? String.valueOf(posts.get(posts.size() - 1).getId())
                 : null;
 
+        // 총 게시글 수 조회 (상태별)
+        LocalDateTime now = LocalDateTime.now();
+        long totalCount;
+        if (status == null) {
+            totalCount = votePostRepository.countByDeletedFalse();
+        } else if (status == VoteStatus.IN_PROGRESS) {
+            totalCount = votePostRepository.countInProgress(now);
+        } else {
+            totalCount = votePostRepository.countCompleted(now);
+        }
+
+        // 사용자 인증 여부 확인
+        boolean isAuthorized = userId != null;
+
         // DTO 변환
         List<VotePostSummaryResponse> summaries = posts.stream()
                 .map(post -> {
                     long commentCount = commentRepository.countByPostId(post.getId());
                     long likeCount = votePostLikeRepository.countByVotePostId(post.getId());
-                    boolean isLiked = userId != null && votePostLikeRepository.existsByVotePostIdAndUserId(post.getId(), userId);
+                    Boolean isLiked = userId != null
+                        ? votePostLikeRepository.existsByVotePostIdAndUserId(post.getId(), userId)
+                        : null;
                     return votePostMapper.toSummaryResponse(post, commentCount, likeCount, isLiked);
                 })
                 .toList();
 
-        return votePostMapper.toListResponse(summaries, nextCursor, hasNext);
+        return votePostMapper.toListResponse(summaries, nextCursor, hasNext, totalCount, isAuthorized);
     }
 
     @Override

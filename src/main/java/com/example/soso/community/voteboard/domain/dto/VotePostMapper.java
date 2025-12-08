@@ -51,7 +51,7 @@ public class VotePostMapper {
     /**
      * VotePost를 요약 응답 DTO로 변환 (목록 조회용)
      */
-    public VotePostSummaryResponse toSummaryResponse(VotePost votePost, long commentCount, long likeCount, boolean isLiked) {
+    public VotePostSummaryResponse toSummaryResponse(VotePost votePost, long commentCount, long likeCount, Boolean isLiked) {
         // 투표 옵션 미리보기 (최대 3개)
         List<VoteOptionResponse> voteOptions = votePost.getVoteOptions().stream()
                 .limit(3)
@@ -172,13 +172,17 @@ public class VotePostMapper {
     public VotePostListResponse toListResponse(
             List<VotePostSummaryResponse> posts,
             String nextCursor,
-            boolean hasNext
+            boolean hasNext,
+            long totalCount,
+            boolean isAuthorized
     ) {
         return VotePostListResponse.builder()
                 .posts(posts)
-                .nextCursor(nextCursor)
                 .hasNext(hasNext)
+                .nextCursor(nextCursor)
                 .size(posts.size())
+                .totalCount(totalCount)
+                .isAuthorized(isAuthorized)
                 .build();
     }
 }
