@@ -56,7 +56,7 @@ public class VoteboardController {
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     content = @Content(
                             mediaType = MediaType.MULTIPART_FORM_DATA_VALUE,
-                            schema = @Schema(implementation = VotePostCreateRequest.class)
+                            schema = @Schema(implementation = VoteboardCreateRequest.class)
                     )
             )
     )
@@ -66,10 +66,10 @@ public class VoteboardController {
                     description = "투표 게시글 작성 성공",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = VotePostIdResponse.class),
+                            schema = @Schema(implementation = VoteboardCreateResponse.class),
                             examples = @ExampleObject(
                                     name = "성공 응답",
-                                    value = "{\"votesboardId\": 1}"
+                                    value = "{\"postId\": 1}"
                             )
                     )
             ),
@@ -112,13 +112,13 @@ public class VoteboardController {
                     )
             )
     })
-    public ResponseEntity<VotePostIdResponse> createVotePost(
-            @ModelAttribute @Valid VotePostCreateRequest request,
+    public ResponseEntity<VoteboardCreateResponse> createVotePost(
+            @ModelAttribute @Valid VoteboardCreateRequest request,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
         Long votesboardId = votePostService.createVotePost(request, userDetails.getUser().getId());
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(new VotePostIdResponse(votesboardId));
+                .body(new VoteboardCreateResponse(votesboardId));
     }
 
     @GetMapping("/{votesboardId}")
@@ -157,23 +157,23 @@ public class VoteboardController {
                     description = "투표 게시글 조회 성공",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = VotePostDetailResponse.class),
+                            schema = @Schema(implementation = VoteboardDetailResponse.class),
                             examples = {
                                     @ExampleObject(
                                             name = "인증 사용자 (본인 작성, 투표 전)",
-                                            value = "{\"id\":1,\"author\":{\"userId\":\"author123\",\"nickname\":\"작성자\",\"address\":\"서울시 강남구\",\"profileImageUrl\":\"https://cdn.example.com/profile.jpg\",\"userType\":\"INHABITANT\"},\"category\":\"restaurant\",\"title\":\"우리 동네 카페 선호도 조사\",\"content\":\"여러분이 가장 좋아하는 카페 스타일은 무엇인가요?\",\"images\":[{\"imageId\":1,\"imageUrl\":\"https://cdn.example.com/vote1.jpg\",\"sequence\":0}],\"voteOptions\":[{\"id\":1,\"content\":\"조용한 분위기\",\"sequence\":0,\"voteCount\":15,\"percentage\":37.5},{\"id\":2,\"content\":\"활기찬 분위기\",\"sequence\":1,\"voteCount\":10,\"percentage\":25.0},{\"id\":3,\"content\":\"작업하기 좋은 곳\",\"sequence\":2,\"voteCount\":15,\"percentage\":37.5}],\"selectedOptionIds\":[],\"totalVotes\":40,\"voteStatus\":\"IN_PROGRESS\",\"endTime\":\"2025-12-31T23:59:59\",\"allowRevote\":true,\"allowMultipleChoice\":false,\"viewCount\":120,\"commentCount\":5,\"likeCount\":8,\"isLiked\":false,\"isAuthorized\":true,\"isAuthor\":true,\"canEdit\":true,\"canDelete\":true,\"createdDate\":\"2025-01-01T10:00:00\",\"lastModifiedDate\":\"2025-01-01T10:00:00\"}"
+                                            value = "{\"postId\":1,\"author\":{\"userId\":\"author123\",\"nickname\":\"작성자\",\"address\":\"서울시 강남구\",\"profileImageUrl\":\"https://cdn.example.com/profile.jpg\",\"userType\":\"INHABITANT\"},\"category\":\"restaurant\",\"title\":\"우리 동네 카페 선호도 조사\",\"content\":\"여러분이 가장 좋아하는 카페 스타일은 무엇인가요?\",\"images\":[{\"imageId\":1,\"imageUrl\":\"https://cdn.example.com/vote1.jpg\",\"sequence\":0}],\"voteOptions\":[{\"id\":1,\"content\":\"조용한 분위기\",\"sequence\":0,\"voteCount\":15,\"percentage\":37.5},{\"id\":2,\"content\":\"활기찬 분위기\",\"sequence\":1,\"voteCount\":10,\"percentage\":25.0},{\"id\":3,\"content\":\"작업하기 좋은 곳\",\"sequence\":2,\"voteCount\":15,\"percentage\":37.5}],\"selectedOptionIds\":[],\"totalVotes\":40,\"voteStatus\":\"IN_PROGRESS\",\"endTime\":\"2025-12-31T23:59:59\",\"allowRevote\":true,\"allowMultipleChoice\":false,\"viewCount\":120,\"commentCount\":5,\"likeCount\":8,\"isLiked\":false,\"isAuthorized\":true,\"isAuthor\":true,\"canEdit\":true,\"canDelete\":true,\"createdDate\":\"2025-01-01T10:00:00\",\"lastModifiedDate\":\"2025-01-01T10:00:00\"}"
                                     ),
                                     @ExampleObject(
                                             name = "인증 사용자 (다른 사람 글, 투표 완료)",
-                                            value = "{\"id\":2,\"author\":{\"userId\":\"other-user\",\"nickname\":\"다른사용자\",\"address\":\"서울시 서초구\",\"profileImageUrl\":\"https://cdn.example.com/profile2.jpg\",\"userType\":\"FOUNDER\"},\"category\":\"startup\",\"title\":\"스타트업 근무 환경 선호도\",\"content\":\"어떤 근무 환경을 선호하시나요? (복수 선택 가능)\",\"images\":[],\"voteOptions\":[{\"id\":4,\"content\":\"재택근무\",\"sequence\":0,\"voteCount\":25,\"percentage\":50.0},{\"id\":5,\"content\":\"사무실 근무\",\"sequence\":1,\"voteCount\":15,\"percentage\":30.0},{\"id\":6,\"content\":\"하이브리드\",\"sequence\":2,\"voteCount\":10,\"percentage\":20.0}],\"selectedOptionIds\":[4,6],\"totalVotes\":50,\"voteStatus\":\"IN_PROGRESS\",\"endTime\":\"2025-06-30T23:59:59\",\"allowRevote\":true,\"allowMultipleChoice\":true,\"viewCount\":350,\"commentCount\":25,\"likeCount\":42,\"isLiked\":true,\"isAuthorized\":true,\"isAuthor\":false,\"canEdit\":false,\"canDelete\":false,\"createdDate\":\"2025-01-05T14:00:00\",\"lastModifiedDate\":\"2025-01-05T14:00:00\"}"
+                                            value = "{\"postId\":2,\"author\":{\"userId\":\"other-user\",\"nickname\":\"다른사용자\",\"address\":\"서울시 서초구\",\"profileImageUrl\":\"https://cdn.example.com/profile2.jpg\",\"userType\":\"FOUNDER\"},\"category\":\"startup\",\"title\":\"스타트업 근무 환경 선호도\",\"content\":\"어떤 근무 환경을 선호하시나요? (복수 선택 가능)\",\"images\":[],\"voteOptions\":[{\"id\":4,\"content\":\"재택근무\",\"sequence\":0,\"voteCount\":25,\"percentage\":50.0},{\"id\":5,\"content\":\"사무실 근무\",\"sequence\":1,\"voteCount\":15,\"percentage\":30.0},{\"id\":6,\"content\":\"하이브리드\",\"sequence\":2,\"voteCount\":10,\"percentage\":20.0}],\"selectedOptionIds\":[4,6],\"totalVotes\":50,\"voteStatus\":\"IN_PROGRESS\",\"endTime\":\"2025-06-30T23:59:59\",\"allowRevote\":true,\"allowMultipleChoice\":true,\"viewCount\":350,\"commentCount\":25,\"likeCount\":42,\"isLiked\":true,\"isAuthorized\":true,\"isAuthor\":false,\"canEdit\":false,\"canDelete\":false,\"createdDate\":\"2025-01-05T14:00:00\",\"lastModifiedDate\":\"2025-01-05T14:00:00\"}"
                                     ),
                                     @ExampleObject(
                                             name = "비인증 사용자",
-                                            value = "{\"id\":1,\"author\":{\"userId\":\"author123\",\"nickname\":\"작성자\",\"address\":\"서울시 강남구\",\"profileImageUrl\":\"https://cdn.example.com/profile.jpg\",\"userType\":\"INHABITANT\"},\"category\":\"restaurant\",\"title\":\"우리 동네 카페 선호도 조사\",\"content\":\"여러분이 가장 좋아하는 카페 스타일은 무엇인가요?\",\"images\":[],\"voteOptions\":[{\"id\":1,\"content\":\"조용한 분위기\",\"sequence\":0,\"voteCount\":15,\"percentage\":37.5},{\"id\":2,\"content\":\"활기찬 분위기\",\"sequence\":1,\"voteCount\":10,\"percentage\":25.0},{\"id\":3,\"content\":\"작업하기 좋은 곳\",\"sequence\":2,\"voteCount\":15,\"percentage\":37.5}],\"selectedOptionIds\":[],\"totalVotes\":40,\"voteStatus\":\"IN_PROGRESS\",\"endTime\":\"2025-12-31T23:59:59\",\"allowRevote\":true,\"allowMultipleChoice\":false,\"viewCount\":120,\"commentCount\":5,\"likeCount\":8,\"isLiked\":null,\"isAuthorized\":false,\"isAuthor\":false,\"canEdit\":null,\"canDelete\":null,\"createdDate\":\"2025-01-01T10:00:00\",\"lastModifiedDate\":\"2025-01-01T10:00:00\"}"
+                                            value = "{\"postId\":1,\"author\":{\"userId\":\"author123\",\"nickname\":\"작성자\",\"address\":\"서울시 강남구\",\"profileImageUrl\":\"https://cdn.example.com/profile.jpg\",\"userType\":\"INHABITANT\"},\"category\":\"restaurant\",\"title\":\"우리 동네 카페 선호도 조사\",\"content\":\"여러분이 가장 좋아하는 카페 스타일은 무엇인가요?\",\"images\":[],\"voteOptions\":[{\"id\":1,\"content\":\"조용한 분위기\",\"sequence\":0,\"voteCount\":15,\"percentage\":37.5},{\"id\":2,\"content\":\"활기찬 분위기\",\"sequence\":1,\"voteCount\":10,\"percentage\":25.0},{\"id\":3,\"content\":\"작업하기 좋은 곳\",\"sequence\":2,\"voteCount\":15,\"percentage\":37.5}],\"selectedOptionIds\":[],\"totalVotes\":40,\"voteStatus\":\"IN_PROGRESS\",\"endTime\":\"2025-12-31T23:59:59\",\"allowRevote\":true,\"allowMultipleChoice\":false,\"viewCount\":120,\"commentCount\":5,\"likeCount\":8,\"isLiked\":null,\"isAuthorized\":false,\"isAuthor\":false,\"canEdit\":null,\"canDelete\":null,\"createdDate\":\"2025-01-01T10:00:00\",\"lastModifiedDate\":\"2025-01-01T10:00:00\"}"
                                     ),
                                     @ExampleObject(
                                             name = "투표 완료된 게시글",
-                                            value = "{\"id\":3,\"author\":{\"userId\":\"poll-master\",\"nickname\":\"투표왕\",\"address\":\"서울시 송파구\",\"profileImageUrl\":null,\"userType\":\"INHABITANT\"},\"category\":\"neighborhood-news\",\"title\":\"동네 축제 개최 시기 투표\",\"content\":\"언제 축제를 개최하면 좋을까요?\",\"images\":[],\"voteOptions\":[{\"id\":7,\"content\":\"봄 (3-5월)\",\"sequence\":0,\"voteCount\":30,\"percentage\":30.0},{\"id\":8,\"content\":\"여름 (6-8월)\",\"sequence\":1,\"voteCount\":20,\"percentage\":20.0},{\"id\":9,\"content\":\"가을 (9-11월)\",\"sequence\":2,\"voteCount\":50,\"percentage\":50.0}],\"selectedOptionIds\":[9],\"totalVotes\":100,\"voteStatus\":\"COMPLETED\",\"endTime\":\"2025-01-10T23:59:59\",\"allowRevote\":false,\"allowMultipleChoice\":false,\"viewCount\":500,\"commentCount\":35,\"likeCount\":65,\"isLiked\":false,\"isAuthorized\":true,\"isAuthor\":false,\"canEdit\":false,\"canDelete\":false,\"createdDate\":\"2025-01-01T09:00:00\",\"lastModifiedDate\":\"2025-01-01T09:00:00\"}"
+                                            value = "{\"postId\":3,\"author\":{\"userId\":\"poll-master\",\"nickname\":\"투표왕\",\"address\":\"서울시 송파구\",\"profileImageUrl\":null,\"userType\":\"INHABITANT\"},\"category\":\"neighborhood-news\",\"title\":\"동네 축제 개최 시기 투표\",\"content\":\"언제 축제를 개최하면 좋을까요?\",\"images\":[],\"voteOptions\":[{\"id\":7,\"content\":\"봄 (3-5월)\",\"sequence\":0,\"voteCount\":30,\"percentage\":30.0},{\"id\":8,\"content\":\"여름 (6-8월)\",\"sequence\":1,\"voteCount\":20,\"percentage\":20.0},{\"id\":9,\"content\":\"가을 (9-11월)\",\"sequence\":2,\"voteCount\":50,\"percentage\":50.0}],\"selectedOptionIds\":[9],\"totalVotes\":100,\"voteStatus\":\"COMPLETED\",\"endTime\":\"2025-01-10T23:59:59\",\"allowRevote\":false,\"allowMultipleChoice\":false,\"viewCount\":500,\"commentCount\":35,\"likeCount\":65,\"isLiked\":false,\"isAuthorized\":true,\"isAuthor\":false,\"canEdit\":false,\"canDelete\":false,\"createdDate\":\"2025-01-01T09:00:00\",\"lastModifiedDate\":\"2025-01-01T09:00:00\"}"
                                     )
                             }
                     )
@@ -188,13 +188,13 @@ public class VoteboardController {
                     )
             )
     })
-    public ResponseEntity<VotePostDetailResponse> getVotePost(
+    public ResponseEntity<VoteboardDetailResponse> getVotePost(
             @Parameter(description = "투표 게시글 ID", required = true)
             @PathVariable Long votesboardId,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
         String userId = userDetails != null ? userDetails.getUser().getId() : null;
-        VotePostDetailResponse response = votePostService.getVotePost(votesboardId, userId);
+        VoteboardDetailResponse response = votePostService.getVotePost(votesboardId, userId);
         return ResponseEntity.ok(response);
     }
 
@@ -229,7 +229,7 @@ public class VoteboardController {
                     description = "투표 게시글 목록 조회 성공",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = VotePostListResponse.class)
+                            schema = @Schema(implementation = VoteboardCursorResponse.class)
                     )
             ),
             @ApiResponse(
@@ -244,7 +244,7 @@ public class VoteboardController {
                     )
             )
     })
-    public ResponseEntity<VotePostListResponse> getVotePostList(
+    public ResponseEntity<VoteboardCursorResponse> getVotePostList(
             @Parameter(description = "투표 상태 (IN_PROGRESS: 진행중, COMPLETED: 완료, null: 전체)")
             @RequestParam(required = false) VoteStatus status,
             @Parameter(
@@ -275,7 +275,7 @@ public class VoteboardController {
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
         String userId = userDetails != null ? userDetails.getUser().getId() : null;
-        VotePostListResponse response = votePostService.getVotePostsByCursor(status, sort, size, cursor, userId);
+        VoteboardCursorResponse response = votePostService.getVotePostsByCursor(status, sort, size, cursor, userId);
         return ResponseEntity.ok(response);
     }
 
@@ -297,7 +297,7 @@ public class VoteboardController {
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     content = @Content(
                             mediaType = MediaType.MULTIPART_FORM_DATA_VALUE,
-                            schema = @Schema(implementation = VotePostUpdateRequest.class)
+                            schema = @Schema(implementation = VoteboardUpdateRequest.class)
                     )
             )
     )
@@ -328,7 +328,7 @@ public class VoteboardController {
     public ResponseEntity<Void> updateVotePost(
             @Parameter(description = "투표 게시글 ID", required = true)
             @PathVariable Long votesboardId,
-            @ModelAttribute @Valid VotePostUpdateRequest request,
+            @ModelAttribute @Valid VoteboardUpdateRequest request,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
         votePostService.updateVotePost(votesboardId, request, userDetails.getUser().getId());

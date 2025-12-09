@@ -10,17 +10,17 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 /**
- * 투표 게시글 목록 응답 DTO (커서 기반 페이지네이션)
+ * 투표 게시판 커서 기반 목록 조회 응답
  */
-@Schema(description = "투표 게시글 목록 응답 (커서 기반 페이지네이션)")
+@Schema(description = "투표 게시판 커서 기반 목록 조회 응답")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class VotePostListResponse {
+public class VoteboardCursorResponse {
 
     @Schema(description = "투표 게시글 목록", requiredMode = Schema.RequiredMode.REQUIRED)
-    private List<VotePostSummaryResponse> posts;
+    private List<VoteboardSummary> posts;
 
     @Schema(description = "다음 페이지 존재 여부", example = "true", requiredMode = Schema.RequiredMode.REQUIRED)
     private boolean hasNext;

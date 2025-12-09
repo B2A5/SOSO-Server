@@ -1,6 +1,6 @@
 package com.example.soso.community.voteboard.service;
 
-import com.example.soso.community.common.comment.domain.repository.CommentRepository;
+import com.example.soso.community.voteboard.comment.domain.repository.VoteboardCommentRepository;
 import com.example.soso.community.voteboard.domain.dto.*;
 import com.example.soso.community.voteboard.dto.VoteboardSortType;
 import com.example.soso.community.voteboard.domain.entity.VoteOption;
@@ -43,14 +43,14 @@ public class VotePostServiceImpl implements VotePostService {
     private final VoteOptionRepository voteOptionRepository;
     private final VoteResultRepository voteResultRepository;
     private final UsersRepository usersRepository;
-    private final CommentRepository commentRepository;
+    private final VoteboardCommentRepository voteboardCommentRepository;
     private final VotePostLikeRepository votePostLikeRepository;
-    private final VotePostMapper votePostMapper;
+    private final VoteboardMapper votePostMapper;
     private final ImageUploadService imageUploadService;
 
     @Override
     @Transactional
-    public Long createVotePost(VotePostCreateRequest request, String userId) {
+    public Long createVotePost(VoteboardCreateRequest request, String userId) {
         log.info("투표 게시글 작성 시작: userId={}, optionCount={}, imageCount={}",
                 userId, request.getVoteOptions().size(),
                 request.getImages() != null ? request.getImages().size() : 0);
@@ -72,7 +72,7 @@ public class VotePostServiceImpl implements VotePostService {
 
     @Override
     @Transactional
-    public VotePostDetailResponse getVotePost(Long postId, String userId) {
+    public VoteboardDetailResponse getVotePost(Long postId, String userId) {
         log.debug("투표 게시글 조회: postId={}, userId={}", postId, userId);
 
         VotePost votePost = findVotePostById(postId);
@@ -81,7 +81,7 @@ public class VotePostServiceImpl implements VotePostService {
         votePost.increaseViewCount();
 
         // 댓글 수 조회
-        long commentCount = commentRepository.countByPostId(postId);
+        long commentCount = voteboardCommentRepository.countByVotePostId(postId);
 
         // 좋아요 수 조회
         long likeCount = votePostLikeRepository.countByVotePostId(postId);
@@ -99,7 +99,7 @@ public class VotePostServiceImpl implements VotePostService {
     }
 
     @Override
-    public VotePostListResponse getVotePostsByCursor(VoteStatus status, VoteboardSortType sort, int size, String cursor, String userId) {
+    public VoteboardCursorResponse getVotePostsByCursor(VoteStatus status, VoteboardSortType sort, int size, String cursor, String userId) {
         log.debug("투표 게시글 목록 조회: status={}, sort={}, size={}, cursor={}, userId={}", status, sort, size, cursor, userId);
 
         // String cursor를 Long으로 파싱
@@ -143,9 +143,9 @@ public class VotePostServiceImpl implements VotePostService {
 
         // DTO 변환
         Users user = userId != null ? findUserById(userId) : null;
-        List<VotePostSummaryResponse> summaries = posts.stream()
+        List<VoteboardSummary> summaries = posts.stream()
                 .map(post -> {
-                    long commentCount = commentRepository.countByPostId(post.getId());
+                    long commentCount = voteboardCommentRepository.countByVotePostId(post.getId());
                     long likeCount = votePostLikeRepository.countByVotePostId(post.getId());
                     Boolean isLiked = userId != null
                         ? votePostLikeRepository.existsByVotePostIdAndUserId(post.getId(), userId)
@@ -162,7 +162,7 @@ public class VotePostServiceImpl implements VotePostService {
 
     @Override
     @Transactional
-    public void updateVotePost(Long postId, VotePostUpdateRequest request, String userId) {
+    public void updateVotePost(Long postId, VoteboardUpdateRequest request, String userId) {
         log.info("투표 게시글 수정 시작: postId={}, userId={}", postId, userId);
 
         VotePost votePost = findVotePostById(postId);

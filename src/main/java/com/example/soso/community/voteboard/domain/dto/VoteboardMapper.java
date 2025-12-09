@@ -12,18 +12,18 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 /**
- * 투표 게시글 매퍼
+ * 투표 게시판 매퍼
  */
 @Component
 @RequiredArgsConstructor
-public class VotePostMapper {
+public class VoteboardMapper {
 
     private final UserMapper userMapper;
 
     /**
      * 생성 요청 DTO를 VotePost 엔티티로 변환
      */
-    public VotePost toEntity(VotePostCreateRequest request, Users user) {
+    public VotePost toEntity(VoteboardCreateRequest request, Users user) {
         VotePost votePost = VotePost.create(
                 user,
                 request.getTitle(),
@@ -51,7 +51,7 @@ public class VotePostMapper {
     /**
      * VotePost를 요약 응답 DTO로 변환 (목록 조회용)
      */
-    public VotePostSummaryResponse toSummaryResponse(VotePost votePost, long commentCount, long likeCount, Boolean isLiked, Boolean hasVoted) {
+    public VoteboardSummary toSummaryResponse(VotePost votePost, long commentCount, long likeCount, Boolean isLiked, Boolean hasVoted) {
         // 투표 옵션 미리보기 (최대 3개)
         List<VoteOptionResponse> voteOptions = votePost.getVoteOptions().stream()
                 .limit(3)
@@ -73,8 +73,8 @@ public class VotePostMapper {
                 ? votePost.getContent().substring(0, 100) + "..."
                 : votePost.getContent();
 
-        return VotePostSummaryResponse.builder()
-                .id(votePost.getId())
+        return VoteboardSummary.builder()
+                .postId(votePost.getId())
                 .author(userMapper.toUserSummary(votePost.getUser()))
                 .category(votePost.getCategory())
                 .title(votePost.getTitle())
@@ -100,7 +100,7 @@ public class VotePostMapper {
     /**
      * VotePost를 상세 응답 DTO로 변환
      */
-    public VotePostDetailResponse toDetailResponse(
+    public VoteboardDetailResponse toDetailResponse(
             VotePost votePost,
             long commentCount,
             List<VoteResult> userVoteResults,
@@ -127,17 +127,17 @@ public class VotePostMapper {
                 : null;
 
         // 이미지 정보 목록 추출
-        List<VotePostDetailResponse.ImageInfo> images = votePost.getImages().stream()
+        List<VoteboardDetailResponse.ImageInfo> images = votePost.getImages().stream()
                 .sorted((img1, img2) -> Integer.compare(img1.getSequence(), img2.getSequence()))
-                .map(img -> VotePostDetailResponse.ImageInfo.builder()
+                .map(img -> VoteboardDetailResponse.ImageInfo.builder()
                         .imageId(img.getId())
                         .imageUrl(img.getImageUrl())
                         .sequence(img.getSequence())
                         .build())
                 .toList();
 
-        return VotePostDetailResponse.builder()
-                .id(votePost.getId())
+        return VoteboardDetailResponse.builder()
+                .postId(votePost.getId())
                 .author(userMapper.toUserSummary(votePost.getUser()))
                 .category(votePost.getCategory())
                 .title(votePost.getTitle())
@@ -182,14 +182,14 @@ public class VotePostMapper {
     /**
      * 목록 응답 생성
      */
-    public VotePostListResponse toListResponse(
-            List<VotePostSummaryResponse> posts,
+    public VoteboardCursorResponse toListResponse(
+            List<VoteboardSummary> posts,
             String nextCursor,
             boolean hasNext,
             long totalCount,
             boolean isAuthorized
     ) {
-        return VotePostListResponse.builder()
+        return VoteboardCursorResponse.builder()
                 .posts(posts)
                 .hasNext(hasNext)
                 .nextCursor(nextCursor)

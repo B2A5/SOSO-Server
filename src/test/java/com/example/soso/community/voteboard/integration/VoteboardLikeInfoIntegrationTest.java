@@ -89,7 +89,7 @@ class VoteboardLikeInfoIntegrationTest {
         mockMvc.perform(get("/community/votesboard/" + votePostId)
                         .with(SecurityMockMvcRequestPostProcessors.user(testUserDetails)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(votePostId))
+                .andExpect(jsonPath("$.postId").value(votePostId))
                 .andExpect(jsonPath("$.likeCount").value(0))
                 .andExpect(jsonPath("$.isLiked").value(false));
     }
@@ -114,7 +114,7 @@ class VoteboardLikeInfoIntegrationTest {
         mockMvc.perform(get("/community/votesboard/" + votePostId)
                         .with(SecurityMockMvcRequestPostProcessors.user(testUserDetails)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(votePostId))
+                .andExpect(jsonPath("$.postId").value(votePostId))
                 .andExpect(jsonPath("$.likeCount").value(2))
                 .andExpect(jsonPath("$.isLiked").value(true));
 
@@ -153,15 +153,15 @@ class VoteboardLikeInfoIntegrationTest {
                 .andExpect(jsonPath("$.posts[0].likeCount").exists())
                 .andExpect(jsonPath("$.posts[0].isLiked").exists())
                 // 최신순이므로 votePostId3이 첫 번째
-                .andExpect(jsonPath("$.posts[0].id").value(votePostId3))
+                .andExpect(jsonPath("$.posts[0].postId").value(votePostId3))
                 .andExpect(jsonPath("$.posts[0].likeCount").value(0))
                 .andExpect(jsonPath("$.posts[0].isLiked").value(false))
                 // 두 번째는 votePostId2
-                .andExpect(jsonPath("$.posts[1].id").value(votePostId2))
+                .andExpect(jsonPath("$.posts[1].postId").value(votePostId2))
                 .andExpect(jsonPath("$.posts[1].likeCount").value(1))
                 .andExpect(jsonPath("$.posts[1].isLiked").value(true))
                 // 세 번째는 votePostId1
-                .andExpect(jsonPath("$.posts[2].id").value(votePostId1))
+                .andExpect(jsonPath("$.posts[2].postId").value(votePostId1))
                 .andExpect(jsonPath("$.posts[2].likeCount").value(2))
                 .andExpect(jsonPath("$.posts[2].isLiked").value(true));
     }
@@ -231,6 +231,6 @@ class VoteboardLikeInfoIntegrationTest {
                 .andReturn();
 
         String responseJson = result.getResponse().getContentAsString();
-        return objectMapper.readTree(responseJson).get("votesboardId").asLong();
+        return objectMapper.readTree(responseJson).get("postId").asLong();
     }
 }

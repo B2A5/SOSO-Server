@@ -266,7 +266,7 @@ class VoteboardCommentIntegrationTest {
                 .andReturn();
 
         String response = result.getResponse().getContentAsString();
-        return objectMapper.readTree(response).get("votesboardId").asLong();
+        return objectMapper.readTree(response).get("postId").asLong();
     }
 
     private Long createComment(Long votePostId, CustomUserDetails userDetails, String content) throws Exception {

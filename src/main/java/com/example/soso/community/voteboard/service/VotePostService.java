@@ -15,7 +15,7 @@ public interface VotePostService {
      * @param userId 작성자 ID
      * @return 생성된 게시글 ID
      */
-    Long createVotePost(VotePostCreateRequest request, String userId);
+    Long createVotePost(VoteboardCreateRequest request, String userId);
 
     /**
      * 투표 게시글 상세 정보를 조회합니다.
@@ -24,7 +24,7 @@ public interface VotePostService {
      * @param userId 조회하는 사용자 ID (null 가능 - 비로그인)
      * @return 투표 게시글 상세 정보
      */
-    VotePostDetailResponse getVotePost(Long postId, String userId);
+    VoteboardDetailResponse getVotePost(Long postId, String userId);
 
     /**
      * 커서 기반으로 투표 게시글 목록을 조회합니다.
@@ -36,7 +36,7 @@ public interface VotePostService {
      * @param userId 조회하는 사용자 ID (null 가능 - 비로그인)
      * @return 게시글 목록과 커서 정보
      */
-    VotePostListResponse getVotePostsByCursor(VoteStatus status, com.example.soso.community.voteboard.dto.VoteboardSortType sort, int size, String cursor, String userId);
+    VoteboardCursorResponse getVotePostsByCursor(VoteStatus status, com.example.soso.community.voteboard.dto.VoteboardSortType sort, int size, String cursor, String userId);
 
     /**
      * 투표 게시글을 수정합니다 (제목, 내용, 이미지, 투표 설정만 가능).
@@ -46,7 +46,7 @@ public interface VotePostService {
      * @param request 수정 요청 데이터
      * @param userId 수정하는 사용자 ID
      */
-    void updateVotePost(Long postId, VotePostUpdateRequest request, String userId);
+    void updateVotePost(Long postId, VoteboardUpdateRequest request, String userId);
 
     /**
      * 투표 게시글을 삭제합니다 (소프트 삭제).

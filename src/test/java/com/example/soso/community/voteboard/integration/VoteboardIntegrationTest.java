@@ -122,7 +122,7 @@ class VoteboardIntegrationTest {
                             .contentType(MediaType.MULTIPART_FORM_DATA))
                     .andDo(print())
                     .andExpect(status().isCreated())
-                    .andExpect(jsonPath("$.votesboardId").exists())
+                    .andExpect(jsonPath("$.postId").exists())
                     .andReturn().getResponse().getContentAsString();
             System.out.println("Success response: " + result);
         } catch (AssertionError e) {
@@ -323,6 +323,6 @@ class VoteboardIntegrationTest {
                         .with(SecurityMockMvcRequestPostProcessors.user(testUserDetails))
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.votesboardId").exists());
+                .andExpect(jsonPath("$.postId").exists());
     }
 }

@@ -15,17 +15,17 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * 투표 게시글 요약 응답 DTO (목록 조회용)
+ * 투표 게시판 게시글 요약 정보
  */
-@Schema(description = "투표 게시글 요약 정보 (목록 조회)")
+@Schema(description = "투표 게시판 게시글 요약 정보")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class VotePostSummaryResponse {
+public class VoteboardSummary {
 
     @Schema(description = "게시글 ID", example = "1", requiredMode = Schema.RequiredMode.REQUIRED)
-    private Long id;
+    private Long postId;
 
     @Schema(description = "작성자 정보", requiredMode = Schema.RequiredMode.REQUIRED)
     private UserSummaryResponse author;

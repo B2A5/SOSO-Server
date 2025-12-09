@@ -87,14 +87,14 @@ class VoteboardVotingIntegrationTest {
                 .getResponse()
                 .getContentAsString();
 
-        return objectMapper.readTree(createResponse).get("votesboardId").asLong();
+        return objectMapper.readTree(createResponse).get("postId").asLong();
     }
 
     @Test
     @DisplayName("투표 게시글 상세 조회 성공")
     void getVotePost_Success() throws Exception {
         // given - 투표 게시글 생성
-        Long votesboardId = createVotePost(
+        Long voteboardId = createVotePost(
                 "점심 메뉴 투표",
                 "오늘 점심 뭐 먹을까요?",
                 Arrays.asList("한식", "중식", "일식"),
@@ -104,9 +104,9 @@ class VoteboardVotingIntegrationTest {
         );
 
         // when & then - 상세 조회
-        mockMvc.perform(get("/community/votesboard/" + votesboardId))
+        mockMvc.perform(get("/community/votesboard/" + voteboardId))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(votesboardId))
+                .andExpect(jsonPath("$.postId").value(voteboardId))
                 .andExpect(jsonPath("$.title").value("점심 메뉴 투표"))
                 .andExpect(jsonPath("$.content").value("오늘 점심 뭐 먹을까요?"))
                 .andExpect(jsonPath("$.voteOptions").isArray())
@@ -126,7 +126,7 @@ class VoteboardVotingIntegrationTest {
     @DisplayName("투표 참여 성공")
     void vote_Success() throws Exception {
         // given - 투표 게시글 생성
-        Long votesboardId = createVotePost(
+        Long voteboardId = createVotePost(
                 "점심 메뉴 투표",
                 "오늘 점심 뭐 먹을까요?",
                 Arrays.asList("한식", "중식"),
@@ -136,7 +136,7 @@ class VoteboardVotingIntegrationTest {
         );
 
         // 상세 조회로 옵션 ID 가져오기
-        String detailResponse = mockMvc.perform(get("/community/votesboard/" + votesboardId))
+        String detailResponse = mockMvc.perform(get("/community/votesboard/" + voteboardId))
                 .andExpect(status().isOk())
                 .andReturn()
                 .getResponse()
@@ -153,14 +153,14 @@ class VoteboardVotingIntegrationTest {
                 .voteOptionIds(Collections.singletonList(optionId))
                 .build();
 
-        mockMvc.perform(post("/community/votesboard/" + votesboardId + "/vote")
+        mockMvc.perform(post("/community/votesboard/" + voteboardId + "/vote")
                         .with(SecurityMockMvcRequestPostProcessors.user(testUserDetails))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(voteRequest)))
                 .andExpect(status().isOk());
 
         // then - 투표 결과 확인
-        mockMvc.perform(get("/community/votesboard/" + votesboardId)
+        mockMvc.perform(get("/community/votesboard/" + voteboardId)
                         .with(SecurityMockMvcRequestPostProcessors.user(testUserDetails)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.totalVotes").value(1))
@@ -174,7 +174,7 @@ class VoteboardVotingIntegrationTest {
     @DisplayName("투표 참여 실패 - 중복 투표")
     void vote_AlreadyVoted() throws Exception {
         // given - 투표 게시글 생성 및 첫 번째 투표
-        Long votesboardId = createVotePost(
+        Long voteboardId = createVotePost(
                 "점심 메뉴 투표",
                 "오늘 점심 뭐 먹을까요?",
                 Arrays.asList("한식", "중식"),
@@ -183,7 +183,7 @@ class VoteboardVotingIntegrationTest {
                 false
         );
 
-        String detailResponse = mockMvc.perform(get("/community/votesboard/" + votesboardId))
+        String detailResponse = mockMvc.perform(get("/community/votesboard/" + voteboardId))
                 .andReturn().getResponse().getContentAsString();
 
         Long optionId = objectMapper.readTree(detailResponse)
@@ -194,14 +194,14 @@ class VoteboardVotingIntegrationTest {
                 .build();
 
         // 첫 번째 투표
-        mockMvc.perform(post("/community/votesboard/" + votesboardId + "/vote")
+        mockMvc.perform(post("/community/votesboard/" + voteboardId + "/vote")
                         .with(SecurityMockMvcRequestPostProcessors.user(testUserDetails))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(voteRequest)))
                 .andExpect(status().isOk());
 
         // when & then - 두 번째 투표 시도 (중복)
-        mockMvc.perform(post("/community/votesboard/" + votesboardId + "/vote")
+        mockMvc.perform(post("/community/votesboard/" + voteboardId + "/vote")
                         .with(SecurityMockMvcRequestPostProcessors.user(testUserDetails))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(voteRequest)))
@@ -212,7 +212,7 @@ class VoteboardVotingIntegrationTest {
     @DisplayName("재투표 성공")
     void changeVote_Success() throws Exception {
         // given - 재투표 허용 게시글 생성 및 첫 번째 투표
-        Long votesboardId = createVotePost(
+        Long voteboardId = createVotePost(
                 "점심 메뉴 투표",
                 "오늘 점심 뭐 먹을까요?",
                 Arrays.asList("한식", "중식", "일식"),
@@ -221,7 +221,7 @@ class VoteboardVotingIntegrationTest {
                 false
         );
 
-        String detailResponse = mockMvc.perform(get("/community/votesboard/" + votesboardId))
+        String detailResponse = mockMvc.perform(get("/community/votesboard/" + voteboardId))
                 .andReturn().getResponse().getContentAsString();
 
         Long option1Id = objectMapper.readTree(detailResponse)
@@ -234,7 +234,7 @@ class VoteboardVotingIntegrationTest {
                 .voteOptionIds(Collections.singletonList(option1Id))
                 .build();
 
-        mockMvc.perform(post("/community/votesboard/" + votesboardId + "/vote")
+        mockMvc.perform(post("/community/votesboard/" + voteboardId + "/vote")
                         .with(SecurityMockMvcRequestPostProcessors.user(testUserDetails))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(firstVote)))
@@ -245,14 +245,14 @@ class VoteboardVotingIntegrationTest {
                 .voteOptionIds(Collections.singletonList(option2Id))
                 .build();
 
-        mockMvc.perform(put("/community/votesboard/" + votesboardId + "/vote")
+        mockMvc.perform(put("/community/votesboard/" + voteboardId + "/vote")
                         .with(SecurityMockMvcRequestPostProcessors.user(testUserDetails))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(changeVote)))
                 .andExpect(status().isOk());
 
         // then - 변경 결과 확인
-        mockMvc.perform(get("/community/votesboard/" + votesboardId)
+        mockMvc.perform(get("/community/votesboard/" + voteboardId)
                         .with(SecurityMockMvcRequestPostProcessors.user(testUserDetails)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.totalVotes").value(1))  // 총 투표수는 그대로
@@ -265,7 +265,7 @@ class VoteboardVotingIntegrationTest {
     @DisplayName("재투표 실패 - 재투표 허용되지 않음")
     void changeVote_NotAllowed() throws Exception {
         // given - 재투표 불허 게시글 생성 및 투표
-        Long votesboardId = createVotePost(
+        Long voteboardId = createVotePost(
                 "점심 메뉴 투표",
                 "오늘 점심 뭐 먹을까요?",
                 Arrays.asList("한식", "중식"),
@@ -274,7 +274,7 @@ class VoteboardVotingIntegrationTest {
                 false
         );
 
-        String detailResponse = mockMvc.perform(get("/community/votesboard/" + votesboardId))
+        String detailResponse = mockMvc.perform(get("/community/votesboard/" + voteboardId))
                 .andReturn().getResponse().getContentAsString();
 
         Long option1Id = objectMapper.readTree(detailResponse)
@@ -283,7 +283,7 @@ class VoteboardVotingIntegrationTest {
                 .get("voteOptions").get(1).get("id").asLong();
 
         // 첫 번째 투표
-        mockMvc.perform(post("/community/votesboard/" + votesboardId + "/vote")
+        mockMvc.perform(post("/community/votesboard/" + voteboardId + "/vote")
                         .with(SecurityMockMvcRequestPostProcessors.user(testUserDetails))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(
@@ -291,7 +291,7 @@ class VoteboardVotingIntegrationTest {
                 .andExpect(status().isOk());
 
         // when & then - 재투표 시도 (실패)
-        mockMvc.perform(put("/community/votesboard/" + votesboardId + "/vote")
+        mockMvc.perform(put("/community/votesboard/" + voteboardId + "/vote")
                         .with(SecurityMockMvcRequestPostProcessors.user(testUserDetails))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(
@@ -303,7 +303,7 @@ class VoteboardVotingIntegrationTest {
     @DisplayName("투표 취소 성공")
     void cancelVote_Success() throws Exception {
         // given - 재투표 허용 게시글 생성 및 투표
-        Long votesboardId = createVotePost(
+        Long voteboardId = createVotePost(
                 "점심 메뉴 투표",
                 "오늘 점심 뭐 먹을까요?",
                 Arrays.asList("한식", "중식"),
@@ -312,14 +312,14 @@ class VoteboardVotingIntegrationTest {
                 false
         );
 
-        String detailResponse = mockMvc.perform(get("/community/votesboard/" + votesboardId))
+        String detailResponse = mockMvc.perform(get("/community/votesboard/" + voteboardId))
                 .andReturn().getResponse().getContentAsString();
 
         Long optionId = objectMapper.readTree(detailResponse)
                 .get("voteOptions").get(0).get("id").asLong();
 
         // 투표
-        mockMvc.perform(post("/community/votesboard/" + votesboardId + "/vote")
+        mockMvc.perform(post("/community/votesboard/" + voteboardId + "/vote")
                         .with(SecurityMockMvcRequestPostProcessors.user(testUserDetails))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(
@@ -327,12 +327,12 @@ class VoteboardVotingIntegrationTest {
                 .andExpect(status().isOk());
 
         // when - 투표 취소
-        mockMvc.perform(delete("/community/votesboard/" + votesboardId + "/vote")
+        mockMvc.perform(delete("/community/votesboard/" + voteboardId + "/vote")
                         .with(SecurityMockMvcRequestPostProcessors.user(testUserDetails)))
                 .andExpect(status().isOk());
 
         // then - 취소 결과 확인
-        mockMvc.perform(get("/community/votesboard/" + votesboardId)
+        mockMvc.perform(get("/community/votesboard/" + voteboardId)
                         .with(SecurityMockMvcRequestPostProcessors.user(testUserDetails)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.totalVotes").value(0))
@@ -344,7 +344,7 @@ class VoteboardVotingIntegrationTest {
     @DisplayName("중복 선택 투표 성공 - 2개 옵션 선택")
     void multipleChoiceVote_Success() throws Exception {
         // given - 중복 선택 허용 투표 게시글 생성 (3개 옵션)
-        Long votesboardId = createVotePost(
+        Long voteboardId = createVotePost(
                 "좋아하는 음식 선택",
                 "좋아하는 음식을 여러 개 선택해주세요",
                 Arrays.asList("한식", "중식", "일식"),
@@ -354,7 +354,7 @@ class VoteboardVotingIntegrationTest {
         );
 
         // 옵션 ID 가져오기
-        String detailResponse = mockMvc.perform(get("/community/votesboard/" + votesboardId))
+        String detailResponse = mockMvc.perform(get("/community/votesboard/" + voteboardId))
                 .andReturn().getResponse().getContentAsString();
 
         Long option1Id = objectMapper.readTree(detailResponse).get("voteOptions").get(0).get("id").asLong();
@@ -365,14 +365,14 @@ class VoteboardVotingIntegrationTest {
                 .voteOptionIds(Arrays.asList(option1Id, option2Id))
                 .build();
 
-        mockMvc.perform(post("/community/votesboard/" + votesboardId + "/vote")
+        mockMvc.perform(post("/community/votesboard/" + voteboardId + "/vote")
                         .with(SecurityMockMvcRequestPostProcessors.user(testUserDetails))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(voteRequest)))
                 .andExpect(status().isOk());
 
         // then - 투표 결과 확인
-        mockMvc.perform(get("/community/votesboard/" + votesboardId)
+        mockMvc.perform(get("/community/votesboard/" + voteboardId)
                         .with(SecurityMockMvcRequestPostProcessors.user(testUserDetails)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.totalVotes").value(1))  // 참여자 수는 1명
@@ -389,7 +389,7 @@ class VoteboardVotingIntegrationTest {
     @DisplayName("중복 선택 투표 실패 - n개 모두 선택 (최대 n-1개)")
     void multipleChoiceVote_TooManyOptions() throws Exception {
         // given - 중복 선택 허용 투표 게시글 생성 (3개 옵션)
-        Long votesboardId = createVotePost(
+        Long voteboardId = createVotePost(
                 "좋아하는 음식 선택",
                 "좋아하는 음식을 여러 개 선택해주세요",
                 Arrays.asList("한식", "중식", "일식"),
@@ -398,7 +398,7 @@ class VoteboardVotingIntegrationTest {
                 true
         );
 
-        String detailResponse = mockMvc.perform(get("/community/votesboard/" + votesboardId))
+        String detailResponse = mockMvc.perform(get("/community/votesboard/" + voteboardId))
                 .andReturn().getResponse().getContentAsString();
 
         Long option1Id = objectMapper.readTree(detailResponse).get("voteOptions").get(0).get("id").asLong();
@@ -410,7 +410,7 @@ class VoteboardVotingIntegrationTest {
                 .voteOptionIds(Arrays.asList(option1Id, option2Id, option3Id))
                 .build();
 
-        mockMvc.perform(post("/community/votesboard/" + votesboardId + "/vote")
+        mockMvc.perform(post("/community/votesboard/" + voteboardId + "/vote")
                         .with(SecurityMockMvcRequestPostProcessors.user(testUserDetails))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(voteRequest)))
@@ -421,7 +421,7 @@ class VoteboardVotingIntegrationTest {
     @DisplayName("중복 선택 투표 실패 - 중복된 옵션 선택")
     void multipleChoiceVote_DuplicateOptions() throws Exception {
         // given - 중복 선택 허용 투표 게시글 생성
-        Long votesboardId = createVotePost(
+        Long voteboardId = createVotePost(
                 "좋아하는 음식 선택",
                 "좋아하는 음식을 여러 개 선택해주세요",
                 Arrays.asList("한식", "중식", "일식"),
@@ -430,7 +430,7 @@ class VoteboardVotingIntegrationTest {
                 true
         );
 
-        String detailResponse = mockMvc.perform(get("/community/votesboard/" + votesboardId))
+        String detailResponse = mockMvc.perform(get("/community/votesboard/" + voteboardId))
                 .andReturn().getResponse().getContentAsString();
 
         Long option1Id = objectMapper.readTree(detailResponse).get("voteOptions").get(0).get("id").asLong();
@@ -440,7 +440,7 @@ class VoteboardVotingIntegrationTest {
                 .voteOptionIds(Arrays.asList(option1Id, option1Id))
                 .build();
 
-        mockMvc.perform(post("/community/votesboard/" + votesboardId + "/vote")
+        mockMvc.perform(post("/community/votesboard/" + voteboardId + "/vote")
                         .with(SecurityMockMvcRequestPostProcessors.user(testUserDetails))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(voteRequest)))
@@ -451,7 +451,7 @@ class VoteboardVotingIntegrationTest {
     @DisplayName("단일 선택 투표 실패 - 여러 옵션 선택")
     void singleChoiceVote_MultipleOptionsNotAllowed() throws Exception {
         // given - 단일 선택만 허용하는 투표 게시글 생성
-        Long votesboardId = createVotePost(
+        Long voteboardId = createVotePost(
                 "점심 메뉴 투표",
                 "오늘 점심 뭐 먹을까요?",
                 Arrays.asList("한식", "중식", "일식"),
@@ -460,7 +460,7 @@ class VoteboardVotingIntegrationTest {
                 false  // 단일 선택만 허용
         );
 
-        String detailResponse = mockMvc.perform(get("/community/votesboard/" + votesboardId))
+        String detailResponse = mockMvc.perform(get("/community/votesboard/" + voteboardId))
                 .andReturn().getResponse().getContentAsString();
 
         Long option1Id = objectMapper.readTree(detailResponse).get("voteOptions").get(0).get("id").asLong();
@@ -471,7 +471,7 @@ class VoteboardVotingIntegrationTest {
                 .voteOptionIds(Arrays.asList(option1Id, option2Id))
                 .build();
 
-        mockMvc.perform(post("/community/votesboard/" + votesboardId + "/vote")
+        mockMvc.perform(post("/community/votesboard/" + voteboardId + "/vote")
                         .with(SecurityMockMvcRequestPostProcessors.user(testUserDetails))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(voteRequest)))
@@ -482,7 +482,7 @@ class VoteboardVotingIntegrationTest {
     @DisplayName("중복 선택 재투표 성공 - 단일 선택에서 중복 선택으로 변경")
     void changeMultipleChoiceVote_Success() throws Exception {
         // given - 중복 선택 및 재투표 허용 게시글 생성
-        Long votesboardId = createVotePost(
+        Long voteboardId = createVotePost(
                 "좋아하는 음식 선택",
                 "좋아하는 음식을 여러 개 선택해주세요",
                 Arrays.asList("한식", "중식", "일식"),
@@ -491,7 +491,7 @@ class VoteboardVotingIntegrationTest {
                 true
         );
 
-        String detailResponse = mockMvc.perform(get("/community/votesboard/" + votesboardId))
+        String detailResponse = mockMvc.perform(get("/community/votesboard/" + voteboardId))
                 .andReturn().getResponse().getContentAsString();
 
         Long option1Id = objectMapper.readTree(detailResponse).get("voteOptions").get(0).get("id").asLong();
@@ -503,7 +503,7 @@ class VoteboardVotingIntegrationTest {
                 .voteOptionIds(Collections.singletonList(option1Id))
                 .build();
 
-        mockMvc.perform(post("/community/votesboard/" + votesboardId + "/vote")
+        mockMvc.perform(post("/community/votesboard/" + voteboardId + "/vote")
                         .with(SecurityMockMvcRequestPostProcessors.user(testUserDetails))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(firstVote)))
@@ -514,14 +514,14 @@ class VoteboardVotingIntegrationTest {
                 .voteOptionIds(Arrays.asList(option2Id, option3Id))
                 .build();
 
-        mockMvc.perform(put("/community/votesboard/" + votesboardId + "/vote")
+        mockMvc.perform(put("/community/votesboard/" + voteboardId + "/vote")
                         .with(SecurityMockMvcRequestPostProcessors.user(testUserDetails))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(changeVote)))
                 .andExpect(status().isOk());
 
         // then - 변경 결과 확인
-        mockMvc.perform(get("/community/votesboard/" + votesboardId)
+        mockMvc.perform(get("/community/votesboard/" + voteboardId)
                         .with(SecurityMockMvcRequestPostProcessors.user(testUserDetails)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.totalVotes").value(1))  // 참여자 수는 그대로
