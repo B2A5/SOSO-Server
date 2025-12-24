@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -48,7 +49,7 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(auth -> auth
                         // CORS preflight 요청 허용 (모든 OPTIONS 요청)
-                        .requestMatchers("OPTIONS", "/**").permitAll()
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         // 인증 없이 접근 가능한 경로들
                         .requestMatchers(
                                 "/auth/**",           // 인증 관련
@@ -60,9 +61,9 @@ public class SecurityConfig {
                                 "/actuator/health"    // 헬스체크 (Docker healthcheck 및 모니터링용)
                         ).permitAll()
                         // 자유게시판 조회 (인증 불필요)
-                        .requestMatchers("GET", "/community/freeboard/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/community/freeboard/**").permitAll()
                         // 투표게시판 조회 (인증 불필요)
-                        .requestMatchers("GET", "/community/votesboard/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/community/votesboard/**").permitAll()
                         // 그 외 모든 요청은 인증 필요
                         .anyRequest().authenticated()
                 )
