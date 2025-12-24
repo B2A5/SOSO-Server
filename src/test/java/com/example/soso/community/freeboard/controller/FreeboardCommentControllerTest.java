@@ -351,15 +351,17 @@ class FreeboardCommentControllerTest {
     @DisplayName("인증되지 않은 사용자 요청 실패")
     void unauthenticatedRequest_ShouldFail() throws Exception {
         // when & then
+        // GET 요청은 비인증 허용되지만 서비스 레이어에서 예외 발생 가능
         mockMvc.perform(get("/community/freeboard/{freeboardId}/comments", TEST_POST_ID))
                 .andDo(print())
                 .andExpect(status().isInternalServerError());
 
+        // POST 요청은 Spring Security에서 차단하여 401 반환
         mockMvc.perform(post("/community/freeboard/{freeboardId}/comments", TEST_POST_ID)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{}"))
                 .andDo(print())
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isUnauthorized());
     }
 
     @Test
