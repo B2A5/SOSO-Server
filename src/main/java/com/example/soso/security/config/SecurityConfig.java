@@ -61,6 +61,8 @@ public class SecurityConfig {
                         ).permitAll()
                         // 자유게시판 조회 (인증 불필요)
                         .requestMatchers("GET", "/community/freeboard/**").permitAll()
+                        // 투표게시판 조회 (인증 불필요)
+                        .requestMatchers("GET", "/community/votesboard/**").permitAll()
                         // 그 외 모든 요청은 인증 필요
                         .anyRequest().authenticated()
                 )
