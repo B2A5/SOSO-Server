@@ -234,7 +234,7 @@ pipeline {
                             # 최신 코드로 업데이트 (현재 브랜치 기준)
                             echo "🔄 최신 코드로 업데이트 중..."
                             git fetch origin
-                            git reset --hard origin/${GIT_COMMIT}
+                            git reset --hard origin/${GIT_BRANCH##*/}
 
                             echo "✅ 현재 커밋:"
                             git log -1 --oneline
