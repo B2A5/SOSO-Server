@@ -268,8 +268,7 @@ class VoteboardIntegrationTest {
         LocalDateTime endTime = LocalDateTime.now().plusDays(7);
 
         // when & then
-        // 테스트 환경에서는 Security가 null userDetails를 허용하여 500 에러가 발생함
-        // 실제 운영에서는 Security Filter가 401/403을 반환함
+        // Spring Security가 인증되지 않은 요청을 차단하여 401 Unauthorized 반환
         mockMvc.perform(multipart("/community/votesboard")
                         .param("category", "daily-hobby")
                         .param("title", "테스트 투표")
@@ -280,7 +279,10 @@ class VoteboardIntegrationTest {
                         .param("allowRevote", "true")
                         .param("allowMultipleChoice", "false")
                         .contentType(MediaType.MULTIPART_FORM_DATA))
-                .andExpect(status().is5xxServerError());
+                .andDo(print())
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.code").value("UNAUTHORIZED"))
+                .andExpect(jsonPath("$.message").exists());
     }
 
     @Test

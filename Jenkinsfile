@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         // Docker Image Configuration
-        APP_IMAGE = "localtest/soso-server:latest"
+        APP_IMAGE = "soso/api:latest"
         COMPOSE_PROJECT_NAME = "soso-server"
 
         // Deployment Configuration
@@ -72,24 +72,6 @@ pipeline {
                     echo "   • Database: H2 In-Memory"
                     echo "   • Java: $(java -version 2>&1 | head -1)"
                     echo ""
-
-                    # =============================================================
-                    # 안전한 빌드 최적화 전략
-                    # =============================================================
-                    # 목표: 안정성을 유지하면서 빌드 시간 단축
-                    #
-                    # 1단계: 테스트 결과만 삭제 (컴파일 캐시 보존)
-                    #   - 전체 build 삭제 대신 테스트 출력만 정리
-                    #   - 예상 효과: 컴파일 시간 30-50% 절약
-                    #
-                    # 2단계: Gradle 데몬 재시작 (깨끗한 상태 + 속도 향상)
-                    #   - 매번 데몬 중지 후 재시작으로 캐시 오염 방지
-                    #   - 예상 효과: 데몬 재사용으로 5-10초 절약
-                    #
-                    # 3단계: 병렬 테스트 실행 (멀티코어 활용)
-                    #   - 독립적인 테스트를 동시 실행
-                    #   - 예상 효과: 테스트 시간 30-40% 단축
-                    # =============================================================
 
                     # 테스트 결과 파일만 삭제 (컴파일 캐시는 유지)
                     echo "🧹 Cleaning test output files..."
@@ -252,7 +234,7 @@ pipeline {
                             # 최신 코드로 업데이트 (현재 브랜치 기준)
                             echo "🔄 최신 코드로 업데이트 중..."
                             git fetch origin
-                            git reset --hard origin/${GIT_BRANCH##*/}
+                            git reset --hard origin/${GIT_COMMIT}
 
                             echo "✅ 현재 커밋:"
                             git log -1 --oneline

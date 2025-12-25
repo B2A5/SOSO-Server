@@ -354,10 +354,10 @@ class FreeboardControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        // 게시글 작성은 인증 필요 (multipart 요청 시 필수 파라미터가 없으면 BadRequest가 먼저 발생)
+        // 게시글 작성은 인증 필요 (Spring Security에서 401 Unauthorized 반환)
         mockMvc.perform(post("/community/freeboard")
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andDo(print())
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isUnauthorized());
     }
 }

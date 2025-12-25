@@ -2,7 +2,6 @@ package com.example.soso.security.config;
 
 import com.example.soso.security.filter.ExceptionHandlerFilter;
 import com.example.soso.security.filter.JwtAuthenticationFilter;
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;

@@ -75,7 +75,7 @@ class ErrorScenarioIntegrationTest {
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andDo(print())
                 .andExpect(status().isUnauthorized())
-                .andExpect(jsonPath("$.code").value("AUTHENTICATION_FAILED"))
+                .andExpect(jsonPath("$.code").value("UNAUTHORIZED"))
                 .andExpect(jsonPath("$.message").exists());
 
         // ==================== 테스트 2: 잘못된 토큰으로 요청 ====================
@@ -90,7 +90,7 @@ class ErrorScenarioIntegrationTest {
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andDo(print())
                 .andExpect(status().isUnauthorized())
-                .andExpect(jsonPath("$.code").value("AUTHENTICATION_FAILED"))
+                .andExpect(jsonPath("$.code").value("UNAUTHORIZED"))
                 .andExpect(jsonPath("$.message").exists());
 
         // ==================== 테스트 3: 정상 사용자는 인증 필요 없는 조회는 가능 ====================

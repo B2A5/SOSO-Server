@@ -83,7 +83,7 @@ services:
   # - Caddy 프록시를 통해서만 접근 가능
   # =============================================================================
   api:
-    image: ${API_IMAGE:-localtest/soso-server:latest} # Jenkins가 빌드한 이미지 사용
+    image: ${API_IMAGE:-soso/api:latest} # Jenkins가 빌드한 이미지 사용
     container_name: soso-api
     environment:
       TZ: Asia/Seoul # 한국 시간대 설정
