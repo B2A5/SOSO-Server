@@ -348,18 +348,54 @@ class FreeboardCommentControllerTest {
     }
 
     @Test
-    @DisplayName("인증되지 않은 사용자 요청 실패")
-    void unauthenticatedRequest_ShouldFail() throws Exception {
-        // when & then
-        // GET 요청은 비인증 허용되지만 서비스 레이어에서 예외 발생 가능
+    @DisplayName("비인증 사용자 GET 요청 성공")
+    void unauthenticatedUser_GetRequest_Success() throws Exception {
+        // given - Mock 서비스 설정
+        FreeboardCommentCursorResponse mockResponse = FreeboardCommentCursorResponse.builder()
+                .comments(List.of())
+                .hasNext(false)
+                .nextCursor(null)
+                .size(0)
+                .build();
+
+        when(commentService.getCommentsByCursor(eq(TEST_POST_ID), any(), anyInt(), isNull(), isNull()))
+                .thenReturn(mockResponse);
+
+        // when & then - GET 요청은 비인증 사용자도 접근 가능
         mockMvc.perform(get("/community/freeboard/{freeboardId}/comments", TEST_POST_ID))
                 .andDo(print())
-                .andExpect(status().isInternalServerError());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.comments").isArray())
+                .andExpect(jsonPath("$.hasNext").value(false));
+    }
 
-        // POST 요청은 Spring Security에서 차단하여 401 반환
+    @Test
+    @DisplayName("비인증 사용자 POST 요청 차단 (401)")
+    void unauthenticatedUser_PostRequest_Unauthorized() throws Exception {
+        // when & then - POST 요청은 Spring Security에서 차단
         mockMvc.perform(post("/community/freeboard/{freeboardId}/comments", TEST_POST_ID)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{}"))
+                        .content("{\"content\": \"비인증 댓글 작성 시도\"}"))
+                .andDo(print())
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @DisplayName("비인증 사용자 PATCH 요청 차단 (401)")
+    void unauthenticatedUser_PatchRequest_Unauthorized() throws Exception {
+        // when & then - PATCH 요청은 Spring Security에서 차단
+        mockMvc.perform(patch("/community/freeboard/{freeboardId}/comments/456", TEST_POST_ID)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"content\": \"비인증 댓글 수정 시도\"}"))
+                .andDo(print())
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @DisplayName("비인증 사용자 DELETE 요청 차단 (401)")
+    void unauthenticatedUser_DeleteRequest_Unauthorized() throws Exception {
+        // when & then - DELETE 요청은 Spring Security에서 차단
+        mockMvc.perform(delete("/community/freeboard/{freeboardId}/comments/456", TEST_POST_ID))
                 .andDo(print())
                 .andExpect(status().isUnauthorized());
     }
