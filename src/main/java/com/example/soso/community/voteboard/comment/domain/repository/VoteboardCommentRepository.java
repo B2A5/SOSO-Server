@@ -79,23 +79,23 @@ public interface VoteboardCommentRepository extends JpaRepository<VoteboardComme
     /**
      * 커서 기반 페이징 - 생성일 이전
      */
-    List<VoteboardComment> findByVotePostIdAndDeletedFalseAndCreatedDateBefore(
-            Long votePostId, LocalDateTime createdDate, Pageable pageable);
+    List<VoteboardComment> findByVotePostIdAndDeletedFalseAndCreatedAtBefore(
+            Long votePostId, LocalDateTime createdAt, Pageable pageable);
 
     /**
      * 커서 기반 페이징 - 생성일 이후
      */
-    List<VoteboardComment> findByVotePostIdAndDeletedFalseAndCreatedDateAfter(
-            Long votePostId, LocalDateTime createdDate, Pageable pageable);
+    List<VoteboardComment> findByVotePostIdAndDeletedFalseAndCreatedAtAfter(
+            Long votePostId, LocalDateTime createdAt, Pageable pageable);
 
     /**
      * 소프트 삭제된 댓글도 포함하여 조회 (댓글 구조 유지용)
      */
     List<VoteboardComment> findByVotePostId(Long votePostId, Pageable pageable);
 
-    List<VoteboardComment> findByVotePostIdAndCreatedDateBefore(
-            Long votePostId, LocalDateTime createdDate, Pageable pageable);
+    List<VoteboardComment> findByVotePostIdAndCreatedAtBefore(
+            Long votePostId, LocalDateTime createdAt, Pageable pageable);
 
-    List<VoteboardComment> findByVotePostIdAndCreatedDateAfter(
-            Long votePostId, LocalDateTime createdDate, Pageable pageable);
+    List<VoteboardComment> findByVotePostIdAndCreatedAtAfter(
+            Long votePostId, LocalDateTime createdAt, Pageable pageable);
 }
