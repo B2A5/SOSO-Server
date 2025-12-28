@@ -193,7 +193,11 @@ public class VoteboardController {
             @PathVariable Long votesboardId,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-        String userId = userDetails != null ? userDetails.getUser().getId() : null;
+        String userId = null;
+        if (userDetails != null) {
+            userId = userDetails.getUser().getId();
+        }
+        
         VoteboardDetailResponse response = votePostService.getVotePost(votesboardId, userId);
         return ResponseEntity.ok(response);
     }
@@ -274,7 +278,10 @@ public class VoteboardController {
             @Parameter(hidden = true)
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-        String userId = userDetails != null ? userDetails.getUser().getId() : null;
+        String userId = null;
+        if (userDetails != null) {
+                userId = userDetails.getUser().getId();
+        }
         VoteboardCursorResponse response = votePostService.getVotePostsByCursor(status, sort, size, cursor, userId);
         return ResponseEntity.ok(response);
     }
