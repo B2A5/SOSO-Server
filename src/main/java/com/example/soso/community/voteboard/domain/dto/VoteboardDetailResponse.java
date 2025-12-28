@@ -1,7 +1,6 @@
 package com.example.soso.community.voteboard.domain.dto;
 
 import com.example.soso.community.common.post.domain.entity.Category;
-import com.example.soso.community.voteboard.domain.entity.VoteStatus;
 import com.example.soso.community.common.post.domain.dto.UserSummaryResponse;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -52,23 +51,8 @@ public class VoteboardDetailResponse {
     )
     private Boolean hasVoted;
 
-    @Schema(description = "현재 사용자가 선택한 옵션 ID 목록 (미투표 시 빈 리스트)", example = "[1, 2]")
-    private List<Long> selectedOptionIds;
-
-    @Schema(description = "총 투표 참여자 수", example = "89", requiredMode = Schema.RequiredMode.REQUIRED)
-    private int totalVotes;
-
-    @Schema(description = "투표 상태 (IN_PROGRESS: 진행중, COMPLETED: 완료)", example = "IN_PROGRESS", requiredMode = Schema.RequiredMode.REQUIRED)
-    private VoteStatus voteStatus;
-
-    @Schema(description = "투표 마감 시간", example = "2024-12-31T23:59:59", requiredMode = Schema.RequiredMode.REQUIRED)
-    private LocalDateTime endTime;
-
-    @Schema(description = "재투표 허용 여부 (투표 후 변경 가능 여부)", example = "true", requiredMode = Schema.RequiredMode.REQUIRED)
-    private boolean allowRevote;
-
-    @Schema(description = "중복 선택 허용 여부 (여러 옵션 동시 선택 가능 여부)", example = "false", requiredMode = Schema.RequiredMode.REQUIRED)
-    private boolean allowMultipleChoice;
+    @Schema(description = "투표 정보", requiredMode = Schema.RequiredMode.REQUIRED)
+    private VoteInfo voteInfo;
 
     @Schema(description = "조회수", example = "123", requiredMode = Schema.RequiredMode.REQUIRED)
     private int viewCount;

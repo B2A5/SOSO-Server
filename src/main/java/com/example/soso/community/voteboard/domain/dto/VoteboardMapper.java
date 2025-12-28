@@ -73,6 +73,16 @@ public class VoteboardMapper {
                 ? votePost.getContent().substring(0, 100) + "..."
                 : votePost.getContent();
 
+        // VoteInfo 생성
+        VoteInfo voteInfo = new VoteInfo(
+                List.of(), // Summary에서는 selectedOptionIds 없음
+                votePost.getTotalVotes(),
+                votePost.getVoteStatus(),
+                votePost.getEndTime(),
+                votePost.isAllowRevote(),
+                votePost.isAllowMultipleChoice()
+        );
+
         return VoteboardSummary.builder()
                 .postId(votePost.getId())
                 .author(userMapper.toUserSummary(votePost.getUser()))
@@ -83,12 +93,8 @@ public class VoteboardMapper {
                 .imageCount(imageCount)
                 .viewCount(votePost.getViewCount())
                 .commentCount(commentCount)
-                .totalVotes(votePost.getTotalVotes())
                 .hasVoted(hasVoted)
-                .voteStatus(votePost.getVoteStatus())
-                .endTime(votePost.getEndTime())
-                .allowRevote(votePost.isAllowRevote())
-                .allowMultipleChoice(votePost.isAllowMultipleChoice())
+                .voteInfo(voteInfo)
                 .voteOptions(voteOptions)
                 .likeCount(likeCount)
                 .isLiked(isLiked)
@@ -136,6 +142,16 @@ public class VoteboardMapper {
                         .build())
                 .toList();
 
+        // VoteInfo 생성
+        VoteInfo voteInfo = new VoteInfo(
+                selectedOptionIds,
+                votePost.getTotalVotes(),
+                votePost.getVoteStatus(),
+                votePost.getEndTime(),
+                votePost.isAllowRevote(),
+                votePost.isAllowMultipleChoice()
+        );
+
         return VoteboardDetailResponse.builder()
                 .postId(votePost.getId())
                 .author(userMapper.toUserSummary(votePost.getUser()))
@@ -147,12 +163,7 @@ public class VoteboardMapper {
                         .map(option -> toVoteOptionResponse(option, votePost.getTotalVotes()))
                         .toList())
                 .hasVoted(hasVoted)
-                .selectedOptionIds(selectedOptionIds)
-                .totalVotes(votePost.getTotalVotes())
-                .voteStatus(votePost.getVoteStatus())
-                .endTime(votePost.getEndTime())
-                .allowRevote(votePost.isAllowRevote())
-                .allowMultipleChoice(votePost.isAllowMultipleChoice())
+                .voteInfo(voteInfo)
                 .viewCount(votePost.getViewCount())
                 .commentCount(commentCount)
                 .likeCount(likeCount)

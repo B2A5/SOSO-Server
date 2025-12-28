@@ -39,7 +39,7 @@ public class VotePostLike {
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
-    private LocalDateTime createdDate;
+    private LocalDateTime createdAt;
 
     @Builder
     public VotePostLike(VotePost votePost, Users user) {
