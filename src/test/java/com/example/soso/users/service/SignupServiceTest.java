@@ -298,8 +298,8 @@ class SignupServiceTest {
                 .ageRange(AgeRange.TWENTIES)
                 .location("서울시 종로구")
                 .interests(List.of())
-                .createdDate(java.time.LocalDateTime.now())
-                .lastModifiedDate(java.time.LocalDateTime.now())
+                .createdAt(java.time.LocalDateTime.now())
+                .updatedAt(java.time.LocalDateTime.now())
                 .build();
 
             when(userMapper.fromSignupSession(any(), anyString(), anyString(), anyString())).thenReturn(mockUser);

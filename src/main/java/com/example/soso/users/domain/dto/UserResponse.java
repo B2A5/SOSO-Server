@@ -56,8 +56,8 @@ public class UserResponse {
     private String longitude;
 
     @Schema(description = "계정 생성일시", example = "2024-01-01T00:00:00", requiredMode = Schema.RequiredMode.REQUIRED)
-    private LocalDateTime createdDate;
+    private LocalDateTime createdAt;
 
     @Schema(description = "마지막 수정일시", example = "2024-01-01T00:00:00", requiredMode = Schema.RequiredMode.REQUIRED)
-    private LocalDateTime lastModifiedDate;
+    private LocalDateTime updatedAt;
 }
