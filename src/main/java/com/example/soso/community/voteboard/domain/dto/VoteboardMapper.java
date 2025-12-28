@@ -92,8 +92,8 @@ public class VoteboardMapper {
                 .voteOptions(voteOptions)
                 .likeCount(likeCount)
                 .isLiked(isLiked)
-                .createdDate(votePost.getCreatedDate())
-                .lastModifiedDate(votePost.getLastModifiedDate())
+                .createdAt(votePost.getCreatedAt())
+                .updatedAt(votePost.getUpdatedAt())
                 .build();
     }
 
@@ -161,8 +161,8 @@ public class VoteboardMapper {
                 .isAuthor(isAuthor)
                 .canEdit(isAuthorized ? isAuthor : null)
                 .canDelete(isAuthorized ? isAuthor : null)
-                .createdDate(votePost.getCreatedDate())
-                .lastModifiedDate(votePost.getLastModifiedDate())
+                .createdAt(votePost.getCreatedAt())
+                .updatedAt(votePost.getUpdatedAt())
                 .build();
     }
 

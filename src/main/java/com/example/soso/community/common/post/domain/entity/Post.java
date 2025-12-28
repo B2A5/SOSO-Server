@@ -99,10 +99,10 @@ public class Post extends BaseTimeEntity {
     }
 
     public LocalDateTime getCreatedAt() {
-        return super.getCreatedDate();
+        return super.getCreatedAt();
     }
 
     public LocalDateTime getUpdatedAt() {
-        return super.getLastModifiedDate();
+        return super.getUpdatedAt();
     }
 }

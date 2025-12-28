@@ -84,8 +84,8 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                             post.commentCount, // int commentCount
                             post.viewCount, // int viewCount
                             Expressions.nullExpression(Boolean.class), // Boolean likeByPost = null
-                            post.createdDate, // LocalDateTime createdAt
-                            post.lastModifiedDate, // LocalDateTime updatedAt
+                            post.createdAt, // LocalDateTime createdAt
+                            post.updatedAt, // LocalDateTime updatedAt
                             thumbnailUrlSubQuery, // String thumbnailUrl
                             imageCountSubQuery, // Integer imageCount
                             Projections.constructor(com.example.soso.community.common.post.domain.dto.UserSummaryResponse.class,
@@ -113,8 +113,8 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                             post.commentCount, // int commentCount
                             post.viewCount, // int viewCount
                             like.id.isNotNull(), // boolean likeByPost
-                            post.createdDate, // LocalDateTime createdAt
-                            post.lastModifiedDate, // LocalDateTime updatedAt
+                            post.createdAt, // LocalDateTime createdAt
+                            post.updatedAt, // LocalDateTime updatedAt
                             thumbnailUrlSubQuery, // String thumbnailUrl
                             imageCountSubQuery, // Integer imageCount
                             Projections.constructor(com.example.soso.community.common.post.domain.dto.UserSummaryResponse.class,

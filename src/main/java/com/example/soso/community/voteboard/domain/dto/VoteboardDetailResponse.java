@@ -96,10 +96,10 @@ public class VoteboardDetailResponse {
     private Boolean canDelete;
 
     @Schema(description = "생성일시", example = "2024-01-01T10:00:00", requiredMode = Schema.RequiredMode.REQUIRED)
-    private LocalDateTime createdDate;
+    private LocalDateTime createdAt;
 
     @Schema(description = "수정일시", example = "2024-01-02T15:30:00", requiredMode = Schema.RequiredMode.REQUIRED)
-    private LocalDateTime lastModifiedDate;
+    private LocalDateTime updatedAt;
 
     @Schema(description = "이미지 정보")
     @Getter

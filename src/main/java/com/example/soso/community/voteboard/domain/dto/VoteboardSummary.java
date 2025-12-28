@@ -90,10 +90,10 @@ public class VoteboardSummary {
     private Boolean isLiked;
 
     @Schema(description = "생성일시", example = "2024-01-01T10:00:00", requiredMode = Schema.RequiredMode.REQUIRED)
-    private LocalDateTime createdDate;
+    private LocalDateTime createdAt;
 
     @Schema(description = "수정일시", example = "2024-01-02T15:30:00", requiredMode = Schema.RequiredMode.REQUIRED)
-    private LocalDateTime lastModifiedDate;
+    private LocalDateTime updatedAt;
 
     // Lombok @Getter가 생성하는 isLiked() 메서드를 Jackson이 "liked"로 직렬화하는 것을 방지
     @JsonIgnore

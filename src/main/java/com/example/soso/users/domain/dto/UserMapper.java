@@ -76,8 +76,8 @@ public class UserMapper {
                         : null)
                 .latitude(user.getLatitude())
                 .longitude(user.getLongitude())
-                .createdDate(user.getCreatedDate())
-                .lastModifiedDate(user.getLastModifiedDate())
+                .createdDate(user.getCreatedAt())
+                .lastModifiedDate(user.getUpdatedAt())
                 .build();
     }
 

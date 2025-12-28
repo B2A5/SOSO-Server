@@ -188,8 +188,8 @@ public class FreeboardCommentServiceImpl
                 .isLiked(isLiked)
                 .canEdit(canEdit)
                 .canDelete(canDelete)
-                .createdAt(comment.getCreatedDate())
-                .updatedAt(comment.getLastModifiedDate())
+                .createdAt(comment.getCreatedAt())
+                .updatedAt(comment.getUpdatedAt())
                 .build();
     }
 }
