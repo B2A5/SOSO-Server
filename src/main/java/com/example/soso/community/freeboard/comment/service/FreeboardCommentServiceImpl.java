@@ -125,8 +125,8 @@ public class FreeboardCommentServiceImpl
     @Override
     protected Sort buildSort(FreeboardCommentSortType sortType) {
         return switch (sortType) {
-            case LATEST -> Sort.by(Sort.Direction.DESC, "createdDate");
-            case OLDEST -> Sort.by(Sort.Direction.ASC, "createdDate");
+            case LATEST -> Sort.by(Sort.Direction.DESC, "createdAt");
+            case OLDEST -> Sort.by(Sort.Direction.ASC, "createdAt");
         };
     }
 
@@ -140,10 +140,10 @@ public class FreeboardCommentServiceImpl
             // 커서 기반 페이징 - 소프트 삭제된 댓글도 포함하여 조회
             if (sortType == FreeboardCommentSortType.LATEST) {
                 // 최신순: cursorTime보다 이전 댓글들 조회
-                return commentRepository.findByPostIdAndCreatedDateBefore(postId, cursorTime, pageable);
+                return commentRepository.findByPostIdAndCreatedAtBefore(postId, cursorTime, pageable);
             } else {
                 // 오래된순: cursorTime보다 이후 댓글들 조회
-                return commentRepository.findByPostIdAndCreatedDateAfter(postId, cursorTime, pageable);
+                return commentRepository.findByPostIdAndCreatedAtAfter(postId, cursorTime, pageable);
             }
         }
     }
@@ -188,8 +188,8 @@ public class FreeboardCommentServiceImpl
                 .isLiked(isLiked)
                 .canEdit(canEdit)
                 .canDelete(canDelete)
-                .createdAt(comment.getCreatedDate())
-                .updatedAt(comment.getLastModifiedDate())
+                .createdAt(comment.getCreatedAt())
+                .updatedAt(comment.getUpdatedAt())
                 .build();
     }
 }

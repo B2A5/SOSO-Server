@@ -81,8 +81,8 @@ class SignupControllerTest {
                 .gender(Gender.MALE)
                 .ageRange(AgeRange.TWENTIES)
                 .location("서울시 강남구")
-                .createdDate(LocalDateTime.now())
-                .lastModifiedDate(LocalDateTime.now())
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
                 .build();
 
         SignupCompleteResponse response = new SignupCompleteResponse("access", userResponse);

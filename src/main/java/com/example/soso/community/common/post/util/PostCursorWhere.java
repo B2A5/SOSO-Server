@@ -18,8 +18,8 @@ public class PostCursorWhere {
             case LATEST -> {
                 LocalDateTime createdAt = LocalDateTime.parse(cursor);
                 condition.and(
-                        post.createdDate.lt(createdAt)
-                                .or(post.createdDate.eq(createdAt).and(post.id.lt(idAfter)))
+                        post.createdAt.lt(createdAt)
+                                .or(post.createdAt.eq(createdAt).and(post.id.lt(idAfter)))
                 );
             }
             case LIKE -> {

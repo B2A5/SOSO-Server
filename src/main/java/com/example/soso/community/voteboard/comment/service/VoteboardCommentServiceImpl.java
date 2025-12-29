@@ -92,7 +92,7 @@ public class VoteboardCommentServiceImpl implements VoteboardCommentService {
 
         // 다음 커서 계산
         String nextCursor = hasNext && !comments.isEmpty() ?
-                comments.get(comments.size() - 1).getCreatedDate().toString() : null;
+                comments.get(comments.size() - 1).getCreatedAt().toString() : null;
 
         // 댓글 요약 생성
         List<VoteboardCommentCursorResponse.VoteboardCommentSummary> summaries = comments.stream()
@@ -192,8 +192,8 @@ public class VoteboardCommentServiceImpl implements VoteboardCommentService {
 
     private Sort buildSort(VoteboardCommentSortType sortType) {
         return switch (sortType) {
-            case LATEST -> Sort.by(Sort.Direction.DESC, "createdDate");
-            case OLDEST -> Sort.by(Sort.Direction.ASC, "createdDate");
+            case LATEST -> Sort.by(Sort.Direction.DESC, "createdAt");
+            case OLDEST -> Sort.by(Sort.Direction.ASC, "createdAt");
         };
     }
 
@@ -205,9 +205,9 @@ public class VoteboardCommentServiceImpl implements VoteboardCommentService {
         } else {
             LocalDateTime cursorTime = LocalDateTime.parse(cursor);
             if (sortType == VoteboardCommentSortType.LATEST) {
-                return commentRepository.findByVotePostIdAndCreatedDateBefore(votePostId, cursorTime, pageRequest);
+                return commentRepository.findByVotePostIdAndCreatedAtBefore(votePostId, cursorTime, pageRequest);
             } else {
-                return commentRepository.findByVotePostIdAndCreatedDateAfter(votePostId, cursorTime, pageRequest);
+                return commentRepository.findByVotePostIdAndCreatedAtAfter(votePostId, cursorTime, pageRequest);
             }
         }
     }
@@ -247,8 +247,8 @@ public class VoteboardCommentServiceImpl implements VoteboardCommentService {
                 .isLiked(isLiked)
                 .canEdit(canEdit)
                 .canDelete(canDelete)
-                .createdAt(comment.getCreatedDate())
-                .updatedAt(comment.getLastModifiedDate())
+                .createdAt(comment.getCreatedAt())
+                .updatedAt(comment.getUpdatedAt())
                 .build();
     }
 }

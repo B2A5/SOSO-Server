@@ -42,14 +42,14 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     long countByPostId(Long postId);
 
     // 커서 기반 페이징을 위한 메서드들 (삭제된 댓글 제외)
-    List<Comment> findByPostIdAndDeletedFalseAndCreatedDateBefore(Long postId, LocalDateTime createdDate, Pageable pageable);
+    List<Comment> findByPostIdAndDeletedFalseAndCreatedAtBefore(Long postId, LocalDateTime createdAt, Pageable pageable);
 
-    List<Comment> findByPostIdAndDeletedFalseAndCreatedDateAfter(Long postId, LocalDateTime createdDate, Pageable pageable);
+    List<Comment> findByPostIdAndDeletedFalseAndCreatedAtAfter(Long postId, LocalDateTime createdAt, Pageable pageable);
 
     // 소프트 삭제된 댓글도 포함하여 조회하는 메서드들 (댓글 구조 유지용)
     List<Comment> findByPostId(Long postId, Pageable pageable);
 
-    List<Comment> findByPostIdAndCreatedDateBefore(Long postId, LocalDateTime createdDate, Pageable pageable);
+    List<Comment> findByPostIdAndCreatedAtBefore(Long postId, LocalDateTime createdAt, Pageable pageable);
 
-    List<Comment> findByPostIdAndCreatedDateAfter(Long postId, LocalDateTime createdDate, Pageable pageable);
+    List<Comment> findByPostIdAndCreatedAtAfter(Long postId, LocalDateTime createdAt, Pageable pageable);
 }

@@ -35,7 +35,7 @@ public class PostMapper {
                         .toList(),
                 post.getLikeCount(),
                 isLiked,
-                post.getCreatedDate().toString(),
+                post.getCreatedAt().toString(),
                 userMapper.toUserSummary(post.getUser())
         );
     }

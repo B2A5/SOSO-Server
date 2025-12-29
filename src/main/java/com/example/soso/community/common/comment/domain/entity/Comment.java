@@ -69,10 +69,10 @@ public class Comment extends BaseTimeEntity {
     }
 
     public java.time.LocalDateTime getCreatedAt() {
-        return super.getCreatedDate();
+        return super.getCreatedAt();
     }
 
     public java.time.LocalDateTime getUpdatedAt() {
-        return super.getLastModifiedDate();
+        return super.getUpdatedAt();
     }
 }

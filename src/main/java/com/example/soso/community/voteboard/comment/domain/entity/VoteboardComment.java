@@ -106,13 +106,13 @@ public class VoteboardComment extends BaseTimeEntity {
      * 생성일시 가져오기
      */
     public java.time.LocalDateTime getCreatedAt() {
-        return super.getCreatedDate();
+        return super.getCreatedAt();
     }
 
     /**
      * 수정일시 가져오기
      */
     public java.time.LocalDateTime getUpdatedAt() {
-        return super.getLastModifiedDate();
+        return super.getUpdatedAt();
     }
 }

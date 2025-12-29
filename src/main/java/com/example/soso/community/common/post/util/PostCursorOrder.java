@@ -11,7 +11,7 @@ public class PostCursorOrder {
     public OrderSpecifier<?>[] build(QPost post, PostSortType sort) {
         return switch (sort) {
             case LATEST -> new OrderSpecifier[]{
-                    post.createdDate.desc(),
+                    post.createdAt.desc(),
                     post.id.desc()
             };
             case LIKE -> new OrderSpecifier[]{

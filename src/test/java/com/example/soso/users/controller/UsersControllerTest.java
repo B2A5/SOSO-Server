@@ -107,8 +107,8 @@ class UsersControllerTest {
                 .interests(Arrays.asList("식료품 등 제조업", "도매 및 소매업"))
                 .latitude("37.5665")
                 .longitude("126.9780")
-                .createdDate(LocalDateTime.now())
-                .lastModifiedDate(LocalDateTime.now())
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
                 .build();
 
         when(usersService.getCurrentUserInfo(anyString())).thenReturn(mockResponse);

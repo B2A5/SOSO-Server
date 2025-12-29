@@ -114,11 +114,11 @@ class VoteboardVotingIntegrationTest {
                 .andExpect(jsonPath("$.voteOptions[0].content").value("한식"))
                 .andExpect(jsonPath("$.voteOptions[0].voteCount").value(0))
                 .andExpect(jsonPath("$.voteOptions[0].percentage").value(0.0))
-                .andExpect(jsonPath("$.totalVotes").value(0))
-                .andExpect(jsonPath("$.voteStatus").value("IN_PROGRESS"))
-                .andExpect(jsonPath("$.allowRevote").value(true))
-                .andExpect(jsonPath("$.allowMultipleChoice").value(false))
-                .andExpect(jsonPath("$.selectedOptionIds").isEmpty())
+                .andExpect(jsonPath("$.voteInfo.totalVotes").value(0))
+                .andExpect(jsonPath("$.voteInfo.voteStatus").value("IN_PROGRESS"))
+                .andExpect(jsonPath("$.voteInfo.allowRevote").value(true))
+                .andExpect(jsonPath("$.voteInfo.allowMultipleChoice").value(false))
+                .andExpect(jsonPath("$.voteInfo.selectedOptionIds").isEmpty())
                 .andExpect(jsonPath("$.author.nickname").value("투표테스트유저"));
     }
 
@@ -163,11 +163,11 @@ class VoteboardVotingIntegrationTest {
         mockMvc.perform(get("/community/votesboard/" + voteboardId)
                         .with(SecurityMockMvcRequestPostProcessors.user(testUserDetails)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.totalVotes").value(1))
+                .andExpect(jsonPath("$.voteInfo.totalVotes").value(1))
                 .andExpect(jsonPath("$.voteOptions[0].voteCount").value(1))
                 .andExpect(jsonPath("$.voteOptions[0].percentage").value(100.0))
                 .andExpect(jsonPath("$.voteOptions[1].voteCount").value(0))
-                .andExpect(jsonPath("$.selectedOptionIds[0]").value(optionId));
+                .andExpect(jsonPath("$.voteInfo.selectedOptionIds[0]").value(optionId));
     }
 
     @Test
@@ -255,10 +255,10 @@ class VoteboardVotingIntegrationTest {
         mockMvc.perform(get("/community/votesboard/" + voteboardId)
                         .with(SecurityMockMvcRequestPostProcessors.user(testUserDetails)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.totalVotes").value(1))  // 총 투표수는 그대로
+                .andExpect(jsonPath("$.voteInfo.totalVotes").value(1))  // 총 투표수는 그대로
                 .andExpect(jsonPath("$.voteOptions[0].voteCount").value(0))  // 한식: 1 → 0
                 .andExpect(jsonPath("$.voteOptions[1].voteCount").value(1))  // 중식: 0 → 1
-                .andExpect(jsonPath("$.selectedOptionIds[0]").value(option2Id));
+                .andExpect(jsonPath("$.voteInfo.selectedOptionIds[0]").value(option2Id));
     }
 
     @Test
@@ -335,9 +335,9 @@ class VoteboardVotingIntegrationTest {
         mockMvc.perform(get("/community/votesboard/" + voteboardId)
                         .with(SecurityMockMvcRequestPostProcessors.user(testUserDetails)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.totalVotes").value(0))
+                .andExpect(jsonPath("$.voteInfo.totalVotes").value(0))
                 .andExpect(jsonPath("$.voteOptions[0].voteCount").value(0))
-                .andExpect(jsonPath("$.selectedOptionIds").isEmpty());
+                .andExpect(jsonPath("$.voteInfo.selectedOptionIds").isEmpty());
     }
 
     @Test
@@ -375,14 +375,14 @@ class VoteboardVotingIntegrationTest {
         mockMvc.perform(get("/community/votesboard/" + voteboardId)
                         .with(SecurityMockMvcRequestPostProcessors.user(testUserDetails)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.totalVotes").value(1))  // 참여자 수는 1명
+                .andExpect(jsonPath("$.voteInfo.totalVotes").value(1))  // 참여자 수는 1명
                 .andExpect(jsonPath("$.voteOptions[0].voteCount").value(1))  // 한식: 1표
                 .andExpect(jsonPath("$.voteOptions[1].voteCount").value(1))  // 중식: 1표
                 .andExpect(jsonPath("$.voteOptions[2].voteCount").value(0))  // 일식: 0표
-                .andExpect(jsonPath("$.selectedOptionIds.length()").value(2))
-                .andExpect(jsonPath("$.selectedOptionIds[0]").value(option1Id))
-                .andExpect(jsonPath("$.selectedOptionIds[1]").value(option2Id))
-                .andExpect(jsonPath("$.allowMultipleChoice").value(true));
+                .andExpect(jsonPath("$.voteInfo.selectedOptionIds.length()").value(2))
+                .andExpect(jsonPath("$.voteInfo.selectedOptionIds[0]").value(option1Id))
+                .andExpect(jsonPath("$.voteInfo.selectedOptionIds[1]").value(option2Id))
+                .andExpect(jsonPath("$.voteInfo.allowMultipleChoice").value(true));
     }
 
     @Test
@@ -524,12 +524,12 @@ class VoteboardVotingIntegrationTest {
         mockMvc.perform(get("/community/votesboard/" + voteboardId)
                         .with(SecurityMockMvcRequestPostProcessors.user(testUserDetails)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.totalVotes").value(1))  // 참여자 수는 그대로
+                .andExpect(jsonPath("$.voteInfo.totalVotes").value(1))  // 참여자 수는 그대로
                 .andExpect(jsonPath("$.voteOptions[0].voteCount").value(0))  // 한식: 1 → 0
                 .andExpect(jsonPath("$.voteOptions[1].voteCount").value(1))  // 중식: 0 → 1
                 .andExpect(jsonPath("$.voteOptions[2].voteCount").value(1))  // 일식: 0 → 1
-                .andExpect(jsonPath("$.selectedOptionIds.length()").value(2))
-                .andExpect(jsonPath("$.selectedOptionIds[0]").value(option2Id))
-                .andExpect(jsonPath("$.selectedOptionIds[1]").value(option3Id));
+                .andExpect(jsonPath("$.voteInfo.selectedOptionIds.length()").value(2))
+                .andExpect(jsonPath("$.voteInfo.selectedOptionIds[0]").value(option2Id))
+                .andExpect(jsonPath("$.voteInfo.selectedOptionIds[1]").value(option3Id));
     }
 }

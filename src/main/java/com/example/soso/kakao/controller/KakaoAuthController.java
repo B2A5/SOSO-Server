@@ -51,7 +51,7 @@ public class KakaoAuthController {
                                     examples = {
                                             @ExampleObject(name = "기존 사용자",
                                                     description = "기존 사용자 로그인 - 토큰 및 사용자 정보 반환",
-                                                    value = "{\"isNewUser\": false, \"accessToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\", \"user\": {\"id\": \"550e8400-e29b-41d4-a716-446655440000\", \"username\": \"홍길동\", \"nickname\": \"길동이\", \"email\": \"user@example.com\", \"userType\": \"FOUNDER\", \"gender\": \"MALE\", \"ageRange\": \"TWENTIES\", \"location\": \"서울시 강남구\", \"createdDate\": \"2024-01-01T00:00:00\", \"lastModifiedDate\": \"2024-01-01T00:00:00\"}}"),
+                                                    value = "{\"isNewUser\": false, \"accessToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\", \"user\": {\"id\": \"550e8400-e29b-41d4-a716-446655440000\", \"username\": \"홍길동\", \"nickname\": \"길동이\", \"email\": \"user@example.com\", \"userType\": \"FOUNDER\", \"gender\": \"MALE\", \"ageRange\": \"TWENTIES\", \"location\": \"서울시 강남구\", \"createdAt\": \"2024-01-01T00:00:00\", \"updatedAt\": \"2024-01-01T00:00:00\"}}"),
                                             @ExampleObject(name = "신규 사용자",
                                                     description = "신규 사용자 - 회원가입 세션 생성됨",
                                                     value = "{\"isNewUser\": true, \"accessToken\": null, \"user\": null}")
