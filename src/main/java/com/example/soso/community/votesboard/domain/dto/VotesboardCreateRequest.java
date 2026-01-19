@@ -19,7 +19,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @Schema(description = "투표 게시판 게시글 생성 요청")
-public class VoteboardCreateRequest {
+public class VotesboardCreateRequest {
 
     @Schema(
             description = "게시글 카테고리",

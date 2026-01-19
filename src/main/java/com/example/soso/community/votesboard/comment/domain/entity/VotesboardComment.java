@@ -25,7 +25,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @Entity
 @Table(name = "voteboard_comments")
-public class VoteboardComment extends BaseTimeEntity {
+public class VotesboardComment extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,7 +41,7 @@ public class VoteboardComment extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
-    private VoteboardComment parent;
+    private VotesboardComment parent;
 
     @Lob
     @Column(nullable = false)
@@ -98,7 +98,7 @@ public class VoteboardComment extends BaseTimeEntity {
     /**
      * 부모 댓글 가져오기
      */
-    public VoteboardComment getParent() {
+    public VotesboardComment getParent() {
         return parent;
     }
 

@@ -23,7 +23,7 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class VoteboardCommentLike {
+public class VotesboardCommentLike {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,7 +31,7 @@ public class VoteboardCommentLike {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "comment_id", nullable = false)
-    private VoteboardComment comment;
+    private VotesboardComment comment;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
@@ -42,7 +42,7 @@ public class VoteboardCommentLike {
     private LocalDateTime createdAt;
 
     @Builder
-    public VoteboardCommentLike(VoteboardComment comment, Users user) {
+    public VotesboardCommentLike(VotesboardComment comment, Users user) {
         this.comment = comment;
         this.user = user;
     }
@@ -50,8 +50,8 @@ public class VoteboardCommentLike {
     /**
      * 좋아요 생성 정적 팩토리 메서드
      */
-    public static VoteboardCommentLike create(VoteboardComment comment, Users user) {
-        return VoteboardCommentLike.builder()
+    public static VotesboardCommentLike create(VotesboardComment comment, Users user) {
+        return VotesboardCommentLike.builder()
                 .comment(comment)
                 .user(user)
                 .build();

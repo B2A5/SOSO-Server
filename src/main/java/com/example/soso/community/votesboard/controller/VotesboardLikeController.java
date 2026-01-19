@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 /**
  * 투표 게시글 좋아요 API 컨트롤러
  */
-@Tag(name = "Voteboard Like", description = "투표 게시글 좋아요 API")
+@Tag(name = "Votesboard Like", description = "투표 게시글 좋아요 API")
 @Slf4j
 @RestController
 @RequestMapping("/api/community/votesboard/{votesboardId}/like")

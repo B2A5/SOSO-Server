@@ -1,6 +1,6 @@
 package com.example.soso.community.votesboard.comment.controller;
 
-import com.example.soso.community.votesboard.comment.service.VoteboardCommentLikeService;
+import com.example.soso.community.votesboard.comment.service.VotesboardCommentLikeService;
 import com.example.soso.security.domain.CustomUserDetails;
 import com.example.soso.global.exception.domain.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -20,17 +20,17 @@ import org.springframework.web.bind.annotation.*;
 /**
  * 투표 게시판 댓글 좋아요 API 컨트롤러
  */
-@Tag(name = "Voteboard Comment Like", description = "투표 게시판 댓글 좋아요 API")
+@Tag(name = "Votesboard Comment Like", description = "투표 게시판 댓글 좋아요 API")
 @Slf4j
 @RestController
 @RequestMapping("/community/votesboard/{votesboardId}/comments/{commentId}/like")
 @RequiredArgsConstructor
-public class VoteboardCommentLikeController {
+public class VotesboardCommentLikeController {
 
-    private final VoteboardCommentLikeService commentLikeService;
+    private final VotesboardCommentLikeService commentLikeService;
 
     @Operation(
-            operationId = "toggleVoteboardCommentLike",
+            operationId = "toggleVotesboardCommentLike",
             summary = "댓글 좋아요 토글",
             description = """
                     댓글에 좋아요를 추가하거나 취소합니다.
@@ -93,7 +93,7 @@ public class VoteboardCommentLikeController {
     }
 
     @Operation(
-            operationId = "getVoteboardCommentLikeStatus",
+            operationId = "getVotesboardCommentLikeStatus",
             summary = "댓글 좋아요 상태 확인",
             description = """
                     사용자가 특정 댓글에 좋아요를 했는지 확인합니다.

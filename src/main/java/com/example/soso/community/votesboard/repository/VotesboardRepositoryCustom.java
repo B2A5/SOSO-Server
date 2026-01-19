@@ -2,7 +2,7 @@ package com.example.soso.community.votesboard.repository;
 
 import com.example.soso.community.votesboard.domain.entity.Votesboard;
 import com.example.soso.community.votesboard.domain.entity.VoteStatus;
-import com.example.soso.community.votesboard.dto.VoteboardSortType;
+import com.example.soso.community.votesboard.dto.VotesboardSortType;
 
 import java.util.List;
 
@@ -20,5 +20,5 @@ public interface VotesboardRepositoryCustom {
      * @param size   조회 개수
      * @return 투표 게시글 목록
      */
-    List<Votesboard> findAllBySortAndCursor(VoteStatus status, VoteboardSortType sort, Long cursor, int size);
+    List<Votesboard> findAllBySortAndCursor(VoteStatus status, VotesboardSortType sort, Long cursor, int size);
 }

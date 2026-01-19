@@ -44,10 +44,10 @@ public class SwaggerConfig {
                 "Freeboard Like",
                 "Freeboard Comment",
                 "Freeboard Comment Like",
-                "Voteboard",
-                "Voteboard Like",
-                "Voteboard Comment",
-                "Voteboard Comment Like"
+                "Votesboard",
+                "Votesboard Like",
+                "Votesboard Comment",
+                "Votesboard Comment Like"
         );
 
         return openApi -> openApi.setTags(

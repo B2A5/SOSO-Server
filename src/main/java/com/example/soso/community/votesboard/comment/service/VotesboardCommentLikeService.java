@@ -3,7 +3,7 @@ package com.example.soso.community.votesboard.comment.service;
 /**
  * 투표 게시판 댓글 좋아요 서비스 인터페이스
  */
-public interface VoteboardCommentLikeService {
+public interface VotesboardCommentLikeService {
 
     /**
      * 댓글 좋아요 토글 (추가/취소)

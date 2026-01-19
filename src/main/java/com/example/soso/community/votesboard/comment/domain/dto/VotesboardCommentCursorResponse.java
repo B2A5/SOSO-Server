@@ -17,10 +17,10 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class VoteboardCommentCursorResponse {
+public class VotesboardCommentCursorResponse {
 
     @Schema(description = "댓글 목록", requiredMode = Schema.RequiredMode.REQUIRED)
-    private List<VoteboardCommentSummary> comments;
+    private List<VotesboardCommentSummary> comments;
 
     @Schema(description = "다음 페이지 존재 여부", example = "true", requiredMode = Schema.RequiredMode.REQUIRED)
     private boolean hasNext;
@@ -43,7 +43,7 @@ public class VoteboardCommentCursorResponse {
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
-    public static class VoteboardCommentSummary {
+    public static class VotesboardCommentSummary {
         @Schema(description = "댓글 ID", example = "456", requiredMode = Schema.RequiredMode.REQUIRED)
         private Long commentId;
 

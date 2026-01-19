@@ -3,7 +3,7 @@ package com.example.soso.community.votesboard.repository;
 import com.example.soso.community.votesboard.domain.entity.QVotesboard;
 import com.example.soso.community.votesboard.domain.entity.Votesboard;
 import com.example.soso.community.votesboard.domain.entity.VoteStatus;
-import com.example.soso.community.votesboard.dto.VoteboardSortType;
+import com.example.soso.community.votesboard.dto.VotesboardSortType;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -24,7 +24,7 @@ public class VotesboardRepositoryImpl implements VotesboardRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<Votesboard> findAllBySortAndCursor(VoteStatus status, VoteboardSortType sort, Long cursor, int size) {
+    public List<Votesboard> findAllBySortAndCursor(VoteStatus status, VotesboardSortType sort, Long cursor, int size) {
         QVotesboard votesboard = QVotesboard.votesboard;
         LocalDateTime now = LocalDateTime.now();
 
@@ -58,7 +58,7 @@ public class VotesboardRepositoryImpl implements VotesboardRepositoryCustom {
     /**
      * 정렬 기준에 따른 커서 조건 생성
      */
-    private BooleanExpression getCursorCondition(QVotesboard votesboard, VoteboardSortType sort, Long cursorId) {
+    private BooleanExpression getCursorCondition(QVotesboard votesboard, VotesboardSortType sort, Long cursorId) {
         // 커서 ID에 해당하는 게시글의 정렬 기준 값을 가져와서 비교
         // 간단하게 ID만으로 커서 처리 (복잡한 정렬의 경우 서브쿼리 필요)
         return votesboard.id.lt(cursorId);
@@ -67,7 +67,7 @@ public class VotesboardRepositoryImpl implements VotesboardRepositoryCustom {
     /**
      * 정렬 기준에 따른 OrderSpecifier 생성
      */
-    private OrderSpecifier<?>[] getOrderSpecifiers(QVotesboard votesboard, VoteboardSortType sort) {
+    private OrderSpecifier<?>[] getOrderSpecifiers(QVotesboard votesboard, VotesboardSortType sort) {
         switch (sort) {
             case LIKE:
                 // 투표 인원 순 (totalVotes 내림차순), 동점 시 최신순

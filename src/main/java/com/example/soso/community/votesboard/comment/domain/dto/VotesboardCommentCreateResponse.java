@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class VoteboardCommentCreateResponse {
+public class VotesboardCommentCreateResponse {
 
     @Schema(description = "생성/수정된 댓글 ID", example = "456", requiredMode = Schema.RequiredMode.REQUIRED)
     private Long commentId;

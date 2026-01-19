@@ -17,10 +17,10 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class VoteboardCursorResponse {
+public class VotesboardCursorResponse {
 
     @Schema(description = "투표 게시글 목록", requiredMode = Schema.RequiredMode.REQUIRED)
-    private List<VoteboardSummary> posts;
+    private List<VotesboardSummary> posts;
 
     @Schema(description = "다음 페이지 존재 여부", example = "true", requiredMode = Schema.RequiredMode.REQUIRED)
     private boolean hasNext;

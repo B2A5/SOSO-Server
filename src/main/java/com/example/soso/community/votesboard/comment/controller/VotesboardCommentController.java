@@ -1,7 +1,7 @@
 package com.example.soso.community.votesboard.comment.controller;
 
 import com.example.soso.community.votesboard.comment.domain.dto.*;
-import com.example.soso.community.votesboard.comment.service.VoteboardCommentService;
+import com.example.soso.community.votesboard.comment.service.VotesboardCommentService;
 import com.example.soso.security.domain.CustomUserDetails;
 import com.example.soso.global.exception.domain.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -30,16 +30,16 @@ import org.springframework.web.bind.annotation.*;
  * - 대댓글 지원
  */
 @Slf4j
-@Tag(name = "Voteboard Comment", description = "투표 게시판 댓글 API")
+@Tag(name = "Votesboard Comment", description = "투표 게시판 댓글 API")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/community/votesboard/{votesboardId}/comments")
-public class VoteboardCommentController {
+public class VotesboardCommentController {
 
-    private final VoteboardCommentService commentService;
+    private final VotesboardCommentService commentService;
 
     @Operation(
-            operationId = "createVoteboardComment",
+            operationId = "createVotesboardComment",
             summary = "댓글 작성",
             description = """
                     투표 게시판 게시글에 댓글을 작성합니다.
@@ -51,7 +51,7 @@ public class VoteboardCommentController {
                     """,
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     description = "댓글 작성 요청",
-                    content = @Content(schema = @Schema(implementation = VoteboardCommentCreateRequest.class))
+                    content = @Content(schema = @Schema(implementation = VotesboardCommentCreateRequest.class))
             )
     )
     @ApiResponses({
@@ -59,7 +59,7 @@ public class VoteboardCommentController {
                     responseCode = "201",
                     description = "댓글 작성 성공",
                     content = @Content(
-                            schema = @Schema(implementation = VoteboardCommentCreateResponse.class),
+                            schema = @Schema(implementation = VotesboardCommentCreateResponse.class),
                             examples = @ExampleObject(value = "{\"commentId\": 456}")
                     )
             ),
@@ -88,7 +88,7 @@ public class VoteboardCommentController {
     public ResponseEntity<Object> createComment(
             @Parameter(description = "투표 게시글 ID", example = "123")
             @PathVariable Long votesboardId,
-            @RequestBody @Valid VoteboardCommentCreateRequest request,
+            @RequestBody @Valid VotesboardCommentCreateRequest request,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
         if (userDetails == null) {
@@ -101,14 +101,14 @@ public class VoteboardCommentController {
                 votesboardId, userDetails.getUser().getId(), request.getParentCommentId());
 
         String userId = userDetails.getUser().getId();
-        VoteboardCommentCreateResponse response = commentService.createComment(votesboardId, request, userId);
+        VotesboardCommentCreateResponse response = commentService.createComment(votesboardId, request, userId);
 
         log.info("투표게시판 댓글 작성 완료: commentId={}", response.getCommentId());
         return ResponseEntity.status(201).body(response);
     }
 
     @Operation(
-            operationId = "getVoteboardCommentsByCursor",
+            operationId = "getVotesboardCommentsByCursor",
             summary = "댓글 목록 조회 (커서 기반)",
             description = """
                     게시글의 댓글 목록을 커서 기반으로 조회합니다.
@@ -157,7 +157,7 @@ public class VoteboardCommentController {
             @ApiResponse(
                     responseCode = "200",
                     description = "조회 성공",
-                    content = @Content(schema = @Schema(implementation = VoteboardCommentCursorResponse.class))
+                    content = @Content(schema = @Schema(implementation = VotesboardCommentCursorResponse.class))
             ),
             @ApiResponse(
                     responseCode = "400",
@@ -177,7 +177,7 @@ public class VoteboardCommentController {
             )
     })
     @GetMapping
-    public ResponseEntity<VoteboardCommentCursorResponse> getCommentsByCursor(
+    public ResponseEntity<VotesboardCommentCursorResponse> getCommentsByCursor(
             @Parameter(description = "투표 게시글 ID", example = "123")
             @PathVariable Long votesboardId,
             @Parameter(
@@ -185,7 +185,7 @@ public class VoteboardCommentController {
                     example = "LATEST",
                     schema = @Schema(allowableValues = {"LATEST", "OLDEST"})
             )
-            @RequestParam(defaultValue = "LATEST") VoteboardCommentSortType sort,
+            @RequestParam(defaultValue = "LATEST") VotesboardCommentSortType sort,
             @RequestParam(required = false) String cursor,
             @RequestParam(defaultValue = "20") int size
     ) {
@@ -202,7 +202,7 @@ public class VoteboardCommentController {
         log.info("투표게시판 댓글 목록 조회 요청: votesboardId={}, sort={}, cursor={}, size={}, userId={}",
                 votesboardId, sort, cursor != null ? "present" : "null", size, userId != null ? userId : "anonymous");
 
-        VoteboardCommentCursorResponse response = commentService.getCommentsByCursor(votesboardId, sort, size, cursor, userId);
+        VotesboardCommentCursorResponse response = commentService.getCommentsByCursor(votesboardId, sort, size, cursor, userId);
 
         log.debug("투표게시판 댓글 목록 조회 완료: resultCount={}, hasNext={}",
                 response.getComments().size(), response.isHasNext());
@@ -210,7 +210,7 @@ public class VoteboardCommentController {
     }
 
     @Operation(
-            operationId = "updateVoteboardComment",
+            operationId = "updateVotesboardComment",
             summary = "댓글 수정",
             description = """
                     작성한 댓글을 수정합니다.
@@ -225,7 +225,7 @@ public class VoteboardCommentController {
             @ApiResponse(
                     responseCode = "200",
                     description = "수정 성공",
-                    content = @Content(schema = @Schema(implementation = VoteboardCommentCreateResponse.class))
+                    content = @Content(schema = @Schema(implementation = VotesboardCommentCreateResponse.class))
             ),
             @ApiResponse(
                     responseCode = "400",
@@ -269,7 +269,7 @@ public class VoteboardCommentController {
             @PathVariable Long votesboardId,
             @Parameter(description = "댓글 ID", example = "456")
             @PathVariable Long commentId,
-            @RequestBody @Valid VoteboardCommentUpdateRequest request,
+            @RequestBody @Valid VotesboardCommentUpdateRequest request,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
         if (userDetails == null) {
@@ -282,14 +282,14 @@ public class VoteboardCommentController {
                 votesboardId, commentId, userDetails.getUser().getId());
 
         String userId = userDetails.getUser().getId();
-        VoteboardCommentCreateResponse response = commentService.updateComment(votesboardId, commentId, request, userId);
+        VotesboardCommentCreateResponse response = commentService.updateComment(votesboardId, commentId, request, userId);
 
         log.info("투표게시판 댓글 수정 완료: commentId={}", response.getCommentId());
         return ResponseEntity.ok(response);
     }
 
     @Operation(
-            operationId = "deleteVoteboardComment",
+            operationId = "deleteVotesboardComment",
             summary = "댓글 삭제 (소프트 삭제)",
             description = """
                     댓글을 삭제합니다. (소프트 삭제)

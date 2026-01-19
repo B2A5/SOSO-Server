@@ -19,7 +19,7 @@ import java.util.List;
 @Getter
 @Setter
 @Schema(description = "투표 게시판 게시글 수정 요청 (투표 옵션 수정 불가)")
-public class VoteboardUpdateRequest {
+public class VotesboardUpdateRequest {
 
     @Schema(
             description = "수정할 카테고리",

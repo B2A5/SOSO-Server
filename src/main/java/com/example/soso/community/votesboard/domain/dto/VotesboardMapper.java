@@ -16,14 +16,14 @@ import java.util.List;
  */
 @Component
 @RequiredArgsConstructor
-public class VoteboardMapper {
+public class VotesboardMapper {
 
     private final UserMapper userMapper;
 
     /**
      * 생성 요청 DTO를 Votesboard 엔티티로 변환
      */
-    public Votesboard toEntity(VoteboardCreateRequest request, Users user) {
+    public Votesboard toEntity(VotesboardCreateRequest request, Users user) {
         Votesboard votesboard = Votesboard.create(
                 user,
                 request.getTitle(),
@@ -51,7 +51,7 @@ public class VoteboardMapper {
     /**
      * Votesboard를 요약 응답 DTO로 변환 (목록 조회용)
      */
-    public VoteboardSummary toSummaryResponse(Votesboard votesboard, long commentCount, long likeCount, Boolean isLiked, Boolean hasVoted) {
+    public VotesboardSummary toSummaryResponse(Votesboard votesboard, long commentCount, long likeCount, Boolean isLiked, Boolean hasVoted) {
         // 투표 옵션 미리보기 (최대 3개)
         List<VoteOptionResponse> voteOptions = votesboard.getVoteOptions().stream()
                 .limit(3)
@@ -83,7 +83,7 @@ public class VoteboardMapper {
                 votesboard.isAllowMultipleChoice()
         );
 
-        return VoteboardSummary.builder()
+        return VotesboardSummary.builder()
                 .postId(votesboard.getId())
                 .author(userMapper.toUserSummary(votesboard.getUser()))
                 .category(votesboard.getCategory())
@@ -106,7 +106,7 @@ public class VoteboardMapper {
     /**
      * Votesboard를 상세 응답 DTO로 변환
      */
-    public VoteboardDetailResponse toDetailResponse(
+    public VotesboardDetailResponse toDetailResponse(
             Votesboard votesboard,
             long commentCount,
             List<VoteResult> userVoteResults,
@@ -133,9 +133,9 @@ public class VoteboardMapper {
                 : null;
 
         // 이미지 정보 목록 추출
-        List<VoteboardDetailResponse.ImageInfo> images = votesboard.getImages().stream()
+        List<VotesboardDetailResponse.ImageInfo> images = votesboard.getImages().stream()
                 .sorted((img1, img2) -> Integer.compare(img1.getSequence(), img2.getSequence()))
-                .map(img -> VoteboardDetailResponse.ImageInfo.builder()
+                .map(img -> VotesboardDetailResponse.ImageInfo.builder()
                         .imageId(img.getId())
                         .imageUrl(img.getImageUrl())
                         .sequence(img.getSequence())
@@ -152,7 +152,7 @@ public class VoteboardMapper {
                 votesboard.isAllowMultipleChoice()
         );
 
-        return VoteboardDetailResponse.builder()
+        return VotesboardDetailResponse.builder()
                 .postId(votesboard.getId())
                 .author(userMapper.toUserSummary(votesboard.getUser()))
                 .category(votesboard.getCategory())
@@ -193,14 +193,14 @@ public class VoteboardMapper {
     /**
      * 목록 응답 생성
      */
-    public VoteboardCursorResponse toListResponse(
-            List<VoteboardSummary> posts,
+    public VotesboardCursorResponse toListResponse(
+            List<VotesboardSummary> posts,
             String nextCursor,
             boolean hasNext,
             long totalCount,
             boolean isAuthorized
     ) {
-        return VoteboardCursorResponse.builder()
+        return VotesboardCursorResponse.builder()
                 .posts(posts)
                 .hasNext(hasNext)
                 .nextCursor(nextCursor)

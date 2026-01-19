@@ -29,8 +29,8 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/community/votesboard")
 @RequiredArgsConstructor
-@Tag(name = "Voteboard", description = "투표 게시판 API")
-public class VoteboardController {
+@Tag(name = "Votesboard", description = "투표 게시판 API")
+public class VotesboardController {
 
     private final VotesboardService votesboardService;
 
@@ -56,7 +56,7 @@ public class VoteboardController {
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     content = @Content(
                             mediaType = MediaType.MULTIPART_FORM_DATA_VALUE,
-                            schema = @Schema(implementation = VoteboardCreateRequest.class)
+                            schema = @Schema(implementation = VotesboardCreateRequest.class)
                     )
             )
     )
@@ -66,7 +66,7 @@ public class VoteboardController {
                     description = "투표 게시글 작성 성공",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = VoteboardCreateResponse.class),
+                            schema = @Schema(implementation = VotesboardCreateResponse.class),
                             examples = @ExampleObject(
                                     name = "성공 응답",
                                     value = "{\"postId\": 1}"
@@ -112,13 +112,13 @@ public class VoteboardController {
                     )
             )
     })
-    public ResponseEntity<VoteboardCreateResponse> createVotesboard(
-            @ModelAttribute @Valid VoteboardCreateRequest request,
+    public ResponseEntity<VotesboardCreateResponse> createVotesboard(
+            @ModelAttribute @Valid VotesboardCreateRequest request,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
         Long votesboardId = votesboardService.createVotesboard(request, userDetails.getUser().getId());
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(new VoteboardCreateResponse(votesboardId));
+                .body(new VotesboardCreateResponse(votesboardId));
     }
 
     @GetMapping("/{votesboardId}")
@@ -157,7 +157,7 @@ public class VoteboardController {
                     description = "투표 게시글 조회 성공",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = VoteboardDetailResponse.class),
+                            schema = @Schema(implementation = VotesboardDetailResponse.class),
                             examples = {
                                     @ExampleObject(
                                             name = "인증 사용자 (본인 작성, 투표 전)",
@@ -188,7 +188,7 @@ public class VoteboardController {
                     )
             )
     })
-    public ResponseEntity<VoteboardDetailResponse> getVotesboard(
+    public ResponseEntity<VotesboardDetailResponse> getVotesboard(
             @Parameter(description = "투표 게시글 ID", required = true)
             @PathVariable Long votesboardId,
             @AuthenticationPrincipal CustomUserDetails userDetails
@@ -198,7 +198,7 @@ public class VoteboardController {
             userId = userDetails.getUser().getId();
         }
 
-        VoteboardDetailResponse response = votesboardService.getVotesboard(votesboardId, userId);
+        VotesboardDetailResponse response = votesboardService.getVotesboard(votesboardId, userId);
         return ResponseEntity.ok(response);
     }
 
@@ -233,7 +233,7 @@ public class VoteboardController {
                     description = "투표 게시글 목록 조회 성공",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = VoteboardCursorResponse.class)
+                            schema = @Schema(implementation = VotesboardCursorResponse.class)
                     )
             ),
             @ApiResponse(
@@ -248,7 +248,7 @@ public class VoteboardController {
                     )
             )
     })
-    public ResponseEntity<VoteboardCursorResponse> getVotesboardList(
+    public ResponseEntity<VotesboardCursorResponse> getVotesboardList(
             @Parameter(description = "투표 상태 (IN_PROGRESS: 진행중, COMPLETED: 완료, null: 전체)")
             @RequestParam(required = false) VoteStatus status,
             @Parameter(
@@ -262,7 +262,7 @@ public class VoteboardController {
                             """,
                     example = "LATEST"
             )
-            @RequestParam(defaultValue = "LATEST") com.example.soso.community.votesboard.dto.VoteboardSortType sort,
+            @RequestParam(defaultValue = "LATEST") com.example.soso.community.votesboard.dto.VotesboardSortType sort,
             @Parameter(description = "페이지 크기 (1-50, 기본값: 20)", example = "20")
             @RequestParam(defaultValue = "20") int size,
             @Parameter(
@@ -282,7 +282,7 @@ public class VoteboardController {
         if (userDetails != null) {
                 userId = userDetails.getUser().getId();
         }
-        VoteboardCursorResponse response = votesboardService.getVotesboardsByCursor(status, sort, size, cursor, userId);
+        VotesboardCursorResponse response = votesboardService.getVotesboardsByCursor(status, sort, size, cursor, userId);
         return ResponseEntity.ok(response);
     }
 
@@ -304,7 +304,7 @@ public class VoteboardController {
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     content = @Content(
                             mediaType = MediaType.MULTIPART_FORM_DATA_VALUE,
-                            schema = @Schema(implementation = VoteboardUpdateRequest.class)
+                            schema = @Schema(implementation = VotesboardUpdateRequest.class)
                     )
             )
     )
@@ -335,7 +335,7 @@ public class VoteboardController {
     public ResponseEntity<Void> updateVotesboard(
             @Parameter(description = "투표 게시글 ID", required = true)
             @PathVariable Long votesboardId,
-            @ModelAttribute @Valid VoteboardUpdateRequest request,
+            @ModelAttribute @Valid VotesboardUpdateRequest request,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
         votesboardService.updateVotesboard(votesboardId, request, userDetails.getUser().getId());

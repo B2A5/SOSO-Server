@@ -1,9 +1,9 @@
 package com.example.soso.community.votesboard.comment.service;
 
-import com.example.soso.community.votesboard.comment.domain.entity.VoteboardComment;
-import com.example.soso.community.votesboard.comment.domain.entity.VoteboardCommentLike;
-import com.example.soso.community.votesboard.comment.domain.repository.VoteboardCommentLikeRepository;
-import com.example.soso.community.votesboard.comment.domain.repository.VoteboardCommentRepository;
+import com.example.soso.community.votesboard.comment.domain.entity.VotesboardComment;
+import com.example.soso.community.votesboard.comment.domain.entity.VotesboardCommentLike;
+import com.example.soso.community.votesboard.comment.domain.repository.VotesboardCommentLikeRepository;
+import com.example.soso.community.votesboard.comment.domain.repository.VotesboardCommentRepository;
 import com.example.soso.global.exception.domain.PostErrorCode;
 import com.example.soso.global.exception.domain.UserErrorCode;
 import com.example.soso.global.exception.util.PostException;
@@ -20,10 +20,10 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class VoteboardCommentLikeServiceImpl implements VoteboardCommentLikeService {
+public class VotesboardCommentLikeServiceImpl implements VotesboardCommentLikeService {
 
-    private final VoteboardCommentLikeRepository commentLikeRepository;
-    private final VoteboardCommentRepository commentRepository;
+    private final VotesboardCommentLikeRepository commentLikeRepository;
+    private final VotesboardCommentRepository commentRepository;
     private final UsersRepository usersRepository;
 
     /**
@@ -32,7 +32,7 @@ public class VoteboardCommentLikeServiceImpl implements VoteboardCommentLikeServ
     @Override
     @Transactional
     public boolean toggleLike(Long commentId, String userId) {
-        VoteboardComment comment = commentRepository.findById(commentId)
+        VotesboardComment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new PostException(PostErrorCode.COMMENT_NOT_FOUND));
 
         Users user = usersRepository.findById(userId)
@@ -48,7 +48,7 @@ public class VoteboardCommentLikeServiceImpl implements VoteboardCommentLikeServ
                 })
                 .orElseGet(() -> {
                     // 좋아요 추가
-                    VoteboardCommentLike newLike = VoteboardCommentLike.create(comment, user);
+                    VotesboardCommentLike newLike = VotesboardCommentLike.create(comment, user);
                     commentLikeRepository.save(newLike);
                     comment.incrementLikeCount();
                     return true;

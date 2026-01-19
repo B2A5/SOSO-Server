@@ -5,7 +5,7 @@ import com.example.soso.community.votesboard.comment.domain.dto.*;
 /**
  * 투표 게시판 댓글 비즈니스 로직 인터페이스
  */
-public interface VoteboardCommentService {
+public interface VotesboardCommentService {
 
     /**
      * 새 댓글을 작성합니다.
@@ -15,7 +15,7 @@ public interface VoteboardCommentService {
      * @param userId 작성자 ID
      * @return 생성된 댓글 ID
      */
-    VoteboardCommentCreateResponse createComment(Long votesboardId, VoteboardCommentCreateRequest request, String userId);
+    VotesboardCommentCreateResponse createComment(Long votesboardId, VotesboardCommentCreateRequest request, String userId);
 
     /**
      * 커서 기반으로 댓글 목록을 조회합니다.
@@ -27,7 +27,7 @@ public interface VoteboardCommentService {
      * @param userId 조회하는 사용자 ID (null 가능)
      * @return 댓글 목록과 커서 정보
      */
-    VoteboardCommentCursorResponse getCommentsByCursor(Long votesboardId, VoteboardCommentSortType sort, int size, String cursor, String userId);
+    VotesboardCommentCursorResponse getCommentsByCursor(Long votesboardId, VotesboardCommentSortType sort, int size, String cursor, String userId);
 
     /**
      * 댓글을 수정합니다.
@@ -38,7 +38,7 @@ public interface VoteboardCommentService {
      * @param userId 수정하는 사용자 ID
      * @return 수정된 댓글 ID
      */
-    VoteboardCommentCreateResponse updateComment(Long votesboardId, Long commentId, VoteboardCommentUpdateRequest request, String userId);
+    VotesboardCommentCreateResponse updateComment(Long votesboardId, Long commentId, VotesboardCommentUpdateRequest request, String userId);
 
     /**
      * 댓글을 소프트 삭제합니다.

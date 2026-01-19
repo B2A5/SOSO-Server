@@ -32,7 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 @DisplayName("투표 참여 통합 테스트")
-class VoteboardVotingIntegrationTest {
+class VotesboardVotingIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;

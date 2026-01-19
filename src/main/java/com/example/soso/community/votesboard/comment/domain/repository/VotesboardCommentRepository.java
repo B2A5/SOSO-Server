@@ -1,6 +1,6 @@
 package com.example.soso.community.votesboard.comment.domain.repository;
 
-import com.example.soso.community.votesboard.comment.domain.entity.VoteboardComment;
+import com.example.soso.community.votesboard.comment.domain.entity.VotesboardComment;
 import com.example.soso.community.votesboard.domain.entity.Votesboard;
 import com.example.soso.users.domain.entity.Users;
 import org.springframework.data.domain.Pageable;
@@ -16,45 +16,45 @@ import java.util.Optional;
 /**
  * 투표 게시판 댓글 Repository
  */
-public interface VoteboardCommentRepository extends JpaRepository<VoteboardComment, Long> {
+public interface VotesboardCommentRepository extends JpaRepository<VotesboardComment, Long> {
 
     /**
      * 좋아요 수 업데이트
      */
     @Modifying
-    @Query("UPDATE VoteboardComment c SET c.likeCount = :count WHERE c.id = :commentId")
+    @Query("UPDATE VotesboardComment c SET c.likeCount = :count WHERE c.id = :commentId")
     void updateLikeCount(@Param("commentId") Long commentId, @Param("count") long count);
 
     /**
      * 투표 게시글의 모든 댓글 조회
      */
-    List<VoteboardComment> findAllByVotesboard(Votesboard votesboard);
+    List<VotesboardComment> findAllByVotesboard(Votesboard votesboard);
 
     /**
      * 댓글 ID와 사용자 ID로 조회
      */
-    Optional<VoteboardComment> findByIdAndUserId(Long commentId, String userId);
+    Optional<VotesboardComment> findByIdAndUserId(Long commentId, String userId);
 
     /**
      * 댓글 ID와 투표 게시글 ID로 조회
      */
-    Optional<VoteboardComment> findByIdAndVotesboardId(Long commentId, Long votesboardId);
+    Optional<VotesboardComment> findByIdAndVotesboardId(Long commentId, Long votesboardId);
 
     /**
      * 투표 게시글의 댓글 ID 목록 조회
      */
-    @Query("select c.id from VoteboardComment c where c.votesboard.id = :votesboardId")
+    @Query("select c.id from VotesboardComment c where c.votesboard.id = :votesboardId")
     List<Long> findIdsByVotesboardId(@Param("votesboardId") Long votesboardId);
 
     /**
      * 삭제되지 않은 댓글 조회 (페이징)
      */
-    List<VoteboardComment> findByVotesboardIdAndDeletedFalse(Long votesboardId, Pageable pageable);
+    List<VotesboardComment> findByVotesboardIdAndDeletedFalse(Long votesboardId, Pageable pageable);
 
     /**
      * 부모 댓글의 자식 댓글 조회
      */
-    List<VoteboardComment> findByParentId(Long parentId);
+    List<VotesboardComment> findByParentId(Long parentId);
 
     /**
      * 부모 댓글의 삭제되지 않은 자식 댓글 수
@@ -64,7 +64,7 @@ public interface VoteboardCommentRepository extends JpaRepository<VoteboardComme
     /**
      * 삭제되지 않은 댓글 조회
      */
-    Optional<VoteboardComment> findByIdAndDeletedFalse(Long commentId);
+    Optional<VotesboardComment> findByIdAndDeletedFalse(Long commentId);
 
     /**
      * 투표 게시글의 삭제되지 않은 댓글 수
@@ -79,23 +79,23 @@ public interface VoteboardCommentRepository extends JpaRepository<VoteboardComme
     /**
      * 커서 기반 페이징 - 생성일 이전
      */
-    List<VoteboardComment> findByVotesboardIdAndDeletedFalseAndCreatedAtBefore(
+    List<VotesboardComment> findByVotesboardIdAndDeletedFalseAndCreatedAtBefore(
             Long votesboardId, LocalDateTime createdAt, Pageable pageable);
 
     /**
      * 커서 기반 페이징 - 생성일 이후
      */
-    List<VoteboardComment> findByVotesboardIdAndDeletedFalseAndCreatedAtAfter(
+    List<VotesboardComment> findByVotesboardIdAndDeletedFalseAndCreatedAtAfter(
             Long votesboardId, LocalDateTime createdAt, Pageable pageable);
 
     /**
      * 소프트 삭제된 댓글도 포함하여 조회 (댓글 구조 유지용)
      */
-    List<VoteboardComment> findByVotesboardId(Long votesboardId, Pageable pageable);
+    List<VotesboardComment> findByVotesboardId(Long votesboardId, Pageable pageable);
 
-    List<VoteboardComment> findByVotesboardIdAndCreatedAtBefore(
+    List<VotesboardComment> findByVotesboardIdAndCreatedAtBefore(
             Long votesboardId, LocalDateTime createdAt, Pageable pageable);
 
-    List<VoteboardComment> findByVotesboardIdAndCreatedAtAfter(
+    List<VotesboardComment> findByVotesboardIdAndCreatedAtAfter(
             Long votesboardId, LocalDateTime createdAt, Pageable pageable);
 }

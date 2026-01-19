@@ -38,7 +38,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 @Transactional
 @DisplayName("투표 게시판 좋아요 정보 통합 테스트")
-class VoteboardLikeInfoIntegrationTest {
+class VotesboardLikeInfoIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;

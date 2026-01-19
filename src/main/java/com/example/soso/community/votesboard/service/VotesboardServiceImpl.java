@@ -1,8 +1,8 @@
 package com.example.soso.community.votesboard.service;
 
-import com.example.soso.community.votesboard.comment.domain.repository.VoteboardCommentRepository;
+import com.example.soso.community.votesboard.comment.domain.repository.VotesboardCommentRepository;
 import com.example.soso.community.votesboard.domain.dto.*;
-import com.example.soso.community.votesboard.dto.VoteboardSortType;
+import com.example.soso.community.votesboard.dto.VotesboardSortType;
 import com.example.soso.community.votesboard.domain.entity.VoteOption;
 import com.example.soso.community.votesboard.domain.entity.Votesboard;
 import com.example.soso.community.votesboard.domain.entity.VotesboardImage;
@@ -43,14 +43,14 @@ public class VotesboardServiceImpl implements VotesboardService {
     private final VoteOptionRepository voteOptionRepository;
     private final VoteResultRepository voteResultRepository;
     private final UsersRepository usersRepository;
-    private final VoteboardCommentRepository voteboardCommentRepository;
+    private final VotesboardCommentRepository voteboardCommentRepository;
     private final VotesboardLikeRepository votesboardLikeRepository;
-    private final VoteboardMapper voteboardMapper;
+    private final VotesboardMapper voteboardMapper;
     private final ImageUploadService imageUploadService;
 
     @Override
     @Transactional
-    public Long createVotesboard(VoteboardCreateRequest request, String userId) {
+    public Long createVotesboard(VotesboardCreateRequest request, String userId) {
         log.info("투표 게시글 작성 시작: userId={}, optionCount={}, imageCount={}",
                 userId, request.getVoteOptions().size(),
                 request.getImages() != null ? request.getImages().size() : 0);
@@ -72,7 +72,7 @@ public class VotesboardServiceImpl implements VotesboardService {
 
     @Override
     @Transactional
-    public VoteboardDetailResponse getVotesboard(Long postId, String userId) {
+    public VotesboardDetailResponse getVotesboard(Long postId, String userId) {
         log.debug("투표 게시글 조회: postId={}, userId={}", postId, userId);
 
         Votesboard votesboard = findVotesboardById(postId);
@@ -99,7 +99,7 @@ public class VotesboardServiceImpl implements VotesboardService {
     }
 
     @Override
-    public VoteboardCursorResponse getVotesboardsByCursor(VoteStatus status, VoteboardSortType sort, int size, String cursor, String userId) {
+    public VotesboardCursorResponse getVotesboardsByCursor(VoteStatus status, VotesboardSortType sort, int size, String cursor, String userId) {
         log.debug("투표 게시글 목록 조회: status={}, sort={}, size={}, cursor={}, userId={}", status, sort, size, cursor, userId);
 
         // String cursor를 Long으로 파싱
@@ -143,7 +143,7 @@ public class VotesboardServiceImpl implements VotesboardService {
 
         // DTO 변환
         Users user = userId != null ? findUserById(userId) : null;
-        List<VoteboardSummary> summaries = posts.stream()
+        List<VotesboardSummary> summaries = posts.stream()
                 .map(post -> {
                     long commentCount = voteboardCommentRepository.countByVotesboardIdAndDeletedFalse(post.getId());
                     long likeCount = votesboardLikeRepository.countByVotesboard(post);
@@ -162,7 +162,7 @@ public class VotesboardServiceImpl implements VotesboardService {
 
     @Override
     @Transactional
-    public void updateVotesboard(Long postId, VoteboardUpdateRequest request, String userId) {
+    public void updateVotesboard(Long postId, VotesboardUpdateRequest request, String userId) {
         log.info("투표 게시글 수정 시작: postId={}, userId={}", postId, userId);
 
         Votesboard votesboard = findVotesboardById(postId);

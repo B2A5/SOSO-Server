@@ -1,6 +1,6 @@
 package com.example.soso.community.votesboard.integration;
 
-import com.example.soso.community.votesboard.comment.domain.dto.VoteboardCommentCreateRequest;
+import com.example.soso.community.votesboard.comment.domain.dto.VotesboardCommentCreateRequest;
 import com.example.soso.security.domain.CustomUserDetails;
 import com.example.soso.users.domain.entity.UserType;
 import com.example.soso.users.domain.entity.Users;
@@ -40,7 +40,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 @Transactional
 @DisplayName("투표 게시판 댓글 시스템 통합 테스트")
-class VoteboardCommentIntegrationTest {
+class VotesboardCommentIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -87,7 +87,7 @@ class VoteboardCommentIntegrationTest {
         // given - 투표 게시글 생성
         Long votesboardId = createVotesboard(testUserDetails, "댓글 테스트 게시글");
 
-        VoteboardCommentCreateRequest request = VoteboardCommentCreateRequest.builder()
+        VotesboardCommentCreateRequest request = VotesboardCommentCreateRequest.builder()
                 .content("첫 번째 댓글입니다")
                 .build();
 
@@ -144,7 +144,7 @@ class VoteboardCommentIntegrationTest {
         Long votesboardId = createVotesboard(testUserDetails, "댓글 수정 테스트");
         Long commentId = createComment(votesboardId, testUserDetails, "원래 댓글");
 
-        VoteboardCommentCreateRequest updateRequest = VoteboardCommentCreateRequest.builder()
+        VotesboardCommentCreateRequest updateRequest = VotesboardCommentCreateRequest.builder()
                 .content("수정된 댓글 내용")
                 .build();
 
@@ -190,7 +190,7 @@ class VoteboardCommentIntegrationTest {
         Long votesboardId = createVotesboard(testUserDetails, "대댓글 테스트");
         Long parentCommentId = createComment(votesboardId, testUserDetails, "부모 댓글");
 
-        VoteboardCommentCreateRequest replyRequest = VoteboardCommentCreateRequest.builder()
+        VotesboardCommentCreateRequest replyRequest = VotesboardCommentCreateRequest.builder()
                 .content("대댓글입니다")
                 .parentCommentId(parentCommentId)
                 .build();
@@ -270,7 +270,7 @@ class VoteboardCommentIntegrationTest {
     }
 
     private Long createComment(Long votesboardId, CustomUserDetails userDetails, String content) throws Exception {
-        VoteboardCommentCreateRequest request = VoteboardCommentCreateRequest.builder()
+        VotesboardCommentCreateRequest request = VotesboardCommentCreateRequest.builder()
                 .content(content)
                 .build();
 

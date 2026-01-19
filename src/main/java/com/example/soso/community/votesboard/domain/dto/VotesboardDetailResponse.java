@@ -20,7 +20,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Schema(description = "투표 게시판 게시글 상세 정보")
-public class VoteboardDetailResponse {
+public class VotesboardDetailResponse {
 
     @Schema(description = "게시글 ID", example = "1", requiredMode = Schema.RequiredMode.REQUIRED)
     private Long postId;

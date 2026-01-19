@@ -1,9 +1,9 @@
 package com.example.soso.community.votesboard.comment.service;
 
 import com.example.soso.community.votesboard.comment.domain.dto.*;
-import com.example.soso.community.votesboard.comment.domain.entity.VoteboardComment;
-import com.example.soso.community.votesboard.comment.domain.repository.VoteboardCommentLikeRepository;
-import com.example.soso.community.votesboard.comment.domain.repository.VoteboardCommentRepository;
+import com.example.soso.community.votesboard.comment.domain.entity.VotesboardComment;
+import com.example.soso.community.votesboard.comment.domain.repository.VotesboardCommentLikeRepository;
+import com.example.soso.community.votesboard.comment.domain.repository.VotesboardCommentRepository;
 import com.example.soso.community.votesboard.domain.entity.Votesboard;
 import com.example.soso.community.votesboard.repository.VotesboardRepository;
 import com.example.soso.global.exception.domain.PostErrorCode;
@@ -29,23 +29,23 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class VoteboardCommentServiceImpl implements VoteboardCommentService {
+public class VotesboardCommentServiceImpl implements VotesboardCommentService {
 
-    private final VoteboardCommentRepository commentRepository;
-    private final VoteboardCommentLikeRepository commentLikeRepository;
+    private final VotesboardCommentRepository commentRepository;
+    private final VotesboardCommentLikeRepository commentLikeRepository;
     private final VotesboardRepository votesboardRepository;
     private final UsersRepository usersRepository;
 
     @Override
     @Transactional
-    public VoteboardCommentCreateResponse createComment(Long votesboardId, VoteboardCommentCreateRequest request, String userId) {
+    public VotesboardCommentCreateResponse createComment(Long votesboardId, VotesboardCommentCreateRequest request, String userId) {
         log.info("투표게시판 댓글 작성 시작: votesboardId={}, userId={}", votesboardId, userId);
 
         Votesboard votesboard = findVotesboardById(votesboardId);
         Users user = findUserById(userId);
 
         // 부모 댓글 확인 (대댓글인 경우)
-        VoteboardComment parent = null;
+        VotesboardComment parent = null;
         if (request.getParentCommentId() != null) {
             parent = findCommentById(request.getParentCommentId());
 
@@ -55,21 +55,21 @@ public class VoteboardCommentServiceImpl implements VoteboardCommentService {
             }
         }
 
-        VoteboardComment comment = VoteboardComment.builder()
+        VotesboardComment comment = VotesboardComment.builder()
                 .votesboard(votesboard)
                 .user(user)
                 .parent(parent)
                 .content(request.getContent())
                 .build();
 
-        VoteboardComment savedComment = commentRepository.save(comment);
+        VotesboardComment savedComment = commentRepository.save(comment);
         log.info("투표게시판 댓글 작성 완료: commentId={}", savedComment.getId());
 
-        return new VoteboardCommentCreateResponse(savedComment.getId());
+        return new VotesboardCommentCreateResponse(savedComment.getId());
     }
 
     @Override
-    public VoteboardCommentCursorResponse getCommentsByCursor(Long votesboardId, VoteboardCommentSortType sort,
+    public VotesboardCommentCursorResponse getCommentsByCursor(Long votesboardId, VotesboardCommentSortType sort,
                                                              int size, String cursor, String userId) {
         log.debug("투표게시판 댓글 목록 조회: votesboardId={}, sort={}, size={}, userId={}",
                  votesboardId, sort, size, userId);
@@ -82,7 +82,7 @@ public class VoteboardCommentServiceImpl implements VoteboardCommentService {
         PageRequest pageRequest = PageRequest.of(0, size + 1, sortOrder);
 
         // 댓글 조회
-        List<VoteboardComment> comments = fetchComments(votesboardId, cursor, pageRequest, sort);
+        List<VotesboardComment> comments = fetchComments(votesboardId, cursor, pageRequest, sort);
 
         // 다음 페이지 존재 여부 확인
         boolean hasNext = comments.size() > size;
@@ -95,14 +95,14 @@ public class VoteboardCommentServiceImpl implements VoteboardCommentService {
                 comments.get(comments.size() - 1).getCreatedAt().toString() : null;
 
         // 댓글 요약 생성
-        List<VoteboardCommentCursorResponse.VoteboardCommentSummary> summaries = comments.stream()
+        List<VotesboardCommentCursorResponse.VotesboardCommentSummary> summaries = comments.stream()
                 .map(comment -> createCommentSummary(comment, userId))
                 .toList();
 
         // 총 댓글 수
         long total = commentRepository.countByVotesboardId(votesboardId);
 
-        return VoteboardCommentCursorResponse.builder()
+        return VotesboardCommentCursorResponse.builder()
                 .comments(summaries)
                 .hasNext(hasNext)
                 .nextCursor(nextCursor)
@@ -114,11 +114,11 @@ public class VoteboardCommentServiceImpl implements VoteboardCommentService {
 
     @Override
     @Transactional
-    public VoteboardCommentCreateResponse updateComment(Long votesboardId, Long commentId,
-                                                       VoteboardCommentUpdateRequest request, String userId) {
+    public VotesboardCommentCreateResponse updateComment(Long votesboardId, Long commentId,
+                                                       VotesboardCommentUpdateRequest request, String userId) {
         log.info("투표게시판 댓글 수정 시작: commentId={}, userId={}", commentId, userId);
 
-        VoteboardComment comment = findCommentById(commentId);
+        VotesboardComment comment = findCommentById(commentId);
 
         // 권한 확인
         validateCommentAuthor(comment, userId);
@@ -131,7 +131,7 @@ public class VoteboardCommentServiceImpl implements VoteboardCommentService {
         comment.updateContent(request.getContent());
         log.info("투표게시판 댓글 수정 완료: commentId={}", commentId);
 
-        return new VoteboardCommentCreateResponse(comment.getId());
+        return new VotesboardCommentCreateResponse(comment.getId());
     }
 
     @Override
@@ -139,7 +139,7 @@ public class VoteboardCommentServiceImpl implements VoteboardCommentService {
     public void deleteComment(Long votesboardId, Long commentId, String userId) {
         log.info("투표게시판 댓글 삭제 시작: commentId={}, userId={}", commentId, userId);
 
-        VoteboardComment comment = findCommentById(commentId);
+        VotesboardComment comment = findCommentById(commentId);
 
         // 권한 확인
         validateCommentAuthor(comment, userId);
@@ -153,13 +153,13 @@ public class VoteboardCommentServiceImpl implements VoteboardCommentService {
     public void hardDeleteComment(Long votesboardId, Long commentId, String userId) {
         log.warn("투표게시판 댓글 하드 삭제 시작: commentId={}, userId={}", commentId, userId);
 
-        VoteboardComment comment = findCommentById(commentId);
+        VotesboardComment comment = findCommentById(commentId);
 
         // 권한 확인 (관리자 또는 작성자)
         validateCommentAuthor(comment, userId);
 
         // 자식 댓글도 삭제
-        List<VoteboardComment> childComments = commentRepository.findByParentId(commentId);
+        List<VotesboardComment> childComments = commentRepository.findByParentId(commentId);
         commentRepository.deleteAll(childComments);
         commentRepository.delete(comment);
 
@@ -179,32 +179,32 @@ public class VoteboardCommentServiceImpl implements VoteboardCommentService {
                 .orElseThrow(() -> new UserAuthException(UserErrorCode.USER_NOT_FOUND));
     }
 
-    private VoteboardComment findCommentById(Long commentId) {
+    private VotesboardComment findCommentById(Long commentId) {
         return commentRepository.findById(commentId)
                 .orElseThrow(() -> new PostException(PostErrorCode.COMMENT_NOT_FOUND));
     }
 
-    private void validateCommentAuthor(VoteboardComment comment, String userId) {
+    private void validateCommentAuthor(VotesboardComment comment, String userId) {
         if (!comment.getUser().getId().equals(userId)) {
             throw new UserAuthException(UserErrorCode.UNAUTHORIZED_ACCESS);
         }
     }
 
-    private Sort buildSort(VoteboardCommentSortType sortType) {
+    private Sort buildSort(VotesboardCommentSortType sortType) {
         return switch (sortType) {
             case LATEST -> Sort.by(Sort.Direction.DESC, "createdAt");
             case OLDEST -> Sort.by(Sort.Direction.ASC, "createdAt");
         };
     }
 
-    private List<VoteboardComment> fetchComments(Long votesboardId, String cursor,
-                                                 PageRequest pageRequest, VoteboardCommentSortType sortType) {
+    private List<VotesboardComment> fetchComments(Long votesboardId, String cursor,
+                                                 PageRequest pageRequest, VotesboardCommentSortType sortType) {
         if (cursor == null) {
             // 첫 페이지 - 소프트 삭제된 댓글도 포함 (댓글 구조 유지)
             return commentRepository.findByVotesboardId(votesboardId, pageRequest);
         } else {
             LocalDateTime cursorTime = LocalDateTime.parse(cursor);
-            if (sortType == VoteboardCommentSortType.LATEST) {
+            if (sortType == VotesboardCommentSortType.LATEST) {
                 return commentRepository.findByVotesboardIdAndCreatedAtBefore(votesboardId, cursorTime, pageRequest);
             } else {
                 return commentRepository.findByVotesboardIdAndCreatedAtAfter(votesboardId, cursorTime, pageRequest);
@@ -212,8 +212,8 @@ public class VoteboardCommentServiceImpl implements VoteboardCommentService {
         }
     }
 
-    private VoteboardCommentCursorResponse.VoteboardCommentSummary createCommentSummary(
-            VoteboardComment comment, String userId) {
+    private VotesboardCommentCursorResponse.VotesboardCommentSummary createCommentSummary(
+            VotesboardComment comment, String userId) {
 
         int replyCount = commentRepository.countByParentIdAndDeletedFalse(comment.getId());
         int depth = comment.getParent() != null ? 1 : 0;
@@ -228,11 +228,11 @@ public class VoteboardCommentServiceImpl implements VoteboardCommentService {
         Boolean canEdit = isAuthorized ? isAuthor : null;
         Boolean canDelete = isAuthorized ? isAuthor : null;
 
-        return VoteboardCommentCursorResponse.VoteboardCommentSummary.builder()
+        return VotesboardCommentCursorResponse.VotesboardCommentSummary.builder()
                 .commentId(comment.getId())
                 .votesboardId(comment.getVotesboard().getId())
                 .parentCommentId(comment.getParent() != null ? comment.getParent().getId() : null)
-                .author(VoteboardCommentCursorResponse.CommentAuthorInfo.builder()
+                .author(VotesboardCommentCursorResponse.CommentAuthorInfo.builder()
                         .userId(comment.getUser().getId())
                         .nickname(comment.getUser().getNickname())
                         .profileImageUrl(comment.getUser().getProfileImageUrl())
