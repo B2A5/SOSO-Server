@@ -2,7 +2,7 @@ package com.example.soso.community.voteboard.controller;
 
 import com.example.soso.community.voteboard.domain.dto.*;
 import com.example.soso.community.voteboard.domain.entity.VoteStatus;
-import com.example.soso.community.voteboard.service.VotePostService;
+import com.example.soso.community.voteboard.service.VotesboardService;
 import com.example.soso.global.exception.domain.ErrorResponse;
 import com.example.soso.security.domain.CustomUserDetails;
 import io.swagger.v3.oas.annotations.Operation;
@@ -32,11 +32,11 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Voteboard", description = "투표 게시판 API")
 public class VoteboardController {
 
-    private final VotePostService votePostService;
+    private final VotesboardService votesboardService;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(
-            operationId = "createVotePost",
+            operationId = "createVotesboard",
             summary = "투표 게시글 작성",
             description = """
                     새로운 투표 게시글을 작성합니다.
@@ -112,18 +112,18 @@ public class VoteboardController {
                     )
             )
     })
-    public ResponseEntity<VoteboardCreateResponse> createVotePost(
+    public ResponseEntity<VoteboardCreateResponse> createVotesboard(
             @ModelAttribute @Valid VoteboardCreateRequest request,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-        Long votesboardId = votePostService.createVotePost(request, userDetails.getUser().getId());
+        Long votesboardId = votesboardService.createVotesboard(request, userDetails.getUser().getId());
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new VoteboardCreateResponse(votesboardId));
     }
 
     @GetMapping("/{votesboardId}")
     @Operation(
-            operationId = "getVotePost",
+            operationId = "getVotesboard",
             summary = "투표 게시글 상세 조회",
             description = """
                     투표 게시글의 상세 정보를 조회합니다.
@@ -188,7 +188,7 @@ public class VoteboardController {
                     )
             )
     })
-    public ResponseEntity<VoteboardDetailResponse> getVotePost(
+    public ResponseEntity<VoteboardDetailResponse> getVotesboard(
             @Parameter(description = "투표 게시글 ID", required = true)
             @PathVariable Long votesboardId,
             @AuthenticationPrincipal CustomUserDetails userDetails
@@ -197,14 +197,14 @@ public class VoteboardController {
         if (userDetails != null) {
             userId = userDetails.getUser().getId();
         }
-        
-        VoteboardDetailResponse response = votePostService.getVotePost(votesboardId, userId);
+
+        VoteboardDetailResponse response = votesboardService.getVotesboard(votesboardId, userId);
         return ResponseEntity.ok(response);
     }
 
     @GetMapping
     @Operation(
-            operationId = "getVotePostsByCursor",
+            operationId = "getVotesboardsByCursor",
             summary = "투표 게시글 목록 조회 (커서 기반)",
             description = """
                     커서 기반 페이지네이션으로 투표 게시글 목록을 조회합니다.
@@ -248,7 +248,7 @@ public class VoteboardController {
                     )
             )
     })
-    public ResponseEntity<VoteboardCursorResponse> getVotePostList(
+    public ResponseEntity<VoteboardCursorResponse> getVotesboardList(
             @Parameter(description = "투표 상태 (IN_PROGRESS: 진행중, COMPLETED: 완료, null: 전체)")
             @RequestParam(required = false) VoteStatus status,
             @Parameter(
@@ -282,13 +282,13 @@ public class VoteboardController {
         if (userDetails != null) {
                 userId = userDetails.getUser().getId();
         }
-        VoteboardCursorResponse response = votePostService.getVotePostsByCursor(status, sort, size, cursor, userId);
+        VoteboardCursorResponse response = votesboardService.getVotesboardsByCursor(status, sort, size, cursor, userId);
         return ResponseEntity.ok(response);
     }
 
     @PutMapping(value = "/{votesboardId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(
-            operationId = "updateVotePost",
+            operationId = "updateVotesboard",
             summary = "투표 게시글 수정",
             description = """
                     투표 게시글을 수정합니다. 투표 옵션은 수정할 수 없습니다.
@@ -332,19 +332,19 @@ public class VoteboardController {
                     )
             )
     })
-    public ResponseEntity<Void> updateVotePost(
+    public ResponseEntity<Void> updateVotesboard(
             @Parameter(description = "투표 게시글 ID", required = true)
             @PathVariable Long votesboardId,
             @ModelAttribute @Valid VoteboardUpdateRequest request,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-        votePostService.updateVotePost(votesboardId, request, userDetails.getUser().getId());
+        votesboardService.updateVotesboard(votesboardId, request, userDetails.getUser().getId());
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{votesboardId}")
     @Operation(
-            operationId = "deleteVotePost",
+            operationId = "deleteVotesboard",
             summary = "투표 게시글 삭제",
             description = "투표 게시글을 삭제합니다 (소프트 삭제)."
     )
@@ -372,12 +372,12 @@ public class VoteboardController {
                     )
             )
     })
-    public ResponseEntity<Void> deleteVotePost(
+    public ResponseEntity<Void> deleteVotesboard(
             @Parameter(description = "투표 게시글 ID", required = true)
             @PathVariable Long votesboardId,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-        votePostService.deleteVotePost(votesboardId, userDetails.getUser().getId());
+        votesboardService.deleteVotesboard(votesboardId, userDetails.getUser().getId());
         return ResponseEntity.ok().build();
     }
 
@@ -479,7 +479,7 @@ public class VoteboardController {
             @Valid @RequestBody VoteRequest request,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-        votePostService.vote(votesboardId, request, userDetails.getUser().getId());
+        votesboardService.vote(votesboardId, request, userDetails.getUser().getId());
         return ResponseEntity.ok().build();
     }
 
@@ -574,7 +574,7 @@ public class VoteboardController {
             @Valid @RequestBody VoteRequest request,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-        votePostService.changeVote(votesboardId, request, userDetails.getUser().getId());
+        votesboardService.changeVote(votesboardId, request, userDetails.getUser().getId());
         return ResponseEntity.ok().build();
     }
 
@@ -613,7 +613,7 @@ public class VoteboardController {
             @PathVariable Long votesboardId,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-        votePostService.cancelVote(votesboardId, userDetails.getUser().getId());
+        votesboardService.cancelVote(votesboardId, userDetails.getUser().getId());
         return ResponseEntity.ok().build();
     }
 }

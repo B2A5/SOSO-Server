@@ -13,16 +13,16 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "vote_post_image")
-public class VotePostImage extends BaseTimeEntity {
+@Table(name = "votesboard_image")
+public class VotesboardImage extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "vote_post_id", nullable = false)
-    private VotePost votePost;
+    @JoinColumn(name = "votesboard_id", nullable = false)
+    private Votesboard votesboard;
 
     @Column(name = "image_url", nullable = false, length = 500)
     private String imageUrl;
@@ -31,13 +31,13 @@ public class VotePostImage extends BaseTimeEntity {
     private int sequence;
 
     @Builder
-    public VotePostImage(VotePost votePost, String imageUrl, int sequence) {
-        this.votePost = votePost;
+    public VotesboardImage(Votesboard votesboard, String imageUrl, int sequence) {
+        this.votesboard = votesboard;
         this.imageUrl = imageUrl;
         this.sequence = sequence;
     }
 
-    public void setVotePost(VotePost votePost) {
-        this.votePost = votePost;
+    public void setVotesboard(Votesboard votesboard) {
+        this.votesboard = votesboard;
     }
 }

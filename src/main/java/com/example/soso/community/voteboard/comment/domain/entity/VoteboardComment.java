@@ -1,7 +1,7 @@
 package com.example.soso.community.voteboard.comment.domain.entity;
 
 import com.example.soso.global.time.BaseTimeEntity;
-import com.example.soso.community.voteboard.domain.entity.VotePost;
+import com.example.soso.community.voteboard.domain.entity.Votesboard;
 import com.example.soso.users.domain.entity.Users;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
  * 투표 게시판 댓글 엔티티
  *
  * 특징:
- * - VotePost와 연결
+ * - Votesboard와 연결
  * - 대댓글 지원 (parent 관계)
  * - 소프트 삭제 지원
  * - 좋아요 수 포함
@@ -32,8 +32,8 @@ public class VoteboardComment extends BaseTimeEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "vote_post_id", nullable = false)
-    private VotePost votePost;
+    @JoinColumn(name = "votesboard_id", nullable = false)
+    private Votesboard votesboard;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)

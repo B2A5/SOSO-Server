@@ -1,6 +1,6 @@
 package com.example.soso.community.voteboard.controller;
 
-import com.example.soso.community.voteboard.service.VotePostLikeService;
+import com.example.soso.community.voteboard.service.VotesboardLikeService;
 import com.example.soso.security.domain.CustomUserDetails;
 import com.example.soso.global.exception.domain.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -23,14 +23,14 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Voteboard Like", description = "투표 게시글 좋아요 API")
 @Slf4j
 @RestController
-@RequestMapping("/community/votesboard/{votesboardId}/like")
+@RequestMapping("/api/community/votesboard/{votesboardId}/like")
 @RequiredArgsConstructor
-public class VotePostLikeController {
+public class VotesboardLikeController {
 
-    private final VotePostLikeService votePostLikeService;
+    private final VotesboardLikeService votesboardLikeService;
 
     @Operation(
-            operationId = "toggleVotePostLike",
+            operationId = "toggleVotesboardLike",
             summary = "투표 게시글 좋아요 토글",
             description = """
                     투표 게시글에 좋아요를 추가하거나 취소합니다.
@@ -85,13 +85,13 @@ public class VotePostLikeController {
 
         log.info("투표 게시글 좋아요 토글: votesboardId={}, userId={}", votesboardId, userDetails.getUsername());
 
-        boolean isLiked = votePostLikeService.toggleLike(votesboardId, userDetails.getUsername());
+        boolean isLiked = votesboardLikeService.toggleLike(votesboardId, userDetails.getUsername());
 
         return ResponseEntity.ok(isLiked);
     }
 
     @Operation(
-            operationId = "getVotePostLikeStatus",
+            operationId = "getVotesboardLikeStatus",
             summary = "투표 게시글 좋아요 상태 확인",
             description = """
                     사용자가 특정 투표 게시글에 좋아요를 했는지 확인합니다.
@@ -142,7 +142,7 @@ public class VotePostLikeController {
 
         log.debug("투표 게시글 좋아요 상태 조회: votesboardId={}, userId={}", votesboardId, userDetails.getUsername());
 
-        boolean isLiked = votePostLikeService.isLikedByUser(votesboardId, userDetails.getUsername());
+        boolean isLiked = votesboardLikeService.isLikedByUser(votesboardId, userDetails.getUsername());
 
         return ResponseEntity.ok(isLiked);
     }

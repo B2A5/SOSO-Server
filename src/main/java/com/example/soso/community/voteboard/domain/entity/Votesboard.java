@@ -20,8 +20,8 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "vote_post")
-public class VotePost extends BaseTimeEntity {
+@Table(name = "votesboard")
+public class Votesboard extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,9 +42,9 @@ public class VotePost extends BaseTimeEntity {
     @Column(nullable = false, length = 50)
     private Category category;
 
-    @OneToMany(mappedBy = "votePost", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "votesboard", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("sequence ASC")
-    private List<VotePostImage> images = new ArrayList<>();
+    private List<VotesboardImage> images = new ArrayList<>();
 
     @Column(name = "view_count", nullable = false)
     private int viewCount = 0;
@@ -61,7 +61,7 @@ public class VotePost extends BaseTimeEntity {
     /**
      * 투표 옵션 목록 (2-5개)
      */
-    @OneToMany(mappedBy = "votePost", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "votesboard", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("sequence ASC")
     private List<VoteOption> voteOptions = new ArrayList<>();
 
@@ -94,22 +94,22 @@ public class VotePost extends BaseTimeEntity {
     private int totalVotes = 0;
 
     /**
-     * VotePost 생성 정적 팩토리 메서드
+     * Votesboard 생성 정적 팩토리 메서드
      */
-    public static VotePost create(Users user, String title, String content, Category category,
+    public static Votesboard create(Users user, String title, String content, Category category,
                                    LocalDateTime endTime, boolean allowRevote, boolean allowMultipleChoice) {
-        VotePost votePost = new VotePost();
-        votePost.user = user;
-        votePost.title = title;
-        votePost.content = content;
-        votePost.category = category;
-        votePost.endTime = endTime;
-        votePost.allowRevote = allowRevote;
-        votePost.allowMultipleChoice = allowMultipleChoice;
-        votePost.totalVotes = 0;
-        votePost.viewCount = 0;
-        votePost.deleted = false;
-        return votePost;
+        Votesboard votesboard = new Votesboard();
+        votesboard.user = user;
+        votesboard.title = title;
+        votesboard.content = content;
+        votesboard.category = category;
+        votesboard.endTime = endTime;
+        votesboard.allowRevote = allowRevote;
+        votesboard.allowMultipleChoice = allowMultipleChoice;
+        votesboard.totalVotes = 0;
+        votesboard.viewCount = 0;
+        votesboard.deleted = false;
+        return votesboard;
     }
 
     /**
@@ -117,7 +117,7 @@ public class VotePost extends BaseTimeEntity {
      */
     public void addVoteOption(VoteOption option) {
         this.voteOptions.add(option);
-        option.setVotePost(this);
+        option.setVotesboard(this);
     }
 
     /**
@@ -167,9 +167,9 @@ public class VotePost extends BaseTimeEntity {
     /**
      * 이미지 추가
      */
-    public void addImage(VotePostImage image) {
+    public void addImage(VotesboardImage image) {
         this.images.add(image);
-        image.setVotePost(this);
+        image.setVotesboard(this);
     }
 
     /**

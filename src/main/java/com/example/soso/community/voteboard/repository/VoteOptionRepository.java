@@ -1,7 +1,7 @@
 package com.example.soso.community.voteboard.repository;
 
 import com.example.soso.community.voteboard.domain.entity.VoteOption;
-import com.example.soso.community.voteboard.domain.entity.VotePost;
+import com.example.soso.community.voteboard.domain.entity.Votesboard;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -18,16 +18,16 @@ public interface VoteOptionRepository extends JpaRepository<VoteOption, Long> {
     /**
      * 특정 투표 게시글의 모든 옵션 조회 (순서대로)
      */
-    @Query("SELECT vo FROM VoteOption vo WHERE vo.votePost = :votePost ORDER BY vo.sequence ASC")
-    List<VoteOption> findByVotePostOrderBySequenceAsc(@Param("votePost") VotePost votePost);
+    @Query("SELECT vo FROM VoteOption vo WHERE vo.votesboard = :votesboard ORDER BY vo.sequence ASC")
+    List<VoteOption> findByVotesboardOrderBySequenceAsc(@Param("votesboard") Votesboard votesboard);
 
     /**
      * 특정 투표 게시글의 옵션 개수 조회
      */
-    long countByVotePost(VotePost votePost);
+    long countByVotesboard(Votesboard votesboard);
 
     /**
      * 특정 투표 게시글의 모든 옵션 삭제
      */
-    void deleteByVotePost(VotePost votePost);
+    void deleteByVotesboard(Votesboard votesboard);
 }

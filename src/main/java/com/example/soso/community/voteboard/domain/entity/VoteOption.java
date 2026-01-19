@@ -26,8 +26,8 @@ public class VoteOption extends BaseTimeEntity {
      * 소속 투표 게시글
      */
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "vote_post_id", nullable = false)
-    private VotePost votePost;
+    @JoinColumn(name = "votesboard_id", nullable = false)
+    private Votesboard votesboard;
 
     /**
      * 옵션 내용
@@ -48,18 +48,18 @@ public class VoteOption extends BaseTimeEntity {
     private int voteCount = 0;
 
     @Builder
-    public VoteOption(VotePost votePost, String content, int sequence) {
-        this.votePost = votePost;
+    public VoteOption(Votesboard votesboard, String content, int sequence) {
+        this.votesboard = votesboard;
         this.content = content;
         this.sequence = sequence;
         this.voteCount = 0;
     }
 
     /**
-     * VotePost 설정 (양방향 관계 설정용)
+     * Votesboard 설정 (양방향 관계 설정용)
      */
-    public void setVotePost(VotePost votePost) {
-        this.votePost = votePost;
+    public void setVotesboard(Votesboard votesboard) {
+        this.votesboard = votesboard;
     }
 
     /**

@@ -17,21 +17,21 @@ import java.time.LocalDateTime;
  * 한 사용자는 하나의 투표 게시글에 하나의 좋아요만 가능 (unique constraint)
  */
 @Entity
-@Table(name = "vote_post_like", uniqueConstraints = {
-    @UniqueConstraint(columnNames = {"vote_post_id", "user_id"})
+@Table(name = "votesboard_like", uniqueConstraints = {
+    @UniqueConstraint(columnNames = {"votesboard_id", "user_id"})
 })
 @EntityListeners(AuditingEntityListener.class)
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class VotePostLike {
+public class VotesboardLike {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "vote_post_id", nullable = false)
-    private VotePost votePost;
+    @JoinColumn(name = "votesboard_id", nullable = false)
+    private Votesboard votesboard;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
@@ -42,17 +42,17 @@ public class VotePostLike {
     private LocalDateTime createdAt;
 
     @Builder
-    public VotePostLike(VotePost votePost, Users user) {
-        this.votePost = votePost;
+    public VotesboardLike(Votesboard votesboard, Users user) {
+        this.votesboard = votesboard;
         this.user = user;
     }
 
     /**
      * 좋아요 생성 정적 팩토리 메서드
      */
-    public static VotePostLike create(VotePost votePost, Users user) {
-        return VotePostLike.builder()
-                .votePost(votePost)
+    public static VotesboardLike create(Votesboard votesboard, Users user) {
+        return VotesboardLike.builder()
+                .votesboard(votesboard)
                 .user(user)
                 .build();
     }

@@ -21,13 +21,13 @@ import lombok.NoArgsConstructor;
     uniqueConstraints = {
         @UniqueConstraint(
             name = "uk_vote_result_user_post_option",
-            columnNames = {"user_id", "vote_post_id", "vote_option_id"}
+            columnNames = {"user_id", "votesboard_id", "vote_option_id"}
         )
     },
     indexes = {
         @Index(name = "idx_vote_result_user", columnList = "user_id"),
-        @Index(name = "idx_vote_result_post", columnList = "vote_post_id"),
-        @Index(name = "idx_vote_result_user_post", columnList = "user_id, vote_post_id")
+        @Index(name = "idx_vote_result_post", columnList = "votesboard_id"),
+        @Index(name = "idx_vote_result_user_post", columnList = "user_id, votesboard_id")
     }
 )
 public class VoteResult extends BaseTimeEntity {
@@ -47,8 +47,8 @@ public class VoteResult extends BaseTimeEntity {
      * 투표 게시글
      */
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "vote_post_id", nullable = false)
-    private VotePost votePost;
+    @JoinColumn(name = "votesboard_id", nullable = false)
+    private Votesboard votesboard;
 
     /**
      * 선택한 옵션
@@ -58,9 +58,9 @@ public class VoteResult extends BaseTimeEntity {
     private VoteOption voteOption;
 
     @Builder
-    public VoteResult(Users user, VotePost votePost, VoteOption voteOption) {
+    public VoteResult(Users user, Votesboard votesboard, VoteOption voteOption) {
         this.user = user;
-        this.votePost = votePost;
+        this.votesboard = votesboard;
         this.voteOption = voteOption;
     }
 

@@ -85,14 +85,14 @@ class VoteboardCommentIntegrationTest {
     @DisplayName("댓글 작성 - 일반 댓글")
     void createComment_Success() throws Exception {
         // given - 투표 게시글 생성
-        Long votePostId = createVotePost(testUserDetails, "댓글 테스트 게시글");
+        Long votesboardId = createVotesboard(testUserDetails, "댓글 테스트 게시글");
 
         VoteboardCommentCreateRequest request = VoteboardCommentCreateRequest.builder()
                 .content("첫 번째 댓글입니다")
                 .build();
 
         // when & then
-        mockMvc.perform(post("/community/votesboard/" + votePostId + "/comments")
+        mockMvc.perform(post("/community/votesboard/" + votesboardId + "/comments")
                         .with(SecurityMockMvcRequestPostProcessors.user(testUserDetails))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
@@ -104,10 +104,10 @@ class VoteboardCommentIntegrationTest {
     @DisplayName("댓글 목록 조회 - 댓글 0개")
     void getComments_Empty() throws Exception {
         // given
-        Long votePostId = createVotePost(testUserDetails, "댓글 없는 게시글");
+        Long votesboardId = createVotesboard(testUserDetails, "댓글 없는 게시글");
 
         // when & then
-        mockMvc.perform(get("/community/votesboard/" + votePostId + "/comments")
+        mockMvc.perform(get("/community/votesboard/" + votesboardId + "/comments")
                         .with(SecurityMockMvcRequestPostProcessors.user(testUserDetails)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.comments").isArray())
@@ -120,12 +120,12 @@ class VoteboardCommentIntegrationTest {
     @DisplayName("댓글 목록 조회 - 댓글 2개")
     void getComments_WithMultipleComments() throws Exception {
         // given
-        Long votePostId = createVotePost(testUserDetails, "댓글 테스트 게시글");
-        Long comment1Id = createComment(votePostId, testUserDetails, "첫 번째 댓글");
-        Long comment2Id = createComment(votePostId, anotherUserDetails, "두 번째 댓글");
+        Long votesboardId = createVotesboard(testUserDetails, "댓글 테스트 게시글");
+        Long comment1Id = createComment(votesboardId, testUserDetails, "첫 번째 댓글");
+        Long comment2Id = createComment(votesboardId, anotherUserDetails, "두 번째 댓글");
 
         // when & then
-        mockMvc.perform(get("/community/votesboard/" + votePostId + "/comments")
+        mockMvc.perform(get("/community/votesboard/" + votesboardId + "/comments")
                         .with(SecurityMockMvcRequestPostProcessors.user(testUserDetails)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.comments").isArray())
@@ -141,15 +141,15 @@ class VoteboardCommentIntegrationTest {
     @DisplayName("댓글 수정 - 본인 댓글")
     void updateComment_AsAuthor_Success() throws Exception {
         // given
-        Long votePostId = createVotePost(testUserDetails, "댓글 수정 테스트");
-        Long commentId = createComment(votePostId, testUserDetails, "원래 댓글");
+        Long votesboardId = createVotesboard(testUserDetails, "댓글 수정 테스트");
+        Long commentId = createComment(votesboardId, testUserDetails, "원래 댓글");
 
         VoteboardCommentCreateRequest updateRequest = VoteboardCommentCreateRequest.builder()
                 .content("수정된 댓글 내용")
                 .build();
 
         // when & then
-        mockMvc.perform(patch("/community/votesboard/" + votePostId + "/comments/" + commentId)
+        mockMvc.perform(patch("/community/votesboard/" + votesboardId + "/comments/" + commentId)
                         .with(SecurityMockMvcRequestPostProcessors.user(testUserDetails))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(updateRequest)))
@@ -157,7 +157,7 @@ class VoteboardCommentIntegrationTest {
                 .andExpect(jsonPath("$.commentId").value(commentId));
 
         // 수정 확인
-        mockMvc.perform(get("/community/votesboard/" + votePostId + "/comments")
+        mockMvc.perform(get("/community/votesboard/" + votesboardId + "/comments")
                         .with(SecurityMockMvcRequestPostProcessors.user(testUserDetails)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.comments[0].content").value("수정된 댓글 내용"));
@@ -167,16 +167,16 @@ class VoteboardCommentIntegrationTest {
     @DisplayName("댓글 삭제 - 본인 댓글")
     void deleteComment_AsAuthor_Success() throws Exception {
         // given
-        Long votePostId = createVotePost(testUserDetails, "댓글 삭제 테스트");
-        Long commentId = createComment(votePostId, testUserDetails, "삭제될 댓글");
+        Long votesboardId = createVotesboard(testUserDetails, "댓글 삭제 테스트");
+        Long commentId = createComment(votesboardId, testUserDetails, "삭제될 댓글");
 
         // when - 댓글 삭제
-        mockMvc.perform(delete("/community/votesboard/" + votePostId + "/comments/" + commentId)
+        mockMvc.perform(delete("/community/votesboard/" + votesboardId + "/comments/" + commentId)
                         .with(SecurityMockMvcRequestPostProcessors.user(testUserDetails)))
                 .andExpect(status().isNoContent());
 
         // then - 삭제된 댓글은 "삭제된 댓글입니다" 표시
-        mockMvc.perform(get("/community/votesboard/" + votePostId + "/comments")
+        mockMvc.perform(get("/community/votesboard/" + votesboardId + "/comments")
                         .with(SecurityMockMvcRequestPostProcessors.user(testUserDetails)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.comments[0].deleted").value(true))
@@ -187,8 +187,8 @@ class VoteboardCommentIntegrationTest {
     @DisplayName("대댓글 작성")
     void createReply_Success() throws Exception {
         // given
-        Long votePostId = createVotePost(testUserDetails, "대댓글 테스트");
-        Long parentCommentId = createComment(votePostId, testUserDetails, "부모 댓글");
+        Long votesboardId = createVotesboard(testUserDetails, "대댓글 테스트");
+        Long parentCommentId = createComment(votesboardId, testUserDetails, "부모 댓글");
 
         VoteboardCommentCreateRequest replyRequest = VoteboardCommentCreateRequest.builder()
                 .content("대댓글입니다")
@@ -196,7 +196,7 @@ class VoteboardCommentIntegrationTest {
                 .build();
 
         // when & then
-        mockMvc.perform(post("/community/votesboard/" + votePostId + "/comments")
+        mockMvc.perform(post("/community/votesboard/" + votesboardId + "/comments")
                         .with(SecurityMockMvcRequestPostProcessors.user(anotherUserDetails))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(replyRequest)))
@@ -204,7 +204,7 @@ class VoteboardCommentIntegrationTest {
                 .andExpect(jsonPath("$.commentId").exists());
 
         // 댓글 목록 조회 시 대댓글 확인
-        mockMvc.perform(get("/community/votesboard/" + votePostId + "/comments")
+        mockMvc.perform(get("/community/votesboard/" + votesboardId + "/comments")
                         .with(SecurityMockMvcRequestPostProcessors.user(testUserDetails)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.comments[0].parentCommentId").value(parentCommentId))
@@ -216,30 +216,30 @@ class VoteboardCommentIntegrationTest {
     @DisplayName("댓글 좋아요 토글")
     void toggleCommentLike_Success() throws Exception {
         // given
-        Long votePostId = createVotePost(testUserDetails, "댓글 좋아요 테스트");
-        Long commentId = createComment(votePostId, anotherUserDetails, "좋아요 테스트 댓글");
+        Long votesboardId = createVotesboard(testUserDetails, "댓글 좋아요 테스트");
+        Long commentId = createComment(votesboardId, anotherUserDetails, "좋아요 테스트 댓글");
 
         // when - 좋아요 추가
-        mockMvc.perform(post("/community/votesboard/" + votePostId + "/comments/" + commentId + "/like")
+        mockMvc.perform(post("/community/votesboard/" + votesboardId + "/comments/" + commentId + "/like")
                         .with(SecurityMockMvcRequestPostProcessors.user(testUserDetails)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").value(true));
 
         // then - 댓글 목록에서 좋아요 확인
-        mockMvc.perform(get("/community/votesboard/" + votePostId + "/comments")
+        mockMvc.perform(get("/community/votesboard/" + votesboardId + "/comments")
                         .with(SecurityMockMvcRequestPostProcessors.user(testUserDetails)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.comments[0].likeCount").value(1))
                 .andExpect(jsonPath("$.comments[0].isLiked").value(true));
 
         // when - 좋아요 취소
-        mockMvc.perform(post("/community/votesboard/" + votePostId + "/comments/" + commentId + "/like")
+        mockMvc.perform(post("/community/votesboard/" + votesboardId + "/comments/" + commentId + "/like")
                         .with(SecurityMockMvcRequestPostProcessors.user(testUserDetails)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").value(false));
 
         // then - 댓글 목록에서 좋아요 취소 확인
-        mockMvc.perform(get("/community/votesboard/" + votePostId + "/comments")
+        mockMvc.perform(get("/community/votesboard/" + votesboardId + "/comments")
                         .with(SecurityMockMvcRequestPostProcessors.user(testUserDetails)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.comments[0].likeCount").value(0))
@@ -248,7 +248,7 @@ class VoteboardCommentIntegrationTest {
 
     // Helper methods
 
-    private Long createVotePost(CustomUserDetails userDetails, String title) throws Exception {
+    private Long createVotesboard(CustomUserDetails userDetails, String title) throws Exception {
         LocalDateTime endTime = LocalDateTime.now().plusDays(7);
 
         MvcResult result = mockMvc.perform(multipart("/community/votesboard")
@@ -269,12 +269,12 @@ class VoteboardCommentIntegrationTest {
         return objectMapper.readTree(response).get("postId").asLong();
     }
 
-    private Long createComment(Long votePostId, CustomUserDetails userDetails, String content) throws Exception {
+    private Long createComment(Long votesboardId, CustomUserDetails userDetails, String content) throws Exception {
         VoteboardCommentCreateRequest request = VoteboardCommentCreateRequest.builder()
                 .content(content)
                 .build();
 
-        MvcResult result = mockMvc.perform(post("/community/votesboard/" + votePostId + "/comments")
+        MvcResult result = mockMvc.perform(post("/community/votesboard/" + votesboardId + "/comments")
                         .with(SecurityMockMvcRequestPostProcessors.user(userDetails))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))

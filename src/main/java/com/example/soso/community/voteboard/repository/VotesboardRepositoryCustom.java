@@ -1,6 +1,6 @@
 package com.example.soso.community.voteboard.repository;
 
-import com.example.soso.community.voteboard.domain.entity.VotePost;
+import com.example.soso.community.voteboard.domain.entity.Votesboard;
 import com.example.soso.community.voteboard.domain.entity.VoteStatus;
 import com.example.soso.community.voteboard.dto.VoteboardSortType;
 
@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * 투표 게시글 커스텀 Repository 인터페이스
  */
-public interface VotePostRepositoryCustom {
+public interface VotesboardRepositoryCustom {
 
     /**
      * 정렬 기준과 상태에 따라 커서 기반 투표 게시글 목록 조회
@@ -20,5 +20,5 @@ public interface VotePostRepositoryCustom {
      * @param size   조회 개수
      * @return 투표 게시글 목록
      */
-    List<VotePost> findAllBySortAndCursor(VoteStatus status, VoteboardSortType sort, Long cursor, int size);
+    List<Votesboard> findAllBySortAndCursor(VoteStatus status, VoteboardSortType sort, Long cursor, int size);
 }

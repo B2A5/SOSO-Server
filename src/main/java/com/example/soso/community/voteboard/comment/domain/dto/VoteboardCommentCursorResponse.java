@@ -48,7 +48,7 @@ public class VoteboardCommentCursorResponse {
         private Long commentId;
 
         @Schema(description = "투표 게시글 ID", example = "123", requiredMode = Schema.RequiredMode.REQUIRED)
-        private Long votePostId;
+        private Long votesboardId;
 
         @Schema(description = "부모 댓글 ID (대댓글인 경우)", example = "789", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
         private Long parentCommentId;

@@ -4,13 +4,13 @@ import com.example.soso.community.voteboard.comment.domain.repository.VoteboardC
 import com.example.soso.community.voteboard.domain.dto.*;
 import com.example.soso.community.voteboard.dto.VoteboardSortType;
 import com.example.soso.community.voteboard.domain.entity.VoteOption;
-import com.example.soso.community.voteboard.domain.entity.VotePost;
-import com.example.soso.community.voteboard.domain.entity.VotePostImage;
+import com.example.soso.community.voteboard.domain.entity.Votesboard;
+import com.example.soso.community.voteboard.domain.entity.VotesboardImage;
 import com.example.soso.community.voteboard.domain.entity.VoteResult;
 import com.example.soso.community.voteboard.domain.entity.VoteStatus;
-import com.example.soso.community.voteboard.repository.VotePostLikeRepository;
+import com.example.soso.community.voteboard.repository.VotesboardLikeRepository;
 import com.example.soso.community.voteboard.repository.VoteOptionRepository;
-import com.example.soso.community.voteboard.repository.VotePostRepository;
+import com.example.soso.community.voteboard.repository.VotesboardRepository;
 import com.example.soso.community.voteboard.repository.VoteResultRepository;
 import com.example.soso.global.exception.domain.PostErrorCode;
 import com.example.soso.global.exception.domain.UserErrorCode;
@@ -35,34 +35,34 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class VotePostServiceImpl implements VotePostService {
+public class VotesboardServiceImpl implements VotesboardService {
 
     private static final String VOTEBOARD_DIRECTORY = "voteboard";
 
-    private final VotePostRepository votePostRepository;
+    private final VotesboardRepository votesboardRepository;
     private final VoteOptionRepository voteOptionRepository;
     private final VoteResultRepository voteResultRepository;
     private final UsersRepository usersRepository;
     private final VoteboardCommentRepository voteboardCommentRepository;
-    private final VotePostLikeRepository votePostLikeRepository;
-    private final VoteboardMapper votePostMapper;
+    private final VotesboardLikeRepository votesboardLikeRepository;
+    private final VoteboardMapper voteboardMapper;
     private final ImageUploadService imageUploadService;
 
     @Override
     @Transactional
-    public Long createVotePost(VoteboardCreateRequest request, String userId) {
+    public Long createVotesboard(VoteboardCreateRequest request, String userId) {
         log.info("투표 게시글 작성 시작: userId={}, optionCount={}, imageCount={}",
                 userId, request.getVoteOptions().size(),
                 request.getImages() != null ? request.getImages().size() : 0);
 
         Users user = findUserById(userId);
-        VotePost votePost = votePostMapper.toEntity(request, user);
-        VotePost savedPost = votePostRepository.save(votePost);
+        Votesboard votesboard = voteboardMapper.toEntity(request, user);
+        Votesboard savedPost = votesboardRepository.save(votesboard);
 
         // 이미지 업로드 및 저장
         if (request.getImages() != null && !request.getImages().isEmpty()) {
             List<String> imageUrls = imageUploadService.uploadImages(request.getImages(), VOTEBOARD_DIRECTORY);
-            saveVotePostImages(savedPost, imageUrls);
+            saveVotesboardImages(savedPost, imageUrls);
         }
 
         log.info("투표 게시글 작성 완료: postId={}, optionCount={}, imageCount={}",
@@ -72,34 +72,34 @@ public class VotePostServiceImpl implements VotePostService {
 
     @Override
     @Transactional
-    public VoteboardDetailResponse getVotePost(Long postId, String userId) {
+    public VoteboardDetailResponse getVotesboard(Long postId, String userId) {
         log.debug("투표 게시글 조회: postId={}, userId={}", postId, userId);
 
-        VotePost votePost = findVotePostById(postId);
+        Votesboard votesboard = findVotesboardById(postId);
 
         // 조회수 증가
-        votePost.increaseViewCount();
+        votesboard.increaseViewCount();
 
         // 댓글 수 조회
-        long commentCount = voteboardCommentRepository.countByVotePostId(postId);
+        long commentCount = voteboardCommentRepository.countByVotesboardIdAndDeletedFalse(postId);
 
         // 좋아요 수 조회
-        long likeCount = votePostLikeRepository.countByVotePostId(postId);
+        long likeCount = votesboardLikeRepository.countByVotesboard(votesboard);
 
         // 사용자의 투표 결과 조회 (비로그인 시 null)
         List<VoteResult> userVoteResults = null;
         Boolean isLiked = null;
         if (userId != null) {
             Users user = findUserById(userId);
-            userVoteResults = voteResultRepository.findAllByUserAndVotePost(user, votePost);
-            isLiked = votePostLikeRepository.existsByVotePostIdAndUserId(postId, userId);
+            userVoteResults = voteResultRepository.findAllByUserAndVotesboard(user, votesboard);
+            isLiked = votesboardLikeRepository.existsByVotesboardIdAndUserId(postId, userId);
         }
 
-        return votePostMapper.toDetailResponse(votePost, commentCount, userVoteResults, likeCount, isLiked, userId);
+        return voteboardMapper.toDetailResponse(votesboard, commentCount, userVoteResults, likeCount, isLiked, userId);
     }
 
     @Override
-    public VoteboardCursorResponse getVotePostsByCursor(VoteStatus status, VoteboardSortType sort, int size, String cursor, String userId) {
+    public VoteboardCursorResponse getVotesboardsByCursor(VoteStatus status, VoteboardSortType sort, int size, String cursor, String userId) {
         log.debug("투표 게시글 목록 조회: status={}, sort={}, size={}, cursor={}, userId={}", status, sort, size, cursor, userId);
 
         // String cursor를 Long으로 파싱
@@ -114,7 +114,7 @@ public class VotePostServiceImpl implements VotePostService {
         }
 
         // Custom Repository를 사용하여 정렬된 목록 조회
-        List<VotePost> posts = votePostRepository.findAllBySortAndCursor(status, sort, cursorId, size);
+        List<Votesboard> posts = votesboardRepository.findAllBySortAndCursor(status, sort, cursorId, size);
 
         // 다음 페이지 존재 여부 확인
         boolean hasNext = posts.size() > size;
@@ -131,11 +131,11 @@ public class VotePostServiceImpl implements VotePostService {
         LocalDateTime now = LocalDateTime.now();
         long totalCount;
         if (status == null) {
-            totalCount = votePostRepository.countByDeletedFalse();
+            totalCount = votesboardRepository.countByDeletedFalse();
         } else if (status == VoteStatus.IN_PROGRESS) {
-            totalCount = votePostRepository.countInProgress(now);
+            totalCount = votesboardRepository.countInProgress(now);
         } else {
-            totalCount = votePostRepository.countCompleted(now);
+            totalCount = votesboardRepository.countCompleted(now);
         }
 
         // 사용자 인증 여부 확인
@@ -145,60 +145,60 @@ public class VotePostServiceImpl implements VotePostService {
         Users user = userId != null ? findUserById(userId) : null;
         List<VoteboardSummary> summaries = posts.stream()
                 .map(post -> {
-                    long commentCount = voteboardCommentRepository.countByVotePostId(post.getId());
-                    long likeCount = votePostLikeRepository.countByVotePostId(post.getId());
+                    long commentCount = voteboardCommentRepository.countByVotesboardIdAndDeletedFalse(post.getId());
+                    long likeCount = votesboardLikeRepository.countByVotesboard(post);
                     Boolean isLiked = userId != null
-                        ? votePostLikeRepository.existsByVotePostIdAndUserId(post.getId(), userId)
+                        ? votesboardLikeRepository.existsByVotesboardIdAndUserId(post.getId(), userId)
                         : null;
                     Boolean hasVoted = userId != null
-                        ? voteResultRepository.existsByUserAndVotePost(user, post)
+                        ? voteResultRepository.existsByUserAndVotesboard(user, post)
                         : null;
-                    return votePostMapper.toSummaryResponse(post, commentCount, likeCount, isLiked, hasVoted);
+                    return voteboardMapper.toSummaryResponse(post, commentCount, likeCount, isLiked, hasVoted);
                 })
                 .toList();
 
-        return votePostMapper.toListResponse(summaries, nextCursor, hasNext, totalCount, isAuthorized);
+        return voteboardMapper.toListResponse(summaries, nextCursor, hasNext, totalCount, isAuthorized);
     }
 
     @Override
     @Transactional
-    public void updateVotePost(Long postId, VoteboardUpdateRequest request, String userId) {
+    public void updateVotesboard(Long postId, VoteboardUpdateRequest request, String userId) {
         log.info("투표 게시글 수정 시작: postId={}, userId={}", postId, userId);
 
-        VotePost votePost = findVotePostById(postId);
+        Votesboard votesboard = findVotesboardById(postId);
         Users user = findUserById(userId);
 
         // 권한 검증
-        validateAuthor(votePost, user);
+        validateAuthor(votesboard, user);
 
         // 기존 이미지 삭제 처리
         if (request.getDeleteImageIds() != null && !request.getDeleteImageIds().isEmpty()) {
-            deleteVotePostImages(votePost, request.getDeleteImageIds());
+            deleteVotesboardImages(votesboard, request.getDeleteImageIds());
         }
 
         // 새로운 이미지 업로드
         List<String> newImageUrls = Collections.emptyList();
         if (request.getImages() != null && !request.getImages().isEmpty()) {
             // 현재 이미지 개수 + 새 이미지 개수가 4개를 초과하지 않는지 확인
-            int currentImageCount = votePost.getImages().size();
+            int currentImageCount = votesboard.getImages().size();
             int newImageCount = request.getImages().size();
             if (currentImageCount + newImageCount > imageUploadService.getMaxImageCount()) {
                 throw new IllegalArgumentException("총 이미지 개수는 " + imageUploadService.getMaxImageCount() + "개를 초과할 수 없습니다.");
             }
 
             newImageUrls = imageUploadService.uploadImages(request.getImages(), VOTEBOARD_DIRECTORY);
-            saveVotePostImages(votePost, newImageUrls);
+            saveVotesboardImages(votesboard, newImageUrls);
         }
 
         // 게시글 내용 수정
-        votePost.updatePost(request.getTitle(), request.getContent(), request.getCategory());
+        votesboard.updatePost(request.getTitle(), request.getContent(), request.getCategory());
 
         // 투표 설정 수정 (투표 시작 전에만 가능)
         if (request.getEndTime() != null || request.getAllowRevote() != null || request.getAllowMultipleChoice() != null) {
-            LocalDateTime endTime = request.getEndTime() != null ? request.getEndTime() : votePost.getEndTime();
-            boolean allowRevote = request.getAllowRevote() != null ? request.getAllowRevote() : votePost.isAllowRevote();
-            boolean allowMultipleChoice = request.getAllowMultipleChoice() != null ? request.getAllowMultipleChoice() : votePost.isAllowMultipleChoice();
-            votePost.updateVoteSettings(endTime, allowRevote, allowMultipleChoice);
+            LocalDateTime endTime = request.getEndTime() != null ? request.getEndTime() : votesboard.getEndTime();
+            boolean allowRevote = request.getAllowRevote() != null ? request.getAllowRevote() : votesboard.isAllowRevote();
+            boolean allowMultipleChoice = request.getAllowMultipleChoice() != null ? request.getAllowMultipleChoice() : votesboard.isAllowMultipleChoice();
+            votesboard.updateVoteSettings(endTime, allowRevote, allowMultipleChoice);
         }
 
         log.info("투표 게시글 수정 완료: postId={}, newImageCount={}", postId, newImageUrls.size());
@@ -206,16 +206,16 @@ public class VotePostServiceImpl implements VotePostService {
 
     @Override
     @Transactional
-    public void deleteVotePost(Long postId, String userId) {
+    public void deleteVotesboard(Long postId, String userId) {
         log.info("투표 게시글 삭제 시작: postId={}, userId={}", postId, userId);
 
-        VotePost votePost = findVotePostById(postId);
+        Votesboard votesboard = findVotesboardById(postId);
         Users user = findUserById(userId);
 
         // 권한 검증
-        validateAuthor(votePost, user);
+        validateAuthor(votesboard, user);
 
-        votePost.delete();
+        votesboard.delete();
         log.info("투표 게시글 삭제 완료: postId={}", postId);
     }
 
@@ -224,25 +224,25 @@ public class VotePostServiceImpl implements VotePostService {
     public void vote(Long postId, VoteRequest request, String userId) {
         log.info("투표 참여 시작: postId={}, userId={}, optionIds={}", postId, userId, request.getVoteOptionIds());
 
-        VotePost votePost = findVotePostById(postId);
+        Votesboard votesboard = findVotesboardById(postId);
         Users user = findUserById(userId);
         List<Long> selectedOptionIds = request.getVoteOptionIds();
 
         // 투표 진행 중인지 확인
-        if (!votePost.isActive()) {
+        if (!votesboard.isActive()) {
             throw new PostException(PostErrorCode.VOTE_CLOSED);
         }
 
         // 이미 투표했는지 확인
-        if (voteResultRepository.existsByUserAndVotePost(user, votePost)) {
+        if (voteResultRepository.existsByUserAndVotesboard(user, votesboard)) {
             throw new PostException(PostErrorCode.ALREADY_VOTED);
         }
 
         // 선택된 옵션 개수 검증
-        int totalOptions = votePost.getVoteOptions().size();
+        int totalOptions = votesboard.getVoteOptions().size();
         int selectedCount = selectedOptionIds.size();
 
-        if (votePost.isAllowMultipleChoice()) {
+        if (votesboard.isAllowMultipleChoice()) {
             // 중복 선택 허용: 최소 1개, 최대 n-1개
             if (selectedCount == 0) {
                 throw new PostException(PostErrorCode.INVALID_VOTE_COUNT);
@@ -267,14 +267,14 @@ public class VotePostServiceImpl implements VotePostService {
             VoteOption selectedOption = findVoteOptionById(optionId);
 
             // 옵션이 해당 투표 게시글의 것인지 확인
-            if (!selectedOption.getVotePost().getId().equals(postId)) {
+            if (!selectedOption.getVotesboard().getId().equals(postId)) {
                 throw new PostException(PostErrorCode.INVALID_VOTE_OPTION);
             }
 
             // 투표 결과 저장
             VoteResult voteResult = VoteResult.builder()
                     .user(user)
-                    .votePost(votePost)
+                    .votesboard(votesboard)
                     .voteOption(selectedOption)
                     .build();
             voteResultRepository.save(voteResult);
@@ -284,7 +284,7 @@ public class VotePostServiceImpl implements VotePostService {
         }
 
         // 총 투표 참여자 수 증가 (한 명이 여러 옵션 선택해도 1명으로 카운트)
-        votePost.increaseTotalVotes();
+        votesboard.increaseTotalVotes();
 
         log.info("투표 참여 완료: postId={}, userId={}, optionIds={}", postId, userId, selectedOptionIds);
     }
@@ -294,31 +294,31 @@ public class VotePostServiceImpl implements VotePostService {
     public void changeVote(Long postId, VoteRequest request, String userId) {
         log.info("투표 변경 시작: postId={}, userId={}, newOptionIds={}", postId, userId, request.getVoteOptionIds());
 
-        VotePost votePost = findVotePostById(postId);
+        Votesboard votesboard = findVotesboardById(postId);
         Users user = findUserById(userId);
         List<Long> newOptionIds = request.getVoteOptionIds();
 
         // 재투표 허용 확인
-        if (!votePost.isAllowRevote()) {
+        if (!votesboard.isAllowRevote()) {
             throw new PostException(PostErrorCode.REVOTE_NOT_ALLOWED);
         }
 
         // 투표 진행 중인지 확인
-        if (!votePost.isActive()) {
+        if (!votesboard.isActive()) {
             throw new PostException(PostErrorCode.VOTE_CLOSED);
         }
 
         // 기존 투표 결과 조회
-        List<VoteResult> existingVotes = voteResultRepository.findAllByUserAndVotePost(user, votePost);
+        List<VoteResult> existingVotes = voteResultRepository.findAllByUserAndVotesboard(user, votesboard);
         if (existingVotes.isEmpty()) {
             throw new PostException(PostErrorCode.VOTE_NOT_FOUND);
         }
 
         // 선택된 옵션 개수 검증
-        int totalOptions = votePost.getVoteOptions().size();
+        int totalOptions = votesboard.getVoteOptions().size();
         int selectedCount = newOptionIds.size();
 
-        if (votePost.isAllowMultipleChoice()) {
+        if (votesboard.isAllowMultipleChoice()) {
             // 중복 선택 허용: 최소 1개, 최대 n-1개
             if (selectedCount == 0) {
                 throw new PostException(PostErrorCode.INVALID_VOTE_COUNT);
@@ -361,14 +361,14 @@ public class VotePostServiceImpl implements VotePostService {
             VoteOption newOption = findVoteOptionById(optionId);
 
             // 옵션이 해당 투표 게시글의 것인지 확인
-            if (!newOption.getVotePost().getId().equals(postId)) {
+            if (!newOption.getVotesboard().getId().equals(postId)) {
                 throw new PostException(PostErrorCode.INVALID_VOTE_OPTION);
             }
 
             // 투표 결과 저장
             VoteResult voteResult = VoteResult.builder()
                     .user(user)
-                    .votePost(votePost)
+                    .votesboard(votesboard)
                     .voteOption(newOption)
                     .build();
             voteResultRepository.save(voteResult);
@@ -385,21 +385,21 @@ public class VotePostServiceImpl implements VotePostService {
     public void cancelVote(Long postId, String userId) {
         log.info("투표 취소 시작: postId={}, userId={}", postId, userId);
 
-        VotePost votePost = findVotePostById(postId);
+        Votesboard votesboard = findVotesboardById(postId);
         Users user = findUserById(userId);
 
         // 재투표 허용 확인 (취소도 재투표의 일종)
-        if (!votePost.isAllowRevote()) {
+        if (!votesboard.isAllowRevote()) {
             throw new PostException(PostErrorCode.REVOTE_NOT_ALLOWED);
         }
 
         // 투표 진행 중인지 확인
-        if (!votePost.isActive()) {
+        if (!votesboard.isActive()) {
             throw new PostException(PostErrorCode.VOTE_CLOSED);
         }
 
         // 기존 투표 결과 조회
-        List<VoteResult> voteResults = voteResultRepository.findAllByUserAndVotePost(user, votePost);
+        List<VoteResult> voteResults = voteResultRepository.findAllByUserAndVotesboard(user, votesboard);
         if (voteResults.isEmpty()) {
             throw new PostException(PostErrorCode.VOTE_NOT_FOUND);
         }
@@ -411,7 +411,7 @@ public class VotePostServiceImpl implements VotePostService {
         }
 
         // 총 투표 참여자 수 감소
-        votePost.decreaseTotalVotes();
+        votesboard.decreaseTotalVotes();
 
         log.info("투표 취소 완료: postId={}, userId={}, canceledCount={}", postId, userId, voteResults.size());
     }
@@ -423,8 +423,8 @@ public class VotePostServiceImpl implements VotePostService {
                 .orElseThrow(() -> new UserAuthException(UserErrorCode.USER_NOT_FOUND));
     }
 
-    private VotePost findVotePostById(Long postId) {
-        return votePostRepository.findByIdAndDeletedFalse(postId)
+    private Votesboard findVotesboardById(Long postId) {
+        return votesboardRepository.findByIdAndDeletedFalse(postId)
                 .orElseThrow(() -> new PostException(PostErrorCode.POST_NOT_FOUND));
     }
 
@@ -433,31 +433,31 @@ public class VotePostServiceImpl implements VotePostService {
                 .orElseThrow(() -> new PostException(PostErrorCode.VOTE_OPTION_NOT_FOUND));
     }
 
-    private void validateAuthor(VotePost votePost, Users user) {
-        if (!votePost.getUser().getId().equals(user.getId())) {
+    private void validateAuthor(Votesboard votesboard, Users user) {
+        if (!votesboard.getUser().getId().equals(user.getId())) {
             throw new UserAuthException(UserErrorCode.UNAUTHORIZED_ACCESS);
         }
     }
 
-    private void saveVotePostImages(VotePost votePost, List<String> imageUrls) {
+    private void saveVotesboardImages(Votesboard votesboard, List<String> imageUrls) {
         for (String imageUrl : imageUrls) {
-            VotePostImage votePostImage = VotePostImage.builder()
-                    .votePost(votePost)
+            VotesboardImage votesboardImage = VotesboardImage.builder()
+                    .votesboard(votesboard)
                     .imageUrl(imageUrl)
-                    .sequence(votePost.getImages().size())
+                    .sequence(votesboard.getImages().size())
                     .build();
-            votePost.addImage(votePostImage);
+            votesboard.addImage(votesboardImage);
         }
     }
 
-    private void deleteVotePostImages(VotePost votePost, List<Long> deleteImageIds) {
-        List<VotePostImage> imagesToDelete = votePost.getImages().stream()
+    private void deleteVotesboardImages(Votesboard votesboard, List<Long> deleteImageIds) {
+        List<VotesboardImage> imagesToDelete = votesboard.getImages().stream()
                 .filter(image -> deleteImageIds.contains(image.getId()))
                 .toList();
 
-        for (VotePostImage image : imagesToDelete) {
+        for (VotesboardImage image : imagesToDelete) {
             imageUploadService.deleteImage(image.getImageUrl());
-            votePost.getImages().remove(image);
+            votesboard.getImages().remove(image);
         }
     }
 }

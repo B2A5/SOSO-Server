@@ -1,7 +1,7 @@
 package com.example.soso.community.voteboard.integration;
 
 import com.example.soso.community.voteboard.domain.entity.VoteStatus;
-import com.example.soso.community.voteboard.repository.VotePostRepository;
+import com.example.soso.community.voteboard.repository.VotesboardRepository;
 import com.example.soso.community.voteboard.repository.VoteResultRepository;
 import com.example.soso.global.image.service.ImageUploadService;
 import com.example.soso.security.domain.CustomUserDetails;
@@ -46,7 +46,7 @@ class VoteboardIntegrationTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private VotePostRepository votePostRepository;
+    private VotesboardRepository votesboardRepository;
 
     @Autowired
     private VoteResultRepository voteResultRepository;
@@ -62,7 +62,7 @@ class VoteboardIntegrationTest {
     @BeforeEach
     void setUp() {
         voteResultRepository.deleteAll();
-        votePostRepository.deleteAll();
+        votesboardRepository.deleteAll();
         usersRepository.deleteAll();
 
         // 테스트용 사용자 생성 (id는 자동 생성됨)

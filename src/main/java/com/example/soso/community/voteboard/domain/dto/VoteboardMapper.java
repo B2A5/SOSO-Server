@@ -1,8 +1,8 @@
 package com.example.soso.community.voteboard.domain.dto;
 
 import com.example.soso.community.voteboard.domain.entity.VoteOption;
-import com.example.soso.community.voteboard.domain.entity.VotePost;
-import com.example.soso.community.voteboard.domain.entity.VotePostImage;
+import com.example.soso.community.voteboard.domain.entity.Votesboard;
+import com.example.soso.community.voteboard.domain.entity.VotesboardImage;
 import com.example.soso.community.voteboard.domain.entity.VoteResult;
 import com.example.soso.users.domain.dto.UserMapper;
 import com.example.soso.users.domain.entity.Users;
@@ -21,10 +21,10 @@ public class VoteboardMapper {
     private final UserMapper userMapper;
 
     /**
-     * 생성 요청 DTO를 VotePost 엔티티로 변환
+     * 생성 요청 DTO를 Votesboard 엔티티로 변환
      */
-    public VotePost toEntity(VoteboardCreateRequest request, Users user) {
-        VotePost votePost = VotePost.create(
+    public Votesboard toEntity(VoteboardCreateRequest request, Users user) {
+        Votesboard votesboard = Votesboard.create(
                 user,
                 request.getTitle(),
                 request.getContent(),
@@ -37,77 +37,77 @@ public class VoteboardMapper {
         // 투표 옵션 추가
         List<VoteOption> options = request.getVoteOptions().stream()
                 .map(optionRequest -> VoteOption.builder()
-                        .votePost(votePost)
+                        .votesboard(votesboard)
                         .content(optionRequest.getContent())
                         .sequence(request.getVoteOptions().indexOf(optionRequest))
                         .build())
                 .toList();
 
-        votePost.addVoteOptions(options);
+        votesboard.addVoteOptions(options);
 
-        return votePost;
+        return votesboard;
     }
 
     /**
-     * VotePost를 요약 응답 DTO로 변환 (목록 조회용)
+     * Votesboard를 요약 응답 DTO로 변환 (목록 조회용)
      */
-    public VoteboardSummary toSummaryResponse(VotePost votePost, long commentCount, long likeCount, Boolean isLiked, Boolean hasVoted) {
+    public VoteboardSummary toSummaryResponse(Votesboard votesboard, long commentCount, long likeCount, Boolean isLiked, Boolean hasVoted) {
         // 투표 옵션 미리보기 (최대 3개)
-        List<VoteOptionResponse> voteOptions = votePost.getVoteOptions().stream()
+        List<VoteOptionResponse> voteOptions = votesboard.getVoteOptions().stream()
                 .limit(3)
-                .map(option -> toVoteOptionResponse(option, votePost.getTotalVotes()))
+                .map(option -> toVoteOptionResponse(option, votesboard.getTotalVotes()))
                 .toList();
 
         // 이미지 정보 추출
-        List<VotePostImage> images = votePost.getImages();
+        List<VotesboardImage> images = votesboard.getImages();
         String thumbnailUrl = images.isEmpty() ? null :
                 images.stream()
                         .sorted((img1, img2) -> Integer.compare(img1.getSequence(), img2.getSequence()))
                         .findFirst()
-                        .map(VotePostImage::getImageUrl)
+                        .map(VotesboardImage::getImageUrl)
                         .orElse(null);
         int imageCount = images.size();
 
         // 내용 미리보기 생성 (100자 제한)
-        String contentPreview = votePost.getContent() != null && votePost.getContent().length() > 100
-                ? votePost.getContent().substring(0, 100) + "..."
-                : votePost.getContent();
+        String contentPreview = votesboard.getContent() != null && votesboard.getContent().length() > 100
+                ? votesboard.getContent().substring(0, 100) + "..."
+                : votesboard.getContent();
 
         // VoteInfo 생성
         VoteInfo voteInfo = new VoteInfo(
                 List.of(), // Summary에서는 selectedOptionIds 없음
-                votePost.getTotalVotes(),
-                votePost.getVoteStatus(),
-                votePost.getEndTime(),
-                votePost.isAllowRevote(),
-                votePost.isAllowMultipleChoice()
+                votesboard.getTotalVotes(),
+                votesboard.getVoteStatus(),
+                votesboard.getEndTime(),
+                votesboard.isAllowRevote(),
+                votesboard.isAllowMultipleChoice()
         );
 
         return VoteboardSummary.builder()
-                .postId(votePost.getId())
-                .author(userMapper.toUserSummary(votePost.getUser()))
-                .category(votePost.getCategory())
-                .title(votePost.getTitle())
+                .postId(votesboard.getId())
+                .author(userMapper.toUserSummary(votesboard.getUser()))
+                .category(votesboard.getCategory())
+                .title(votesboard.getTitle())
                 .contentPreview(contentPreview)
                 .thumbnailUrl(thumbnailUrl)
                 .imageCount(imageCount)
-                .viewCount(votePost.getViewCount())
+                .viewCount(votesboard.getViewCount())
                 .commentCount(commentCount)
                 .hasVoted(hasVoted)
                 .voteInfo(voteInfo)
                 .voteOptions(voteOptions)
                 .likeCount(likeCount)
                 .isLiked(isLiked)
-                .createdAt(votePost.getCreatedAt())
-                .updatedAt(votePost.getUpdatedAt())
+                .createdAt(votesboard.getCreatedAt())
+                .updatedAt(votesboard.getUpdatedAt())
                 .build();
     }
 
     /**
-     * VotePost를 상세 응답 DTO로 변환
+     * Votesboard를 상세 응답 DTO로 변환
      */
     public VoteboardDetailResponse toDetailResponse(
-            VotePost votePost,
+            Votesboard votesboard,
             long commentCount,
             List<VoteResult> userVoteResults,
             long likeCount,
@@ -118,7 +118,7 @@ public class VoteboardMapper {
         boolean isAuthorized = userId != null;
 
         // 작성자 여부 확인
-        boolean isAuthor = userId != null && votePost.getUser().getId().equals(userId);
+        boolean isAuthor = userId != null && votesboard.getUser().getId().equals(userId);
 
         // 사용자가 선택한 옵션 ID 목록
         List<Long> selectedOptionIds = userVoteResults != null ?
@@ -133,7 +133,7 @@ public class VoteboardMapper {
                 : null;
 
         // 이미지 정보 목록 추출
-        List<VoteboardDetailResponse.ImageInfo> images = votePost.getImages().stream()
+        List<VoteboardDetailResponse.ImageInfo> images = votesboard.getImages().stream()
                 .sorted((img1, img2) -> Integer.compare(img1.getSequence(), img2.getSequence()))
                 .map(img -> VoteboardDetailResponse.ImageInfo.builder()
                         .imageId(img.getId())
@@ -145,26 +145,26 @@ public class VoteboardMapper {
         // VoteInfo 생성
         VoteInfo voteInfo = new VoteInfo(
                 selectedOptionIds,
-                votePost.getTotalVotes(),
-                votePost.getVoteStatus(),
-                votePost.getEndTime(),
-                votePost.isAllowRevote(),
-                votePost.isAllowMultipleChoice()
+                votesboard.getTotalVotes(),
+                votesboard.getVoteStatus(),
+                votesboard.getEndTime(),
+                votesboard.isAllowRevote(),
+                votesboard.isAllowMultipleChoice()
         );
 
         return VoteboardDetailResponse.builder()
-                .postId(votePost.getId())
-                .author(userMapper.toUserSummary(votePost.getUser()))
-                .category(votePost.getCategory())
-                .title(votePost.getTitle())
-                .content(votePost.getContent())
+                .postId(votesboard.getId())
+                .author(userMapper.toUserSummary(votesboard.getUser()))
+                .category(votesboard.getCategory())
+                .title(votesboard.getTitle())
+                .content(votesboard.getContent())
                 .images(images)
-                .voteOptions(votePost.getVoteOptions().stream()
-                        .map(option -> toVoteOptionResponse(option, votePost.getTotalVotes()))
+                .voteOptions(votesboard.getVoteOptions().stream()
+                        .map(option -> toVoteOptionResponse(option, votesboard.getTotalVotes()))
                         .toList())
                 .hasVoted(hasVoted)
                 .voteInfo(voteInfo)
-                .viewCount(votePost.getViewCount())
+                .viewCount(votesboard.getViewCount())
                 .commentCount(commentCount)
                 .likeCount(likeCount)
                 .isLiked(isLiked)
@@ -172,8 +172,8 @@ public class VoteboardMapper {
                 .isAuthor(isAuthor)
                 .canEdit(isAuthorized ? isAuthor : null)
                 .canDelete(isAuthorized ? isAuthor : null)
-                .createdAt(votePost.getCreatedAt())
-                .updatedAt(votePost.getUpdatedAt())
+                .createdAt(votesboard.getCreatedAt())
+                .updatedAt(votesboard.getUpdatedAt())
                 .build();
     }
 
