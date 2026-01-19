@@ -24,7 +24,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
 @Entity
-@Table(name = "voteboard_comments")
+@Table(name = "votesboard_comments")
 public class VotesboardComment extends BaseTimeEntity {
 
     @Id

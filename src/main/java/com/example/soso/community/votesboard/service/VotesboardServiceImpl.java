@@ -37,15 +37,15 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class VotesboardServiceImpl implements VotesboardService {
 
-    private static final String VOTEBOARD_DIRECTORY = "voteboard";
+    private static final String VOTESBOARD_DIRECTORY = "votesboard";
 
     private final VotesboardRepository votesboardRepository;
     private final VoteOptionRepository voteOptionRepository;
     private final VoteResultRepository voteResultRepository;
     private final UsersRepository usersRepository;
-    private final VotesboardCommentRepository voteboardCommentRepository;
+    private final VotesboardCommentRepository votesboardCommentRepository;
     private final VotesboardLikeRepository votesboardLikeRepository;
-    private final VotesboardMapper voteboardMapper;
+    private final VotesboardMapper votesboardMapper;
     private final ImageUploadService imageUploadService;
 
     @Override
@@ -56,12 +56,12 @@ public class VotesboardServiceImpl implements VotesboardService {
                 request.getImages() != null ? request.getImages().size() : 0);
 
         Users user = findUserById(userId);
-        Votesboard votesboard = voteboardMapper.toEntity(request, user);
+        Votesboard votesboard = votesboardMapper.toEntity(request, user);
         Votesboard savedPost = votesboardRepository.save(votesboard);
 
         // 이미지 업로드 및 저장
         if (request.getImages() != null && !request.getImages().isEmpty()) {
-            List<String> imageUrls = imageUploadService.uploadImages(request.getImages(), VOTEBOARD_DIRECTORY);
+            List<String> imageUrls = imageUploadService.uploadImages(request.getImages(), VOTESBOARD_DIRECTORY);
             saveVotesboardImages(savedPost, imageUrls);
         }
 
@@ -81,7 +81,7 @@ public class VotesboardServiceImpl implements VotesboardService {
         votesboard.increaseViewCount();
 
         // 댓글 수 조회
-        long commentCount = voteboardCommentRepository.countByVotesboardIdAndDeletedFalse(postId);
+        long commentCount = votesboardCommentRepository.countByVotesboardIdAndDeletedFalse(postId);
 
         // 좋아요 수 조회
         long likeCount = votesboardLikeRepository.countByVotesboard(votesboard);
@@ -95,7 +95,7 @@ public class VotesboardServiceImpl implements VotesboardService {
             isLiked = votesboardLikeRepository.existsByVotesboardIdAndUserId(postId, userId);
         }
 
-        return voteboardMapper.toDetailResponse(votesboard, commentCount, userVoteResults, likeCount, isLiked, userId);
+        return votesboardMapper.toDetailResponse(votesboard, commentCount, userVoteResults, likeCount, isLiked, userId);
     }
 
     @Override
@@ -145,7 +145,7 @@ public class VotesboardServiceImpl implements VotesboardService {
         Users user = userId != null ? findUserById(userId) : null;
         List<VotesboardSummary> summaries = posts.stream()
                 .map(post -> {
-                    long commentCount = voteboardCommentRepository.countByVotesboardIdAndDeletedFalse(post.getId());
+                    long commentCount = votesboardCommentRepository.countByVotesboardIdAndDeletedFalse(post.getId());
                     long likeCount = votesboardLikeRepository.countByVotesboard(post);
                     Boolean isLiked = userId != null
                         ? votesboardLikeRepository.existsByVotesboardIdAndUserId(post.getId(), userId)
@@ -153,11 +153,11 @@ public class VotesboardServiceImpl implements VotesboardService {
                     Boolean hasVoted = userId != null
                         ? voteResultRepository.existsByUserAndVotesboard(user, post)
                         : null;
-                    return voteboardMapper.toSummaryResponse(post, commentCount, likeCount, isLiked, hasVoted);
+                    return votesboardMapper.toSummaryResponse(post, commentCount, likeCount, isLiked, hasVoted);
                 })
                 .toList();
 
-        return voteboardMapper.toListResponse(summaries, nextCursor, hasNext, totalCount, isAuthorized);
+        return votesboardMapper.toListResponse(summaries, nextCursor, hasNext, totalCount, isAuthorized);
     }
 
     @Override
@@ -186,7 +186,7 @@ public class VotesboardServiceImpl implements VotesboardService {
                 throw new IllegalArgumentException("총 이미지 개수는 " + imageUploadService.getMaxImageCount() + "개를 초과할 수 없습니다.");
             }
 
-            newImageUrls = imageUploadService.uploadImages(request.getImages(), VOTEBOARD_DIRECTORY);
+            newImageUrls = imageUploadService.uploadImages(request.getImages(), VOTESBOARD_DIRECTORY);
             saveVotesboardImages(votesboard, newImageUrls);
         }
 
