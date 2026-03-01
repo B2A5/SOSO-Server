@@ -66,6 +66,9 @@ replay_pid*
 .env
 .env.local
 
+# 로컬 개발용 Spring 프로파일 (시크릿 포함)
+application-local.yml
+
 # docker test
 Dockerfile.test
 
