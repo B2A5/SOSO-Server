@@ -42,8 +42,7 @@
 # ┌─────────────────────────────────────────────────────────────────┐
 # │                    soso.dreampaste.com                         │
 # ├─────────────────────────────────────────────────────────────────┤
-# │ /                    → Jenkins 관리자 페이지 (임시)             │
-# │ /jenkins/*           → Jenkins CI/CD 관리자 인터페이스         │
+# │ /                    → Swagger UI (기본 페이지)                 │
 # │ /api/*               → SOSO API 서버 (Spring Boot)             │
 # │ /swagger-ui/*        → API 문서 (Swagger UI)                   │
 # │ /actuator/*          → Spring Boot Actuator (모니터링)         │
@@ -60,7 +59,6 @@
 # - 자동 보안 헤더 추가로 웹 보안 강화
 #
 # 🔄 서비스 의존성:
-# - Jenkins 컨테이너 (jenkins:8080)
 # - API 서버 컨테이너 (api:8080)
 # - MySQL 데이터베이스 (간접 의존성)
 # - Redis 캐시 서버 (간접 의존성)
@@ -96,22 +94,6 @@ soso.dreampaste.com {
         # 클릭재킹 방지: 다른 사이트에서 iframe으로 포함되는 것을 제한
         # SAMEORIGIN: 같은 도메인에서만 iframe 사용 허용
         X-Frame-Options "SAMEORIGIN"
-    }
-
-    # =================================================================
-    # Jenkins CI/CD 관리자 패널 라우팅
-    # =================================================================
-    # Jenkins 웹 UI에 대한 접근을 처리합니다.
-    # 개발팀이 빌드 파이프라인을 관리하고 모니터링할 수 있습니다.
-
-    # /jenkins → /jenkins/ 영구 리다이렉트 (trailing slash 정규화)
-    redir /jenkins /jenkins/ permanent
-
-    # Jenkins 컨테이너로 프록시 (jenkins:8080)
-    reverse_proxy /jenkins/* jenkins:8080 {
-        # HTTPS 프로토콜 정보를 백엔드에 전달
-        # Jenkins가 올바른 리다이렉트 URL을 생성할 수 있도록 함
-        header_up X-Forwarded-Proto {scheme}
     }
 
     # =================================================================
@@ -190,10 +172,8 @@ soso.dreampaste.com {
     # =================================================================
     # 기본 라우팅 (루트 경로)
     # =================================================================
-    # 루트 경로(/)에 대한 기본 처리입니다.
-    # 현재는 Jenkins 관리 페이지로 임시 리다이렉트하지만,
-    # 향후 API가 완성되면 Swagger UI로 변경할 예정입니다.
-    redir / /jenkins/ temporary
+    # 루트 경로(/)는 Swagger UI로 리다이렉트합니다.
+    redir / /swagger-ui/index.html permanent
 
     # =================================================================
     # 에러 처리
