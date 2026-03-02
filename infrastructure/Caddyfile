@@ -224,3 +224,43 @@ http://soso.dreampaste.com {
     # {uri} 변수를 사용하여 원본 요청 경로와 쿼리 스트링을 유지
     redir https://soso.dreampaste.com{uri} permanent
 }
+
+# =============================================================================
+# Webhook Service for PR Preview - Poodle Docs
+# =============================================================================
+webhook.poodle-kit.my {
+    reverse_proxy poodle-webhook:9000
+    encode gzip
+    
+    header {
+        X-Frame-Options "DENY"
+        X-Content-Type-Options "nosniff"
+    }
+    
+    log {
+        output file /var/log/caddy/webhook.log
+    }
+}
+
+# =============================================================================
+# PR Preview Deployments - Poodle Docs
+# =============================================================================
+# =============================================================================
+# Dev Branch Deployment - Poodle Docs
+# =============================================================================
+dev.poodle-kit.my {
+    reverse_proxy poodle-docs-dev:3000
+    encode gzip
+}
+
+# =============================================================================
+# Production Deployment - Poodle Docs (main branch)
+# =============================================================================
+poodle-kit.my {
+    reverse_proxy poodle-docs:3000
+    encode gzip
+}
+
+import /etc/caddy/pr-previews/*.caddy
+
+

@@ -108,9 +108,9 @@ deploy_services() {
         set +a
     fi
 
-    # Pull latest images
-    log_info "Pulling latest base images..."
-    docker compose pull db redis proxy || true
+    # Pull latest images (API from GHCR, others from Docker Hub)
+    log_info "Pulling latest images..."
+    docker compose pull api db redis proxy || true
 
     # Start core services first
     log_info "Starting core services (DB, Redis)..."
@@ -184,12 +184,8 @@ deploy_services() {
 cleanup_old_resources() {
     log_info "Cleaning up old resources..."
 
-    # Remove old images (keep last 3 versions)
-    docker images --format "table {{.Repository}}:{{.Tag}}\t{{.CreatedAt}}" | \
-        grep "localtest/soso-server" | \
-        tail -n +4 | \
-        awk '{print $1}' | \
-        xargs -r docker rmi || true
+    # Remove old images
+    docker image prune -f --filter "until=24h" || true
 
     # Clean up unused volumes and networks
     docker volume prune -f || true

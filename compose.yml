@@ -49,13 +49,15 @@ services:
       JAVA_OPTS: "-Djenkins.install.runSetupWizard=false" # 초기 설정 위저드 건너뛰기
       JENKINS_OPTS: "--prefix=/jenkins" # URL 프리픽스 설정 (/jenkins 경로)
     ports:
-      - "8080:8080" # Jenkins 웹 UI 접근 포트
-      - "50000:50000" # Jenkins 에이전트 연결 포트
+      - "127.0.0.1:8080:8080" # Jenkins 웹 UI (로컬만, Caddy 프록시 통해 접근)
+      - "127.0.0.1:50000:50000" # Jenkins 에이전트 (로컬만)
     volumes:
       - jenkins_data:/var/jenkins_home # Jenkins 설정 및 작업 데이터 영속화
       - /var/run/docker.sock:/var/run/docker.sock # Docker-in-Docker (호스트 Docker 제어)
     networks: [soso_net] # 내부 네트워크 연결
     restart: unless-stopped # 시스템 재부팅 시 자동 시작
+    mem_limit: 2g # 빌드 시 최대 2GB (현재 idle ~400MB)
+    cpus: 2.0 # 빌드 시 CPU 2코어 제한 (서비스 안정성 보장)
     healthcheck: # Jenkins 서비스 상태 확인
       test:
         ["CMD-SHELL", "curl -f http://localhost:8080/jenkins/login || exit 1"]
@@ -83,7 +85,7 @@ services:
   # - Caddy 프록시를 통해서만 접근 가능
   # =============================================================================
   api:
-    image: ${API_IMAGE:-soso/api:latest} # Jenkins가 빌드한 이미지 사용
+    image: ${API_IMAGE:-ghcr.io/b2a5/soso-api:latest} # GHCR에서 이미지 pull
     container_name: soso-api
     environment:
       TZ: Asia/Seoul # 한국 시간대 설정
@@ -149,6 +151,8 @@ services:
     expose: ["8080"] # 내부 네트워크에만 포트 노출 (보안)
     networks: [soso_net] # 내부 네트워크 연결
     restart: unless-stopped # 장애 시 자동 재시작
+    mem_limit: 1g # JVM 최대 1GB (현재 ~720MB)
+    cpus: 1.5
 
     healthcheck: # API 서버 상태 확인
       test:
@@ -200,6 +204,8 @@ services:
       # Jenkins는 관리 페이지일 뿐, 핵심 서비스 아님
     networks: [soso_net] # 내부 네트워크 연결
     restart: unless-stopped # 장애 시 자동 재시작
+    mem_limit: 256m # 현재 ~24MB, 여유 있게
+    cpus: 0.5
     healthcheck: # Caddy 설정 파일 검증
       test: ["CMD", "caddy", "validate", "--config", "/etc/caddy/Caddyfile"]
       interval: 30s # 30초마다 설정 유효성 확인
@@ -246,6 +252,8 @@ services:
       # - ./infrastructure/mysql-init:/docker-entrypoint-initdb.d:ro  # 초기화 SQL 스크립트
     networks: [soso_net] # 내부 네트워크만 접근
     restart: unless-stopped # 장애 시 자동 재시작
+    mem_limit: 1g # 현재 ~420MB, buffer pool 포함 여유
+    cpus: 1.0
     healthcheck: # MySQL 서버 상태 확인
       test:
         [
@@ -293,6 +301,8 @@ services:
       - redis_data:/data # AOF 파일 영속화 (재시작 후 데이터 복구)
     networks: [soso_net] # 내부 네트워크만 접근
     restart: unless-stopped # 장애 시 자동 재시작
+    mem_limit: 300m # Redis maxmemory 256MB + 오버헤드
+    cpus: 0.5
     healthcheck: # Redis 서버 상태 확인
       test: ["CMD", "redis-cli", "ping"] # PING 명령으로 응답성 확인
       interval: 10s # 10초마다 상태 확인
@@ -327,6 +337,8 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock # Docker 데몬 제어를 위한 소켓 접근
     restart: unless-stopped # 장애 시 자동 재시작
+    mem_limit: 128m # 현재 ~18MB, 가벼운 모니터링 도구
+    cpus: 0.25
 
 # =============================================================================
 # 네트워크 설정
