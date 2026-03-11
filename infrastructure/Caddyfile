@@ -117,59 +117,32 @@ soso.dreampaste.com {
     # =================================================================
     # SOSO API 서버 라우팅
     # =================================================================
-    # Spring Boot 기반의 메인 API 서버에 대한 요청을 처리합니다.
-    # 모든 애플리케이션 로직과 데이터 처리가 이루어지는 핵심 서비스입니다.
-
-    # 인증 관련 API
+    # 프론트엔드가 /auth/*, /signup/* 등 프리픽스 없이 직접 호출.
+    # (Next.js 프록시: /api/auth/* → soso.dreampaste.com/auth/*)
     reverse_proxy /auth/* api:8080 {
         header_up X-Forwarded-Proto {scheme}
         health_uri /actuator/health
         health_interval 30s
         health_timeout 10s
     }
-
-    # 회원가입 API
     reverse_proxy /signup/* api:8080 {
         header_up X-Forwarded-Proto {scheme}
     }
-
-    # 커뮤니티 API
+    reverse_proxy /users/* api:8080 {
+        header_up X-Forwarded-Proto {scheme}
+    }
     reverse_proxy /community/* api:8080 {
         header_up X-Forwarded-Proto {scheme}
     }
 
-    # 사용자 API
-    reverse_proxy /users/* api:8080 {
-        header_up X-Forwarded-Proto {scheme}
-    }
-
-    # =================================================================
-    # API 문서 (Swagger UI) 라우팅
-    # =================================================================
-    # 개발자와 클라이언트가 API 스펙을 확인하고 테스트할 수 있는
-    # Swagger UI 인터페이스에 대한 접근을 처리합니다.
-
-    # /swagger → /swagger-ui/index.html 영구 리다이렉트
+    # Swagger UI & API 문서
     redir /swagger /swagger-ui/index.html permanent
     redir /swagger/ /swagger-ui/index.html permanent
-
-    # Swagger UI 정적 파일들 프록시
     reverse_proxy /swagger-ui/* api:8080
-
-    # OpenAPI 3.0 스펙 JSON/YAML 파일 프록시
     reverse_proxy /v3/api-docs* api:8080
 
-    # =================================================================
-    # 헬스체크 및 문서 엔드포인트
-    # =================================================================
-    # Spring Boot Actuator 모니터링 엔드포인트와 기타 문서 페이지를
-    # API 서버로 프록시합니다.
-
-    # Spring Boot Actuator: 애플리케이션 메트릭, 헬스체크, 환경 정보 등
+    # Spring Boot Actuator
     reverse_proxy /actuator/* api:8080
-
-    # 기타 문서 페이지 (개발자 가이드, API 가이드 등)
-    reverse_proxy /docs/* api:8080
 
     # =================================================================
     # 정적 파일 캐싱 설정

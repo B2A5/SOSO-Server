@@ -90,9 +90,9 @@ jwt:
   access-token-validity-in-ms: ${JWT_AT_VALIDITY:1800000}
   refresh-token-validity-in-ms: ${JWT_RT_VALIDITY:1209600000}
 
-# CORS 허용 원점(쉼표 분리)
+# CORS 허용 원점(쉼표 분리). 와일드카드 패턴 지원 (allowedOriginPatterns 사용 중)
 frontend:
-  origin: ${FRONTEND_ORIGIN:http://localhost:3000,https://soso-front-end-web.vercel.app}
+  origin: ${FRONTEND_ORIGIN:http://localhost:3000,https://soso-front-end-web.vercel.app,https://*.vercel.app}
 
 # 쿠키 설정 (환경별)
 # 로컬 개발: secure=false, sameSite=Lax (HTTP 허용)
