@@ -1,0 +1,172 @@
+# =============================================================================
+# SOSO Server - CI/CD Pipeline (GitHub Actions)
+# =============================================================================
+#
+# Jenkinsfile에서 전환된 파이프라인.
+# 역할: 테스트 → 빌드 → Docker 이미지 → GHCR push → 서버 배포
+#
+# 트리거: dev 브랜치 push
+# 레지스트리: ghcr.io/b2a5/soso-api
+# 배포: SSH로 서버에서 docker compose pull && up
+# =============================================================================
+
+name: Build and Deploy
+
+on:
+  push:
+    branches: [dev]
+  workflow_dispatch: # 수동 트리거 (대시보드에서 사용 예정)
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: b2a5/soso-api
+
+jobs:
+  # ===========================================================================
+  # 1단계: 테스트 (Jenkinsfile의 Unit Tests 스테이지)
+  # ===========================================================================
+  test:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Cache Gradle packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: ${{ runner.os }}-gradle-
+
+      - name: Run tests
+        env:
+          SPRING_PROFILES_ACTIVE: test
+          SPRING_DATASOURCE_URL: "jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=MySQL;DATABASE_TO_LOWER=TRUE;CASE_INSENSITIVE_IDENTIFIERS=TRUE"
+          SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.h2.Driver
+          SPRING_DATASOURCE_USERNAME: sa
+          SPRING_DATASOURCE_PASSWORD: ""
+          SPRING_JPA_HIBERNATE_DDL_AUTO: create-drop
+          SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.H2Dialect
+          SPRING_SESSION_STORE_TYPE: none
+        run: |
+          chmod +x ./gradlew
+          ./gradlew test \
+            -Dspring.profiles.active=test \
+            --parallel \
+            --build-cache \
+            --info
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: build/test-results/test/
+          retention-days: 7
+
+  # ===========================================================================
+  # 2단계: 빌드 + Docker 이미지 + GHCR push
+  # (Jenkinsfile의 Build Application + Build Docker Image 스테이지)
+  # ===========================================================================
+  build-and-push:
+    name: Build & Push Image
+    needs: test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Cache Gradle packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: ${{ runner.os }}-gradle-
+
+      - name: Build JAR
+        run: |
+          chmod +x ./gradlew
+          ./gradlew bootJar --parallel --build-cache
+
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=raw,value=latest
+            type=sha,prefix=,format=short
+            type=raw,value={{date 'YYYYMMDD-HHmmss'}}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+  # ===========================================================================
+  # 3단계: 서버 배포 (Jenkinsfile의 Deploy to Production 스테이지)
+  # ===========================================================================
+  deploy:
+    name: Deploy to Production
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          port: ${{ secrets.SERVER_PORT }}
+          script: |
+            set -e
+            DEPLOY_DIR=/srv/soso/app/SOSO-Server
+
+            echo "🔄 Pulling latest code..."
+            cd $DEPLOY_DIR
+            git fetch origin
+            git reset --hard origin/dev
+
+            echo "🐳 Pulling new image from GHCR..."
+            docker compose pull api
+
+            echo "🚀 Zero-downtime deploy..."
+            docker compose up -d --no-deps --wait --wait-timeout 180 api
+
+            echo "🌐 Reloading Caddy config..."
+            docker exec soso-proxy caddy reload --config /etc/caddy/Caddyfile --force 2>/dev/null || true
+
+            echo "🧹 Cleaning old images..."
+            docker image prune -f --filter "until=24h" || true
+
+            echo "✅ Deploy complete!"
+            docker compose ps api
