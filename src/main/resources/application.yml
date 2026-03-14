@@ -41,20 +41,6 @@ spring:
       host: ${REDIS_HOST:localhost}
       port: ${REDIS_PORT:6379}
 
-  # Kafka 미사용시 KAFKA_BOOTSTRAP 비워둬도 됨
-  kafka:
-    bootstrap-servers: ${KAFKA_BOOTSTRAP:}
-    consumer:
-      group-id: soso-group
-      auto-offset-reset: earliest
-      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
-      properties:
-        spring.json.trusted.packages: "com.example.soso.vote.dto"
-    producer:
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
-
   cloud:
     aws:
       region: ${AWS_REGION:ap-northeast-2}
@@ -66,17 +52,6 @@ spring:
         base-url: ${S3_BASE_URL:https://dreampaste-soso-image-storage.s3.ap-northeast-2.amazonaws.com}
         endpoint: ${AWS_S3_ENDPOINT:}
         path-style-access: ${AWS_S3_PATH_STYLE_ACCESS:false}
-    gcp:
-      storage:
-        bucket: ${GCP_STORAGE_BUCKET:unused}
-        base-url: ${GCP_STORAGE_BASE_URL:unused}
-kafka:
-  topics:
-    vote-events: vote-events
-    vote-counts: vote-counts
-    popular-votes: popular-votes
-    trending-votes: trending-votes
-    vote-summary: vote-summary
 
 oauth:
   kakao:
