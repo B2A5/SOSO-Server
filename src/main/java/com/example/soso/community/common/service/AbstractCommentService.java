@@ -156,15 +156,8 @@ public abstract class AbstractCommentService<T, R, U, S> {
     protected abstract List<Comment> fetchComments(Long postId, LocalDateTime cursorTime,
                                                  Pageable pageable, S sortType);
 
-    // 댓글 수정용 추상 메서드
-    protected String getUpdateContent(Object request) {
-        // 기본적으로 reflection을 사용하여 getContent() 메서드 호출
-        try {
-            return (String) request.getClass().getMethod("getContent").invoke(request);
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to get content from update request", e);
-        }
-    }
+    // 댓글 수정용 추상 메서드 - 구현체에서 적절한 타입으로 캐스팅하여 반환
+    protected abstract String getUpdateContent(Object request);
 
     // 공통 유틸리티 메서드들
     protected Post findPostById(Long postId) {

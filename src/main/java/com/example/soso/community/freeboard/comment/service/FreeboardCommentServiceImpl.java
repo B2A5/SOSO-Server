@@ -84,6 +84,11 @@ public class FreeboardCommentServiceImpl
 
     // 추상 메서드 구현
     @Override
+    protected String getUpdateContent(Object request) {
+        return ((FreeboardCommentUpdateRequest) request).getContent();
+    }
+
+    @Override
     protected String getContent(FreeboardCommentCreateRequest request) {
         return request.getContent();
     }
