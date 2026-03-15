@@ -92,7 +92,7 @@ public class FreeboardCommentCursorResponse {
             nullable = true
         )
         @JsonInclude(JsonInclude.Include.ALWAYS)
-        private Boolean canEdit;
+        private Boolean isEditable;
 
         @Schema(
             description = "댓글 삭제 가능 여부 (비인증 사용자인 경우 null)",
@@ -101,7 +101,7 @@ public class FreeboardCommentCursorResponse {
             nullable = true
         )
         @JsonInclude(JsonInclude.Include.ALWAYS)
-        private Boolean canDelete;
+        private Boolean isDeletable;
 
         @Schema(description = "작성 시간", example = "2024-12-25T10:30:00", requiredMode = Schema.RequiredMode.REQUIRED)
         private LocalDateTime createdAt;
@@ -116,12 +116,12 @@ public class FreeboardCommentCursorResponse {
             return isLiked;
         }
 
-        public Boolean isCanEdit() {
-            return canEdit;
+        public Boolean isEditable() {
+            return isEditable;
         }
 
-        public Boolean isCanDelete() {
-            return canDelete;
+        public Boolean isDeletable() {
+            return isDeletable;
         }
     }
 

@@ -52,7 +52,7 @@ public class PollServiceImpl implements PollService {
     @Transactional
     public Long createPoll(PollCreateRequest request, String userId) {
         log.info("투표 게시글 작성 시작: userId={}, optionCount={}, imageCount={}",
-                userId, request.getVoteOptions().size(),
+                userId, request.getOptions().size(),
                 request.getImages() != null ? request.getImages().size() : 0);
 
         Users user = findUserById(userId);
@@ -194,11 +194,11 @@ public class PollServiceImpl implements PollService {
         poll.updatePost(request.getTitle(), request.getContent(), request.getCategory());
 
         // 투표 설정 수정 (투표 시작 전에만 가능)
-        if (request.getEndTime() != null || request.getAllowRevote() != null || request.getAllowMultipleChoice() != null) {
-            LocalDateTime endTime = request.getEndTime() != null ? request.getEndTime() : poll.getEndTime();
-            boolean allowRevote = request.getAllowRevote() != null ? request.getAllowRevote() : poll.isAllowRevote();
-            boolean allowMultipleChoice = request.getAllowMultipleChoice() != null ? request.getAllowMultipleChoice() : poll.isAllowMultipleChoice();
-            poll.updateVoteSettings(endTime, allowRevote, allowMultipleChoice);
+        if (request.getClosedAt() != null || request.getCanRevote() != null || request.getCanMultiSelect() != null) {
+            LocalDateTime closedAt = request.getClosedAt() != null ? request.getClosedAt() : poll.getClosedAt();
+            boolean canRevote = request.getCanRevote() != null ? request.getCanRevote() : poll.isCanRevote();
+            boolean canMultiSelect = request.getCanMultiSelect() != null ? request.getCanMultiSelect() : poll.isCanMultiSelect();
+            poll.updateVoteSettings(closedAt, canRevote, canMultiSelect);
         }
 
         log.info("투표 게시글 수정 완료: postId={}, newImageCount={}", postId, newImageUrls.size());
@@ -242,7 +242,7 @@ public class PollServiceImpl implements PollService {
         int totalOptions = poll.getOptions().size();
         int selectedCount = selectedOptionIds.size();
 
-        if (poll.isAllowMultipleChoice()) {
+        if (poll.isCanMultiSelect()) {
             // 중복 선택 허용: 최소 1개, 최대 n-1개
             if (selectedCount == 0) {
                 throw new PostException(PostErrorCode.INVALID_VOTE_COUNT);
@@ -284,7 +284,7 @@ public class PollServiceImpl implements PollService {
         }
 
         // 총 투표 참여자 수 증가 (한 명이 여러 옵션 선택해도 1명으로 카운트)
-        poll.increaseTotalVotes();
+        poll.increaseParticipantCount();
 
         log.info("투표 참여 완료: postId={}, userId={}, optionIds={}", postId, userId, selectedOptionIds);
     }
@@ -299,7 +299,7 @@ public class PollServiceImpl implements PollService {
         List<Long> newOptionIds = request.getVoteOptionIds();
 
         // 재투표 허용 확인
-        if (!poll.isAllowRevote()) {
+        if (!poll.isCanRevote()) {
             throw new PostException(PostErrorCode.REVOTE_NOT_ALLOWED);
         }
 
@@ -318,7 +318,7 @@ public class PollServiceImpl implements PollService {
         int totalOptions = poll.getOptions().size();
         int selectedCount = newOptionIds.size();
 
-        if (poll.isAllowMultipleChoice()) {
+        if (poll.isCanMultiSelect()) {
             // 중복 선택 허용: 최소 1개, 최대 n-1개
             if (selectedCount == 0) {
                 throw new PostException(PostErrorCode.INVALID_VOTE_COUNT);
@@ -389,7 +389,7 @@ public class PollServiceImpl implements PollService {
         Users user = findUserById(userId);
 
         // 재투표 허용 확인 (취소도 재투표의 일종)
-        if (!poll.isAllowRevote()) {
+        if (!poll.isCanRevote()) {
             throw new PostException(PostErrorCode.REVOTE_NOT_ALLOWED);
         }
 
@@ -411,7 +411,7 @@ public class PollServiceImpl implements PollService {
         }
 
         // 총 투표 참여자 수 감소
-        poll.decreaseTotalVotes();
+        poll.decreaseParticipantCount();
 
         log.info("투표 취소 완료: postId={}, userId={}, canceledCount={}", postId, userId, voteResults.size());
     }

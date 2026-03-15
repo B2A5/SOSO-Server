@@ -40,7 +40,7 @@ public class Poll extends BaseBoard {
      * 투표 마감 시간
      */
     @Column(name = "end_time", nullable = false)
-    private LocalDateTime endTime;
+    private LocalDateTime closedAt;
 
     /**
      * 투표 후 수정 가능 여부
@@ -48,7 +48,7 @@ public class Poll extends BaseBoard {
      * false: 투표 후 변경 불가 (기본값)
      */
     @Column(name = "allow_revote", nullable = false)
-    private boolean allowRevote = false;
+    private boolean canRevote = false;
 
     /**
      * 중복 선택 허용 여부
@@ -56,28 +56,28 @@ public class Poll extends BaseBoard {
      * false: 하나의 옵션만 선택 가능 (기본값)
      */
     @Column(name = "allow_multiple_choice", nullable = false)
-    private boolean allowMultipleChoice = false;
+    private boolean canMultiSelect = false;
 
     /**
      * 총 투표 참여자 수
      */
     @Column(name = "total_votes", nullable = false)
-    private int totalVotes = 0;
+    private int participantCount = 0;
 
     /**
      * Poll 생성 정적 팩토리 메서드
      */
     public static Poll create(Users user, String title, String content, Category category,
-                              LocalDateTime endTime, boolean allowRevote, boolean allowMultipleChoice) {
+                              LocalDateTime closedAt, boolean canRevote, boolean canMultiSelect) {
         Poll poll = new Poll();
         poll.user = user;
         poll.title = title;
         poll.content = content;
         poll.category = category;
-        poll.endTime = endTime;
-        poll.allowRevote = allowRevote;
-        poll.allowMultipleChoice = allowMultipleChoice;
-        poll.totalVotes = 0;
+        poll.closedAt = closedAt;
+        poll.canRevote = canRevote;
+        poll.canMultiSelect = canMultiSelect;
+        poll.participantCount = 0;
         poll.viewCount = 0;
         poll.deleted = false;
         return poll;
@@ -103,16 +103,16 @@ public class Poll extends BaseBoard {
     /**
      * 투표 참여자 수 증가
      */
-    public void increaseTotalVotes() {
-        this.totalVotes++;
+    public void increaseParticipantCount() {
+        this.participantCount++;
     }
 
     /**
      * 투표 참여자 수 감소 (재투표 시)
      */
-    public void decreaseTotalVotes() {
-        if (this.totalVotes > 0) {
-            this.totalVotes--;
+    public void decreaseParticipantCount() {
+        if (this.participantCount > 0) {
+            this.participantCount--;
         }
     }
 
@@ -122,7 +122,7 @@ public class Poll extends BaseBoard {
      * @return true: 진행 중, false: 완료
      */
     public boolean isActive() {
-        return LocalDateTime.now().isBefore(endTime) && !isDeleted();
+        return LocalDateTime.now().isBefore(closedAt) && !isDeleted();
     }
 
     /**
@@ -161,11 +161,11 @@ public class Poll extends BaseBoard {
     /**
      * 투표 설정 수정
      */
-    public void updateVoteSettings(LocalDateTime endTime, boolean allowRevote, boolean allowMultipleChoice) {
-        if (this.totalVotes == 0) {
-            this.endTime = endTime;
-            this.allowRevote = allowRevote;
-            this.allowMultipleChoice = allowMultipleChoice;
+    public void updateVoteSettings(LocalDateTime closedAt, boolean canRevote, boolean canMultiSelect) {
+        if (this.participantCount == 0) {
+            this.closedAt = closedAt;
+            this.canRevote = canRevote;
+            this.canMultiSelect = canMultiSelect;
         }
     }
 }

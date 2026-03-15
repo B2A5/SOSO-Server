@@ -34,9 +34,9 @@ public class PollRepositoryImpl implements PollRepositoryCustom {
 
         // 상태 필터링
         if (status == PollStatus.IN_PROGRESS) {
-            condition.and(poll.endTime.gt(now));
+            condition.and(poll.closedAt.gt(now));
         } else if (status == PollStatus.COMPLETED) {
-            condition.and(poll.endTime.loe(now));
+            condition.and(poll.closedAt.loe(now));
         }
 
         // 커서 조건 추가
@@ -70,9 +70,9 @@ public class PollRepositoryImpl implements PollRepositoryCustom {
     private OrderSpecifier<?>[] getOrderSpecifiers(QPoll poll, PollSortType sort) {
         switch (sort) {
             case LIKE:
-                // 투표 인원 순 (totalVotes 내림차순), 동점 시 최신순
+                // 투표 인원 순 (participantCount 내림차순), 동점 시 최신순
                 return new OrderSpecifier<?>[]{
-                        poll.totalVotes.desc(),
+                        poll.participantCount.desc(),
                         poll.id.desc()
                 };
             case COMMENT:

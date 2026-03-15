@@ -29,17 +29,17 @@ public class PollMapper {
                 request.getTitle(),
                 request.getContent(),
                 request.getCategory(),
-                request.getEndTime(),
-                request.getAllowRevote(),
-                request.getAllowMultipleChoice()
+                request.getClosedAt(),
+                request.getCanRevote(),
+                request.getCanMultiSelect()
         );
 
         // 투표 옵션 추가
-        List<PollOption> options = request.getVoteOptions().stream()
+        List<PollOption> options = request.getOptions().stream()
                 .map(optionRequest -> PollOption.builder()
                         .poll(poll)
                         .content(optionRequest.getContent())
-                        .sequence(request.getVoteOptions().indexOf(optionRequest))
+                        .sequence(request.getOptions().indexOf(optionRequest))
                         .build())
                 .toList();
 
@@ -55,7 +55,7 @@ public class PollMapper {
         // 투표 옵션 미리보기 (최대 3개)
         List<PollOptionResponse> voteOptions = poll.getOptions().stream()
                 .limit(3)
-                .map(option -> toVoteOptionResponse(option, poll.getTotalVotes()))
+                .map(option -> toVoteOptionResponse(option, poll.getParticipantCount()))
                 .toList();
 
         // 이미지 정보 추출
@@ -75,12 +75,12 @@ public class PollMapper {
 
         // VoteInfo 생성
         VoteInfo voteInfo = new VoteInfo(
-                List.of(), // Summary에서는 selectedOptionIds 없음
-                poll.getTotalVotes(),
+                List.of(), // Summary에서는 myOptionIds 없음
+                poll.getParticipantCount(),
                 poll.getPollStatus(),
-                poll.getEndTime(),
-                poll.isAllowRevote(),
-                poll.isAllowMultipleChoice()
+                poll.getClosedAt(),
+                poll.isCanRevote(),
+                poll.isCanMultiSelect()
         );
 
         return PollSummary.builder()
@@ -121,7 +121,7 @@ public class PollMapper {
         boolean isAuthor = userId != null && poll.getUser().getId().equals(userId);
 
         // 사용자가 선택한 옵션 ID 목록
-        List<Long> selectedOptionIds = userVoteResults != null ?
+        List<Long> myOptionIds = userVoteResults != null ?
                 userVoteResults.stream()
                         .map(vr -> vr.getVoteOption().getId())
                         .toList() :
@@ -144,12 +144,12 @@ public class PollMapper {
 
         // VoteInfo 생성
         VoteInfo voteInfo = new VoteInfo(
-                selectedOptionIds,
-                poll.getTotalVotes(),
+                myOptionIds,
+                poll.getParticipantCount(),
                 poll.getPollStatus(),
-                poll.getEndTime(),
-                poll.isAllowRevote(),
-                poll.isAllowMultipleChoice()
+                poll.getClosedAt(),
+                poll.isCanRevote(),
+                poll.isCanMultiSelect()
         );
 
         return PollDetailResponse.builder()
@@ -159,8 +159,8 @@ public class PollMapper {
                 .title(poll.getTitle())
                 .content(poll.getContent())
                 .images(images)
-                .voteOptions(poll.getOptions().stream()
-                        .map(option -> toVoteOptionResponse(option, poll.getTotalVotes()))
+                .options(poll.getOptions().stream()
+                        .map(option -> toVoteOptionResponse(option, poll.getParticipantCount()))
                         .toList())
                 .hasVoted(hasVoted)
                 .voteInfo(voteInfo)
@@ -170,8 +170,8 @@ public class PollMapper {
                 .isLiked(isLiked)
                 .isAuthorized(isAuthorized)
                 .isAuthor(isAuthor)
-                .canEdit(isAuthorized ? isAuthor : null)
-                .canDelete(isAuthorized ? isAuthor : null)
+                .isEditable(isAuthorized ? isAuthor : null)
+                .isDeletable(isAuthorized ? isAuthor : null)
                 .createdAt(poll.getCreatedAt())
                 .updatedAt(poll.getUpdatedAt())
                 .build();

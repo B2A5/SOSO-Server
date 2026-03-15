@@ -41,7 +41,7 @@ public class PollDetailResponse {
     private List<ImageInfo> images;
 
     @Schema(description = "투표 옵션 목록", requiredMode = Schema.RequiredMode.REQUIRED)
-    private List<PollOptionResponse> voteOptions;
+    private List<PollOptionResponse> options;
 
     @Schema(
         description = "현재 사용자의 투표 참여 여부 (비인증 사용자인 경우 null, 참여하지 않은 경우 false, 참여한 경우 true)",
@@ -74,10 +74,10 @@ public class PollDetailResponse {
     private boolean isAuthor;
 
     @Schema(description = "현재 사용자가 게시글 수정 권한이 있는지 여부 (비인증 사용자인 경우 null, 작성자인 경우 true)", example = "false", requiredMode = Schema.RequiredMode.REQUIRED, nullable = true)
-    private Boolean canEdit;
+    private Boolean isEditable;
 
     @Schema(description = "현재 사용자가 게시글 삭제 권한이 있는지 여부 (비인증 사용자인 경우 null, 작성자인 경우 true)", example = "false", requiredMode = Schema.RequiredMode.REQUIRED, nullable = true)
-    private Boolean canDelete;
+    private Boolean isDeletable;
 
     @Schema(description = "생성일시", example = "2024-01-01T10:00:00", requiredMode = Schema.RequiredMode.REQUIRED)
     private LocalDateTime createdAt;

@@ -103,7 +103,7 @@ class PollIntegrationTest {
                 "test image content 2".getBytes()
         );
 
-        LocalDateTime endTime = LocalDateTime.now().plusDays(7);
+        LocalDateTime closedAt = LocalDateTime.now().plusDays(7);
 
         // when & then
         try {
@@ -113,11 +113,11 @@ class PollIntegrationTest {
                             .param("category", "daily-hobby")
                             .param("title", "테스트 투표")
                             .param("content", "테스트 내용입니다")
-                            .param("voteOptions[0].content", "옵션1")
-                            .param("voteOptions[1].content", "옵션2")
-                            .param("endTime", endTime.toString())
-                            .param("allowRevote", "true")
-                            .param("allowMultipleChoice", "false")
+                            .param("options[0].content", "옵션1")
+                            .param("options[1].content", "옵션2")
+                            .param("closedAt", closedAt.toString())
+                            .param("canRevote", "true")
+                            .param("canMultiSelect", "false")
                             .with(SecurityMockMvcRequestPostProcessors.user(testUserDetails))
                             .contentType(MediaType.MULTIPART_FORM_DATA))
                     .andDo(print())
@@ -135,17 +135,17 @@ class PollIntegrationTest {
     @DisplayName("투표 게시글 생성 실패 - 옵션 부족 (1개)")
     void createVotePost_InsufficientOptions() throws Exception {
         // given
-        LocalDateTime endTime = LocalDateTime.now().plusDays(7);
+        LocalDateTime closedAt = LocalDateTime.now().plusDays(7);
 
         // when & then
         mockMvc.perform(multipart("/community/polls")
                         .param("category", "daily-hobby")
                         .param("title", "테스트 투표")
                         .param("content", "테스트 내용입니다")
-                        .param("voteOptions[0].content", "옵션1")
-                        .param("endTime", endTime.toString())
-                        .param("allowRevote", "true")
-                        .param("allowMultipleChoice", "false")
+                        .param("options[0].content", "옵션1")
+                        .param("closedAt", closedAt.toString())
+                        .param("canRevote", "true")
+                        .param("canMultiSelect", "false")
                         .with(SecurityMockMvcRequestPostProcessors.user(testUserDetails))
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andExpect(status().isBadRequest());
@@ -155,22 +155,22 @@ class PollIntegrationTest {
     @DisplayName("투표 게시글 생성 실패 - 옵션 초과 (6개)")
     void createVotePost_TooManyOptions() throws Exception {
         // given
-        LocalDateTime endTime = LocalDateTime.now().plusDays(7);
+        LocalDateTime closedAt = LocalDateTime.now().plusDays(7);
 
         // when & then
         mockMvc.perform(multipart("/community/polls")
                         .param("category", "daily-hobby")
                         .param("title", "테스트 투표")
                         .param("content", "테스트 내용입니다")
-                        .param("voteOptions[0].content", "옵션1")
-                        .param("voteOptions[1].content", "옵션2")
-                        .param("voteOptions[2].content", "옵션3")
-                        .param("voteOptions[3].content", "옵션4")
-                        .param("voteOptions[4].content", "옵션5")
-                        .param("voteOptions[5].content", "옵션6")
-                        .param("endTime", endTime.toString())
-                        .param("allowRevote", "true")
-                        .param("allowMultipleChoice", "false")
+                        .param("options[0].content", "옵션1")
+                        .param("options[1].content", "옵션2")
+                        .param("options[2].content", "옵션3")
+                        .param("options[3].content", "옵션4")
+                        .param("options[4].content", "옵션5")
+                        .param("options[5].content", "옵션6")
+                        .param("closedAt", closedAt.toString())
+                        .param("canRevote", "true")
+                        .param("canMultiSelect", "false")
                         .with(SecurityMockMvcRequestPostProcessors.user(testUserDetails))
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andExpect(status().isBadRequest());
@@ -180,18 +180,18 @@ class PollIntegrationTest {
     @DisplayName("투표 게시글 생성 실패 - 과거 마감 시간")
     void createVotePost_PastEndTime() throws Exception {
         // given
-        LocalDateTime endTime = LocalDateTime.now().minusDays(1);  // 과거 시간
+        LocalDateTime closedAt = LocalDateTime.now().minusDays(1);  // 과거 시간
 
         // when & then
         mockMvc.perform(multipart("/community/polls")
                         .param("category", "daily-hobby")
                         .param("title", "테스트 투표")
                         .param("content", "테스트 내용입니다")
-                        .param("voteOptions[0].content", "옵션1")
-                        .param("voteOptions[1].content", "옵션2")
-                        .param("endTime", endTime.toString())
-                        .param("allowRevote", "true")
-                        .param("allowMultipleChoice", "false")
+                        .param("options[0].content", "옵션1")
+                        .param("options[1].content", "옵션2")
+                        .param("closedAt", closedAt.toString())
+                        .param("canRevote", "true")
+                        .param("canMultiSelect", "false")
                         .with(SecurityMockMvcRequestPostProcessors.user(testUserDetails))
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andExpect(status().isBadRequest());
@@ -265,7 +265,7 @@ class PollIntegrationTest {
     @DisplayName("인증 없이 투표 게시글 생성 시도 - 실패")
     void createVotePost_Unauthorized() throws Exception {
         // given
-        LocalDateTime endTime = LocalDateTime.now().plusDays(7);
+        LocalDateTime closedAt = LocalDateTime.now().plusDays(7);
 
         // when & then
         // Spring Security가 인증되지 않은 요청을 차단하여 401 Unauthorized 반환
@@ -273,11 +273,11 @@ class PollIntegrationTest {
                         .param("category", "daily-hobby")
                         .param("title", "테스트 투표")
                         .param("content", "테스트 내용입니다")
-                        .param("voteOptions[0].content", "옵션1")
-                        .param("voteOptions[1].content", "옵션2")
-                        .param("endTime", endTime.toString())
-                        .param("allowRevote", "true")
-                        .param("allowMultipleChoice", "false")
+                        .param("options[0].content", "옵션1")
+                        .param("options[1].content", "옵션2")
+                        .param("closedAt", closedAt.toString())
+                        .param("canRevote", "true")
+                        .param("canMultiSelect", "false")
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andDo(print())
                 .andExpect(status().isUnauthorized())
@@ -289,18 +289,18 @@ class PollIntegrationTest {
     @DisplayName("투표 게시글 생성 실패 - 카테고리 누락")
     void createVotePost_MissingCategory() throws Exception {
         // given
-        LocalDateTime endTime = LocalDateTime.now().plusDays(7);
+        LocalDateTime closedAt = LocalDateTime.now().plusDays(7);
 
         // when & then
         mockMvc.perform(multipart("/community/polls")
                         // category 설정 안 함
                         .param("title", "테스트 투표")
                         .param("content", "테스트 내용입니다")
-                        .param("voteOptions[0].content", "옵션1")
-                        .param("voteOptions[1].content", "옵션2")
-                        .param("endTime", endTime.toString())
-                        .param("allowRevote", "true")
-                        .param("allowMultipleChoice", "false")
+                        .param("options[0].content", "옵션1")
+                        .param("options[1].content", "옵션2")
+                        .param("closedAt", closedAt.toString())
+                        .param("canRevote", "true")
+                        .param("canMultiSelect", "false")
                         .with(SecurityMockMvcRequestPostProcessors.user(testUserDetails))
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andExpect(status().isBadRequest());
@@ -310,18 +310,18 @@ class PollIntegrationTest {
     @DisplayName("투표 게시글 생성 성공 - 이미지 없이")
     void createVotePost_WithoutImages() throws Exception {
         // given
-        LocalDateTime endTime = LocalDateTime.now().plusDays(7);
+        LocalDateTime closedAt = LocalDateTime.now().plusDays(7);
 
         // when & then
         mockMvc.perform(multipart("/community/polls")
                         .param("category", "restaurant")
                         .param("title", "테스트 투표")
                         .param("content", "테스트 내용입니다")
-                        .param("voteOptions[0].content", "옵션1")
-                        .param("voteOptions[1].content", "옵션2")
-                        .param("endTime", endTime.toString())
-                        .param("allowRevote", "false")
-                        .param("allowMultipleChoice", "true")
+                        .param("options[0].content", "옵션1")
+                        .param("options[1].content", "옵션2")
+                        .param("closedAt", closedAt.toString())
+                        .param("canRevote", "false")
+                        .param("canMultiSelect", "true")
                         .with(SecurityMockMvcRequestPostProcessors.user(testUserDetails))
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andExpect(status().isCreated())

@@ -169,9 +169,9 @@ public class FreeboardCommentServiceImpl
         Boolean isLiked = isAuthorized ?
                 commentLikeRepository.existsByComment_IdAndUser_Id(comment.getId(), userId) : null;
 
-        // canEdit, canDelete 설정 (비인증 사용자는 null, 인증 사용자는 작성자 여부에 따라 boolean)
-        Boolean canEdit = isAuthorized ? isAuthor : null;
-        Boolean canDelete = isAuthorized ? isAuthor : null;
+        // isEditable, isDeletable 설정 (비인증 사용자는 null, 인증 사용자는 작성자 여부에 따라 boolean)
+        Boolean isEditable = isAuthorized ? isAuthor : null;
+        Boolean isDeletable = isAuthorized ? isAuthor : null;
 
         return FreeboardCommentCursorResponse.FreeboardCommentSummary.builder()
                 .commentId(comment.getId())
@@ -190,8 +190,8 @@ public class FreeboardCommentServiceImpl
                 .deleted(comment.isDeleted())
                 .isAuthor(isAuthor)
                 .isLiked(isLiked)
-                .canEdit(canEdit)
-                .canDelete(canDelete)
+                .isEditable(isEditable)
+                .isDeletable(isDeletable)
                 .createdAt(comment.getCreatedAt())
                 .updatedAt(comment.getUpdatedAt())
                 .build();

@@ -43,16 +43,16 @@ public class PollCreateRequest {
     @Size(min = 2, max = 5, message = "투표 옵션은 최소 2개, 최대 5개까지 가능합니다.")
     @Valid
     @Schema(description = "투표 옵션 목록 (2-5개)", requiredMode = Schema.RequiredMode.REQUIRED)
-    private List<PollOptionRequest> voteOptions;
+    private List<PollOptionRequest> options;
 
     @NotNull(message = "투표 마감 시간은 필수입니다.")
     @Future(message = "투표 마감 시간은 미래 시간이어야 합니다.")
     @Schema(description = "투표 마감 시간", example = "2024-12-31T23:59:59", requiredMode = Schema.RequiredMode.REQUIRED)
-    private LocalDateTime endTime;
+    private LocalDateTime closedAt;
 
     @NotNull(message = "재투표 허용 여부는 필수입니다.")
     @Schema(description = "재투표 허용 여부 (투표 후 변경 가능 여부)", example = "true", requiredMode = Schema.RequiredMode.REQUIRED)
-    private Boolean allowRevote;
+    private Boolean canRevote;
 
     @NotNull(message = "중복 선택 허용 여부는 필수입니다.")
     @Schema(
@@ -60,7 +60,7 @@ public class PollCreateRequest {
             example = "false",
             requiredMode = Schema.RequiredMode.REQUIRED
     )
-    private Boolean allowMultipleChoice;
+    private Boolean canMultiSelect;
 
     @Schema(
             description = "첨부 이미지 파일들 (최대 4장)",

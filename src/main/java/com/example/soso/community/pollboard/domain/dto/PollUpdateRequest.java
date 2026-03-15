@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * 투표 게시판 게시글 수정 요청
  *
- * 투표 옵션은 수정 불가능 (title, content, category, images, endTime, allowRevote만 수정 가능)
+ * 투표 옵션은 수정 불가능 (title, content, category, images, closedAt, canRevote만 수정 가능)
  */
 @Getter
 @Setter
@@ -45,11 +45,11 @@ public class PollUpdateRequest {
 
     @Future(message = "투표 마감 시간은 미래 시간이어야 합니다.")
     @Schema(description = "투표 마감 시간", example = "2024-12-31T23:59:59")
-    private LocalDateTime endTime;
+    private LocalDateTime closedAt;
 
     @Schema(description = "재투표 허용 여부 (투표 후 변경 가능 여부)", example = "false")
-    private Boolean allowRevote;
+    private Boolean canRevote;
 
     @Schema(description = "중복 선택 허용 여부 (여러 옵션 동시 선택 가능 여부)", example = "false")
-    private Boolean allowMultipleChoice;
+    private Boolean canMultiSelect;
 }

@@ -65,18 +65,18 @@ class PollVotingIntegrationTest {
      * 투표 게시글 생성 헬퍼 메서드
      */
     private Long createVotePost(String title, String content, List<String> options,
-                                LocalDateTime endTime, boolean allowRevote, boolean allowMultipleChoice) throws Exception {
+                                LocalDateTime closedAt, boolean canRevote, boolean canMultiSelect) throws Exception {
         var requestBuilder = multipart("/community/polls")
                 .param("category", "daily-hobby")
                 .param("title", title)
                 .param("content", content)
-                .param("endTime", endTime.toString())
-                .param("allowRevote", String.valueOf(allowRevote))
-                .param("allowMultipleChoice", String.valueOf(allowMultipleChoice));
+                .param("closedAt", closedAt.toString())
+                .param("canRevote", String.valueOf(canRevote))
+                .param("canMultiSelect", String.valueOf(canMultiSelect));
 
         // 투표 옵션 추가
         for (int i = 0; i < options.size(); i++) {
-            requestBuilder.param("voteOptions[" + i + "].content", options.get(i));
+            requestBuilder.param("options[" + i + "].content", options.get(i));
         }
 
         String createResponse = mockMvc.perform(requestBuilder
@@ -109,16 +109,16 @@ class PollVotingIntegrationTest {
                 .andExpect(jsonPath("$.postId").value(voteboardId))
                 .andExpect(jsonPath("$.title").value("점심 메뉴 투표"))
                 .andExpect(jsonPath("$.content").value("오늘 점심 뭐 먹을까요?"))
-                .andExpect(jsonPath("$.voteOptions").isArray())
-                .andExpect(jsonPath("$.voteOptions.length()").value(3))
-                .andExpect(jsonPath("$.voteOptions[0].content").value("한식"))
-                .andExpect(jsonPath("$.voteOptions[0].voteCount").value(0))
-                .andExpect(jsonPath("$.voteOptions[0].percentage").value(0.0))
-                .andExpect(jsonPath("$.voteInfo.totalVotes").value(0))
-                .andExpect(jsonPath("$.voteInfo.voteStatus").value("IN_PROGRESS"))
-                .andExpect(jsonPath("$.voteInfo.allowRevote").value(true))
-                .andExpect(jsonPath("$.voteInfo.allowMultipleChoice").value(false))
-                .andExpect(jsonPath("$.voteInfo.selectedOptionIds").isEmpty())
+                .andExpect(jsonPath("$.options").isArray())
+                .andExpect(jsonPath("$.options.length()").value(3))
+                .andExpect(jsonPath("$.options[0].content").value("한식"))
+                .andExpect(jsonPath("$.options[0].voteCount").value(0))
+                .andExpect(jsonPath("$.options[0].percentage").value(0.0))
+                .andExpect(jsonPath("$.voteInfo.participantCount").value(0))
+                .andExpect(jsonPath("$.voteInfo.pollStatus").value("IN_PROGRESS"))
+                .andExpect(jsonPath("$.voteInfo.canRevote").value(true))
+                .andExpect(jsonPath("$.voteInfo.canMultiSelect").value(false))
+                .andExpect(jsonPath("$.voteInfo.myOptionIds").isEmpty())
                 .andExpect(jsonPath("$.author.nickname").value("투표테스트유저"));
     }
 
@@ -143,7 +143,7 @@ class PollVotingIntegrationTest {
                 .getContentAsString();
 
         Long optionId = objectMapper.readTree(detailResponse)
-                .get("voteOptions")
+                .get("options")
                 .get(0)
                 .get("id")
                 .asLong();
@@ -163,11 +163,11 @@ class PollVotingIntegrationTest {
         mockMvc.perform(get("/community/polls/" + voteboardId)
                         .with(SecurityMockMvcRequestPostProcessors.user(testUserDetails)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.voteInfo.totalVotes").value(1))
-                .andExpect(jsonPath("$.voteOptions[0].voteCount").value(1))
-                .andExpect(jsonPath("$.voteOptions[0].percentage").value(100.0))
-                .andExpect(jsonPath("$.voteOptions[1].voteCount").value(0))
-                .andExpect(jsonPath("$.voteInfo.selectedOptionIds[0]").value(optionId));
+                .andExpect(jsonPath("$.voteInfo.participantCount").value(1))
+                .andExpect(jsonPath("$.options[0].voteCount").value(1))
+                .andExpect(jsonPath("$.options[0].percentage").value(100.0))
+                .andExpect(jsonPath("$.options[1].voteCount").value(0))
+                .andExpect(jsonPath("$.voteInfo.myOptionIds[0]").value(optionId));
     }
 
     @Test
@@ -187,7 +187,7 @@ class PollVotingIntegrationTest {
                 .andReturn().getResponse().getContentAsString();
 
         Long optionId = objectMapper.readTree(detailResponse)
-                .get("voteOptions").get(0).get("id").asLong();
+                .get("options").get(0).get("id").asLong();
 
         VoteRequest voteRequest = VoteRequest.builder()
                 .voteOptionIds(Collections.singletonList(optionId))
@@ -225,9 +225,9 @@ class PollVotingIntegrationTest {
                 .andReturn().getResponse().getContentAsString();
 
         Long option1Id = objectMapper.readTree(detailResponse)
-                .get("voteOptions").get(0).get("id").asLong();
+                .get("options").get(0).get("id").asLong();
         Long option2Id = objectMapper.readTree(detailResponse)
-                .get("voteOptions").get(1).get("id").asLong();
+                .get("options").get(1).get("id").asLong();
 
         // 첫 번째 투표 (한식)
         VoteRequest firstVote = VoteRequest.builder()
@@ -255,10 +255,10 @@ class PollVotingIntegrationTest {
         mockMvc.perform(get("/community/polls/" + voteboardId)
                         .with(SecurityMockMvcRequestPostProcessors.user(testUserDetails)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.voteInfo.totalVotes").value(1))  // 총 투표수는 그대로
-                .andExpect(jsonPath("$.voteOptions[0].voteCount").value(0))  // 한식: 1 → 0
-                .andExpect(jsonPath("$.voteOptions[1].voteCount").value(1))  // 중식: 0 → 1
-                .andExpect(jsonPath("$.voteInfo.selectedOptionIds[0]").value(option2Id));
+                .andExpect(jsonPath("$.voteInfo.participantCount").value(1))  // 총 투표수는 그대로
+                .andExpect(jsonPath("$.options[0].voteCount").value(0))  // 한식: 1 → 0
+                .andExpect(jsonPath("$.options[1].voteCount").value(1))  // 중식: 0 → 1
+                .andExpect(jsonPath("$.voteInfo.myOptionIds[0]").value(option2Id));
     }
 
     @Test
@@ -278,9 +278,9 @@ class PollVotingIntegrationTest {
                 .andReturn().getResponse().getContentAsString();
 
         Long option1Id = objectMapper.readTree(detailResponse)
-                .get("voteOptions").get(0).get("id").asLong();
+                .get("options").get(0).get("id").asLong();
         Long option2Id = objectMapper.readTree(detailResponse)
-                .get("voteOptions").get(1).get("id").asLong();
+                .get("options").get(1).get("id").asLong();
 
         // 첫 번째 투표
         mockMvc.perform(post("/community/polls/" + voteboardId + "/vote")
@@ -316,7 +316,7 @@ class PollVotingIntegrationTest {
                 .andReturn().getResponse().getContentAsString();
 
         Long optionId = objectMapper.readTree(detailResponse)
-                .get("voteOptions").get(0).get("id").asLong();
+                .get("options").get(0).get("id").asLong();
 
         // 투표
         mockMvc.perform(post("/community/polls/" + voteboardId + "/vote")
@@ -335,9 +335,9 @@ class PollVotingIntegrationTest {
         mockMvc.perform(get("/community/polls/" + voteboardId)
                         .with(SecurityMockMvcRequestPostProcessors.user(testUserDetails)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.voteInfo.totalVotes").value(0))
-                .andExpect(jsonPath("$.voteOptions[0].voteCount").value(0))
-                .andExpect(jsonPath("$.voteInfo.selectedOptionIds").isEmpty());
+                .andExpect(jsonPath("$.voteInfo.participantCount").value(0))
+                .andExpect(jsonPath("$.options[0].voteCount").value(0))
+                .andExpect(jsonPath("$.voteInfo.myOptionIds").isEmpty());
     }
 
     @Test
@@ -357,8 +357,8 @@ class PollVotingIntegrationTest {
         String detailResponse = mockMvc.perform(get("/community/polls/" + voteboardId))
                 .andReturn().getResponse().getContentAsString();
 
-        Long option1Id = objectMapper.readTree(detailResponse).get("voteOptions").get(0).get("id").asLong();
-        Long option2Id = objectMapper.readTree(detailResponse).get("voteOptions").get(1).get("id").asLong();
+        Long option1Id = objectMapper.readTree(detailResponse).get("options").get(0).get("id").asLong();
+        Long option2Id = objectMapper.readTree(detailResponse).get("options").get(1).get("id").asLong();
 
         // when - 2개 옵션 선택 (한식, 중식)
         VoteRequest voteRequest = VoteRequest.builder()
@@ -375,14 +375,14 @@ class PollVotingIntegrationTest {
         mockMvc.perform(get("/community/polls/" + voteboardId)
                         .with(SecurityMockMvcRequestPostProcessors.user(testUserDetails)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.voteInfo.totalVotes").value(1))  // 참여자 수는 1명
-                .andExpect(jsonPath("$.voteOptions[0].voteCount").value(1))  // 한식: 1표
-                .andExpect(jsonPath("$.voteOptions[1].voteCount").value(1))  // 중식: 1표
-                .andExpect(jsonPath("$.voteOptions[2].voteCount").value(0))  // 일식: 0표
-                .andExpect(jsonPath("$.voteInfo.selectedOptionIds.length()").value(2))
-                .andExpect(jsonPath("$.voteInfo.selectedOptionIds[0]").value(option1Id))
-                .andExpect(jsonPath("$.voteInfo.selectedOptionIds[1]").value(option2Id))
-                .andExpect(jsonPath("$.voteInfo.allowMultipleChoice").value(true));
+                .andExpect(jsonPath("$.voteInfo.participantCount").value(1))  // 참여자 수는 1명
+                .andExpect(jsonPath("$.options[0].voteCount").value(1))  // 한식: 1표
+                .andExpect(jsonPath("$.options[1].voteCount").value(1))  // 중식: 1표
+                .andExpect(jsonPath("$.options[2].voteCount").value(0))  // 일식: 0표
+                .andExpect(jsonPath("$.voteInfo.myOptionIds.length()").value(2))
+                .andExpect(jsonPath("$.voteInfo.myOptionIds[0]").value(option1Id))
+                .andExpect(jsonPath("$.voteInfo.myOptionIds[1]").value(option2Id))
+                .andExpect(jsonPath("$.voteInfo.canMultiSelect").value(true));
     }
 
     @Test
@@ -401,9 +401,9 @@ class PollVotingIntegrationTest {
         String detailResponse = mockMvc.perform(get("/community/polls/" + voteboardId))
                 .andReturn().getResponse().getContentAsString();
 
-        Long option1Id = objectMapper.readTree(detailResponse).get("voteOptions").get(0).get("id").asLong();
-        Long option2Id = objectMapper.readTree(detailResponse).get("voteOptions").get(1).get("id").asLong();
-        Long option3Id = objectMapper.readTree(detailResponse).get("voteOptions").get(2).get("id").asLong();
+        Long option1Id = objectMapper.readTree(detailResponse).get("options").get(0).get("id").asLong();
+        Long option2Id = objectMapper.readTree(detailResponse).get("options").get(1).get("id").asLong();
+        Long option3Id = objectMapper.readTree(detailResponse).get("options").get(2).get("id").asLong();
 
         // when & then - 3개 모두 선택 시도 (실패 - 최대 2개만 가능)
         VoteRequest voteRequest = VoteRequest.builder()
@@ -433,7 +433,7 @@ class PollVotingIntegrationTest {
         String detailResponse = mockMvc.perform(get("/community/polls/" + voteboardId))
                 .andReturn().getResponse().getContentAsString();
 
-        Long option1Id = objectMapper.readTree(detailResponse).get("voteOptions").get(0).get("id").asLong();
+        Long option1Id = objectMapper.readTree(detailResponse).get("options").get(0).get("id").asLong();
 
         // when & then - 같은 옵션을 중복으로 선택 (실패)
         VoteRequest voteRequest = VoteRequest.builder()
@@ -463,8 +463,8 @@ class PollVotingIntegrationTest {
         String detailResponse = mockMvc.perform(get("/community/polls/" + voteboardId))
                 .andReturn().getResponse().getContentAsString();
 
-        Long option1Id = objectMapper.readTree(detailResponse).get("voteOptions").get(0).get("id").asLong();
-        Long option2Id = objectMapper.readTree(detailResponse).get("voteOptions").get(1).get("id").asLong();
+        Long option1Id = objectMapper.readTree(detailResponse).get("options").get(0).get("id").asLong();
+        Long option2Id = objectMapper.readTree(detailResponse).get("options").get(1).get("id").asLong();
 
         // when & then - 2개 옵션 선택 시도 (실패 - 단일 선택만 가능)
         VoteRequest voteRequest = VoteRequest.builder()
@@ -494,9 +494,9 @@ class PollVotingIntegrationTest {
         String detailResponse = mockMvc.perform(get("/community/polls/" + voteboardId))
                 .andReturn().getResponse().getContentAsString();
 
-        Long option1Id = objectMapper.readTree(detailResponse).get("voteOptions").get(0).get("id").asLong();
-        Long option2Id = objectMapper.readTree(detailResponse).get("voteOptions").get(1).get("id").asLong();
-        Long option3Id = objectMapper.readTree(detailResponse).get("voteOptions").get(2).get("id").asLong();
+        Long option1Id = objectMapper.readTree(detailResponse).get("options").get(0).get("id").asLong();
+        Long option2Id = objectMapper.readTree(detailResponse).get("options").get(1).get("id").asLong();
+        Long option3Id = objectMapper.readTree(detailResponse).get("options").get(2).get("id").asLong();
 
         // 첫 번째 투표 - 1개 선택 (한식)
         VoteRequest firstVote = VoteRequest.builder()
@@ -524,12 +524,12 @@ class PollVotingIntegrationTest {
         mockMvc.perform(get("/community/polls/" + voteboardId)
                         .with(SecurityMockMvcRequestPostProcessors.user(testUserDetails)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.voteInfo.totalVotes").value(1))  // 참여자 수는 그대로
-                .andExpect(jsonPath("$.voteOptions[0].voteCount").value(0))  // 한식: 1 → 0
-                .andExpect(jsonPath("$.voteOptions[1].voteCount").value(1))  // 중식: 0 → 1
-                .andExpect(jsonPath("$.voteOptions[2].voteCount").value(1))  // 일식: 0 → 1
-                .andExpect(jsonPath("$.voteInfo.selectedOptionIds.length()").value(2))
-                .andExpect(jsonPath("$.voteInfo.selectedOptionIds[0]").value(option2Id))
-                .andExpect(jsonPath("$.voteInfo.selectedOptionIds[1]").value(option3Id));
+                .andExpect(jsonPath("$.voteInfo.participantCount").value(1))  // 참여자 수는 그대로
+                .andExpect(jsonPath("$.options[0].voteCount").value(0))  // 한식: 1 → 0
+                .andExpect(jsonPath("$.options[1].voteCount").value(1))  // 중식: 0 → 1
+                .andExpect(jsonPath("$.options[2].voteCount").value(1))  // 일식: 0 → 1
+                .andExpect(jsonPath("$.voteInfo.myOptionIds.length()").value(2))
+                .andExpect(jsonPath("$.voteInfo.myOptionIds[0]").value(option2Id))
+                .andExpect(jsonPath("$.voteInfo.myOptionIds[1]").value(option3Id));
     }
 }

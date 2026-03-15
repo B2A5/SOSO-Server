@@ -39,25 +39,25 @@ public interface PollRepository extends JpaRepository<Poll, Long>, PollRepositor
     /**
      * 커서 기반 페이지네이션 - 진행 중 투표 조회
      */
-    @Query("SELECT p FROM Poll p WHERE p.deleted = false AND p.endTime > :now AND p.id < :cursor ORDER BY p.id DESC")
+    @Query("SELECT p FROM Poll p WHERE p.deleted = false AND p.closedAt > :now AND p.id < :cursor ORDER BY p.id DESC")
     List<Poll> findInProgressByCursor(@Param("cursor") Long cursor, @Param("now") LocalDateTime now, Pageable pageable);
 
     /**
      * 커서 기반 페이지네이션 - 진행 중 투표 첫 페이지
      */
-    @Query("SELECT p FROM Poll p WHERE p.deleted = false AND p.endTime > :now ORDER BY p.id DESC")
+    @Query("SELECT p FROM Poll p WHERE p.deleted = false AND p.closedAt > :now ORDER BY p.id DESC")
     List<Poll> findInProgress(@Param("now") LocalDateTime now, Pageable pageable);
 
     /**
      * 커서 기반 페이지네이션 - 완료된 투표 조회
      */
-    @Query("SELECT p FROM Poll p WHERE p.deleted = false AND p.endTime <= :now AND p.id < :cursor ORDER BY p.id DESC")
+    @Query("SELECT p FROM Poll p WHERE p.deleted = false AND p.closedAt <= :now AND p.id < :cursor ORDER BY p.id DESC")
     List<Poll> findCompletedByCursor(@Param("cursor") Long cursor, @Param("now") LocalDateTime now, Pageable pageable);
 
     /**
      * 커서 기반 페이지네이션 - 완료된 투표 첫 페이지
      */
-    @Query("SELECT p FROM Poll p WHERE p.deleted = false AND p.endTime <= :now ORDER BY p.id DESC")
+    @Query("SELECT p FROM Poll p WHERE p.deleted = false AND p.closedAt <= :now ORDER BY p.id DESC")
     List<Poll> findCompleted(@Param("now") LocalDateTime now, Pageable pageable);
 
     /**
@@ -73,12 +73,12 @@ public interface PollRepository extends JpaRepository<Poll, Long>, PollRepositor
     /**
      * 진행 중인 투표 게시글 수 조회
      */
-    @Query("SELECT COUNT(p) FROM Poll p WHERE p.deleted = false AND p.endTime > :now")
+    @Query("SELECT COUNT(p) FROM Poll p WHERE p.deleted = false AND p.closedAt > :now")
     long countInProgress(@Param("now") LocalDateTime now);
 
     /**
      * 완료된 투표 게시글 수 조회
      */
-    @Query("SELECT COUNT(p) FROM Poll p WHERE p.deleted = false AND p.endTime <= :now")
+    @Query("SELECT COUNT(p) FROM Poll p WHERE p.deleted = false AND p.closedAt <= :now")
     long countCompleted(@Param("now") LocalDateTime now);
 }
