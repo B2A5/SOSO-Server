@@ -89,7 +89,7 @@ class UserJourneyIntegrationTest {
                         .header("Authorization", founder.getAuthHeader())
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andDo(print())
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.postId").exists())
                 .andReturn();
 
@@ -290,7 +290,7 @@ class UserJourneyIntegrationTest {
                         .header("Authorization", inhabitant.getAuthHeader())
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andDo(print())
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andReturn();
 
         FreeboardCreateResponse createResponse = objectMapper.readValue(

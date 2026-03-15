@@ -229,7 +229,7 @@ public class PollController {
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping(value = "/{pollId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PatchMapping(value = "/{pollId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(
             operationId = "updatePoll",
             summary = "투표 게시글 수정",
@@ -289,7 +289,7 @@ public class PollController {
             description = "투표 게시글을 삭제합니다 (소프트 삭제)."
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "투표 게시글 삭제 성공"),
+            @ApiResponse(responseCode = "204", description = "투표 게시글 삭제 성공"),
             @ApiResponse(
                     responseCode = "403",
                     description = "권한 없음 (작성자가 아님)",
@@ -315,7 +315,7 @@ public class PollController {
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
         pollService.deletePoll(pollId, userDetails.getUser().getId());
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/{pollId}/vote")

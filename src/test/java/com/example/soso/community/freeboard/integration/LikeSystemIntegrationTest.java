@@ -111,7 +111,7 @@ class LikeSystemIntegrationTest {
                         .header("Authorization", postAuthor.getAuthHeader())
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andDo(print())
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andReturn();
 
         FreeboardCreateResponse createResponse = objectMapper.readValue(
@@ -315,7 +315,7 @@ class LikeSystemIntegrationTest {
                         .header("Authorization", validUser.getAuthHeader())
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andDo(print())
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andReturn();
 
         FreeboardCreateResponse createResponse = objectMapper.readValue(
@@ -397,7 +397,7 @@ class LikeSystemIntegrationTest {
                         .header("Authorization", influencerAuthor.getAuthHeader())
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andDo(print())
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andReturn();
 
         FreeboardCreateResponse viralResponse = objectMapper.readValue(

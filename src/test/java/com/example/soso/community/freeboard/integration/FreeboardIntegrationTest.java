@@ -90,7 +90,7 @@ class FreeboardIntegrationTest {
                         .header("Authorization", authHeader)
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andDo(print())
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.postId").exists())
                 .andReturn();
 
@@ -206,7 +206,7 @@ class FreeboardIntegrationTest {
                 .param("category", "restaurant")
                         .header("Authorization", authHeader)
                         .contentType(MediaType.MULTIPART_FORM_DATA))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andReturn();
 
         String createResponseContent = createResult.getResponse().getContentAsString();
@@ -285,7 +285,7 @@ class FreeboardIntegrationTest {
                         .header("Authorization", authHeader)
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andDo(print())
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.postId").exists())
                 .andReturn();
 
@@ -341,7 +341,7 @@ class FreeboardIntegrationTest {
                         .header("Authorization", authHeader)
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andDo(print())
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.postId").exists())
                 .andReturn();
 

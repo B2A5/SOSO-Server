@@ -392,7 +392,7 @@ class AuthenticationPermissionTest {
                         .param("category", category)
                         .header("Authorization", user.getAuthHeader())
                         .contentType(MediaType.MULTIPART_FORM_DATA))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andReturn();
 
         FreeboardCreateResponse response = objectMapper.readValue(
