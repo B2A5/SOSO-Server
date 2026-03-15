@@ -1,6 +1,6 @@
 package com.example.soso.community.freeboard.comment.service;
 
-import com.example.soso.community.freeboard.comment.domain.entity.Comment;
+import com.example.soso.community.freeboard.comment.domain.entity.PostComment;
 import com.example.soso.community.freeboard.comment.domain.repository.CommentRepository;
 import com.example.soso.community.freeboard.like.domain.CommentLike;
 import com.example.soso.community.freeboard.like.repository.CommentLikeRepository;
@@ -37,7 +37,7 @@ public class FreeboardCommentLikeServiceImpl implements FreeboardCommentLikeServ
         log.info("댓글 좋아요 토글: freeboardId={}, commentId={}, userId={}", freeboardId, commentId, userId);
 
         // 댓글 존재 확인 (게시글 ID도 함께 검증)
-        Comment comment = commentRepository.findByIdAndPostId(commentId, freeboardId)
+        PostComment comment = commentRepository.findByIdAndPostId(commentId, freeboardId)
                 .orElseThrow(() -> new PostException(PostErrorCode.COMMENT_NOT_FOUND));
 
         // 삭제된 댓글인지 확인

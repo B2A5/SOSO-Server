@@ -89,7 +89,7 @@ class UserJourneyIntegrationTest {
                         .header("Authorization", founder.getAuthHeader())
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andDo(print())
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.postId").exists())
                 .andReturn();
 
@@ -134,8 +134,8 @@ class UserJourneyIntegrationTest {
                 .andExpect(jsonPath("$.author.userType").value("FOUNDER"))
                 .andExpect(jsonPath("$.author.nickname").value(founder.getNickname()))
                 .andExpect(jsonPath("$.author.address").exists())
-                .andExpect(jsonPath("$.canEdit").value(true))
-                .andExpect(jsonPath("$.canDelete").value(true))
+                .andExpect(jsonPath("$.isEditable").value(true))
+                .andExpect(jsonPath("$.isDeletable").value(true))
                 .andExpect(jsonPath("$.viewCount").exists())
                 .andExpect(jsonPath("$.likeCount").value(0))
                 .andExpect(jsonPath("$.commentCount").value(0))
@@ -145,8 +145,8 @@ class UserJourneyIntegrationTest {
             detailResult.getResponse().getContentAsString(), FreeboardDetailResponse.class);
 
         System.out.println("✅ 상세 조회 확인 (작성자):");
-        System.out.println("  - 편집 권한: " + detailResponse.isCanEdit());
-        System.out.println("  - 삭제 권한: " + detailResponse.isCanDelete());
+        System.out.println("  - 편집 권한: " + detailResponse.isEditable());
+        System.out.println("  - 삭제 권한: " + detailResponse.isDeletable());
         System.out.println("  - 작성자 주소: " + detailResponse.getAuthor().getAddress());
 
         // ==================== STEP 5: 게시글 수정 ====================
@@ -195,8 +195,8 @@ class UserJourneyIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.postId").value(postId))
                 .andExpect(jsonPath("$.title").value(updatedTitle))
-                .andExpect(jsonPath("$.canEdit").value(false))
-                .andExpect(jsonPath("$.canDelete").value(false))
+                .andExpect(jsonPath("$.isEditable").value(false))
+                .andExpect(jsonPath("$.isDeletable").value(false))
                 .andExpect(jsonPath("$.author.userType").value("FOUNDER"))
                 .andReturn();
 
@@ -210,8 +210,8 @@ class UserJourneyIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.postId").value(postId))
                 .andExpect(jsonPath("$.isAuthorized").value(false))
-                .andExpect(jsonPath("$.canEdit").value(nullValue()))
-                .andExpect(jsonPath("$.canDelete").value(nullValue()))
+                .andExpect(jsonPath("$.isEditable").value(nullValue()))
+                .andExpect(jsonPath("$.isDeletable").value(nullValue()))
                 .andExpect(jsonPath("$.isLiked").value(nullValue()))
                 .andExpect(jsonPath("$.author.userType").value("FOUNDER"))
                 .andExpect(jsonPath("$.author.address").exists());
@@ -257,8 +257,8 @@ class UserJourneyIntegrationTest {
         assertThat(postId).isPositive();
 
         // 권한 검증
-        assertThat(detailResponse.isCanEdit()).isTrue();
-        assertThat(detailResponse.isCanDelete()).isTrue();
+        assertThat(detailResponse.isEditable()).isTrue();
+        assertThat(detailResponse.isDeletable()).isTrue();
         assertThat(detailResponse.getAuthor().getUserType().toString()).isEqualTo("FOUNDER");
 
         System.out.println("✅ 모든 검증 통과! 완전한 사용자 여정 시나리오 성공 🎉");
@@ -290,7 +290,7 @@ class UserJourneyIntegrationTest {
                         .header("Authorization", inhabitant.getAuthHeader())
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andDo(print())
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andReturn();
 
         FreeboardCreateResponse createResponse = objectMapper.readValue(

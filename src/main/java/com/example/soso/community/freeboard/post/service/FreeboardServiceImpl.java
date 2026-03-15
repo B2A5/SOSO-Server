@@ -65,14 +65,7 @@ public class FreeboardServiceImpl implements FreeboardService {
         Users user = findUserById(userId);
 
         // 게시글 엔티티 생성
-        Post post = Post.builder()
-                .user(user)
-                .category(request.getCategory())
-                .title(request.getTitle())
-                .content(request.getContent())
-                .likeCount(0)
-                .commentCount(0)
-                .build();
+        Post post = Post.create(user, request.getTitle(), request.getContent(), request.getCategory());
 
         // 게시글 저장
         Post savedPost = postRepository.save(post);
@@ -139,17 +132,17 @@ public class FreeboardServiceImpl implements FreeboardService {
                 .isAuthorized(isAuthorized)
                 .isAuthor(isAuthor);
 
-        // 인증된 사용자인 경우에만 isLiked, canEdit, canDelete 설정
+        // 인증된 사용자인 경우에만 isLiked, isEditable, isDeletable 설정
         if (isAuthorized) {
             boolean isLiked = postLikeRepository.existsByPost_IdAndUser_Id(postId, userId);
             builder.isLiked(isLiked)
-                   .canEdit(isAuthor)
-                   .canDelete(isAuthor);
+                   .isEditable(isAuthor)
+                   .isDeletable(isAuthor);
         } else {
             // 비인증 사용자는 null
             builder.isLiked(null)
-                   .canEdit(null)
-                   .canDelete(null);
+                   .isEditable(null)
+                   .isDeletable(null);
         }
 
         return builder.build();

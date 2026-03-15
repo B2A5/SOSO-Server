@@ -1,0 +1,254 @@
+package com.example.soso.community.pollboard.comment.service;
+
+import com.example.soso.community.pollboard.comment.domain.dto.*;
+import com.example.soso.community.pollboard.comment.domain.entity.PollComment;
+import com.example.soso.community.pollboard.comment.domain.repository.PollCommentLikeRepository;
+import com.example.soso.community.pollboard.comment.domain.repository.PollCommentRepository;
+import com.example.soso.community.pollboard.domain.entity.Poll;
+import com.example.soso.community.pollboard.repository.PollRepository;
+import com.example.soso.global.exception.domain.PostErrorCode;
+import com.example.soso.global.exception.domain.UserErrorCode;
+import com.example.soso.global.exception.util.PostException;
+import com.example.soso.global.exception.util.UserAuthException;
+import com.example.soso.users.domain.entity.Users;
+import com.example.soso.users.repository.UsersRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+/**
+ * 투표 게시판 댓글 비즈니스 로직 구현체
+ */
+@Slf4j
+@Service
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
+public class PollCommentServiceImpl implements PollCommentService {
+
+    private final PollCommentRepository commentRepository;
+    private final PollCommentLikeRepository commentLikeRepository;
+    private final PollRepository pollRepository;
+    private final UsersRepository usersRepository;
+
+    @Override
+    @Transactional
+    public PollCommentCreateResponse createComment(Long pollId, PollCommentCreateRequest request, String userId) {
+        log.info("투표게시판 댓글 작성 시작: pollId={}, userId={}", pollId, userId);
+
+        Poll poll = findPollById(pollId);
+        Users user = findUserById(userId);
+
+        // 부모 댓글 확인 (대댓글인 경우)
+        PollComment parent = null;
+        if (request.getParentCommentId() != null) {
+            parent = findCommentById(request.getParentCommentId());
+
+            // 대댓글의 대댓글은 허용하지 않음
+            if (parent.getParent() != null) {
+                throw new PostException(PostErrorCode.REPLY_DEPTH_EXCEEDED);
+            }
+        }
+
+        PollComment comment = PollComment.builder()
+                .poll(poll)
+                .user(user)
+                .parent(parent)
+                .content(request.getContent())
+                .build();
+
+        PollComment savedComment = commentRepository.save(comment);
+        log.info("투표게시판 댓글 작성 완료: commentId={}", savedComment.getId());
+
+        return new PollCommentCreateResponse(savedComment.getId());
+    }
+
+    @Override
+    public PollCommentCursorResponse getCommentsByCursor(Long pollId, PollCommentSortType sort,
+                                                         int size, String cursor, String userId) {
+        log.debug("투표게시판 댓글 목록 조회: pollId={}, sort={}, size={}, userId={}",
+                 pollId, sort, size, userId);
+
+        // 투표 게시글 존재 확인
+        findPollById(pollId);
+
+        // 페이징 설정
+        Sort sortOrder = buildSort(sort);
+        PageRequest pageRequest = PageRequest.of(0, size + 1, sortOrder);
+
+        // 댓글 조회
+        List<PollComment> comments = fetchComments(pollId, cursor, pageRequest, sort);
+
+        // 다음 페이지 존재 여부 확인
+        boolean hasNext = comments.size() > size;
+        if (hasNext) {
+            comments = comments.subList(0, size);
+        }
+
+        // 다음 커서 계산
+        String nextCursor = hasNext && !comments.isEmpty() ?
+                comments.get(comments.size() - 1).getCreatedAt().toString() : null;
+
+        // 댓글 요약 생성
+        List<PollCommentCursorResponse.PollCommentSummary> summaries = comments.stream()
+                .map(comment -> createCommentSummary(comment, userId))
+                .toList();
+
+        // 총 댓글 수
+        long total = commentRepository.countByPollId(pollId);
+
+        return PollCommentCursorResponse.builder()
+                .comments(summaries)
+                .hasNext(hasNext)
+                .nextCursor(nextCursor)
+                .size(summaries.size())
+                .total(total)
+                .isAuthorized(userId != null)
+                .build();
+    }
+
+    @Override
+    @Transactional
+    public PollCommentCreateResponse updateComment(Long pollId, Long commentId,
+                                                   PollCommentUpdateRequest request, String userId) {
+        log.info("투표게시판 댓글 수정 시작: commentId={}, userId={}", commentId, userId);
+
+        PollComment comment = findCommentById(commentId);
+
+        // 권한 확인
+        validateCommentAuthor(comment, userId);
+
+        // 삭제된 댓글은 수정 불가
+        if (comment.isDeleted()) {
+            throw new PostException(PostErrorCode.COMMENT_ALREADY_DELETED);
+        }
+
+        comment.updateContent(request.getContent());
+        log.info("투표게시판 댓글 수정 완료: commentId={}", commentId);
+
+        return new PollCommentCreateResponse(comment.getId());
+    }
+
+    @Override
+    @Transactional
+    public void deleteComment(Long pollId, Long commentId, String userId) {
+        log.info("투표게시판 댓글 삭제 시작: commentId={}, userId={}", commentId, userId);
+
+        PollComment comment = findCommentById(commentId);
+
+        // 권한 확인
+        validateCommentAuthor(comment, userId);
+
+        comment.delete();
+        log.info("투표게시판 댓글 삭제 완료: commentId={}", commentId);
+    }
+
+    @Override
+    @Transactional
+    public void hardDeleteComment(Long pollId, Long commentId, String userId) {
+        log.warn("투표게시판 댓글 하드 삭제 시작: commentId={}, userId={}", commentId, userId);
+
+        PollComment comment = findCommentById(commentId);
+
+        // 권한 확인 (관리자 또는 작성자)
+        validateCommentAuthor(comment, userId);
+
+        // 자식 댓글도 삭제
+        List<PollComment> childComments = commentRepository.findByParentId(commentId);
+        commentRepository.deleteAll(childComments);
+        commentRepository.delete(comment);
+
+        log.warn("투표게시판 댓글 하드 삭제 완료: commentId={}, deletedChildCount={}",
+                commentId, childComments.size());
+    }
+
+    // Helper methods
+
+    private Poll findPollById(Long pollId) {
+        return pollRepository.findByIdAndDeletedFalse(pollId)
+                .orElseThrow(() -> new PostException(PostErrorCode.POST_NOT_FOUND));
+    }
+
+    private Users findUserById(String userId) {
+        return usersRepository.findById(userId)
+                .orElseThrow(() -> new UserAuthException(UserErrorCode.USER_NOT_FOUND));
+    }
+
+    private PollComment findCommentById(Long commentId) {
+        return commentRepository.findById(commentId)
+                .orElseThrow(() -> new PostException(PostErrorCode.COMMENT_NOT_FOUND));
+    }
+
+    private void validateCommentAuthor(PollComment comment, String userId) {
+        if (!comment.getUser().getId().equals(userId)) {
+            throw new UserAuthException(UserErrorCode.UNAUTHORIZED_ACCESS);
+        }
+    }
+
+    private Sort buildSort(PollCommentSortType sortType) {
+        return switch (sortType) {
+            case LATEST -> Sort.by(Sort.Direction.DESC, "createdAt");
+            case OLDEST -> Sort.by(Sort.Direction.ASC, "createdAt");
+        };
+    }
+
+    private List<PollComment> fetchComments(Long pollId, String cursor,
+                                             PageRequest pageRequest, PollCommentSortType sortType) {
+        if (cursor == null) {
+            // 첫 페이지 - 소프트 삭제된 댓글도 포함 (댓글 구조 유지)
+            return commentRepository.findByPollId(pollId, pageRequest);
+        } else {
+            LocalDateTime cursorTime = LocalDateTime.parse(cursor);
+            if (sortType == PollCommentSortType.LATEST) {
+                return commentRepository.findByPollIdAndCreatedAtBefore(pollId, cursorTime, pageRequest);
+            } else {
+                return commentRepository.findByPollIdAndCreatedAtAfter(pollId, cursorTime, pageRequest);
+            }
+        }
+    }
+
+    private PollCommentCursorResponse.PollCommentSummary createCommentSummary(
+            PollComment comment, String userId) {
+
+        int replyCount = commentRepository.countByParentIdAndDeletedFalse(comment.getId());
+        int depth = comment.getParent() != null ? 1 : 0;
+
+        // 인증 여부
+        boolean isAuthorized = userId != null;
+        boolean isAuthor = userId != null && comment.getUser().getId().equals(userId);
+
+        // 댓글 좋아요 정보
+        Boolean isLiked = isAuthorized ?
+                commentLikeRepository.existsByCommentIdAndUserId(comment.getId(), userId) : null;
+        Boolean canEdit = isAuthorized ? isAuthor : null;
+        Boolean canDelete = isAuthorized ? isAuthor : null;
+
+        return PollCommentCursorResponse.PollCommentSummary.builder()
+                .commentId(comment.getId())
+                .pollId(comment.getPoll().getId())
+                .parentCommentId(comment.getParent() != null ? comment.getParent().getId() : null)
+                .author(PollCommentCursorResponse.CommentAuthorInfo.builder()
+                        .userId(comment.getUser().getId())
+                        .nickname(comment.getUser().getNickname())
+                        .profileImageUrl(comment.getUser().getProfileImageUrl())
+                        .userType(comment.getUser().getUserType())
+                        .build())
+                .content(comment.isDeleted() ? "삭제된 댓글입니다" : comment.getContent())
+                .replyCount(replyCount)
+                .likeCount(comment.getLikeCount())
+                .depth(depth)
+                .deleted(comment.isDeleted())
+                .isAuthor(isAuthor)
+                .isLiked(isLiked)
+                .canEdit(canEdit)
+                .canDelete(canDelete)
+                .createdAt(comment.getCreatedAt())
+                .updatedAt(comment.getUpdatedAt())
+                .build();
+    }
+}

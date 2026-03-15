@@ -72,13 +72,13 @@ public class FreeboardDetailResponse {
     private Boolean isLiked;
 
     @Schema(
-        description = "편집 가능 여부 (비인증 사용자인 경우 null)",
+        description = "수정 가능 여부 (비인증 사용자인 경우 null)",
         example = "true",
         requiredMode = Schema.RequiredMode.REQUIRED,
         nullable = true
     )
     @JsonInclude(JsonInclude.Include.ALWAYS)
-    private Boolean canEdit;
+    private Boolean isEditable;
 
     @Schema(
         description = "삭제 가능 여부 (비인증 사용자인 경우 null)",
@@ -87,7 +87,7 @@ public class FreeboardDetailResponse {
         nullable = true
     )
     @JsonInclude(JsonInclude.Include.ALWAYS)
-    private Boolean canDelete;
+    private Boolean isDeletable;
 
     // Lombok @Getter가 생성하는 메서드들을 오버라이드
     // Boolean 타입이므로 Lombok은 getIsLiked()를 생성하지만,
@@ -96,12 +96,12 @@ public class FreeboardDetailResponse {
         return isLiked;
     }
 
-    public Boolean isCanEdit() {
-        return canEdit;
+    public Boolean isEditable() {
+        return isEditable;
     }
 
-    public Boolean isCanDelete() {
-        return canDelete;
+    public Boolean isDeletable() {
+        return isDeletable;
     }
 
     @Schema(description = "이미지 정보")

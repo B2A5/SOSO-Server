@@ -65,7 +65,7 @@ public class FreeboardController {
     )
     @ApiResponses({
             @ApiResponse(
-                    responseCode = "200",
+                    responseCode = "201",
                     description = "게시글 작성 성공",
                     content = @Content(
                             schema = @Schema(implementation = FreeboardCreateResponse.class),
@@ -125,7 +125,7 @@ public class FreeboardController {
         FreeboardCreateResponse response = freeboardService.createPost(request, userId);
 
         log.info("자유게시판 글 작성 완료: postId={}", response.getPostId());
-        return ResponseEntity.ok(response);
+        return ResponseEntity.status(201).body(response);
     }
 
     @Operation(

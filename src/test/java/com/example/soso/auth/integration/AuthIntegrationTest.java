@@ -188,7 +188,7 @@ class AuthIntegrationTest {
                         .param("category", "restaurant")
                         .header("Authorization", "Bearer " + accessToken))
                 .andDo(print())
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.postId").exists());
     }
 

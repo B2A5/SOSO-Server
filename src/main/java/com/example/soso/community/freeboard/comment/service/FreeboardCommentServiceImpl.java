@@ -1,6 +1,6 @@
 package com.example.soso.community.freeboard.comment.service;
 
-import com.example.soso.community.freeboard.comment.domain.entity.Comment;
+import com.example.soso.community.freeboard.comment.domain.entity.PostComment;
 import com.example.soso.community.freeboard.comment.domain.repository.CommentRepository;
 import com.example.soso.community.freeboard.like.repository.CommentLikeRepository;
 import com.example.soso.community.freeboard.post.domain.entity.Post;
@@ -68,8 +68,8 @@ public class FreeboardCommentServiceImpl
     public void hardDeleteComment(Long postId, Long commentId, String userId) {
         log.warn("자유게시판 댓글 하드 삭제 시작: postId={}, commentId={}, userId={}", postId, commentId, userId);
 
-        Comment comment = findCommentByIdAndUserId(commentId, userId);
-        List<Comment> childComments = commentRepository.findByParentId(commentId);
+        PostComment comment = findCommentByIdAndUserId(commentId, userId);
+        List<PostComment> childComments = commentRepository.findByParentId(commentId);
         int totalDeletedCount = childComments.size() + 1;
 
         commentRepository.delete(comment);
@@ -103,7 +103,7 @@ public class FreeboardCommentServiceImpl
     }
 
     @Override
-    protected FreeboardCommentCursorResponse buildCursorResponse(List<Comment> comments, boolean hasNext,
+    protected FreeboardCommentCursorResponse buildCursorResponse(List<PostComment> comments, boolean hasNext,
                                                                String nextCursor, int size, String userId) {
         List<FreeboardCommentCursorResponse.FreeboardCommentSummary> summaries = comments.stream()
                 .map(comment -> createCommentSummary(comment, userId))
@@ -135,7 +135,7 @@ public class FreeboardCommentServiceImpl
     }
 
     @Override
-    protected List<Comment> fetchComments(Long postId, LocalDateTime cursorTime,
+    protected List<PostComment> fetchComments(Long postId, LocalDateTime cursorTime,
                                         Pageable pageable, FreeboardCommentSortType sortType) {
         if (cursorTime == null) {
             // 첫 페이지인 경우 - 소프트 삭제된 댓글도 포함하여 조회 (댓글 구조 유지)
@@ -152,7 +152,7 @@ public class FreeboardCommentServiceImpl
         }
     }
 
-    private FreeboardCommentCursorResponse.FreeboardCommentSummary createCommentSummary(Comment comment, String userId) {
+    private FreeboardCommentCursorResponse.FreeboardCommentSummary createCommentSummary(PostComment comment, String userId) {
         int replyCount = commentRepository.countByParentIdAndDeletedFalse(comment.getId());
         int depth = comment.getParent() != null ? 1 : 0;
 
@@ -169,9 +169,9 @@ public class FreeboardCommentServiceImpl
         Boolean isLiked = isAuthorized ?
                 commentLikeRepository.existsByComment_IdAndUser_Id(comment.getId(), userId) : null;
 
-        // canEdit, canDelete 설정 (비인증 사용자는 null, 인증 사용자는 작성자 여부에 따라 boolean)
-        Boolean canEdit = isAuthorized ? isAuthor : null;
-        Boolean canDelete = isAuthorized ? isAuthor : null;
+        // isEditable, isDeletable 설정 (비인증 사용자는 null, 인증 사용자는 작성자 여부에 따라 boolean)
+        Boolean isEditable = isAuthorized ? isAuthor : null;
+        Boolean isDeletable = isAuthorized ? isAuthor : null;
 
         return FreeboardCommentCursorResponse.FreeboardCommentSummary.builder()
                 .commentId(comment.getId())
@@ -190,8 +190,8 @@ public class FreeboardCommentServiceImpl
                 .deleted(comment.isDeleted())
                 .isAuthor(isAuthor)
                 .isLiked(isLiked)
-                .canEdit(canEdit)
-                .canDelete(canDelete)
+                .isEditable(isEditable)
+                .isDeletable(isDeletable)
                 .createdAt(comment.getCreatedAt())
                 .updatedAt(comment.getUpdatedAt())
                 .build();

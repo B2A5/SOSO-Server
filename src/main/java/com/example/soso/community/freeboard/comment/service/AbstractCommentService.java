@@ -1,6 +1,6 @@
 package com.example.soso.community.freeboard.comment.service;
 
-import com.example.soso.community.freeboard.comment.domain.entity.Comment;
+import com.example.soso.community.freeboard.comment.domain.entity.PostComment;
 import com.example.soso.community.freeboard.comment.domain.repository.CommentRepository;
 import com.example.soso.community.freeboard.post.domain.entity.Post;
 import com.example.soso.community.freeboard.post.repository.PostRepository;
@@ -53,21 +53,21 @@ public abstract class AbstractCommentService<T, R, U, S> {
         validateCommentContent(getContent(request));
 
         // 부모 댓글 처리
-        Comment parentComment = null;
+        PostComment parentComment = null;
         if (getParentId(request) != null) {
             parentComment = findCommentById(getParentId(request));
             validateReplyDepth(parentComment);
         }
 
         // 댓글 생성
-        Comment comment = Comment.builder()
+        PostComment comment = PostComment.builder()
                 .post(post)
                 .user(user)
                 .parent(parentComment)
                 .content(getContent(request))
                 .build();
 
-        Comment savedComment = commentRepository.save(comment);
+        PostComment savedComment = commentRepository.save(comment);
 
         // 게시글 댓글 수 업데이트
         updatePostCommentCount(post);
@@ -98,7 +98,7 @@ public abstract class AbstractCommentService<T, R, U, S> {
         LocalDateTime cursorTime = parseCursor(cursor);
 
         // 댓글 조회
-        List<Comment> comments = fetchComments(postId, cursorTime, pageable, sortType);
+        List<PostComment> comments = fetchComments(postId, cursorTime, pageable, sortType);
 
         // 다음 페이지 여부 확인
         boolean hasNext = comments.size() > size;
@@ -120,7 +120,7 @@ public abstract class AbstractCommentService<T, R, U, S> {
     public R updateComment(Long commentId, Object request, String userId) {
         log.info("댓글 수정 시작: commentId={}, userId={}", commentId, userId);
 
-        Comment comment = findCommentByIdAndUserId(commentId, userId);
+        PostComment comment = findCommentByIdAndUserId(commentId, userId);
         String content = getUpdateContent(request);
         validateCommentContent(content);
 
@@ -137,7 +137,7 @@ public abstract class AbstractCommentService<T, R, U, S> {
     public void deleteComment(Long commentId, String userId) {
         log.info("댓글 삭제 시작: commentId={}, userId={}", commentId, userId);
 
-        Comment comment = findCommentByIdAndUserId(commentId, userId);
+        PostComment comment = findCommentByIdAndUserId(commentId, userId);
         comment.delete();
 
         // 게시글 댓글 수 업데이트
@@ -150,10 +150,10 @@ public abstract class AbstractCommentService<T, R, U, S> {
     protected abstract String getContent(T request);
     protected abstract Long getParentId(T request);
     protected abstract R buildCreateResponse(Long commentId);
-    protected abstract U buildCursorResponse(List<Comment> comments, boolean hasNext,
+    protected abstract U buildCursorResponse(List<PostComment> comments, boolean hasNext,
                                            String nextCursor, int size, String userId);
     protected abstract Sort buildSort(S sortType);
-    protected abstract List<Comment> fetchComments(Long postId, LocalDateTime cursorTime,
+    protected abstract List<PostComment> fetchComments(Long postId, LocalDateTime cursorTime,
                                                  Pageable pageable, S sortType);
 
     // 댓글 수정용 추상 메서드 - 구현체에서 적절한 타입으로 캐스팅하여 반환
@@ -170,13 +170,13 @@ public abstract class AbstractCommentService<T, R, U, S> {
                 .orElseThrow(() -> new UserAuthException(UserErrorCode.USER_NOT_FOUND));
     }
 
-    protected Comment findCommentById(Long commentId) {
+    protected PostComment findCommentById(Long commentId) {
         return commentRepository.findByIdAndDeletedFalse(commentId)
                 .orElseThrow(() -> new CommentException(CommentErrorCode.COMMENT_NOT_FOUND));
     }
 
-    protected Comment findCommentByIdAndUserId(Long commentId, String userId) {
-        Comment comment = findCommentById(commentId);
+    protected PostComment findCommentByIdAndUserId(Long commentId, String userId) {
+        PostComment comment = findCommentById(commentId);
         if (!comment.getUser().getId().equals(userId)) {
             throw new CommentException(CommentErrorCode.COMMENT_ACCESS_DENIED);
         }
@@ -192,7 +192,7 @@ public abstract class AbstractCommentService<T, R, U, S> {
         }
     }
 
-    protected void validateReplyDepth(Comment parentComment) {
+    protected void validateReplyDepth(PostComment parentComment) {
         if (parentComment.getParent() != null) {
             throw new CommentException(CommentErrorCode.REPLY_DEPTH_EXCEEDED);
         }
@@ -217,7 +217,7 @@ public abstract class AbstractCommentService<T, R, U, S> {
         }
     }
 
-    protected String generateCursor(Comment comment) {
+    protected String generateCursor(PostComment comment) {
         String timestamp = comment.getCreatedAt().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
         return Base64.getEncoder().encodeToString(timestamp.getBytes());
     }

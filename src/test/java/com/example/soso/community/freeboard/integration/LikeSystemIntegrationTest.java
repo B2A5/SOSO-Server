@@ -111,7 +111,7 @@ class LikeSystemIntegrationTest {
                         .header("Authorization", postAuthor.getAuthHeader())
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andDo(print())
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andReturn();
 
         FreeboardCreateResponse createResponse = objectMapper.readValue(
@@ -224,8 +224,8 @@ class LikeSystemIntegrationTest {
                 .andExpect(jsonPath("$.comments").isArray())
                 .andExpect(jsonPath("$.comments[0].likeCount").value(3))
                 .andExpect(jsonPath("$.comments[0].isLiked").value(true))
-                .andExpect(jsonPath("$.comments[0].canEdit").value(false))
-                .andExpect(jsonPath("$.comments[0].canDelete").value(false)); // liker1은 작성자가 아님
+                .andExpect(jsonPath("$.comments[0].isEditable").value(false))
+                .andExpect(jsonPath("$.comments[0].isDeletable").value(false)); // liker1은 작성자가 아님
 
         System.out.println("✅ 댓글 좋아요 상태 확인 완료!");
 
@@ -283,8 +283,8 @@ class LikeSystemIntegrationTest {
                 .andExpect(jsonPath("$.total").isNumber())
                 .andExpect(jsonPath("$.comments[0].likeCount").value(2))
                 .andExpect(jsonPath("$.comments[0].isLiked").value(false)) // commenter는 댓글에 좋아요 안 눌렀음
-                .andExpect(jsonPath("$.comments[0].canEdit").value(true)) // 본인 댓글이므로 수정 가능
-                .andExpect(jsonPath("$.comments[0].canDelete").value(true)); // 본인 댓글이므로 삭제 가능
+                .andExpect(jsonPath("$.comments[0].isEditable").value(true)) // 본인 댓글이므로 수정 가능
+                .andExpect(jsonPath("$.comments[0].isDeletable").value(true)); // 본인 댓글이므로 삭제 가능
 
         System.out.println("✅ 최종 상태: 게시글 좋아요 1개, 댓글 좋아요 2개");
         System.out.println("\n🎉 === 좋아요 생태계 시나리오 완료 ===");
@@ -315,7 +315,7 @@ class LikeSystemIntegrationTest {
                         .header("Authorization", validUser.getAuthHeader())
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andDo(print())
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andReturn();
 
         FreeboardCreateResponse createResponse = objectMapper.readValue(
@@ -397,7 +397,7 @@ class LikeSystemIntegrationTest {
                         .header("Authorization", influencerAuthor.getAuthHeader())
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andDo(print())
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andReturn();
 
         FreeboardCreateResponse viralResponse = objectMapper.readValue(

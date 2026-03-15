@@ -209,7 +209,7 @@ class ErrorScenarioIntegrationTest {
                         .header("Authorization", postAuthor.getAuthHeader())
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andDo(print())
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andReturn();
 
         FreeboardCreateResponse createResponse = objectMapper.readValue(
@@ -374,7 +374,7 @@ class ErrorScenarioIntegrationTest {
                         .header("Authorization", validUser.getAuthHeader())
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andDo(print())
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andReturn();
 
         FreeboardCreateResponse createResponse = objectMapper.readValue(
@@ -417,7 +417,7 @@ class ErrorScenarioIntegrationTest {
                         .header("Authorization", user1.getAuthHeader())
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andDo(print())
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andReturn();
 
         FreeboardCreateResponse createResponse = objectMapper.readValue(
@@ -621,7 +621,7 @@ class ErrorScenarioIntegrationTest {
                         .header("Authorization", validUser.getAuthHeader())
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andDo(print())
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.postId").exists());
 
         System.out.println("✅ 정상 이미지 업로드 성공!");

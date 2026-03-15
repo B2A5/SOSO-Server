@@ -1,6 +1,6 @@
 package com.example.soso.community.freeboard.like.domain;
 
-import com.example.soso.community.freeboard.comment.domain.entity.Comment;
+import com.example.soso.community.freeboard.comment.domain.entity.PostComment;
 import com.example.soso.users.domain.entity.Users;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -31,7 +31,7 @@ public class CommentLike {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private Comment comment;
+    private PostComment comment;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Users user;

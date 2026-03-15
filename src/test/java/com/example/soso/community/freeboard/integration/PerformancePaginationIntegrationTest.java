@@ -134,7 +134,7 @@ class PerformancePaginationIntegrationTest {
                             .param("category", category)
                             .header("Authorization", author.getAuthHeader())
                             .contentType(MediaType.MULTIPART_FORM_DATA))
-                    .andExpect(status().isOk())
+                    .andExpect(status().isCreated())
                     .andReturn();
 
             FreeboardCreateResponse response = objectMapper.readValue(
@@ -271,7 +271,7 @@ class PerformancePaginationIntegrationTest {
                                 .param("category", category)
                                 .header("Authorization", author.getAuthHeader())
                                 .contentType(MediaType.MULTIPART_FORM_DATA))
-                        .andExpect(status().isOk());
+                        .andExpect(status().isCreated());
             }
             System.out.println("✅ " + category + " 카테고리 3개 게시글 생성 완료");
         }
@@ -355,7 +355,7 @@ class PerformancePaginationIntegrationTest {
                         .param("category", "others")
                         .header("Authorization", postAuthor.getAuthHeader())
                         .contentType(MediaType.MULTIPART_FORM_DATA))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andReturn();
 
         FreeboardCreateResponse postResponse = objectMapper.readValue(
@@ -495,7 +495,7 @@ class PerformancePaginationIntegrationTest {
                             .param("category", "others")
                             .header("Authorization", author1.getAuthHeader())
                             .contentType(MediaType.MULTIPART_FORM_DATA))
-                    .andExpect(status().isOk());
+                    .andExpect(status().isCreated());
 
             // 시간 차이를 두어 명확한 정렬 순서 보장
             Thread.sleep(10);
@@ -543,7 +543,7 @@ class PerformancePaginationIntegrationTest {
                             .param("category", "others")
                             .header("Authorization", author2.getAuthHeader())
                             .contentType(MediaType.MULTIPART_FORM_DATA))
-                    .andExpect(status().isOk());
+                    .andExpect(status().isCreated());
 
             Thread.sleep(10);
         }

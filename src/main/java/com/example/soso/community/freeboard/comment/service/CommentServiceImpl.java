@@ -3,7 +3,7 @@ package com.example.soso.community.freeboard.comment.service;
 import com.example.soso.community.freeboard.comment.domain.dto.CommentCreateRequest;
 import com.example.soso.community.freeboard.comment.domain.dto.CommentMapper;
 import com.example.soso.community.freeboard.comment.domain.dto.PostCommentResponse;
-import com.example.soso.community.freeboard.comment.domain.entity.Comment;
+import com.example.soso.community.freeboard.comment.domain.entity.PostComment;
 import com.example.soso.community.freeboard.comment.domain.repository.CommentRepository;
 import com.example.soso.global.exception.domain.PostErrorCode;
 import com.example.soso.global.exception.domain.UserErrorCode;
@@ -36,14 +36,14 @@ public class CommentServiceImpl implements CommentService {
                 .orElseThrow(() -> new PostException(PostErrorCode.NOT_FOUND));
         Users user = usersRepository.findById(userId)
                 .orElseThrow(() -> new UserAuthException(UserErrorCode.USER_NOT_FOUND));
-        Comment comment = commentMapper.toEntity(request, post, user);
+        PostComment comment = commentMapper.toEntity(request, post, user);
         commentRepository.save(comment);
     }
 
     @Override
     @Transactional
     public void update(Long postId, Long commentId, String userId, CommentCreateRequest request) {
-        Comment comment = commentRepository.findByIdAndPostId(commentId, postId)
+        PostComment comment = commentRepository.findByIdAndPostId(commentId, postId)
                 .orElseThrow(() -> new PostException(PostErrorCode.NOT_FOUND));
         validateCommentOwner(comment.getId(), userId);
         comment.updateContent(request.content());
@@ -54,9 +54,9 @@ public class CommentServiceImpl implements CommentService {
     public List<PostCommentResponse> getcomments(Long postId, String userId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new PostException(PostErrorCode.NOT_FOUND));
-        List<Comment> comments = commentRepository.findAllByPost(post);
+        List<PostComment> comments = commentRepository.findAllByPost(post);
         List<PostCommentResponse> responseList = new ArrayList<>();
-        for (Comment comment : comments) {
+        for (PostComment comment : comments) {
             responseList.add(commentMapper.toResponse(comment));
         }
         return responseList;
@@ -66,7 +66,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional
     public void delete(Long postId, Long commentId, String userId) {
-        Comment comment = commentRepository.findByIdAndPostId(commentId, postId)
+        PostComment comment = commentRepository.findByIdAndPostId(commentId, postId)
                 .orElseThrow(() -> new PostException(PostErrorCode.NOT_FOUND));
         validateCommentOwner(comment.getId(), userId);
         commentRepository.delete(comment);

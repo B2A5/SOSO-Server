@@ -108,7 +108,7 @@ class FreeboardControllerTest {
                         .with(SecurityMockMvcRequestPostProcessors.user(testUserDetails))
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andDo(print())
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.postId").value(123));
     }
 
