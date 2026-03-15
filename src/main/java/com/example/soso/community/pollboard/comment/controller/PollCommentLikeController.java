@@ -72,19 +72,13 @@ public class PollCommentLikeController {
             )
     })
     @PostMapping
-    public ResponseEntity<Object> toggleLike(
+    public ResponseEntity<Boolean> toggleLike(
             @Parameter(description = "투표 게시글 ID", example = "123")
             @PathVariable Long pollId,
             @Parameter(description = "댓글 ID", example = "456")
             @PathVariable Long commentId,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-        if (userDetails == null) {
-            log.warn("toggleLike 요청 시 인증 정보 없음: commentId={}", commentId);
-            ErrorResponse errorResponse = new ErrorResponse("AUTHENTICATION_FAILED", "인증이 필요합니다.");
-            return ResponseEntity.status(401).body(errorResponse);
-        }
-
         log.info("투표게시판 댓글 좋아요 토글: commentId={}, userId={}", commentId, userDetails.getUsername());
 
         boolean isLiked = commentLikeService.toggleLike(commentId, userDetails.getUsername());
@@ -131,19 +125,13 @@ public class PollCommentLikeController {
             )
     })
     @GetMapping
-    public ResponseEntity<Object> getLikeStatus(
+    public ResponseEntity<Boolean> getLikeStatus(
             @Parameter(description = "투표 게시글 ID", example = "123")
             @PathVariable Long pollId,
             @Parameter(description = "댓글 ID", example = "456")
             @PathVariable Long commentId,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-        if (userDetails == null) {
-            log.warn("getLikeStatus 요청 시 인증 정보 없음: commentId={}", commentId);
-            ErrorResponse errorResponse = new ErrorResponse("AUTHENTICATION_FAILED", "인증이 필요합니다.");
-            return ResponseEntity.status(401).body(errorResponse);
-        }
-
         log.debug("투표게시판 댓글 좋아요 상태 조회: commentId={}, userId={}", commentId, userDetails.getUsername());
 
         boolean isLiked = commentLikeService.isLikedByUser(commentId, userDetails.getUsername());

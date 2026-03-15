@@ -4,9 +4,10 @@ import com.example.soso.community.freeboard.post.domain.dto.*;
 import com.example.soso.community.freeboard.post.service.FreeboardService;
 import com.example.soso.community.common.post.domain.entity.Category;
 
-import com.example.soso.security.domain.CustomUserDetails;
 import com.example.soso.global.exception.domain.ErrorResponse;
 import com.example.soso.global.exception.util.PostException;
+import com.example.soso.security.domain.CustomUserDetails;
+import org.springframework.http.HttpStatus;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -105,16 +106,10 @@ public class FreeboardController {
             )
     })
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Object> createPost(
+    public ResponseEntity<FreeboardCreateResponse> createPost(
             @ModelAttribute @Valid FreeboardCreateRequest request,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-        if (userDetails == null) {
-            log.warn("자유게시판 글 작성 요청 시 인증 정보 없음");
-            ErrorResponse errorResponse = new ErrorResponse("AUTHENTICATION_FAILED", "인증이 필요합니다.");
-            return ResponseEntity.status(401).body(errorResponse);
-        }
-
         log.info("자유게시판 글 작성 요청: userId={}, category={}, title={}, imageCount={}",
                 userDetails.getUser().getId(),
                 request.getCategory(),
@@ -125,7 +120,7 @@ public class FreeboardController {
         FreeboardCreateResponse response = freeboardService.createPost(request, userId);
 
         log.info("자유게시판 글 작성 완료: postId={}", response.getPostId());
-        return ResponseEntity.status(201).body(response);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @Operation(
@@ -410,18 +405,12 @@ public class FreeboardController {
             )
     })
     @PatchMapping(value = "/{freeboardId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Object> updatePost(
+    public ResponseEntity<FreeboardCreateResponse> updatePost(
             @Parameter(description = "수정할 게시글 ID", example = "123")
             @PathVariable Long freeboardId,
             @ModelAttribute @Valid FreeboardUpdateRequest request,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-        if (userDetails == null) {
-            log.warn("자유게시판 글 수정 요청 시 인증 정보 없음: freeboardId={}", freeboardId);
-            ErrorResponse errorResponse = new ErrorResponse("AUTHENTICATION_FAILED", "인증이 필요합니다.");
-            return ResponseEntity.status(401).body(errorResponse);
-        }
-
         log.info("자유게시판 글 수정 요청: freeboardId={}, userId={}",
                 freeboardId, userDetails.getUser().getId());
 
@@ -474,17 +463,11 @@ public class FreeboardController {
             )
     })
     @DeleteMapping("/{freeboardId}")
-    public ResponseEntity<Object> deletePost(
+    public ResponseEntity<Void> deletePost(
             @Parameter(description = "삭제할 게시글 ID", example = "123")
             @PathVariable Long freeboardId,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-        if (userDetails == null) {
-            log.warn("자유게시판 글 삭제 요청 시 인증 정보 없음: freeboardId={}", freeboardId);
-            ErrorResponse errorResponse = new ErrorResponse("AUTHENTICATION_FAILED", "인증이 필요합니다.");
-            return ResponseEntity.status(401).body(errorResponse);
-        }
-
         log.info("자유게시판 글 삭제 요청: freeboardId={}, userId={}",
                 freeboardId, userDetails.getUser().getId());
 
@@ -535,17 +518,11 @@ public class FreeboardController {
             )
     })
     @DeleteMapping("/{freeboardId}/force")
-    public ResponseEntity<Object> hardDeletePost(
+    public ResponseEntity<Void> hardDeletePost(
             @Parameter(description = "영구 삭제할 게시글 ID", example = "123")
             @PathVariable Long freeboardId,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-        if (userDetails == null) {
-            log.warn("자유게시판 글 영구 삭제 요청 시 인증 정보 없음: freeboardId={}", freeboardId);
-            ErrorResponse errorResponse = new ErrorResponse("AUTHENTICATION_FAILED", "인증이 필요합니다.");
-            return ResponseEntity.status(401).body(errorResponse);
-        }
-
         log.warn("자유게시판 글 영구 삭제 요청: freeboardId={}, userId={}",
                 freeboardId, userDetails.getUser().getId());
 

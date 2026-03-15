@@ -72,19 +72,13 @@ public class FreeboardCommentLikeController {
             )
     })
     @PostMapping
-    public ResponseEntity<Object> toggleCommentLike(
+    public ResponseEntity<Boolean> toggleCommentLike(
             @Parameter(description = "자유게시판 게시글 ID", example = "123")
             @PathVariable Long freeboardId,
             @Parameter(description = "댓글 ID", example = "456")
             @PathVariable Long commentId,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-        if (userDetails == null) {
-            log.warn("toggleCommentLike 요청 시 인증 정보 없음: freeboardId={}, commentId={}", freeboardId, commentId);
-            ErrorResponse errorResponse = new ErrorResponse("AUTHENTICATION_FAILED", "인증이 필요합니다.");
-            return ResponseEntity.status(401).body(errorResponse);
-        }
-
         log.info("자유게시판 댓글 좋아요 토글: freeboardId={}, commentId={}, userId={}",
                 freeboardId, commentId, userDetails.getUsername());
 
@@ -132,19 +126,13 @@ public class FreeboardCommentLikeController {
             )
     })
     @GetMapping
-    public ResponseEntity<Object> getCommentLikeStatus(
+    public ResponseEntity<Boolean> getCommentLikeStatus(
             @Parameter(description = "자유게시판 게시글 ID", example = "123")
             @PathVariable Long freeboardId,
             @Parameter(description = "댓글 ID", example = "456")
             @PathVariable Long commentId,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-        if (userDetails == null) {
-            log.warn("getCommentLikeStatus 요청 시 인증 정보 없음: freeboardId={}, commentId={}", freeboardId, commentId);
-            ErrorResponse errorResponse = new ErrorResponse("AUTHENTICATION_FAILED", "인증이 필요합니다.");
-            return ResponseEntity.status(401).body(errorResponse);
-        }
-
         log.debug("자유게시판 댓글 좋아요 상태 조회: freeboardId={}, commentId={}, userId={}",
                 freeboardId, commentId, userDetails.getUsername());
 

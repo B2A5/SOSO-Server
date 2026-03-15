@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.Authentication;
@@ -84,18 +85,12 @@ public class PollCommentController {
             )
     })
     @PostMapping
-    public ResponseEntity<Object> createComment(
+    public ResponseEntity<PollCommentCreateResponse> createComment(
             @Parameter(description = "투표 게시글 ID", example = "123")
             @PathVariable Long pollId,
             @RequestBody @Valid PollCommentCreateRequest request,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-        if (userDetails == null) {
-            log.warn("투표게시판 댓글 작성 요청 시 인증 정보 없음: pollId={}", pollId);
-            ErrorResponse errorResponse = new ErrorResponse("AUTHENTICATION_FAILED", "인증이 필요합니다.");
-            return ResponseEntity.status(401).body(errorResponse);
-        }
-
         log.info("투표게시판 댓글 작성 요청: pollId={}, userId={}, parentCommentId={}",
                 pollId, userDetails.getUser().getId(), request.getParentCommentId());
 
@@ -103,7 +98,7 @@ public class PollCommentController {
         PollCommentCreateResponse response = commentService.createComment(pollId, request, userId);
 
         log.info("투표게시판 댓글 작성 완료: commentId={}", response.getCommentId());
-        return ResponseEntity.status(201).body(response);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @Operation(
@@ -228,7 +223,7 @@ public class PollCommentController {
             )
     })
     @PatchMapping("/{commentId}")
-    public ResponseEntity<Object> updateComment(
+    public ResponseEntity<PollCommentCreateResponse> updateComment(
             @Parameter(description = "투표 게시글 ID", example = "123")
             @PathVariable Long pollId,
             @Parameter(description = "댓글 ID", example = "456")
@@ -236,12 +231,6 @@ public class PollCommentController {
             @RequestBody @Valid PollCommentUpdateRequest request,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-        if (userDetails == null) {
-            log.warn("투표게시판 댓글 수정 요청 시 인증 정보 없음: pollId={}, commentId={}", pollId, commentId);
-            ErrorResponse errorResponse = new ErrorResponse("AUTHENTICATION_FAILED", "인증이 필요합니다.");
-            return ResponseEntity.status(401).body(errorResponse);
-        }
-
         log.info("투표게시판 댓글 수정 요청: pollId={}, commentId={}, userId={}",
                 pollId, commentId, userDetails.getUser().getId());
 
@@ -293,19 +282,13 @@ public class PollCommentController {
             )
     })
     @DeleteMapping("/{commentId}")
-    public ResponseEntity<Object> deleteComment(
+    public ResponseEntity<Void> deleteComment(
             @Parameter(description = "투표 게시글 ID", example = "123")
             @PathVariable Long pollId,
             @Parameter(description = "댓글 ID", example = "456")
             @PathVariable Long commentId,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-        if (userDetails == null) {
-            log.warn("투표게시판 댓글 삭제 요청 시 인증 정보 없음: pollId={}, commentId={}", pollId, commentId);
-            ErrorResponse errorResponse = new ErrorResponse("AUTHENTICATION_FAILED", "인증이 필요합니다.");
-            return ResponseEntity.status(401).body(errorResponse);
-        }
-
         log.info("투표게시판 댓글 삭제 요청: pollId={}, commentId={}, userId={}",
                 pollId, commentId, userDetails.getUser().getId());
 

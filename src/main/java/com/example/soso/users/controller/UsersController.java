@@ -61,9 +61,6 @@ public class UsersController {
     public ResponseEntity<UserResponse> getCurrentUser(
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-        if (userDetails == null) {
-            return ResponseEntity.status(401).build();
-        }
         UserResponse userResponse = usersService.getCurrentUserInfo(userDetails.getUsername());
         return ResponseEntity.ok(userResponse);
     }
