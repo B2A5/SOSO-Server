@@ -1,11 +1,10 @@
 package com.example.soso.community.freeboard.integration;
 
-import com.example.soso.community.common.comment.domain.dto.*;
-import com.example.soso.community.common.comment.domain.repository.CommentRepository;
-import com.example.soso.community.common.likes.repository.CommentLikeRepository;
-import com.example.soso.community.common.likes.repository.PostLikeRepository;
-import com.example.soso.community.common.post.repository.PostImageRepository;
-import com.example.soso.community.common.post.repository.PostRepository;
+import com.example.soso.community.freeboard.comment.domain.repository.CommentRepository;
+import com.example.soso.community.freeboard.like.repository.CommentLikeRepository;
+import com.example.soso.community.freeboard.like.repository.PostLikeRepository;
+import com.example.soso.community.freeboard.post.repository.PostImageRepository;
+import com.example.soso.community.freeboard.post.repository.PostRepository;
 import com.example.soso.community.freeboard.comment.domain.dto.*;
 import com.example.soso.community.freeboard.post.domain.dto.*;
 import com.example.soso.community.freeboard.util.TestUserHelper;

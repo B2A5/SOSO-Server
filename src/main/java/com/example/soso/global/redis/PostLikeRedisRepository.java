@@ -49,11 +49,11 @@ public class PostLikeRedisRepository {
     }
 
     public Set<Long> getAllPostIdsWithLikes() {
-        Set<String> keys = redisTemplate.keys("like:count:*");
+        Set<String> keys = redisTemplate.keys(LIKE_COUNT_KEY_PREFIX + "*");
         if (keys == null) return Set.of();
 
         return keys.stream()
-                .map(key -> Long.parseLong(key.replace("like:count:", "")))
+                .map(key -> Long.parseLong(key.replace(LIKE_COUNT_KEY_PREFIX, "")))
                 .collect(Collectors.toSet());
     }
 }

@@ -1,9 +1,9 @@
 package com.example.soso.community.freeboard.comment.service;
 
-import com.example.soso.community.common.comment.domain.entity.Comment;
-import com.example.soso.community.common.comment.domain.repository.CommentRepository;
-import com.example.soso.community.common.likes.domain.CommentLike;
-import com.example.soso.community.common.likes.repository.CommentLikeRepository;
+import com.example.soso.community.freeboard.comment.domain.entity.Comment;
+import com.example.soso.community.freeboard.comment.domain.repository.CommentRepository;
+import com.example.soso.community.freeboard.like.domain.CommentLike;
+import com.example.soso.community.freeboard.like.repository.CommentLikeRepository;
 import com.example.soso.global.exception.domain.CommentErrorCode;
 import com.example.soso.global.exception.domain.PostErrorCode;
 import com.example.soso.global.exception.domain.UserErrorCode;
