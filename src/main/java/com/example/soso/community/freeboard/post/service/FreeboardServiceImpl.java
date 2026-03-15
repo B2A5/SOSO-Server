@@ -65,14 +65,7 @@ public class FreeboardServiceImpl implements FreeboardService {
         Users user = findUserById(userId);
 
         // 게시글 엔티티 생성
-        Post post = Post.builder()
-                .user(user)
-                .category(request.getCategory())
-                .title(request.getTitle())
-                .content(request.getContent())
-                .likeCount(0)
-                .commentCount(0)
-                .build();
+        Post post = Post.create(user, request.getTitle(), request.getContent(), request.getCategory());
 
         // 게시글 저장
         Post savedPost = postRepository.save(post);

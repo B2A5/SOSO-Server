@@ -78,7 +78,7 @@ class FreeboardServiceTest {
             throw new RuntimeException("Failed to set user ID", e);
         }
 
-        // 테스트 게시글 생성
+        // 테스트 게시글 생성 (id는 BaseBoard의 @SuperBuilder를 통해 설정)
         testPost = Post.builder()
                 .id(123L)
                 .user(testUser)
@@ -87,7 +87,6 @@ class FreeboardServiceTest {
                 .content("어제 갔던 라면집이 정말 맛있었어요!")
                 .likeCount(15)
                 .commentCount(8)
-                .images(new ArrayList<>())
                 .build();
 
         // 테스트 요청 생성
@@ -170,9 +169,9 @@ class FreeboardServiceTest {
                 .sequence(0)
                 .post(testPost)
                 .build();
-        // PostImage에 ID 설정 (리플렉션 사용)
+        // PostImage에 ID 설정 (id는 BaseImage에 있으므로 상위 클래스에서 접근)
         try {
-            java.lang.reflect.Field idField = PostImage.class.getDeclaredField("id");
+            java.lang.reflect.Field idField = postImage.getClass().getSuperclass().getDeclaredField("id");
             idField.setAccessible(true);
             idField.set(postImage, 1L);
         } catch (Exception e) {

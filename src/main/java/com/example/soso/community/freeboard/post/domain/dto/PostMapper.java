@@ -15,14 +15,7 @@ public class PostMapper {
     private final UserMapper userMapper;
 
     public Post toEntity(PostCreateRequest dto, Users user) {
-        return Post.builder()
-                .title(dto.title())
-                .content(dto.content())
-                .category(dto.category())
-                .user(user)
-                .likeCount(0)
-                .commentCount(0)
-                .build();
+        return Post.create(user, dto.title(), dto.content(), dto.category());
     }
 
     public PostResponse toResponse(Post post, boolean isLiked) {
