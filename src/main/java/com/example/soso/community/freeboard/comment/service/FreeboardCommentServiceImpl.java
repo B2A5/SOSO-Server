@@ -1,11 +1,10 @@
 package com.example.soso.community.freeboard.comment.service;
 
-import com.example.soso.community.common.comment.domain.entity.Comment;
-import com.example.soso.community.common.comment.domain.repository.CommentRepository;
-import com.example.soso.community.common.likes.repository.CommentLikeRepository;
-import com.example.soso.community.common.post.domain.entity.Post;
-import com.example.soso.community.common.post.repository.PostRepository;
-import com.example.soso.community.common.service.AbstractCommentService;
+import com.example.soso.community.freeboard.comment.domain.entity.Comment;
+import com.example.soso.community.freeboard.comment.domain.repository.CommentRepository;
+import com.example.soso.community.freeboard.like.repository.CommentLikeRepository;
+import com.example.soso.community.freeboard.post.domain.entity.Post;
+import com.example.soso.community.freeboard.post.repository.PostRepository;
 import com.example.soso.community.freeboard.comment.domain.dto.*;
 import com.example.soso.users.repository.UsersRepository;
 import lombok.extern.slf4j.Slf4j;

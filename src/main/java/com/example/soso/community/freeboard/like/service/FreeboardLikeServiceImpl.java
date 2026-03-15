@@ -1,8 +1,7 @@
 package com.example.soso.community.freeboard.like.service;
 
-import com.example.soso.community.common.likes.repository.PostLikeRepository;
-import com.example.soso.community.common.post.repository.PostRepository;
-import com.example.soso.community.common.service.AbstractLikeService;
+import com.example.soso.community.freeboard.like.repository.PostLikeRepository;
+import com.example.soso.community.freeboard.post.repository.PostRepository;
 import com.example.soso.users.repository.UsersRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
