@@ -2,6 +2,7 @@ package com.example.soso.community.freeboard.comment.controller;
 
 import com.example.soso.community.freeboard.comment.domain.dto.*;
 import com.example.soso.community.freeboard.comment.service.FreeboardCommentService;
+import com.example.soso.global.config.SecurityUtil;
 import com.example.soso.global.exception.domain.ErrorResponse;
 import com.example.soso.security.domain.CustomUserDetails;
 import org.springframework.http.HttpStatus;
@@ -18,8 +19,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -196,15 +195,7 @@ public class FreeboardCommentController {
             @RequestParam(required = false) String cursor,
             @RequestParam(defaultValue = "20") int size
     ) {
-        // 선택적 인증 처리
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String userId = null;
-        if (authentication != null && authentication.isAuthenticated() &&
-            !"anonymousUser".equals(authentication.getPrincipal()) &&
-            authentication.getPrincipal() instanceof CustomUserDetails) {
-            CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-            userId = userDetails.getUser().getId();
-        }
+        String userId = SecurityUtil.getCurrentUserId();
 
         log.info("자유게시판 댓글 목록 조회 요청: freeboardId={}, sort={}, cursor={}, size={}, userId={}",
                 freeboardId, sort, cursor != null ? "present" : "null", size, userId != null ? userId : "anonymous");

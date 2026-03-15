@@ -4,6 +4,7 @@ import com.example.soso.community.freeboard.post.domain.dto.*;
 import com.example.soso.community.freeboard.post.service.FreeboardService;
 import com.example.soso.community.common.post.domain.entity.Category;
 
+import com.example.soso.global.config.SecurityUtil;
 import com.example.soso.global.exception.domain.ErrorResponse;
 import com.example.soso.global.exception.util.PostException;
 import com.example.soso.security.domain.CustomUserDetails;
@@ -22,8 +23,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -180,15 +179,7 @@ public class FreeboardController {
             @Parameter(description = "조회할 게시글 ID", example = "123")
             @PathVariable Long freeboardId
     ) {
-        // 선택적 인증 처리
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String userId = null;
-        if (authentication != null && authentication.isAuthenticated() &&
-            !"anonymousUser".equals(authentication.getPrincipal()) &&
-            authentication.getPrincipal() instanceof CustomUserDetails) {
-            CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-            userId = userDetails.getUser().getId();
-        }
+        String userId = SecurityUtil.getCurrentUserId();
 
         log.info("자유게시판 글 조회 요청: freeboardId={}, userId={}",
                 freeboardId, userId != null ? userId : "anonymous");
@@ -305,15 +296,7 @@ public class FreeboardController {
             @RequestParam(required = false) String cursor,
             @RequestParam(defaultValue = "10") int size
     ) {
-        // 선택적 인증 처리
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String userId = null;
-        if (authentication != null && authentication.isAuthenticated() &&
-            !"anonymousUser".equals(authentication.getPrincipal()) &&
-            authentication.getPrincipal() instanceof CustomUserDetails) {
-            CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-            userId = userDetails.getUser().getId();
-        }
+        String userId = SecurityUtil.getCurrentUserId();
 
         log.info("자유게시판 목록 조회 요청: category={}, sort={}, cursor={}, size={}, userId={}",
                 category, sort, cursor != null ? "present" : "null", size, userId != null ? userId : "anonymous");
