@@ -23,6 +23,9 @@ spring:
     init:
       encoding: UTF-8
 
+  flyway:
+    enabled: false  # 테스트는 H2 create-drop으로 스키마 관리, Flyway 불필요
+
   session:
     store-type: none  # Disable Redis for tests
 

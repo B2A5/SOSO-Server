@@ -1,0 +1,3 @@
+-- Flyway baseline marker
+-- 이 파일은 Flyway 도입 이전에 이미 존재하는 DB 스키마를 나타냄
+-- baseline-on-migrate=true 설정으로 기존 DB에서 이 버전을 적용된 것으로 처리

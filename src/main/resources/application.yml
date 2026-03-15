@@ -10,9 +10,15 @@ spring:
     password: ${DB_PASS:12341234}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
+  flyway:
+    enabled: true
+    baseline-on-migrate: true   # 기존 DB에 flyway_schema_history가 없어도 V1을 baseline으로 처리
+    baseline-version: 1         # V1__baseline.sql 을 이미 적용된 것으로 간주
+    locations: classpath:db/migration
+
   jpa:
     hibernate:
-      ddl-auto: ${JPA_DDL:update} # 운영은 validate/none 권장
+      ddl-auto: ${JPA_DDL:update} # 운영은 validate/none 권장 (Flyway 도입 후 validate 전환 예정)
     properties:
       hibernate:
         format_sql: true

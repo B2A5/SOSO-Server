@@ -22,7 +22,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @SuperBuilder
-@Table(name = "votesboard")  // DB 테이블명은 유지 (마이그레이션 없음)
+@Table(name = "polls")  // V2 Flyway 마이그레이션으로 votesboard → polls 변경
 public class Poll extends BaseBoard {
 
     @OneToMany(mappedBy = "poll", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -39,7 +39,7 @@ public class Poll extends BaseBoard {
     /**
      * 투표 마감 시간
      */
-    @Column(name = "end_time", nullable = false)
+    @Column(name = "closed_at", nullable = false)
     private LocalDateTime closedAt;
 
     /**
@@ -47,7 +47,7 @@ public class Poll extends BaseBoard {
      * true: 투표 후 변경 가능
      * false: 투표 후 변경 불가 (기본값)
      */
-    @Column(name = "allow_revote", nullable = false)
+    @Column(name = "can_revote", nullable = false)
     private boolean canRevote = false;
 
     /**
@@ -55,13 +55,13 @@ public class Poll extends BaseBoard {
      * true: 여러 옵션 동시 선택 가능 (최대 n-1개)
      * false: 하나의 옵션만 선택 가능 (기본값)
      */
-    @Column(name = "allow_multiple_choice", nullable = false)
+    @Column(name = "can_multi_select", nullable = false)
     private boolean canMultiSelect = false;
 
     /**
      * 총 투표 참여자 수
      */
-    @Column(name = "total_votes", nullable = false)
+    @Column(name = "participant_count", nullable = false)
     private int participantCount = 0;
 
     /**

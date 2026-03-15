@@ -78,6 +78,9 @@ dependencies {
 	implementation 'software.amazon.awssdk:s3'             // s3 SDK
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.8'
 
+	// Flyway (MySQL 전용 모듈 포함)
+	implementation 'org.flywaydb:flyway-mysql'
+
 	// QueryDSL for Jakarta
 	implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
 	annotationProcessor 'com.querydsl:querydsl-apt:5.0.0:jakarta'
