@@ -221,7 +221,7 @@ public class PollServiceImpl implements PollService {
 
     @Override
     @Transactional
-    public void vote(Long postId, VoteRequest request, String userId) {
+    public PollDetailResponse vote(Long postId, VoteRequest request, String userId) {
         log.info("투표 참여 시작: postId={}, userId={}, optionIds={}", postId, userId, request.getVoteOptionIds());
 
         Poll poll = findPollById(postId);
@@ -287,6 +287,12 @@ public class PollServiceImpl implements PollService {
         poll.increaseParticipantCount();
 
         log.info("투표 참여 완료: postId={}, userId={}, optionIds={}", postId, userId, selectedOptionIds);
+
+        long commentCount = pollCommentRepository.countByPollIdAndDeletedFalse(postId);
+        long likeCount = pollLikeRepository.countByPoll(poll);
+        List<Vote> userVoteResults = voteRepository.findAllByUserAndPoll(user, poll);
+        Boolean isLiked = pollLikeRepository.existsByPollIdAndUserId(postId, userId);
+        return pollMapper.toDetailResponse(poll, commentCount, userVoteResults, likeCount, isLiked, userId);
     }
 
     @Override

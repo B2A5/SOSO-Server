@@ -63,7 +63,7 @@ public interface PollService {
      * @param request 투표 요청 데이터 (선택한 옵션 ID)
      * @param userId 투표하는 사용자 ID
      */
-    void vote(Long postId, VoteRequest request, String userId);
+    PollDetailResponse vote(Long postId, VoteRequest request, String userId);
 
     /**
      * 투표를 변경합니다 (재투표).

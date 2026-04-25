@@ -1,6 +1,7 @@
 package com.example.soso.community.pollboard.integration;
 
 import com.example.soso.community.pollboard.domain.entity.PollStatus;
+import com.example.soso.community.pollboard.repository.PollOptionRepository;
 import com.example.soso.community.pollboard.repository.PollRepository;
 import com.example.soso.community.pollboard.repository.VoteRepository;
 import com.example.soso.global.image.service.ImageUploadService;
@@ -8,6 +9,8 @@ import com.example.soso.security.domain.CustomUserDetails;
 import com.example.soso.users.domain.entity.Users;
 import com.example.soso.users.domain.entity.UserType;
 import com.example.soso.users.repository.UsersRepository;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -46,6 +49,9 @@ class PollIntegrationTest {
     private MockMvc mockMvc;
 
     @Autowired
+    private ObjectMapper objectMapper;
+
+    @Autowired
     private PollRepository pollRepository;
 
     @Autowired
@@ -53,6 +59,9 @@ class PollIntegrationTest {
 
     @Autowired
     private UsersRepository usersRepository;
+
+    @Autowired
+    private PollOptionRepository pollOptionRepository;
 
     @MockBean
     private ImageUploadService imageUploadService;
@@ -326,5 +335,122 @@ class PollIntegrationTest {
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.postId").exists());
+    }
+
+    // ──────────────────────────────────────────────────────────────
+    // 투표 참여 (POST /{pollId}/vote) 테스트
+    // ──────────────────────────────────────────────────────────────
+
+    @Test
+    @DisplayName("투표 참여 성공 - PollDetailResponse 반환 및 hasVoted=true 검증")
+    void vote_Success_ReturnsDetailWithHasVotedTrue() throws Exception {
+        // given
+        long pollId = createPoll(false, false);
+        long optionId = firstOptionId(pollId);
+
+        // when & then
+        mockMvc.perform(post("/community/polls/{pollId}/vote", pollId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"voteOptionIds\": [" + optionId + "]}")
+                        .with(SecurityMockMvcRequestPostProcessors.user(testUserDetails)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.postId").value(pollId))
+                .andExpect(jsonPath("$.hasVoted").value(true))
+                .andExpect(jsonPath("$.voteInfo.myOptionIds").isArray())
+                .andExpect(jsonPath("$.voteInfo.myOptionIds[0]").value(optionId));
+    }
+
+    @Test
+    @DisplayName("투표 참여 성공 - 다중 선택")
+    void vote_MultiSelect_Success() throws Exception {
+        // given
+        long pollId = createPoll(false, true);
+        long[] optionIds = twoOptionIds(pollId);
+
+        // when & then
+        mockMvc.perform(post("/community/polls/{pollId}/vote", pollId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"voteOptionIds\": [" + optionIds[0] + "]}")
+                        .with(SecurityMockMvcRequestPostProcessors.user(testUserDetails)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.hasVoted").value(true));
+    }
+
+    @Test
+    @DisplayName("투표 참여 실패 - 중복 투표 (409)")
+    void vote_AlreadyVoted_Conflict() throws Exception {
+        // given
+        long pollId = createPoll(false, false);
+        long optionId = firstOptionId(pollId);
+        String body = "{\"voteOptionIds\": [" + optionId + "]}";
+
+        mockMvc.perform(post("/community/polls/{pollId}/vote", pollId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body)
+                        .with(SecurityMockMvcRequestPostProcessors.user(testUserDetails)))
+                .andExpect(status().isOk());
+
+        // when & then - 두 번째 투표
+        mockMvc.perform(post("/community/polls/{pollId}/vote", pollId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body)
+                        .with(SecurityMockMvcRequestPostProcessors.user(testUserDetails)))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.code").value("ALREADY_VOTED"));
+    }
+
+    @Test
+    @DisplayName("투표 참여 실패 - 비인증 사용자 (401)")
+    void vote_Unauthenticated_Unauthorized() throws Exception {
+        // given
+        long pollId = createPoll(false, false);
+        long optionId = firstOptionId(pollId);
+
+        // when & then
+        mockMvc.perform(post("/community/polls/{pollId}/vote", pollId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"voteOptionIds\": [" + optionId + "]}"))
+                .andExpect(status().isUnauthorized());
+    }
+
+    // ──────────────────────────────────────────────────────────────
+    // 헬퍼
+    // ──────────────────────────────────────────────────────────────
+
+    private long createPoll(boolean canRevote, boolean canMultiSelect) throws Exception {
+        String response = mockMvc.perform(multipart("/community/polls")
+                        .param("category", "daily-hobby")
+                        .param("title", "테스트 투표")
+                        .param("content", "테스트 내용입니다")
+                        .param("options[0].content", "옵션1")
+                        .param("options[1].content", "옵션2")
+                        .param("options[2].content", "옵션3")
+                        .param("closedAt", LocalDateTime.now().plusDays(7).toString())
+                        .param("canRevote", String.valueOf(canRevote))
+                        .param("canMultiSelect", String.valueOf(canMultiSelect))
+                        .with(SecurityMockMvcRequestPostProcessors.user(testUserDetails))
+                        .contentType(MediaType.MULTIPART_FORM_DATA))
+                .andExpect(status().isCreated())
+                .andReturn().getResponse().getContentAsString();
+
+        return objectMapper.readTree(response).get("postId").asLong();
+    }
+
+    private long firstOptionId(long pollId) {
+        return pollOptionRepository.findAll().stream()
+                .filter(o -> o.getPoll().getId().equals(pollId))
+                .mapToLong(o -> o.getId())
+                .findFirst()
+                .orElseThrow();
+    }
+
+    private long[] twoOptionIds(long pollId) {
+        long[] ids = pollOptionRepository.findAll().stream()
+                .filter(o -> o.getPoll().getId().equals(pollId))
+                .mapToLong(o -> o.getId())
+                .limit(2)
+                .toArray();
+        return ids;
     }
 }

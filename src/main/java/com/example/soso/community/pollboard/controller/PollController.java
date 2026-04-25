@@ -366,7 +366,7 @@ public class PollController {
                     )
             )
     })
-    public ResponseEntity<Void> vote(
+    public ResponseEntity<PollDetailResponse> vote(
             @Parameter(description = "투표 게시글 ID", required = true, example = "1")
             @PathVariable Long pollId,
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
@@ -384,8 +384,8 @@ public class PollController {
             @Valid @RequestBody VoteRequest request,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-        pollService.vote(pollId, request, userDetails.getUser().getId());
-        return ResponseEntity.ok().build();
+        PollDetailResponse response = pollService.vote(pollId, request, userDetails.getUser().getId());
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping("/{pollId}/vote")
