@@ -414,6 +414,46 @@ class PollIntegrationTest {
                 .andExpect(status().isUnauthorized());
     }
 
+    @Test
+    @DisplayName("단일 선택 투표 후 옵션 % 합계 == 100%")
+    void vote_SingleSelect_PercentageSums100() throws Exception {
+        // given: 3개 옵션 단일 선택 투표
+        long pollId = createPoll(false, false);
+        long optionId = firstOptionId(pollId);
+
+        String response = mockMvc.perform(post("/community/polls/{pollId}/vote", pollId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"voteOptionIds\": [" + optionId + "]}")
+                        .with(SecurityMockMvcRequestPostProcessors.user(testUserDetails)))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+
+        JsonNode options = objectMapper.readTree(response).get("options");
+        double sum = 0;
+        for (JsonNode opt : options) sum += opt.get("percentage").asDouble();
+        org.junit.jupiter.api.Assertions.assertEquals(100.0, sum, 0.01);
+    }
+
+    @Test
+    @DisplayName("다중 선택 투표 후 옵션 % 합계 == 100%")
+    void vote_MultiSelect_PercentageSums100() throws Exception {
+        // given: 3개 옵션 중 2개 선택 (canMultiSelect=true)
+        long pollId = createPoll(false, true);
+        long[] optionIds = twoOptionIds(pollId);
+
+        String response = mockMvc.perform(post("/community/polls/{pollId}/vote", pollId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"voteOptionIds\": [" + optionIds[0] + ", " + optionIds[1] + "]}")
+                        .with(SecurityMockMvcRequestPostProcessors.user(testUserDetails)))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+
+        JsonNode options = objectMapper.readTree(response).get("options");
+        double sum = 0;
+        for (JsonNode opt : options) sum += opt.get("percentage").asDouble();
+        org.junit.jupiter.api.Assertions.assertEquals(100.0, sum, 0.01);
+    }
+
     // ──────────────────────────────────────────────────────────────
     // 헬퍼
     // ──────────────────────────────────────────────────────────────

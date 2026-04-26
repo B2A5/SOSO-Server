@@ -53,9 +53,10 @@ public class PollMapper {
      */
     public PollSummary toSummaryResponse(Poll poll, long commentCount, long likeCount, Boolean isLiked, Boolean hasVoted) {
         // 투표 옵션 미리보기 (최대 3개)
+        int totalVotesCastForSummary = poll.getOptions().stream().mapToInt(PollOption::getVoteCount).sum();
         List<PollOptionResponse> voteOptions = poll.getOptions().stream()
                 .limit(3)
-                .map(option -> toVoteOptionResponse(option, poll.getParticipantCount()))
+                .map(option -> toVoteOptionResponse(option, totalVotesCastForSummary))
                 .toList();
 
         // 이미지 정보 추출
@@ -152,6 +153,8 @@ public class PollMapper {
                 poll.isCanMultiSelect()
         );
 
+        int totalVotesCast = poll.getOptions().stream().mapToInt(PollOption::getVoteCount).sum();
+
         return PollDetailResponse.builder()
                 .postId(poll.getId())
                 .author(userMapper.toUserSummary(poll.getUser()))
@@ -160,7 +163,7 @@ public class PollMapper {
                 .content(poll.getContent())
                 .images(images)
                 .options(poll.getOptions().stream()
-                        .map(option -> toVoteOptionResponse(option, poll.getParticipantCount()))
+                        .map(option -> toVoteOptionResponse(option, totalVotesCast))
                         .toList())
                 .hasVoted(hasVoted)
                 .voteInfo(voteInfo)
