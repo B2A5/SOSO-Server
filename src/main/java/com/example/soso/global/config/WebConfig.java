@@ -22,7 +22,7 @@ public class WebConfig implements WebMvcConfigurer {
     WebServerFactoryCustomizer<TomcatServletWebServerFactory> tomcatMultipartCustomizer() {
         return factory -> factory.addConnectorCustomizers(connector -> {
             connector.setMaxParameterCount(10000);
-            connector.setProperty("maxPartCount", "200");
+            connector.setMaxPartCount(200);
         });
     }
 }
