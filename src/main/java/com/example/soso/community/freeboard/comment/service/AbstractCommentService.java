@@ -218,7 +218,11 @@ public abstract class AbstractCommentService<T, R, U, S> {
     }
 
     protected String generateCursor(PostComment comment) {
-        String timestamp = comment.getCreatedAt().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+        LocalDateTime createdAt = comment.getCreatedAt();
+        if (createdAt == null) {
+            createdAt = LocalDateTime.now();
+        }
+        String timestamp = createdAt.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
         return Base64.getEncoder().encodeToString(timestamp.getBytes());
     }
 }

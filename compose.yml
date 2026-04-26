@@ -203,6 +203,8 @@ services:
         "--mysql-native-password=ON", # 기존 인증 방식 사용 (호환성)
         "--sql-mode=STRICT_TRANS_TABLES,NO_ZERO_DATE,NO_ZERO_IN_DATE,ERROR_FOR_DIVISION_BY_ZERO", # 엄격한 SQL 모드
       ]
+    ports:
+      - "127.0.0.1:3306:3306" # 로컬호스트에서만 접근 가능 (SSH 터널용)
     volumes:
       - mysql_data:/var/lib/mysql # 데이터 영속화 (재시작 후에도 데이터 보존)
       # - ./infrastructure/mysql-init:/docker-entrypoint-initdb.d:ro  # 초기화 SQL 스크립트
