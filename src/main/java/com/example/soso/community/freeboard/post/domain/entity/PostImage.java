@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "post_image")
+@Table(name = "freeboard_post_images")
 public class PostImage extends BaseImage {
 
     @ManyToOne(fetch = FetchType.LAZY)

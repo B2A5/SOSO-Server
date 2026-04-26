@@ -22,7 +22,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @SuperBuilder
 @Entity
-@Table(name = "comments")
+@Table(name = "freeboard_comments")
 public class PostComment extends BaseComment {
 
     @ManyToOne(fetch = FetchType.LAZY)

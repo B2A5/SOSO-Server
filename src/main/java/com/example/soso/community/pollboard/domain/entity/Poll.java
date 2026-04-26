@@ -22,7 +22,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @SuperBuilder
-@Table(name = "polls")  // V2 Flyway 마이그레이션으로 votesboard → polls 변경
+@Table(name = "pollboard_posts")
 public class Poll extends BaseBoard {
 
     @OneToMany(mappedBy = "poll", cascade = CascadeType.ALL, orphanRemoval = true)

@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "vote_option")
+@Table(name = "pollboard_vote_options")
 public class PollOption extends BaseTimeEntity {
 
     @Id
@@ -26,7 +26,7 @@ public class PollOption extends BaseTimeEntity {
      * 소속 투표 게시글
      */
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "votesboard_id", nullable = false)
+    @JoinColumn(name = "poll_id", nullable = false)
     private Poll poll;
 
     /**

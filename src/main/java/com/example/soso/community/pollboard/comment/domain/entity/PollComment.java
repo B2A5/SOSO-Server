@@ -23,11 +23,11 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @SuperBuilder
 @Entity
-@Table(name = "votesboard_comments")
+@Table(name = "pollboard_comments")
 public class PollComment extends BaseComment {
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "votesboard_id", nullable = false)
+    @JoinColumn(name = "poll_id", nullable = false)
     private Poll poll;
 
     @ManyToOne(fetch = FetchType.LAZY)

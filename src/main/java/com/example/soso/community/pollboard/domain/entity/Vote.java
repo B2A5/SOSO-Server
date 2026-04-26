@@ -17,17 +17,17 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(
-    name = "vote_result",
+    name = "pollboard_vote_results",
     uniqueConstraints = {
         @UniqueConstraint(
-            name = "uk_vote_result_user_post_option",
-            columnNames = {"user_id", "votesboard_id", "vote_option_id"}
+            name = "uk_pollboard_vote_results_user_poll_option",
+            columnNames = {"user_id", "poll_id", "poll_option_id"}
         )
     },
     indexes = {
-        @Index(name = "idx_vote_result_user", columnList = "user_id"),
-        @Index(name = "idx_vote_result_post", columnList = "votesboard_id"),
-        @Index(name = "idx_vote_result_user_post", columnList = "user_id, votesboard_id")
+        @Index(name = "idx_pollboard_vote_results_user", columnList = "user_id"),
+        @Index(name = "idx_pollboard_vote_results_poll", columnList = "poll_id"),
+        @Index(name = "idx_pollboard_vote_results_user_poll", columnList = "user_id, poll_id")
     }
 )
 public class Vote extends BaseTimeEntity {
@@ -47,14 +47,14 @@ public class Vote extends BaseTimeEntity {
      * 투표 게시글
      */
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "votesboard_id", nullable = false)
+    @JoinColumn(name = "poll_id", nullable = false)
     private Poll poll;
 
     /**
      * 선택한 옵션
      */
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "vote_option_id", nullable = false)
+    @JoinColumn(name = "poll_option_id", nullable = false)
     private PollOption voteOption;
 
     @Builder

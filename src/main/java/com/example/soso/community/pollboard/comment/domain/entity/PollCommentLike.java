@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
  * 한 사용자는 하나의 댓글에 하나의 좋아요만 가능 (unique constraint)
  */
 @Entity
-@Table(name = "votesboard_comment_like", uniqueConstraints = {
+@Table(name = "pollboard_comment_likes", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"comment_id", "user_id"})
 })
 @EntityListeners(AuditingEntityListener.class)

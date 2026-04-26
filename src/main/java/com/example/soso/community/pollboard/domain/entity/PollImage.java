@@ -13,11 +13,11 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "votesboard_image")
+@Table(name = "pollboard_post_images")
 public class PollImage extends BaseImage {
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "votesboard_id", nullable = false)
+    @JoinColumn(name = "poll_id", nullable = false)
     private Poll poll;
 
     @Builder

@@ -17,8 +17,8 @@ import java.time.LocalDateTime;
  * 한 사용자는 하나의 투표 게시글에 하나의 좋아요만 가능 (unique constraint)
  */
 @Entity
-@Table(name = "votesboard_like", uniqueConstraints = {
-    @UniqueConstraint(columnNames = {"votesboard_id", "user_id"})
+@Table(name = "pollboard_post_likes", uniqueConstraints = {
+    @UniqueConstraint(columnNames = {"poll_id", "user_id"})
 })
 @EntityListeners(AuditingEntityListener.class)
 @Getter
@@ -30,7 +30,7 @@ public class PollLike {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "votesboard_id", nullable = false)
+    @JoinColumn(name = "poll_id", nullable = false)
     private Poll poll;
 
     @ManyToOne(fetch = FetchType.LAZY)

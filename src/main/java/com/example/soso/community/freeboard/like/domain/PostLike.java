@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
 @Entity
-@Table(uniqueConstraints = {
+@Table(name = "freeboard_post_likes", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"post_id", "user_id"})
 })
 public class PostLike {
